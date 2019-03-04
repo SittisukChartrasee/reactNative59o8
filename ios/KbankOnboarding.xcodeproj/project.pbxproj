@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -44,6 +43,12 @@
 		DCC18E575AD2C871DD99CCDD /* libPods-KbankOnboardingTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7E8948B0D71E719F38F1EE5 /* libPods-KbankOnboardingTests.a */; };
 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
+		A4ACD03F58D0455CB2E823EF /* SukhumvitSet-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7DA48EFE273B468F917969B3 /* SukhumvitSet-Bold.ttf */; };
+		D7738871E44C4611875B55B5 /* SukhumvitSet-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C388ABE18F7344D6A9D14536 /* SukhumvitSet-Light.ttf */; };
+		F4FFAE4835944150B4F9088C /* SukhumvitSet-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9A54FD5FDDD40B1A9680B90 /* SukhumvitSet-Medium.ttf */; };
+		01F7E8A45AE8474EA5FBF09C /* SukhumvitSet-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE1D58F7F9074172853939DA /* SukhumvitSet-SemiBold.ttf */; };
+		8C281611352D4732985CBC0A /* SukhumvitSet-Text.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7CE566BF4BB740FEBCC661E9 /* SukhumvitSet-Text.ttf */; };
+		99640BEAA81F415D9E90D6B3 /* SukhumvitSet-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34C7CD23DF3E4E21BAD4D292 /* SukhumvitSet-Thin.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -362,6 +367,12 @@
 		DF7C0BF318F447C9AF067F83 /* Pods-KbankOnboarding.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KbankOnboarding.release.xcconfig"; path = "Pods/Target Support Files/Pods-KbankOnboarding/Pods-KbankOnboarding.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		7DA48EFE273B468F917969B3 /* SukhumvitSet-Bold.ttf */ = {isa = PBXFileReference; name = "SukhumvitSet-Bold.ttf"; path = "../assets/fonts/SukhumvitSet-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C388ABE18F7344D6A9D14536 /* SukhumvitSet-Light.ttf */ = {isa = PBXFileReference; name = "SukhumvitSet-Light.ttf"; path = "../assets/fonts/SukhumvitSet-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D9A54FD5FDDD40B1A9680B90 /* SukhumvitSet-Medium.ttf */ = {isa = PBXFileReference; name = "SukhumvitSet-Medium.ttf"; path = "../assets/fonts/SukhumvitSet-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		AE1D58F7F9074172853939DA /* SukhumvitSet-SemiBold.ttf */ = {isa = PBXFileReference; name = "SukhumvitSet-SemiBold.ttf"; path = "../assets/fonts/SukhumvitSet-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7CE566BF4BB740FEBCC661E9 /* SukhumvitSet-Text.ttf */ = {isa = PBXFileReference; name = "SukhumvitSet-Text.ttf"; path = "../assets/fonts/SukhumvitSet-Text.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		34C7CD23DF3E4E21BAD4D292 /* SukhumvitSet-Thin.ttf */ = {isa = PBXFileReference; name = "SukhumvitSet-Thin.ttf"; path = "../assets/fonts/SukhumvitSet-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -609,6 +620,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				F1EDD331AF4C20D630BA8498 /* Pods */,
+				98D36A67738B40EC85C6B221 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -647,6 +659,20 @@
 			);
 			name = Pods;
 			sourceTree = "<group>";
+		};
+		98D36A67738B40EC85C6B221 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				7DA48EFE273B468F917969B3 /* SukhumvitSet-Bold.ttf */,
+				C388ABE18F7344D6A9D14536 /* SukhumvitSet-Light.ttf */,
+				D9A54FD5FDDD40B1A9680B90 /* SukhumvitSet-Medium.ttf */,
+				AE1D58F7F9074172853939DA /* SukhumvitSet-SemiBold.ttf */,
+				7CE566BF4BB740FEBCC661E9 /* SukhumvitSet-Text.ttf */,
+				34C7CD23DF3E4E21BAD4D292 /* SukhumvitSet-Thin.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -1097,6 +1123,12 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				A4ACD03F58D0455CB2E823EF /* SukhumvitSet-Bold.ttf in Resources */,
+				D7738871E44C4611875B55B5 /* SukhumvitSet-Light.ttf in Resources */,
+				F4FFAE4835944150B4F9088C /* SukhumvitSet-Medium.ttf in Resources */,
+				01F7E8A45AE8474EA5FBF09C /* SukhumvitSet-SemiBold.ttf in Resources */,
+				8C281611352D4732985CBC0A /* SukhumvitSet-Text.ttf in Resources */,
+				99640BEAA81F415D9E90D6B3 /* SukhumvitSet-Thin.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
