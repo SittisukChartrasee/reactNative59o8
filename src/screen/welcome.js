@@ -11,6 +11,7 @@ import Screen from '../component/screenComponent'
 import { NavBar } from '../component/gradient/navBar';
 import images from '../config/images'
 import HeaderBox from '../component/gradient/headerBox'
+import Input from '../component/input'
 
 class Welcome extends React.Component {
   render() {
@@ -30,7 +31,7 @@ class Welcome extends React.Component {
           // }
         /> */}
         <Text style={{ fontFamily: 'SukhumvitSet-Thin', fontSize: 28 }}>TESTTEST</Text>
-        <TextInput value="" style={{ backgroundColor: 'red'}} />
+        <Input />
       </Screen>
     )
   }
