@@ -5,7 +5,7 @@ import {
   StatusBar,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
-import { TText, TBold } from '../texts';
+import { TText, TBold, TSemiBold } from '../texts';
 import colors from '../../config/colors';
 import images from '../../config/images';
 
@@ -28,7 +28,7 @@ export default class extends React.Component {
       >
         <View>
           <Image source={images.kmyfundLogo} />
-          <TBold fontSize={20} color={colors.white} mt="30">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
+          <TSemiBold fontSize={20} color={colors.white} mt="30">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TSemiBold>
         </View>
       </LinearGradient>
     )

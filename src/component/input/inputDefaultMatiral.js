@@ -35,11 +35,11 @@ export default class extends React.PureComponent {
         {...this.props}
         label={this.props.label}
         style={[
-          { fontFamily: fonts.sukhumvit, color: colors.hunterGreen },
+          { fontFamily: fonts.sukhumvitText, color: colors.hunterGreen },
           this.props.label === '' && { fontSize: this.props.fs, textAlign: 'center' },
           { ...this.props.styled },
         ]}
-        labelTextStyle={{ fontFamily: fonts.sukhumvit, fontSize: 100 }}
+        labelTextStyle={{ fontFamily: fonts.sukhumvitText, fontSize: 100 }}
         tintColor={colors.darkSage}
         baseColor={colors.darkSage}
         titleFontSize={12}

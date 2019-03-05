@@ -20,9 +20,9 @@ const Drop = props => (
     textColor={colors.darkSage}
     itemColor={colors.darkSage}
     selectedItemColor={colors.darkSage}
-    style={{ fontFamily: fonts.sukhumvit }}
-    labelTextStyle={{ fontFamily: fonts.sukhumvit }}
-    itemTextStyle={{ fontFamily: fonts.sukhumvit }}
+    style={{ fontFamily: fonts.sukhumvitText }}
+    labelTextStyle={{ fontFamily: fonts.sukhumvitText }}
+    itemTextStyle={{ fontFamily: fonts.sukhumvitText }}
   />
 )
 

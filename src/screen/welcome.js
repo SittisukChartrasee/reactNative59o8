@@ -10,14 +10,14 @@ import { connect } from 'react-redux'
 import Screen from '../component/screenComponent'
 import { NavBar } from '../component/gradient/navBar';
 import images from '../config/images'
-import HeaderBox from '../component/gradient/headerBox'
+import HeaderSpace from '../component/gradient/HeaderSpace'
 import Input from '../component/input'
 
 class Welcome extends React.Component {
   render() {
     return (
       <Screen color="transparent">
-        <HeaderBox />
+        <HeaderSpace />
         {/* <NavBar
           navLeft={
             <TouchableOpacity>
@@ -30,8 +30,8 @@ class Welcome extends React.Component {
           //   </TouchableOpacity>
           // }
         /> */}
-        <Text style={{ fontFamily: 'SukhumvitSet-Thin', fontSize: 28 }}>TESTTEST</Text>
-        <Input />
+        {/* <Text style={{ fontFamily: 'SukhumvitSet-Thin', fontSize: 28 }}>TESTTEST</Text> */}
+        <Input type="radio" />
       </Screen>
     )
   }

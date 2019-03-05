@@ -5,7 +5,7 @@ import {
   StatusBar,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
-import { TText, TBold } from '../texts';
+import { TText, TBold, TSemiBold } from '../texts';
 import colors from '../../config/colors';
 import images from '../../config/images';
 
@@ -39,7 +39,7 @@ export const NavBar = ({
           { navLeft && navLeft }
         </View>
         <View style={{ flex: 5, alignItems: 'center' }}>
-          { title && <TBold style={{ color: colors.white }}>{subString(title)}</TBold> }
+          { title && <TSemiBold style={{ color: colors.white }}>{subString(title)}</TSemiBold> }
         </View>
         <View style={{ flex: 1, alignItems: 'flex-end' }}>
           {  navRight && navRight }
