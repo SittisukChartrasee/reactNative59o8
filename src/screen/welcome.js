@@ -12,12 +12,13 @@ import { NavBar } from '../component/gradient/navBar';
 import images from '../config/images'
 import HeaderSpace from '../component/gradient/HeaderSpace'
 import Input from '../component/input'
+import Keyboard from '../component/keyboard'
 
 class Welcome extends React.Component {
   render() {
     return (
-      <Screen color="transparent">
-        <HeaderSpace />
+      <Screen>
+        {/* <HeaderSpace /> */}
         {/* <NavBar
           navLeft={
             <TouchableOpacity>
@@ -31,8 +32,10 @@ class Welcome extends React.Component {
           // }
         /> */}
         {/* <Text style={{ fontFamily: 'SukhumvitSet-Thin', fontSize: 28 }}>TESTTEST</Text> */}
-        <Input type="radio" />
-      </Screen>
+        {/* <Input type="mask" /> */}
+
+        <Keyboard />
+      </Screen> 
     )
   }
 }

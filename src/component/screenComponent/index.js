@@ -12,16 +12,11 @@ import colors from '../../config/colors'
 
 const Screen = props => (
   <LinearGradient 
-    colors={props.color ? [props.color, props.color] : [colors.darkSage, colors.hunterGreen]} 
+    colors={props.color ? [props.color, props.color] : [colors.deepTeal, colors.hunterGreen]} 
     style={styles.linearGradient}
   >
     { Platform.OS === 'android' && <StatusBar translucent backgroundColor="transparent" currentHeight={(d) => console.log(d)} /> }
-    {/* <SafeAreaView> */}
-      { props.children }
-      <Text style={styles.buttonText}>
-        Sign in with Facebook
-      </Text>
-    {/* </SafeAreaView> */}
+    { props.children }
   </LinearGradient>
 )
 

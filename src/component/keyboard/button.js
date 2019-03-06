@@ -24,7 +24,7 @@ const NumberConatiner = styled.View`
 const NumberTouch = styled.TouchableOpacity`
 	width: ${viewportWidth <= 350 ? 52 : 65};
 	height: ${viewportWidth <= 350 ? 52 : 65};
-	borderColor: ${props => (props.disabled || props.del === '' ? colors.white : colors.hunterGreen)};
+	borderColor: ${props => (props.disabled || props.del === '' ? colors.white : 'rgb(170, 170, 170)')};
 	borderWidth: 1;
   borderRadius: 100;
   backgroundColor: ${props => (props.disabled && props.del === 'del' ? 'white' : colors.white)};
@@ -51,7 +51,7 @@ const Keyboard = props => (
             n.map((nn, i) => (
               <NumberTouch
                 onPressIn={() => (Platform.OS === 'android' ? Vibration.vibrate(10) : '')}
-                onPress={() => (nn === 'del' ? props.onSet(nn)('none') : props.onSet(nn)('set'))}
+                onPress={() => props.onSet(nn)}
                 key={nn.concat(i)}
                 disabled={nn === ''}
                 del={nn}
@@ -59,7 +59,7 @@ const Keyboard = props => (
                 {
                   nn === 'del'
                     ? <Image style={styleImg} source={images.cancel} />
-                    : <TText>{nn}</TText>
+                    : <TText fontSize="26">{nn}</TText>
                 }
               </NumberTouch>
             ))

@@ -13,14 +13,14 @@ export default class extends React.Component {
   render() {
     return (
       <LinearGradient
-        colors={[colors.darkSage, colors.hunterGreen, colors.black]} 
+        colors={[colors.darkSage, colors.hunterGreen, colors.black]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0.6, y: 0 }}
         locations={[0, 1, 1]}
-        style={{ 
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          paddingTop: 64, 
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingTop: 64,
           paddingBottom: 45,
           borderBottomRightRadius: 8,
           borderBottomLeftRadius: 8,
