@@ -1,8 +1,10 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-import Welcome from '../screen/welcome'
+import welcome from '../screen/welcome'
+import passcode from '../screen/passcode'
 
 const MainNavigator = createStackNavigator({
-  Welcome
+  // welcome,
+  passcode
 }, {
   headerMode: 'none',
 });

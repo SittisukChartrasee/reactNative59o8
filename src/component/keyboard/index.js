@@ -35,11 +35,36 @@ const ContainerKeyboard = styled.View`
 
 export default class extends React.Component {
   state = {
-
+    Dot: [],
+    DotNone: ['', '', '', '', '', ''],
+    value: '',
   }
 
   ontoggledot = (d) => {
-    console.log(d)
+    // const { Dot, DotNone, value } = this.state
+    // const { maxLength } = this.props
+    // if (status === 'set') {
+    //   if (Dot.length + 1 <= maxLength) {
+    //     this.setState({
+    //       Dot: [...Dot, id],
+    //       value: value + id,
+    //     })
+    //     DotNone.pop()
+    //     this.props.onSet(value + id, value.length + 1)('set')
+    //   }
+    // } 
+    // else if (DotNone.length <= maxLength) {
+    //   if (value.length > 0) {
+    //     this.setState({ DotNone: [...DotNone, ''] })
+    //     Dot.pop()
+
+    //     this.setState({ value: value.substr(0, (Dot.length + 1) - 1) },
+    //       () => this.props.onSet(this.state.value === ''
+    //         ? 0
+    //         : this.state.value,
+    //       value.length - 1)('none'))
+    //   }
+    // }
   }
 
   render() {

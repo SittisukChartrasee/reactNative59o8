@@ -18,28 +18,34 @@ class Welcome extends React.Component {
   render() {
     return (
       <Screen>
-        {/* <HeaderSpace /> */}
-        {/* <NavBar
-          navLeft={
-            <TouchableOpacity>
-              <Image source={images.iconback} />
-            </TouchableOpacity>
-          }
-          // navRight={
-          //   <TouchableOpacity>
-          //     <Image source={images.iconback} />
-          //   </TouchableOpacity>
-          // }
-        /> */}
-        {/* <Text style={{ fontFamily: 'SukhumvitSet-Thin', fontSize: 28 }}>TESTTEST</Text> */}
-        {/* <Input type="mask" /> */}
+        <View style={{ flex: 1 }}>
 
-        <Keyboard />
+        </View>
+        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+
+        </View>
       </Screen> 
     )
   }
 }
 
-const mapToProps = ({root}) => ({root})
-
+const mapToProps = ({ root }) => ({ root })
 export default connect(mapToProps)(Welcome)
+
+// {/* <HeaderSpace /> */}
+//         {/* <NavBar
+//           navLeft={
+//             <TouchableOpacity>
+//               <Image source={images.iconback} />
+//             </TouchableOpacity>
+//           }
+//           // navRight={
+//           //   <TouchableOpacity>
+//           //     <Image source={images.iconback} />
+//           //   </TouchableOpacity>
+//           // }
+//         /> */}
+//         {/* <Text style={{ fontFamily: 'SukhumvitSet-Thin', fontSize: 28 }}>TESTTEST</Text> */}
+//         {/* <Input type="mask" /> */}
+
+//         {/* <Keyboard /> */}
