@@ -3,6 +3,7 @@ import {
   View,
   Image,
 } from 'react-native'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { TText, TSemiBold, TLight } from '../texts'
 import colors from '../../config/colors'
@@ -33,6 +34,8 @@ const ContainerKeyboard = styled.View`
   paddingVertical: 20;
 `
 
+const mapToProps = ({ root }) => ({ root })
+@connect(mapToProps)
 export default class extends React.Component {
   state = {
     Dot: [],
@@ -68,6 +71,7 @@ export default class extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     return (
       <NumberWrapper>
         <Groupflex>

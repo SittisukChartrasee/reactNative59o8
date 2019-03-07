@@ -10,6 +10,7 @@
     "storybook": "storybook start"
   },
   "dependencies": {
+    "@babel/plugin-proposal-decorators": "^7.3.0",
     "@storybook/react-native": "^4.1.13",
     "hoist-non-react-statics": "^3.3.0",
     "react": "16.6.3",
