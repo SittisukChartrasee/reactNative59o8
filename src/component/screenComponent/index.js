@@ -16,6 +16,7 @@ const Screen = props => (
     style={styles.linearGradient}
   >
     { Platform.OS === 'android' && <StatusBar translucent backgroundColor="transparent" currentHeight={(d) => console.log(d)} /> }
+    { Platform.OS === 'ios' && <StatusBar barStyle="light-content" /> }
     { props.children }
   </LinearGradient>
 )

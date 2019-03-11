@@ -9,6 +9,14 @@ import images from '../../config/images'
 
 const { width: viewportWidth } = Dimensions.get('window')
 
+const ContainerKeyboard = styled.View`
+  flex: 1;
+  justifyContent: center;
+  alignItems: center;
+  backgroundColor: ${colors.white};
+  paddingVertical: 20;
+`
+
 const NumberWrapper = styled.View`
   flex: 1;
   width: 280px;
@@ -43,31 +51,33 @@ const styleImg = {
 }
 
 const Keyboard = props => (
-  <NumberWrapper>
-    {
-      number.map(n => (
-        <NumberConatiner key={n}>
-          {
-            n.map((nn, i) => (
-              <NumberTouch
-                onPressIn={() => (Platform.OS === 'android' ? Vibration.vibrate(10) : '')}
-                onPress={() => props.onSet(nn)}
-                key={nn.concat(i)}
-                disabled={nn === ''}
-                del={nn}
-              >
-                {
-                  nn === 'del'
-                    ? <Image style={styleImg} source={images.cancel} />
-                    : <TText fontSize="26">{nn}</TText>
-                }
-              </NumberTouch>
-            ))
-          }
-        </NumberConatiner>
-      ))
-    }
-  </NumberWrapper>
+  <ContainerKeyboard>
+    <NumberWrapper>
+      {
+        number.map(n => (
+          <NumberConatiner key={n}>
+            {
+              n.map((nn, i) => (
+                <NumberTouch
+                  onPressIn={() => (Platform.OS === 'android' ? Vibration.vibrate(10) : '')}
+                  onPress={() => props.onSet(nn)}
+                  key={nn.concat(i)}
+                  disabled={nn === ''}
+                  del={nn}
+                >
+                  {
+                    nn === 'del'
+                      ? <Image style={styleImg} source={images.cancel} />
+                      : <TText fontSize="26">{nn}</TText>
+                  }
+                </NumberTouch>
+              ))
+            }
+          </NumberConatiner>
+        ))
+      }
+    </NumberWrapper>
+  </ContainerKeyboard>
 )
 
 export default Keyboard
