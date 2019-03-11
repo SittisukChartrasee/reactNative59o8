@@ -13,7 +13,7 @@ const TextMask = styled(TextInputMask)`
   paddingLeft: 5;
   paddingRight: 5;
   borderBottomColor: ${props => (props.checkField ? colors.hunterGreen : 'red')};
-  color: ${colors.darkSage};
+  color: ${colors.emerald};
   textAlign: center;
   fontSize: ${props => props.fs || '16'};
 `

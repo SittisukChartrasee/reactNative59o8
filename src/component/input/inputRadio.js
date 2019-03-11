@@ -15,10 +15,10 @@ const ActiveCycle = ({
       width: 16,
       height: 16,
       borderRadius: 8,
-      ...((act) => act 
-            ? { backgroundColor: colors.emerald }
-            : { borderColor: colors.brownGrey, borderWidth: 1 }
-          )(condition)
+      ...((act) => act
+        ? { backgroundColor: colors.emerald }
+        : { borderColor: colors.smoky, borderWidth: 1, opacity: .6 }
+      )(condition)
     }}
   />
 )
@@ -32,7 +32,7 @@ export default class extends React.Component {
     const { data } = this.props
     return (
       <View>
-        <TLight mb="8" textAlign="left" fontSize="14" color={colors.brownGrey}>สถานที่ทำงาน</TLight>
+        <TLight mb="8" textAlign="left" fontSize="14" color={colors.grey}>สถานที่ทำงาน</TLight>
         <View style={{ flexDirection: 'row' }}>
           {
             data.map((d, key) => (
@@ -40,8 +40,8 @@ export default class extends React.Component {
                 key={key}
                 style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}
               >
-                <ActiveCycle condition />
-                <TLight ml="24" textAlign="left" fontSize="16" color={colors.greyishBrown}>{d}</TLight>
+                <ActiveCycle />
+                <TLight ml="16" textAlign="left" fontSize="16" color={colors.midnight}>{d}</TLight>
               </TouchableOpacity>
             ))
           }

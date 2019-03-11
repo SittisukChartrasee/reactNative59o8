@@ -4,7 +4,7 @@ import Imaterial from './inputDefaultMatiral'
 import Imask from './inputDefaultMask'
 import Idown from './inputDefaultDropdown'
 import Iradio from './inputRadio'
-import { TMed } from '../texts'
+import { TMed, TLight, TBold } from '../texts'
 import colors from '../../config/colors';
 
 const WrapperInput = (key) => {
@@ -33,8 +33,8 @@ const WrapperInput = (key) => {
     default:
       return (
         <View>
-          <TMed fontSize="18" mb="10" mt="10" textAlign="left" color={colors.darkSage}>test</TMed>
-          <TMed fontSize="20" textAlign="left" color={colors.greyishBrown}>TT M</TMed>
+          <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={colors.grey}>หมายเลขโทรศัพท์มือถือ</TLight>
+          <TBold textAlign="left" color={colors.midnight}>088 888 8888</TBold>
         </View>
       )
   }

@@ -11,7 +11,7 @@ const Drop = props => (
     onChangeText={props.onChangeText}
 
     tintColor={colors.darkSage}
-    baseColor={colors.darkSage}
+    baseColor={colors.grey}
     titleFontSize={12}
     labelFontSize={14}
     fontSize={24}
@@ -20,9 +20,9 @@ const Drop = props => (
     textColor={colors.darkSage}
     itemColor={colors.darkSage}
     selectedItemColor={colors.darkSage}
-    style={{ fontFamily: fonts.sukhumvitText }}
+    style={{ fontFamily: fonts.sukhumvitBold }}
     labelTextStyle={{ fontFamily: fonts.sukhumvitText }}
-    itemTextStyle={{ fontFamily: fonts.sukhumvitText }}
+    itemTextStyle={{ fontFamily: fonts.sukhumvitBold }}
   />
 )
 

@@ -5,7 +5,7 @@ import confirmPasscode from '../screen/confirmPasscode'
 import login from '../screen/login'
 
 const MainNavigator = createStackNavigator({
-  // welcome,
+  welcome,
   passcode,
   confirmPasscode,
   login

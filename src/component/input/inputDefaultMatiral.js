@@ -22,11 +22,10 @@ export default class extends React.PureComponent {
   }
 
   static defaultProps = {
-    label: 'TEST',
+    label: 'label',
     fs: 16,
     styled: {},
   }
-
 
 
   render() {
@@ -35,19 +34,15 @@ export default class extends React.PureComponent {
         {...this.props}
         label={this.props.label}
         style={[
-          { fontFamily: fonts.sukhumvitText, color: colors.hunterGreen },
+          { fontFamily: fonts.sukhumvitBold, color: colors.hunterGreen },
           this.props.label === '' && { fontSize: this.props.fs, textAlign: 'center' },
           { ...this.props.styled },
         ]}
-        labelTextStyle={{ fontFamily: fonts.sukhumvitText, fontSize: 100 }}
-        tintColor={colors.darkSage}
-        baseColor={colors.darkSage}
+        labelTextStyle={{ fontFamily: fonts.sukhumvitLight, fontSize: 100 }}
+        tintColor={colors.grey}
+        baseColor={colors.grey}
         titleFontSize={12}
         labelFontSize={this.props.labelFontSize !== undefined ? 20 : 14}
-        // lineWidth={this.props.activeLineWidth !== undefined
-        //   ? 0
-        //   : lineInput(this.props.customTextInputProps.editable)}
-        // {...this.props.customTextInputProps}
         activeLineWidth={this.props.activeLineWidth !== undefined ? 0 : 2}
         fontSize={24}
         value={this.props.value}

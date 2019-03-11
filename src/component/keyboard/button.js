@@ -59,7 +59,6 @@ const Keyboard = props => (
             {
               n.map((nn, i) => (
                 <NumberTouch
-                  onPressIn={() => (Platform.OS === 'android' ? Vibration.vibrate(10) : '')}
                   onPress={() => props.onSet(nn)}
                   key={nn.concat(i)}
                   disabled={nn === ''}
