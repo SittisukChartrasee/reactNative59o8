@@ -14,16 +14,15 @@ export default class extends React.Component {
     this.setState({ ...obj })
 
     if (obj.number.length === 6) {
-      navigation.navigate('confirmPasscode')
+      navigation.navigate('login')
     }
   }
   
   render() {
     const { dot, number } = this.state
-
     return (
       <Screen>
-        <HeadPassCode {...{ dot, title: 'ตั้งรหัส Passcode', dis: 'เพื่อเข้าใช้งานในครั้งถัดไป' }} />
+        <HeadPassCode {...{ dot, title: 'ยืนยันรหัส Passcode', dis: 'กรอกรหัสอีกครั้ง' }} />
         <Keyboard setNumber={this.setNumber}/>
       </Screen>
     )
