@@ -4,7 +4,7 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import colors from '../../config/colors'
-import { TBold, TLight, TMed, TSemiBold, TText, TThin } from '../../component/texts'
+import { TBold, TLight, TMed, TSemiBold, TText, TThin } from '../texts'
 
 export default ({
   label="Long button test"

@@ -1,7 +1,7 @@
-import longButton from './longButton'
+import longPositionButton from './longPositionButton'
 import nextButton from './nextButton'
 
 
-export const LongButton = props => longButton(props)
+export const LongPositionButton = props => longPositionButton(props)
 export const NextButton = props => nextButton(props)
 
