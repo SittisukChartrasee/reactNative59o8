@@ -5,6 +5,8 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  ScrollView,
+  Dimensions,
 } from 'react-native'
 import { connect } from 'react-redux'
 import { TBold } from '../component/texts'
@@ -14,6 +16,8 @@ import images from '../config/images'
 import Input from '../component/input'
 import { LongPositionButton, NextButton } from '../component/button'
 import Modal from '../component/modal'
+
+const { width: widthScreen } = Dimensions.get('window')
 
 const fields = [
   {
@@ -47,13 +51,15 @@ class Welcome extends React.Component {
 
   render() {
     const { value, modal } = this.state
+    const sizing = widthScreen <= 320 ? { width: 160, height: 110 } : {}
     return (
       <Screen>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Image source={images.kmyfundLogo} />
-          <TBold fontSize={20} color={colors.white} mt="30">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
+        <ScrollView contentContainerStyle={{ flex: 1 }}>
+        <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+          <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
+          <TBold fontSize={20} color={colors.white} mt="10" mb="40">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
         </View>
-        <View style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24, paddingVertical: 24 }}>
+        <View style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}>
 
           {
             fields.map(
@@ -65,10 +71,15 @@ class Welcome extends React.Component {
             )
           }
         
-          <LongPositionButton label="ถัดไป" onPress={() => this.setState({ modal: true })} />
         </View>
+          <LongPositionButton label="ถัดไป" onPress={() => this.setState({ modal: true })} />
+        </ScrollView>
 
-        <Modal visible={modal} onPress={() => this.setState({ modal: false })}/>
+        <Modal
+          visible={modal}
+          dis={`อีเมลหรือหมายเลขโทรศัพท์นี้ \nได้ทำการสมัครเปิดบัญชีแล้ว  `}
+          onPress={() => this.setState({ modal: false })}
+        />
       </Screen> 
     )
   }

@@ -12,10 +12,11 @@ export default ({
 }) => (
   <View
     style={{
-      flex: 1,
+      backgroundColor: 'white',
       justifyContent: 'flex-end',
       alignItems: 'center',
-      marginBottom: 24,
+      paddingBottom: 24,
+      paddingHorizontal: 24,
     }}
   >
     <TouchableOpacity

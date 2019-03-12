@@ -19,14 +19,16 @@ import images from '../../config/images'
 export default ({
   visible=false,
   image,
+  labelBtn="รับทราบ",
+  dis="รหัส OTP ไม่ถูกต้อง \nคุณสามารถกรอกได้อีก n ครั้ง",
   onPress=() => {},
 }) => (
-  <Modal isVisible={visible}>
+  <Modal isVisible={visible} onSwipeComplete={onPress} swipeDirection="left" useNativeDriver={true}>
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-      <View style={{ flex: 1, marginHorizontal: 18, padding: 24, backgroundColor: 'white', borderRadius: 8 }}>
+      <View style={{ flex: 1, padding: 24, backgroundColor: 'white', borderRadius: 8 }}>
         { image && <Image source={images} style={{ alignSelf: 'center', marginBottom: 24 }} /> }
-        <TLight>{`รหัส OTP ไม่ถูกต้อง \nคุณสามารถกรอกได้อีก n ครั้ง`}</TLight>
-        <LongButton label="รับทราบ" onPress={onPress} />
+        <TLight>{dis}</TLight>
+        <LongButton label={labelBtn} onPress={onPress} />
       </View>
     </View>
   </Modal>
