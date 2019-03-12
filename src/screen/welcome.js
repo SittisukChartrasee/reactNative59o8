@@ -12,6 +12,7 @@ import Screen from '../component/screenComponent'
 import colors from '../config/colors'
 import images from '../config/images'
 import Input from '../component/input'
+import { LongButton, NextButton } from '../component/button'
 
 const fields = [
   {
@@ -61,7 +62,11 @@ class Welcome extends React.Component {
               }, key)
             )
           }
+        
+        <NextButton />
 
+
+        <LongButton label="ถัดไป" />
         </View>
       </Screen> 
     )
