@@ -21,12 +21,13 @@ const TextMask = styled(TextInputMask)`
 export default class extends React.Component {
   static defaultProps = {
     type: 'custom',
-    fs: '16',
     editable: false,
     placeholder: 'x-xxxx-xxxxx-xx-x',
     maskingOptions: { precision: 0, delimiter: ',', separator: '.' },
     valifie: false,
+
     option: "999 AAA SSS ***",
+    label: 'label',
   }
 
   state = {
@@ -38,21 +39,18 @@ export default class extends React.Component {
       maskingOptions,
       onChangeText,
       value,
-      option
+      option,
+      label
     } = this.props
     return (
       <TextMask
-        label="TEST"
         type={'custom'}
-        options={
-          {
-            // the options for your mask if needed
-            mask: option
-          }
-        }
+        options={{
+          mask: option
+        }}
         customTextInput={Imaterial}
         customTextInputProps={{
-          label: 'label',
+          label,
         }}
         value={value}
         onChangeText={text => onChangeText(text)}

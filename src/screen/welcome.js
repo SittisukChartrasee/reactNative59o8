@@ -11,18 +11,35 @@ import { TBold } from '../component/texts'
 import Screen from '../component/screenComponent'
 import colors from '../config/colors'
 import images from '../config/images'
-import { NavBar } from '../component/gradient/navBar';
-import HeaderSpace from '../component/gradient/HeaderSpace'
 import Input from '../component/input'
-import Keyboard from '../component/keyboard'
+
+const fields = [
+  {
+    type: 'mask',
+    label: 'หมายเลขบัตรประชาชน',
+    field: 'idCard',
+    option: '999 999 999 999',
+  },
+  {
+    type: 'textInput',
+    label: 'อีเมล',
+    field: 'email',
+  },
+  {
+    type: 'mask',
+    label: 'หมายเลขโทรศัพท์มือถือ',
+    field: 'phone',
+    option: '099 999 9999',
+  }
+]
 
 class Welcome extends React.Component {
   state = {
     value: '',
   }
 
-  onChangeText = (d) => {
-    this.setState({ value: d })
+  onChangeText = (id) => (value) => {
+    this.setState({ [id]: value })
   }
 
   render() {
@@ -34,29 +51,17 @@ class Welcome extends React.Component {
           <TBold fontSize={20} color={colors.white} mt="30">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
         </View>
         <View style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24, paddingVertical: 24 }}>
-          <Input
-            type="mask"
-            option="999 999 999 999"
-            value={value}
-            onChangeText={this.onChangeText}
-          />
 
-          <Input
-            type="textInput"
-            value={value}
-            onChangeText={this.onChangeText}
-          />
+          {
+            fields.map(
+              (setField, key) => Input({
+                ...setField,
+                value: this.state[setField.field] ? this.state[setField.field] : value,
+                onChangeText: this.onChangeText(setField.field),
+              }, key)
+            )
+          }
 
-          <Input
-            type="radio"
-            value={value}
-            onChangeText={this.onChangeText}
-          />
-
-          {/* <Input type="dropdown" />
-          <Input type="textInput" />
-          <Input type="radio" />
-          <Input /> */}
         </View>
       </Screen> 
     )
@@ -65,19 +70,3 @@ class Welcome extends React.Component {
 
 const mapToProps = ({ root }) => ({ root })
 export default connect(mapToProps)(Welcome)
-
-// {/* <HeaderSpace /> */}
-//         {/* <NavBar
-//           navLeft={
-//             <TouchableOpacity>
-//               <Image source={images.iconback} />
-//             </TouchableOpacity>
-//           }
-//           // navRight={
-//           //   <TouchableOpacity>
-//           //     <Image source={images.iconback} />
-//           //   </TouchableOpacity>
-//           // }
-//         /> */}
-//         {/* <Text style={{ fontFamily: 'SukhumvitSet-Thin', fontSize: 28 }}>TESTTEST</Text> */}
-//         {/* <Input type="mask" /> */}
