@@ -10,14 +10,7 @@ export default ({
   label="Long button test",
   onPress=() => {}
 }) => (
-  <View
-    style={{
-      flex: 1,
-      justifyContent: 'flex-end',
-      alignItems: 'center',
-      marginBottom: 24,
-    }}
-  >
+  <View style={{ marginTop: 16 }}>
     <TouchableOpacity
       onPress={onPress}
       style={{
@@ -26,7 +19,6 @@ export default ({
         backgroundColor: colors.emerald,
         justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal: 24,
         borderRadius: 56,
       }}
     >

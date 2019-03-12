@@ -38,6 +38,7 @@ const fields = [
 class Welcome extends React.Component {
   state = {
     value: '',
+    modal: false,
   }
 
   onChangeText = (id) => (value) => {
@@ -45,7 +46,7 @@ class Welcome extends React.Component {
   }
 
   render() {
-    const { value } = this.state
+    const { value, modal } = this.state
     return (
       <Screen>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -64,12 +65,10 @@ class Welcome extends React.Component {
             )
           }
         
-
-
-          <LongPositionButton label="ถัดไป" />
+          <LongPositionButton label="ถัดไป" onPress={() => this.setState({ modal: true })} />
         </View>
 
-        <Modal />
+        <Modal visible={modal} onPress={() => this.setState({ modal: false })}/>
       </Screen> 
     )
   }
