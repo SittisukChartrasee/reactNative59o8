@@ -32,7 +32,7 @@ export default class extends React.Component {
     const { data } = this.props
     return (
       <View>
-        <TLight mb="8" textAlign="left" fontSize="14" color={colors.grey}>สถานที่ทำงาน</TLight>
+        <TLight mt="16" mb="8" textAlign="left" fontSize="14" color={colors.grey}>สถานที่ทำงาน</TLight>
         <View style={{ flexDirection: 'row' }}>
           {
             data.map((d, key) => (

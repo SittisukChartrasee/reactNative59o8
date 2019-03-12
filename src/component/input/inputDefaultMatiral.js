@@ -46,7 +46,7 @@ export default class extends React.PureComponent {
         activeLineWidth={this.props.activeLineWidth !== undefined ? 0 : 2}
         fontSize={24}
         value={this.props.value}
-        onChangeText={val => this.props.onChangeText(val, this.props.tag)}
+        onChangeText={val => this.props.onChangeText(val)}
         height="100%"
         autoCorrect={false}
         autoComplete="off"

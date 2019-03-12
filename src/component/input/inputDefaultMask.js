@@ -26,6 +26,7 @@ export default class extends React.Component {
     placeholder: 'x-xxxx-xxxxx-xx-x',
     maskingOptions: { precision: 0, delimiter: ',', separator: '.' },
     valifie: false,
+    option: "999 AAA SSS ***",
   }
 
   state = {
@@ -33,7 +34,12 @@ export default class extends React.Component {
   }
 
   render() {
-    const { maskingOptions } = this.props
+    const {
+      maskingOptions,
+      onChangeText,
+      value,
+      option
+    } = this.props
     return (
       <TextMask
         label="TEST"
@@ -41,19 +47,15 @@ export default class extends React.Component {
         options={
           {
             // the options for your mask if needed
-            mask: '999 AAA SSS ***'
+            mask: option
           }
         }
         customTextInput={Imaterial}
         customTextInputProps={{
           label: 'label',
         }}
-        value={this.state.text}
-        onChangeText={text => {
-          this.setState({
-            text: text
-          })
-        }}
+        value={value}
+        onChangeText={text => onChangeText(text)}
       />
     )
   }

@@ -7,11 +7,11 @@ import Iradio from './inputRadio'
 import { TMed, TLight, TBold } from '../texts'
 import colors from '../../config/colors';
 
-const WrapperInput = (key) => {
-  switch (key) {
+const WrapperInput = (props) => {
+  switch (props.type) {
     case 'mask': 
       return (
-        <Imask />
+        <Imask {...props} />
       )
 
     case 'dropdown': 
@@ -21,7 +21,7 @@ const WrapperInput = (key) => {
 
     case 'textInput':
       return (
-        <Imaterial />
+        <Imaterial {...props} />
       )
 
     case 'radio':
@@ -42,7 +42,6 @@ const WrapperInput = (key) => {
 
 export default class extends React.Component {
   render = () => {
-    const { type } = this.props
-    return WrapperInput(type)
+    return WrapperInput(this.props)
   }
 }

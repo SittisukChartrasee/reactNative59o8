@@ -17,7 +17,16 @@ import Input from '../component/input'
 import Keyboard from '../component/keyboard'
 
 class Welcome extends React.Component {
+  state = {
+    value: '',
+  }
+
+  onChangeText = (d) => {
+    this.setState({ value: d })
+  }
+
   render() {
+    const { value } = this.state
     return (
       <Screen>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -25,11 +34,29 @@ class Welcome extends React.Component {
           <TBold fontSize={20} color={colors.white} mt="30">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
         </View>
         <View style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24, paddingVertical: 24 }}>
-          <Input type="mask" />
-          <Input type="dropdown" />
+          <Input
+            type="mask"
+            option="999 999 999 999"
+            value={value}
+            onChangeText={this.onChangeText}
+          />
+
+          <Input
+            type="textInput"
+            value={value}
+            onChangeText={this.onChangeText}
+          />
+
+          <Input
+            type="radio"
+            value={value}
+            onChangeText={this.onChangeText}
+          />
+
+          {/* <Input type="dropdown" />
           <Input type="textInput" />
           <Input type="radio" />
-          <Input />
+          <Input /> */}
         </View>
       </Screen> 
     )
