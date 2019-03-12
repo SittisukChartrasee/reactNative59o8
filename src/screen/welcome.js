@@ -63,10 +63,9 @@ class Welcome extends React.Component {
             )
           }
         
-        <NextButton />
 
 
-        <LongButton label="ถัดไป" />
+          <LongButton label="ถัดไป" />
         </View>
       </Screen> 
     )
