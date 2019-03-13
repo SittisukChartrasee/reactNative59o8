@@ -8,9 +8,10 @@ import { TBold, TLight, TMed, TSemiBold, TText, TThin } from '../texts'
 
 export default ({
   label="Long button test",
-  onPress=() => {}
+  onPress=() => {},
+  style,
 }) => (
-  <View style={{ marginTop: 16 }}>
+  <View style={{ marginTop: 16, ...style }}>
     <TouchableOpacity
       onPress={onPress}
       style={{

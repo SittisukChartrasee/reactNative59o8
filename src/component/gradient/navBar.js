@@ -44,7 +44,7 @@ export default ({
             { navLeft && navLeft }
           </View>
           <View style={{ flex: 5, alignItems: 'center' }}>
-            { title && <TSemiBold style={{ color: colors.white }}>{subString(title)}</TSemiBold> }
+            { title && <TBold color={colors.white}>{subString(title)}</TBold> }
           </View>
           <View style={{ flex: 1, alignItems: 'flex-end' }}>
             {  navRight && navRight }

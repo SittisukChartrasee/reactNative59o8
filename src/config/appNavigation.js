@@ -4,15 +4,15 @@ import passcode from '../screen/passcode'
 import confirmPasscode from '../screen/confirmPasscode'
 import login from '../screen/login'
 import otp from '../screen/otp'
-import termCondition from '../screen/termCondition'
+import termAndCondition from '../screen/termAndCondition'
 
 const MainNavigator = createStackNavigator({
-  // welcome,
-  // passcode,
-  // confirmPasscode,
-  // login,
-  // otp,
-  termCondition
+  welcome,
+  passcode,
+  confirmPasscode,
+  login,
+  otp,
+  termAndCondition
 }, {
   headerMode: 'none',
 });
