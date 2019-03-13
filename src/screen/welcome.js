@@ -50,6 +50,7 @@ class Welcome extends React.Component {
   }
 
   render() {
+    const { navigation } = this.props
     const { value, modal } = this.state
     const sizing = widthScreen <= 320 ? { width: 160, height: 110 } : {}
     return (
@@ -72,7 +73,7 @@ class Welcome extends React.Component {
           }
         
         </View>
-          <LongPositionButton label="ถัดไป" onPress={() => this.setState({ modal: true })} />
+          <LongPositionButton label="ถัดไป" onPress={() => navigation.navigate('otp')} />
         </ScrollView>
 
         <Modal

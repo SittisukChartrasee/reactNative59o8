@@ -10,7 +10,7 @@ import { TText, TSemiBold, TLight } from '../texts';
 import colors from '../../config/colors';
 import images from '../../config/images';
 
-const dotComponent = ({
+export const dotComponent = ({
   dot=['','','','','','']
 }) => (
   <View style={{ marginTop: 32, flexDirection: 'row', justifyContent: 'space-around' }}>
@@ -30,9 +30,11 @@ const dotComponent = ({
 
 export const HeadPassCode = ({
   title="Test title",
+  labelBtn="ลืมรหัส",
   dis,
   dot,
   forgetbtn,
+  children=({ dot }) => dotComponent({ dot })
 }) => (
   <View
     style={{
@@ -45,7 +47,7 @@ export const HeadPassCode = ({
   >
     <TSemiBold color={colors.white} fontSize={28}>{title}</TSemiBold>
     { dis && <TLight color={colors.smoky} fontSize={16}>{dis}</TLight> }
-    { dotComponent({ dot }) }
+    { children({ dot }) }
 
     {
       forgetbtn && typeof forgetbtn === 'function' && (
@@ -60,7 +62,7 @@ export const HeadPassCode = ({
             style={{ textDecorationLine: 'underline', textDecorationColor: 'white' }}
             color={colors.smoky}
           >
-            ลืมรหัส
+            {labelBtn}
           </TSemiBold>
         </TouchableOpacity>
       )
@@ -68,29 +70,3 @@ export const HeadPassCode = ({
     
   </View>
 )
-
-export default class extends React.Component {
-  render() {
-    return (
-      <LinearGradient
-        colors={[colors.darkSage, colors.hunterGreen, colors.black]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0.6, y: 0 }}
-        locations={[0, 1, 1]}
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingTop: 64,
-          paddingBottom: 45,
-          borderBottomRightRadius: 8,
-          borderBottomLeftRadius: 8,
-        }}
-      >
-        <View>
-          <Image source={images.kmyfundLogo} />
-          <TSemiBold fontSize={20} color={colors.white} mt="30">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TSemiBold>
-        </View>
-      </LinearGradient>
-    )
-  }
-}
