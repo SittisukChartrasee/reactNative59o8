@@ -56,24 +56,24 @@ class Welcome extends React.Component {
     return (
       <Screen>
         <ScrollView contentContainerStyle={{ flex: 1 }}>
-        <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-          <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
-          <TBold fontSize={20} color={colors.white} mt="10" mb="40">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
-        </View>
-        <View style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}>
+          <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+            <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
+            <TBold fontSize={20} color={colors.white} mt="10" mb="40">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
+          </View>
+          <View style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}>
 
-          {
-            fields.map(
-              (setField, key) => Input({
-                ...setField,
-                value: this.state[setField.field] ? this.state[setField.field] : value,
-                onChangeText: this.onChangeText(setField.field),
-              }, key)
-            )
-          }
-        
-        </View>
-          <LongPositionButton label="ถัดไป" onPress={() => navigation.navigate('otp')} />
+            {
+              fields.map(
+                (setField, key) => Input({
+                  ...setField,
+                  value: this.state[setField.field] ? this.state[setField.field] : value,
+                  onChangeText: this.onChangeText(setField.field),
+                }, key)
+              )
+            }
+          
+          </View>
+          <LongPositionButton label="ถัดไป" onPress={() => navigation.navigate('tutorialBackCamera')} />
         </ScrollView>
 
         <Modal

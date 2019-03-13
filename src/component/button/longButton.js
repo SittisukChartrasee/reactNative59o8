@@ -9,6 +9,7 @@ import { TBold, TLight, TMed, TSemiBold, TText, TThin } from '../texts'
 export default ({
   label="Long button test",
   onPress=() => {},
+  colorBtn=colors.emerald,
   style,
 }) => (
   <View style={{ marginTop: 16, ...style }}>
@@ -17,7 +18,7 @@ export default ({
       style={{
         width: '100%',
         height: 56,
-        backgroundColor: colors.emerald,
+        backgroundColor: colorBtn,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 56,

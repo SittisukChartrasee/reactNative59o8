@@ -17,6 +17,7 @@ export default class extends React.Component {
   }
   render() {
     const { agree } = this.state
+    const { navigation } = this.props
     return (
       <View>
         <NavBar />
@@ -50,7 +51,7 @@ export default class extends React.Component {
           </TouchableOpacity>
           <LongButton
             label="ยืนยัน"
-            // onPress={() => }
+            onPress={() => navigation.navigate('tutorialBackCamera')}
             style={{ marginHorizontal: 24 }}
           />
         </View>

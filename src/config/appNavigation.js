@@ -4,7 +4,8 @@ import passcode from '../screen/passcode'
 import confirmPasscode from '../screen/confirmPasscode'
 import login from '../screen/login'
 import otp from '../screen/otp'
-import termAndCondition from '../screen/termAndCondition'
+import condi from '../screen/condi'
+import tutorialBackCamera from '../screen/camera/tutorialBackCamera'
 
 const MainNavigator = createStackNavigator({
   welcome,
@@ -12,7 +13,8 @@ const MainNavigator = createStackNavigator({
   confirmPasscode,
   login,
   otp,
-  termAndCondition
+  condi,
+  tutorialBackCamera
 }, {
   headerMode: 'none',
 });

@@ -3,7 +3,7 @@ export default {
   black: '#000000',
   hunterGreen: '#172C0B',
   deepTeal: '#006E51',
-  emerald: '#00A956',
+  emerald: '#00aa49',
   lightgrey: '#f4f4f4',
   smoky: '#D8D6D9',
   grey: '#8C8786',

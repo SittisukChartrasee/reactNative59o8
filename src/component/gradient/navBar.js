@@ -19,10 +19,11 @@ const subString = (string) => {
 export default ({
   navRight,
   navLeft=<Image source={images.iconback} />,
-  title="เงื่อนไขการเปิดบัญชี"
+  title="เงื่อนไขการเปิดบัญชี",
+  color,
 }) => (
   <LinearGradient
-    colors={[colors.deepTeal, colors.hunterGreen]} 
+    colors={color ? [color, color] : [colors.deepTeal, colors.hunterGreen]} 
     start={{ x: 0, y: 0 }}
     end={{ x: 0.6, y: 0 }}
   >
