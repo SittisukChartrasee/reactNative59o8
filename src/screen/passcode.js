@@ -1,7 +1,7 @@
 import React from 'react'
 import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
-import { HeadPassCode } from '../component/gradient/HeaderSpace'
+import { HeadSpace } from '../component/headSpace'
 
 export default class extends React.Component {
   state = {
@@ -23,7 +23,7 @@ export default class extends React.Component {
 
     return (
       <Screen>
-        <HeadPassCode {...{ dot, title: 'ตั้งรหัส Passcode', dis: 'เพื่อเข้าใช้งานในครั้งถัดไป' }} />
+        <HeadSpace {...{ dot, title: 'ตั้งรหัส Passcode', dis: 'เพื่อเข้าใช้งานในครั้งถัดไป' }} />
         <Keyboard setNumber={this.setNumber}/>
       </Screen>
     )
