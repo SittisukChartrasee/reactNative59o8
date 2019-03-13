@@ -73,7 +73,7 @@ class Welcome extends React.Component {
           }
         
         </View>
-          <LongPositionButton label="ถัดไป" onPress={() => navigation.navigate('passcode')} />
+          <LongPositionButton label="ถัดไป" onPress={() => navigation.navigate('otp')} />
         </ScrollView>
 
         <Modal

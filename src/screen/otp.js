@@ -1,11 +1,11 @@
 import React from 'react'
 import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
-import { HeadSpace, dotComponent } from '../component/headSpace'
+import { HeadSpace, lineotpComponent } from '../component/headSpace'
 
 export default class extends React.Component {
   state = {
-    dot: ['', '', '', '', '', ''],
+    dot: [false, false, false, false, false, false],
     number: '',
   }
 
@@ -13,9 +13,9 @@ export default class extends React.Component {
     const { navigation } = this.props
     this.setState({ ...obj })
 
-    // if (obj.number.length === 6) {
-    //   navigation.navigate('confirmPasscode')
-    // }
+    if (obj.number.length === 6) {
+      navigation.navigate('passcode')
+    }
   }
   
   render() {
@@ -29,7 +29,7 @@ export default class extends React.Component {
             labelBtn: 'ส่งรหัส OTP อีกครั้ง',
             dis: 'รหัสอ้างอิง : KaS4TEd',
             forgetbtn: () => alert('resent OTP'),
-            children: dotComponent,
+            children: lineotpComponent,
           }}
         />
         <Keyboard setNumber={this.setNumber}/>

@@ -3,6 +3,8 @@ import {
   View,
   Image,
   StatusBar,
+  SafeAreaView,
+  Platform,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { TText, TBold, TSemiBold } from '../texts';
@@ -14,37 +16,41 @@ const subString = (string) => {
 }
 
 
-export const NavBar = ({
+export default ({
   navRight,
   navLeft=<Image source={images.iconback} />,
   title="เงื่อนไขการเปิดบัญชี"
 }) => (
   <LinearGradient
-    colors={[colors.darkSage, colors.hunterGreen, colors.black]} 
+    colors={[colors.deepTeal, colors.hunterGreen]} 
     start={{ x: 0, y: 0 }}
     end={{ x: 0.6, y: 0 }}
-    locations={[0, 1, 1]}
   >
-    <StatusBar barStyle="light-content" />
-    <View
-      style={{
-        height: 43.5,
-        justifyContent: 'center',
-        marginTop: 20,
-        marginHorizontal: 15,
-      }}
-    >
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <View style={{ flex: 1, alignItems: 'flex-start' }}>
-          { navLeft && navLeft }
-        </View>
-        <View style={{ flex: 5, alignItems: 'center' }}>
-          { title && <TSemiBold style={{ color: colors.white }}>{subString(title)}</TSemiBold> }
-        </View>
-        <View style={{ flex: 1, alignItems: 'flex-end' }}>
-          {  navRight && navRight }
+    <SafeAreaView>
+      <StatusBar barStyle="light-content" />
+      <View
+        style={{
+          height: 43.5,
+          justifyContent: 'center',
+          marginHorizontal: 15,
+          ...((platform) => platform === 'android' 
+            ? { marginTop: 11, marginBottom: 8 } 
+            : {}
+          )(Platform.OS)
+        }}
+      >
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flex: 1, alignItems: 'flex-start' }}>
+            { navLeft && navLeft }
+          </View>
+          <View style={{ flex: 5, alignItems: 'center' }}>
+            { title && <TSemiBold style={{ color: colors.white }}>{subString(title)}</TSemiBold> }
+          </View>
+          <View style={{ flex: 1, alignItems: 'flex-end' }}>
+            {  navRight && navRight }
+          </View>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   </LinearGradient>
 )
