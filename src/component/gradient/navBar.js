@@ -5,6 +5,7 @@ import {
   StatusBar,
   SafeAreaView,
   Platform,
+  TouchableOpacity,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { TText, TBold, TSemiBold } from '../texts';
@@ -18,7 +19,11 @@ const subString = (string) => {
 
 export default ({
   navRight,
-  navLeft=<Image source={images.iconback} />,
+  navLeft=(
+    <TouchableOpacity onPress={() => {}}>
+      <Image source={images.iconback} />
+    </TouchableOpacity>
+  ),
   title="เงื่อนไขการเปิดบัญชี",
   color,
 }) => (

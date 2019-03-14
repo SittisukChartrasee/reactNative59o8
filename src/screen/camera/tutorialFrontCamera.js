@@ -16,9 +16,18 @@ const { width: widthView } = Dimensions.get('window')
 
 export default class extends React.Component {
   render() {
+    const { navigation } = this.props
     return (
       <Screen>
-        <NavBar color="transparent" title="ถ่ายบัตรประชาชนคู่ใบหน้า" />
+        <NavBar
+          color="transparent"
+          title="ถ่ายบัตรประชาชนคู่ใบหน้า"
+          navLeft={
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image source={images.iconback} />
+            </TouchableOpacity>
+          }
+        />
 
         <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
           <View style={{ justifyContent: 'flex-start', alignItems: 'center' }}>

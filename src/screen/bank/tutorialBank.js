@@ -11,7 +11,7 @@ import { TText, TBold, TSemiBold, TLight } from '../../component/texts'
 import colors from '../../config/colors'
 import { LongButton } from '../../component/button'
 import images from '../../config/images'
-const { width: widthView } = Dimensions.get('window')
+const { width: widthView, height: heightView } = Dimensions.get('window')
 
 
 export default class extends React.Component {
@@ -21,7 +21,7 @@ export default class extends React.Component {
       <Screen>
         <NavBar
           color="transparent"
-          title="ถ่ายบัตรประชาชน"
+          title="เชื่อมบัญชีธนาคาร"
           navLeft={
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image source={images.iconback} />
@@ -31,27 +31,36 @@ export default class extends React.Component {
 
         <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
           <View style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
-            <TLight fontSize={16} mb="7%" color={colors.white}>{`ข้อมูลบนรูปบัตรประชาชนต้องชัดเจน \nไม่มีการปิดบังส่วนหนึ่งส่วนใดของบัตร`}</TLight>
-            <Image source={images.idCardMockup} style={{ width: widthView * .6 }} resizeMode="contain"  />
+            <Image source={images.group3} style={{ height: heightView * .2 }} resizeMode="contain"  />
+            <TSemiBold fontSize={16} mt="5%" color={colors.white}>{`กรุณาเลือกธนาคารที่ท่าน\nต้องการใช้ทำธุรกรรมอัตโนมัติและ\nทำการยืนยันตัวตนออนไลน์`}</TSemiBold>
 
             <View style={{ marginHorizontal: 24, marginTop: '6%' }}>
               <View style={{ flexDirection: 'row' }}>
                 <Image source={images.stroke1} style={{ marginTop: '3%' }} />
                 <View style={{ paddingHorizontal: 16 }}>
-                  <TLight fontSize={16} color={colors.smoky} textAlign="left">รูปภาพไม่เบลอ เห็นตัวอักษรชัดเจน และเห็นภาพบัตรเต็มใบ</TLight>
+                  <TLight fontSize={16} color={colors.smoky} textAlign="left">ตัดเงินจากบัญชีอัตโนมัติ</TLight>
                 </View>
               </View>
 
               <View style={{ flexDirection: 'row' }}>
                 <Image source={images.stroke1} style={{ marginTop: '2%' }} />
                 <View style={{ paddingHorizontal: 16 }}>
-                  <TLight fontSize={16} color={colors.smoky} textAlign="left">ไม่ถ่ายสะท้อนแสง และไม่มืด หรือสว่างจนเกินไป</TLight>
+                  <TLight fontSize={16} color={colors.smoky} textAlign="left">รับเงินปันผล</TLight>
+                </View>
+              </View>
+
+              <View style={{ flexDirection: 'row' }}>
+                <Image source={images.stroke1} style={{ marginTop: '2%' }} />
+                <View style={{ paddingHorizontal: 16 }}>
+                  <TLight fontSize={16} color={colors.smoky} textAlign="left">รับเงินค่าขายคืน</TLight>
                 </View>
               </View>
             </View>
           </View>
 
-          <View style={{ width: widthView }}>
+
+          <View style={widthView <= 320 ? { width: widthView, marginBottom: 24 } : { width: widthView }}>
+            <TSemiBold fontSize={16} color={colors.sunflower} mt="9%">{`โดยชื่อบัญชีธนาคารต้องเป็นชื่อเดียวกันกับ\nชื่อที่ใช้สมัครเปิดบัญชี KmyFunds`}</TSemiBold>
             <LongButton
               label="รับทราบ"
               style={{ marginHorizontal: 24 }}
