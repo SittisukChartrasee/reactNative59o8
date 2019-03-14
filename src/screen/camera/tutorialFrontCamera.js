@@ -16,21 +16,20 @@ const { width: widthView } = Dimensions.get('window')
 
 export default class extends React.Component {
   render() {
-    const { navigation } = this.props
     return (
       <Screen>
-        <NavBar color="transparent" title="ถ่ายบัตรประชาชน" />
+        <NavBar color="transparent" title="ถ่ายบัตรประชาชนคู่ใบหน้า" />
 
         <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
           <View style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
-            <TLight fontSize={16} mb="7%" color={colors.white}>{`ข้อมูลบนรูปบัตรประชาชนต้องชัดเจน \nไม่มีการปิดบังส่วนหนึ่งส่วนใดของบัตร`}</TLight>
-            <Image source={images.idCardMockup} style={{ width: widthView * .6 }} resizeMode="contain"  />
+            <TLight fontSize={16} mb="7%" color={colors.white}>{`แสดงบัตรประชาชนไว้ด้านหน้าของคุณ \nเพื่อแสดงความเป็นเจ้าของบัตร`}</TLight>
+            <Image source={images.selfie} style={{ width: widthView * .6 }} resizeMode="contain"  />
 
             <View style={{ marginHorizontal: 24, marginTop: '6%' }}>
               <View style={{ flexDirection: 'row' }}>
                 <Image source={images.stroke1} style={{ marginTop: '3%' }} />
                 <View style={{ paddingHorizontal: 16 }}>
-                  <TLight fontSize={16} color={colors.smoky} textAlign="left">รูปภาพไม่เบลอ เห็นตัวอักษรชัดเจน และเห็นภาพบัตรเต็มใบ</TLight>
+                  <TLight fontSize={16} color={colors.smoky} textAlign="left">รูปภาพไม่เบลอ ใบหน้าชัดเจน และเห็นภาพบัตรเต็มใบ</TLight>
                 </View>
               </View>
 
@@ -47,7 +46,7 @@ export default class extends React.Component {
             <LongButton
               label="รับทราบ"
               style={{ marginHorizontal: 24 }}
-              onPress={() => navigation.navigate('tutorialFrontCamera')}
+              // onPress={() => navigation.navigate('tutorialBackCamera')}
             />
           </View>
         </View>

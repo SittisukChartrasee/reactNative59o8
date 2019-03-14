@@ -6,6 +6,7 @@ import login from '../screen/login'
 import otp from '../screen/otp'
 import condi from '../screen/condi'
 import tutorialBackCamera from '../screen/camera/tutorialBackCamera'
+import tutorialFrontCamera from '../screen/camera/tutorialFrontCamera'
 
 const MainNavigator = createStackNavigator({
   welcome,
@@ -14,7 +15,8 @@ const MainNavigator = createStackNavigator({
   login,
   otp,
   condi,
-  tutorialBackCamera
+  tutorialBackCamera,
+  tutorialFrontCamera
 }, {
   headerMode: 'none',
 });
