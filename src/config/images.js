@@ -9,8 +9,10 @@ import idCardMockup from '../../assets/image/idCardMockup.png'
 import stroke1 from '../../assets/image/stroke1.png'
 import selfie from '../../assets/image/selfieId.png'
 import group3 from '../../assets/image/group3.png'
+import iconLock from '../../assets/image/iconLock.png'
 
 export default {
+  iconLock,
   group3,
   selfie,
   stroke1,

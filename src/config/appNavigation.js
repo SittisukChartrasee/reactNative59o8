@@ -8,17 +8,19 @@ import condi from '../screen/condi'
 import tutorialBackCamera from '../screen/camera/tutorialBackCamera'
 import tutorialFrontCamera from '../screen/camera/tutorialFrontCamera'
 import turorialBank from '../screen/bank/tutorialBank'
+import lockUser from '../screen/lock/lockUser'
 
 const MainNavigator = createStackNavigator({
-  // welcome,
-  // passcode,
-  // confirmPasscode,
-  // login,
-  // otp,
-  // condi,
-  // tutorialBackCamera,
-  // tutorialFrontCamera,
-  turorialBank
+  welcome,
+  passcode,
+  confirmPasscode,
+  login,
+  otp,
+  condi,
+  tutorialBackCamera,
+  tutorialFrontCamera,
+  turorialBank,
+  lockUser
 }, {
   headerMode: 'none',
 });
