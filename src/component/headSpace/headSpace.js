@@ -37,7 +37,7 @@ export default ({
           onPress={forgetbtn}
           style={{
             position: 'absolute',
-            bottom: 40,
+            bottom: '5%',
           }}
         >
           <TSemiBold 

@@ -24,7 +24,7 @@ export default ({
       <Image source={images.iconback} />
     </TouchableOpacity>
   ),
-  title="เงื่อนไขการเปิดบัญชี",
+  title="navBar title",
   color,
 }) => (
   <LinearGradient
