@@ -18,9 +18,23 @@ export default class extends React.Component {
   render() {
     return (
       <Screen color="transparent">
-        <NavBar title="ข้อมูลส่วนตัว" />
+        <NavBar
+          title="ข้อมูลส่วนตัว"
+          navLeft={
+            <TouchableOpacity onPress={() => {}}>
+              <Image source={images.iconback} />
+            </TouchableOpacity>
+          }
+          navRight={
+            <TouchableOpacity>
+              <Image source={images.iconlogoOff} />
+            </TouchableOpacity>
+          }
+        />
 
-        <ScrollView>
+        <ScrollView
+          style={{ marginHorizontal: 24 }}
+        >
           <Input />
         </ScrollView>
       </Screen>

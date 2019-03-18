@@ -1,8 +1,16 @@
 import React from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
 import { HeadSpace } from '../component/headSpace'
+import { navigateAction } from '../redux/actions'
 
+const mapToProps = () => ({})
+const dispatchToProps = dispatch => ({
+  navigateAction: bindActionCreators(navigateAction, dispatch)
+})
+@connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   state = {
     dot: ['', '', '', '', '', ''],
@@ -14,7 +22,7 @@ export default class extends React.Component {
     this.setState({ ...obj })
 
     if (obj.number.length === 6) {
-      navigation.navigate('confirmPasscode')
+      navigateAction({ ...this.props, page: 'confirmPasscode' })
     }
   }
   

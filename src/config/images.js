@@ -10,8 +10,10 @@ import stroke1 from '../../assets/image/stroke1.png'
 import selfie from '../../assets/image/selfieId.png'
 import group3 from '../../assets/image/group3.png'
 import iconLock from '../../assets/image/iconLock.png'
+import iconlogoOff from '../../assets/image/iconlogoff.png'
 
 export default {
+  iconlogoOff,
   iconLock,
   group3,
   selfie,

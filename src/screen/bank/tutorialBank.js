@@ -5,18 +5,25 @@ import {
   Dimensions,
   Image
 } from 'react-native'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { TText, TBold, TSemiBold, TLight } from '../../component/texts'
 import colors from '../../config/colors'
 import { LongButton } from '../../component/button'
 import images from '../../config/images'
+import { navigateAction } from '../../redux/actions'
 const { width: widthView, height: heightView } = Dimensions.get('window')
 
-
+const mapToProps = () => ({})
+const dispatchToProps = dispatch => ({
+  navigateAction: bindActionCreators(navigateAction, dispatch)
+})
+@connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   render() {
-    const { navigation } = this.props
+    const { navigateAction } = this.props
     return (
       <Screen>
         <NavBar
@@ -64,7 +71,7 @@ export default class extends React.Component {
             <LongButton
               label="รับทราบ"
               style={{ marginHorizontal: 24 }}
-              onPress={() => navigation.navigate('tutorialFrontCamera')}
+              onPress={() => navigateAction({ ...this.props, page: 'tutorialFrontCamera' })}
             />
           </View>
         </View>

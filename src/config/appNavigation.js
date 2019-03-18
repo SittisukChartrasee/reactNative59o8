@@ -12,16 +12,16 @@ import lockUser from '../screen/lock/lockUser'
 import profile from '../screen/profile/profile'
 
 const MainNavigator = createStackNavigator({
-  // welcome,
-  // passcode,
-  // confirmPasscode,
-  // login,
-  // otp,
-  // condi,
-  // tutorialBackCamera,
-  // tutorialFrontCamera,
-  // turorialBank,
-  // lockUser,
+  welcome,
+  passcode,
+  confirmPasscode,
+  login,
+  otp,
+  condi,
+  tutorialBackCamera,
+  tutorialFrontCamera,
+  turorialBank,
+  lockUser,
   profile
 }, {
   headerMode: 'none',

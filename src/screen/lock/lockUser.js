@@ -5,18 +5,25 @@ import {
   Dimensions,
   Image
 } from 'react-native'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { TText, TBold, TSemiBold, TLight } from '../../component/texts'
 import colors from '../../config/colors'
 import { LongButton } from '../../component/button'
 import images from '../../config/images'
+import { navigateAction } from '../../redux/actions'
 const { width: widthView } = Dimensions.get('window')
 
-
+const mapToProps = () => ({})
+const dispatchToProps = dispatch => ({
+  navigateAction: bindActionCreators(navigateAction, dispatch)
+})
+@connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   render() {
-    const { navigation } = this.props
+    const { navigateAction } = this.props
     return (
       <Screen>
         <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center', paddingTop: 40 }}>
@@ -29,7 +36,7 @@ export default class extends React.Component {
             label="ติดต่อ 02-673-3999"
             style={{ marginHorizontal: 24 }}
             bgTransparent
-            // onPress={() => navigation.navigate('tutorialBackCamera')}
+            onPress={() => navigateAction({ ...this.props, page: 'tutorialBackCamera' })}
           />
         </View>
       </Screen>

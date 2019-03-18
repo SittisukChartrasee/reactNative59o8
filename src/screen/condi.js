@@ -5,19 +5,27 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import colors from '../config/colors'
 import images from '../config/images'
 import { TLight } from '../component/texts'
 import { NavBar } from '../component/gradient'
 import { LongButton } from '../component/button'
+import { navigateAction } from '../redux/actions'
 
+const mapToProps = () => ({})
+const dispatchToProps = dispatch => ({
+  navigateAction: bindActionCreators(navigateAction, dispatch)
+})
+@connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   state = {
     agree: false,
   }
   render() {
     const { agree } = this.state
-    const { navigation } = this.props
+    const { navigateAction } = this.props
     return (
       <View>
         <NavBar title="เงื่อนไขการเปิดบัญชี" />
@@ -51,7 +59,7 @@ export default class extends React.Component {
           </TouchableOpacity>
           <LongButton
             label="ยืนยัน"
-            onPress={() => navigation.navigate('tutorialBackCamera')}
+            onPress={() => navigateAction({ ...this.props, page: 'tutorialBackCamera' })}
             style={{ marginHorizontal: 24 }}
           />
         </View>

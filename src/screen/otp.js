@@ -1,8 +1,17 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
 import { HeadSpace, lineotpComponent } from '../component/headSpace'
+import { navigateAction } from '../redux/actions'
 
+const mapToProps = () => ({})
+const dispatchToProps = dispatch => ({
+  navigateAction: bindActionCreators(navigateAction, dispatch)
+})
+
+@connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   state = {
     dot: [false, false, false, false, false, false],
@@ -10,11 +19,11 @@ export default class extends React.Component {
   }
 
   setNumber = (obj) => {
-    const { navigation } = this.props
+    const { navigateAction } = this.props
     this.setState({ ...obj })
 
     if (obj.number.length === 6) {
-      navigation.navigate('passcode')
+      navigateAction({ ...this.props, page: 'passcode' })
     }
   }
   

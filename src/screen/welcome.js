@@ -8,6 +8,7 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { TBold } from '../component/texts'
 import Screen from '../component/screenComponent'
@@ -16,6 +17,7 @@ import images from '../config/images'
 import Input from '../component/input'
 import { LongPositionButton, NextButton } from '../component/button'
 import Modal from '../component/modal'
+import { navigateAction } from '../redux/actions'
 
 const { width: widthScreen } = Dimensions.get('window')
 
@@ -39,7 +41,13 @@ const fields = [
   }
 ]
 
-class Welcome extends React.Component {
+const mapToProps = ({ root }) => ({ root })
+const dispatchToProps = dispatch => ({
+  navigateAction: bindActionCreators(navigateAction, dispatch)
+})
+
+@connect(mapToProps, dispatchToProps)
+export default class extends React.Component {
   state = {
     value: '',
     modal: false,
@@ -50,7 +58,7 @@ class Welcome extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
+    const { navigation, navigateAction } = this.props
     const { value, modal } = this.state
     const sizing = widthScreen <= 320 ? { width: 160, height: 110 } : {}
     return (
@@ -73,7 +81,7 @@ class Welcome extends React.Component {
             }
           
           </View>
-          <LongPositionButton label="ถัดไป" onPress={() => navigation.navigate('otp')} />
+          <LongPositionButton label="ถัดไป" onPress={() => navigateAction({ ...this.props, page: 'otp' })} />
         </ScrollView>
 
         <Modal
@@ -86,5 +94,4 @@ class Welcome extends React.Component {
   }
 }
 
-const mapToProps = ({ root }) => ({ root })
-export default connect(mapToProps)(Welcome)
+
