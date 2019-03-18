@@ -11,8 +11,10 @@ import selfie from '../../assets/image/selfieId.png'
 import group3 from '../../assets/image/group3.png'
 import iconLock from '../../assets/image/iconLock.png'
 import iconlogoOff from '../../assets/image/iconlogoff.png'
+import iconinformation from '../../assets/image/iconinformationblack.png'
 
 export default {
+  iconinformation,
   iconlogoOff,
   iconLock,
   group3,

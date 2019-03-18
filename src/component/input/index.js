@@ -4,6 +4,7 @@ import Imaterial from './inputDefaultMatiral'
 import Imask from './inputDefaultMask'
 import Idown from './inputDefaultDropdown'
 import Iradio from './inputRadio'
+import Input from './inputDefault'
 import { TMed, TLight, TBold } from '../texts'
 import colors from '../../config/colors';
 
@@ -24,6 +25,11 @@ export default (props, key) => {
         <Imaterial key={key} {...props} />
       )
 
+    case 'Icustom':
+      return (
+        <Input key={key} />
+      )
+
     case 'radio':
       return (
         <Iradio key={key} />
@@ -33,8 +39,8 @@ export default (props, key) => {
     default:
       return (
         <View key={key} style={{ marginTop: 16 }}>
-          <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={colors.grey}>หมายเลขโทรศัพท์มือถือ</TLight>
-          <TBold textAlign="left" color={colors.midnight}>088 888 8888</TBold>
+          <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={colors.grey}>{props.label}</TLight>
+          <TBold textAlign="left" color={colors.midnight}>1 1234 12345</TBold>
         </View>
       )
   }

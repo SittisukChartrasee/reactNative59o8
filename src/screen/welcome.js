@@ -57,8 +57,12 @@ export default class extends React.Component {
     this.setState({ [id]: value })
   }
 
+  onNext = () => {
+    const { navigateAction } = this.props
+    navigateAction({ ...this.props, page: 'otp' })
+  }
+
   render() {
-    const { navigation, navigateAction } = this.props
     const { value, modal } = this.state
     const sizing = widthScreen <= 320 ? { width: 160, height: 110 } : {}
     return (
@@ -81,7 +85,7 @@ export default class extends React.Component {
             }
           
           </View>
-          <LongPositionButton label="ถัดไป" onPress={() => navigateAction({ ...this.props, page: 'otp' })} />
+          <LongPositionButton label="ถัดไป" onPress={this.onNext} />
         </ScrollView>
 
         <Modal

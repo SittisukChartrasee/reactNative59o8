@@ -36,7 +36,7 @@ export default ({
       <StatusBar barStyle="light-content" />
       <View
         style={{
-          height: 43.5,
+          height: 51.5,
           justifyContent: 'center',
           marginHorizontal: 15,
           ...((platform) => platform === 'android' 
