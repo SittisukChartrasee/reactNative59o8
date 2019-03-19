@@ -8,17 +8,52 @@ import Input from './inputDefault'
 import { TMed, TLight, TBold } from '../texts'
 import colors from '../../config/colors';
 
+const Star = () => (
+  <View style={{ position: 'absolute', left: -16, top: 13 }}>
+    <TLight color={colors.softRed} textAlign="left">*</TLight>
+  </View>
+)
+
 export default (props, key) => {
   switch (props.type) {
-    case 'mask': return <Imask key={key} {...props} />
+    case 'mask':
+      return (
+        <View key={key}>
+          <Star />
+          <Imask key={key} {...props} />
+        </View>
+      )
+    case 'dropdown':
+      return  (
+        <View key={key}>
+          <Star />
+          <Idown {...props} />
+        </View>
+      )
 
-    case 'dropdown': return <Idown key={key} {...props} />
+    case 'textInput':
+      return (
+        <View key={key}>
+          <Star />
+          <Imaterial {...props} />
+        </View>
+      )
 
-    case 'textInput': return <Imaterial key={key} {...props} />
+    case 'Icustom':
+      return (
+        <View key={key}>
+          <Star />
+          <Input {...props} />
+        </View>
+      )
 
-    case 'Icustom': return <Input key={key} {...props} />
-
-    case 'radio': return <Iradio key={key} {...props} />
+    case 'radio':
+      return (
+        <View key={key}>
+          <Star />
+          <Iradio key={key} {...props} />
+        </View>
+      )
   
     default:
       return (

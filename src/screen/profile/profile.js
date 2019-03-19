@@ -95,7 +95,7 @@ export default class extends React.Component {
         />
 
         <ScrollView
-          style={{ marginHorizontal: 24 }}
+          style={{ paddingHorizontal: 24 }}
           showsVerticalScrollIndicator={false}
         >
           {
