@@ -25,23 +25,47 @@ const ActiveCycle = ({
 
 export default class extends React.Component {
   static defaultProps = {
-    data: ['อาคาร', 'หมู่บ้าน']
+    init: [
+      {
+        title: 'อาคาร',
+        active: true,
+      }, {
+        title: 'หมู่บ้าน',
+        active: false,
+      }
+    ],
+    label: 'labelRadio',
+    field: 'fieldName',
+    handleInput: () => {},
+  }
+
+  state = { data: this.props.init }
+
+  handleRadio = (key) => {
+    const { data } = this.state
+    const { handleInput, field } = this.props
+    const maping = data.map((dd, inx) => inx === key
+      ? { ...dd, active: true, output: handleInput({ value: dd.title, type: 'radio', field }) }
+      : { ...dd, active: false })
+    this.setState({ data: maping })
   }
 
   render() {
-    const { data } = this.props
+    const { data } = this.state
+    const { label } = this.props
     return (
       <View>
-        <TLight mt="16" mb="8" textAlign="left" fontSize="14" color={colors.grey}>สถานที่ทำงาน</TLight>
+        <TLight mt="16" mb="8" textAlign="left" fontSize="14" color={colors.grey}>{label}</TLight>
         <View style={{ flexDirection: 'row' }}>
           {
             data.map((d, key) => (
               <TouchableOpacity
                 key={key}
+                onPress={() => this.handleRadio(key)}
                 style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}
               >
-                <ActiveCycle />
-                <TLight ml="16" textAlign="left" fontSize="16" color={colors.midnight}>{d}</TLight>
+                { d.active ? <View style={{ backgroundColor: colors.emerald, width: 16, height: 16, borderRadius: 16 / 2 }} /> : <ActiveCycle /> }
+                <TLight ml="16" textAlign="left" fontSize="16" color={colors.midnight}>{d.title}</TLight>
               </TouchableOpacity>
             ))
           }

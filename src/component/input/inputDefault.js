@@ -11,12 +11,19 @@ import { TLight } from '../texts'
 import colors from '../../config/colors'
 
 export default class extends React.Component {
+  static defaultProps = {
+    handleInput: () => {},
+    field: 'fieldName',
+    label: 'label',
+  }
+
   render() {
+    const { handleInput, field, label } = this.props
     return (
       <View style={{ marginTop: 17 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <TLight fontSize={14} textAlign="left" color={colors.grey}>หมายเลขหลังบัตรประชาชน</TLight>
-          <TouchableOpacity>
+          <TLight fontSize={14} textAlign="left" color={colors.grey}>{label}</TLight>
+          <TouchableOpacity onPress={() => handleInput({ modal: field })}>
             <Image source={images.iconinformation} />
           </TouchableOpacity>
         </View>
@@ -26,6 +33,7 @@ export default class extends React.Component {
             fontFamily: font.sukhumvitBold,
             fontSize: 18
           }}
+          onChangeText={value => handleInput({ value, type: 'Icustom', field })}
           placeholder="ตัวอย่าง JT9-9999999-99"
         />
         <View style={{ height: 1, backgroundColor: colors.smoky }} />

@@ -9,13 +9,14 @@ import { TBold, TLight, TMed, TSemiBold, TText, TThin } from '../../component/te
 import images from '../../config/images'
 
 export default ({
-  label="ต่อไป"
+  label="ต่อไป",
+  onPress=() => {},
 }) => (
   <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', flexDirection: 'row' }}>
     <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
       <TBold fontSize="16" mr="10">{label}</TBold>
       <TouchableOpacity
-        onPress={() => console.log('ok')}
+        onPress={onPress}
         style={{ 
           width: 40,
           height: 40,

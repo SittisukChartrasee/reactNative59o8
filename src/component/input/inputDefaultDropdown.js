@@ -7,14 +7,14 @@ const Drop = props => (
   <Dropdown
     {...props}
     label={props.label}
-    data={props.data}
-    onChangeText={props.onChangeText}
+    data={props.init}
+    onChangeText={(value) => props.handleInput({ value, type: 'dropdown', field: props.field })}
 
     tintColor={colors.darkSage}
     baseColor={colors.grey}
     titleFontSize={12}
     labelFontSize={14}
-    fontSize={24}
+    fontSize={18}
     dropdownPosition={props.dropdownPosition || 0}
 
     textColor={colors.darkSage}
@@ -27,12 +27,14 @@ const Drop = props => (
 )
 
 Drop.defaultProps = {
-  data: [
+  init: [
     { value: 'test' },
     { value: 'test' },
     { value: 'test' },
   ],
-  label: 'test label'
+  label: 'test label',
+  field: 'fieldName',
+  handleInput: () => {},
 }
 
 export default Drop

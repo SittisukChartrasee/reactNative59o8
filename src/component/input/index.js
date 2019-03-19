@@ -10,31 +10,15 @@ import colors from '../../config/colors';
 
 export default (props, key) => {
   switch (props.type) {
-    case 'mask': 
-      return (
-        <Imask key={key} {...props} />
-      )
+    case 'mask': return <Imask key={key} {...props} />
 
-    case 'dropdown': 
-      return (
-        <Idown key={key} />
-      )
+    case 'dropdown': return <Idown key={key} {...props} />
 
-    case 'textInput':
-      return (
-        <Imaterial key={key} {...props} />
-      )
+    case 'textInput': return <Imaterial key={key} {...props} />
 
-    case 'Icustom':
-      return (
-        <Input key={key} />
-      )
+    case 'Icustom': return <Input key={key} {...props} />
 
-    case 'radio':
-      return (
-        <Iradio key={key} />
-      )
-  
+    case 'radio': return <Iradio key={key} {...props} />
   
     default:
       return (

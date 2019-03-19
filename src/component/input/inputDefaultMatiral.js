@@ -7,28 +7,17 @@ import fonts from '../../config/fonts'
 const lineInput = editable => (editable ? 1 : 0)
 
 export default class extends React.PureComponent {
-  static propTypes = {
-    label: PropsType.string,
-    value: PropsType.string.isRequired,
-    onChangeText: PropsType.func.isRequired,
-    fs: PropsType.number,
-    styled: PropsType.object,
-  }
-
-  static defaultProps = {
-    customTextInputProps: {
-      editable: '',
-    },
-  }
-
   static defaultProps = {
     label: 'label',
     fs: 16,
     styled: {},
+    handleInput: () => {},
+    field: 'fieldName',
   }
 
 
   render() {
+    const { handleInput, field } = this.props
     return (
       <TextField
         {...this.props}
@@ -46,7 +35,7 @@ export default class extends React.PureComponent {
         activeLineWidth={this.props.activeLineWidth !== undefined ? 0 : 2}
         fontSize={18}
         value={this.props.value}
-        onChangeText={val => this.props.onChangeText(val)}
+        onChangeText={value => handleInput({ value, type: 'textInput', field })}
         height="100%"
         autoCorrect={false}
         autoComplete="off"
