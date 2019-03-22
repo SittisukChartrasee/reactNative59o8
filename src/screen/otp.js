@@ -38,7 +38,7 @@ export default class extends React.Component {
             labelBtn: 'ส่งรหัส OTP อีกครั้ง',
             dis: 'รหัสอ้างอิง : KaS4TEd',
             forgetbtn: () => alert('resent OTP'),
-            children: lineotpComponent,
+            component: lineotpComponent,
           }}
         />
         <Keyboard setNumber={this.setNumber}/>

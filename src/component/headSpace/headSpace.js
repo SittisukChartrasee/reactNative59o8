@@ -16,7 +16,7 @@ export default ({
   dis,
   dot,
   forgetbtn,
-  children=({ dot }) => dotComponent({ dot })
+  component=({ dot }) => dotComponent({ dot })
 }) => (
   <View
     style={{
@@ -29,7 +29,7 @@ export default ({
   >
     <TSemiBold color={colors.white} fontSize={28}>{title}</TSemiBold>
     { dis && <TLight color={colors.smoky} fontSize={16}>{dis}</TLight> }
-    { children({ dot }) }
+    { component({ dot }) }
 
     {
       forgetbtn && typeof forgetbtn === 'function' && (

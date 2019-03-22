@@ -1,0 +1,1 @@
+export const CHANGE_FATCA = 'CHANGE_FATCA'

@@ -10,6 +10,7 @@ import tutorialFrontCamera from '../screen/camera/tutorialFrontCamera'
 import turorialBank from '../screen/bank/tutorialBank'
 import lockUser from '../screen/lock/lockUser'
 import profile from '../screen/profile/profile'
+import fatca from '../screen/fatca'
 
 const MainNavigator = createStackNavigator({
   // welcome,
@@ -22,7 +23,8 @@ const MainNavigator = createStackNavigator({
   // tutorialFrontCamera,
   // turorialBank,
   // lockUser,
-  profile
+  // profile,
+  fatca
 }, {
   headerMode: 'none',
 });
