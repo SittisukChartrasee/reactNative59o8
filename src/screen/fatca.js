@@ -32,10 +32,6 @@ export default class extends React.Component {
     const checkFatca = NewArr.every(curr => curr.answer === 0)
     this.props.updateFatca('fatca', NewArr)
     this.props.updateFatca('sumFatca', checkFatca)
-
-    // if (this.state.layout[question + 1] !== undefined) {
-    //   this.scroll.scrollTo({ y: this.state.layout[question + 1], animated: true })
-    // }
   }
 
   render() {
@@ -57,10 +53,10 @@ export default class extends React.Component {
 
         <ScrollView
           style={{ paddingHorizontal: 24 }}
+          ref={(ref) => { this.scroll = ref }}
           showsVerticalScrollIndicator={false}
         >
-          <Choice data={this.props.fatcaReducer.fatca} onPress={this.onPress} />
-          {/* disabledChoice={0} */}
+          <Choice data={this.props.fatcaReducer.fatca} onPress={this.onPress} scroll={this.scroll} />
         </ScrollView>
       </Screen>
     )
