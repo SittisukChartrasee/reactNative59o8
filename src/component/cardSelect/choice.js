@@ -1,6 +1,7 @@
 import React from 'react'
 import {
   View,
+  ScrollView,
   TouchableOpacity,
 } from 'react-native'
 import colors from '../../config/colors'
@@ -54,18 +55,23 @@ export default class extends React.Component {
 
   onHandleOnpress = ({ title, key, choice }) => {
     this.props.onPress({ title, key, choice })
-
     if (this.state.layout[key + 1] !== undefined) {
-      this.props.scroll && this.props.scroll.scrollTo({ y: this.state.layout[key + 1], animated: true })
+      this.scroll && this.scroll.scrollTo({ y: this.state.layout[key + 1], animated: true })
     }
   }
 
   render() {
     const { data, disabledChoice } = this.props
     return (
-      <View style={{ marginVertical: 16 }}>
-        { data.map(choice(this.onSetLayout, this.onHandleOnpress, disabledChoice)) }
-      </View>
+      <ScrollView
+        style={{ paddingHorizontal: 24 }}
+        ref={(ref) => { this.scroll = ref }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={{ marginVertical: 16 }}>
+          { data.map(choice(this.onSetLayout, this.onHandleOnpress, disabledChoice)) }
+        </View>
+      </ScrollView>
     )
   }
 }

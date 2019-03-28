@@ -17,14 +17,14 @@ const MainNavigator = createStackNavigator({
   // passcode,
   // confirmPasscode,
   // login,
-  otp,
+  // otp,
   // condi,
   // tutorialBackCamera,
   // tutorialFrontCamera,
   // turorialBank,
   // lockUser,
   // profile,
-  // fatca
+  fatca
 }, {
   headerMode: 'none',
 });
