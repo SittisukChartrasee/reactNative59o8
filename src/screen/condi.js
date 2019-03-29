@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import colors from '../config/colors'
 import images from '../config/images'
-import { chkModel } from '../config/helper'
+import { isIphoneX } from '../config/helper'
 import { TLight } from '../component/texts'
 import { NavBar } from '../component/gradient'
 import { LongButton } from '../component/button'
@@ -29,7 +29,7 @@ export default class extends React.Component {
     const { agree } = this.state
     const { navigateAction } = this.props
     return (
-      <View style={{ flex: 1, backgroundColor: 'white', marginBottom: chkModel() ? '7%' : 16 }}>
+      <View style={{ flex: 1, backgroundColor: 'white', marginBottom: isIphoneX() ? '7%' : 16 }}>
         <NavBar
           title="เงื่อนไขการเปิดบัญชี"
           navRight={

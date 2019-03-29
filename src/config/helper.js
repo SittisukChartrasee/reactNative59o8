@@ -1,9 +1,17 @@
-import { Platform } from 'react-native'
+import { Dimensions, Platform } from 'react-native';
 
-export const chkModel = () => {
-  // console.log('chkModel: ', Constants)
+export function isIphoneX() {
+  const dim = Dimensions.get('window');
   return (
-    Platform.ios &&
-    Platform.ios.model.slice(0, 8) === 'iPhone X'
-  )
+    Platform.OS === 'ios' &&
+    (isIPhoneXSize(dim) || isIPhoneXrSize(dim))
+  );
+}
+
+export function isIPhoneXSize(dim) {
+  return dim.height == 812 || dim.width == 812;
+}
+
+export function isIPhoneXrSize(dim) {
+  return dim.height == 896 || dim.width == 896;
 }
