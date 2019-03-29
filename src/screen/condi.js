@@ -4,6 +4,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -27,9 +28,16 @@ export default class extends React.Component {
     const { agree } = this.state
     const { navigateAction } = this.props
     return (
-      <View>
-        <NavBar title="เงื่อนไขการเปิดบัญชี" />
-        <ScrollView style={{ height: '50%', marginHorizontal: 16, marginTop: 40 }} showsVerticalScrollIndicator={false}>
+      <View style={{ flex: 1, backgroundColor: 'white', marginBottom: '7%' }}>
+        <NavBar
+          title="เงื่อนไขการเปิดบัญชี"
+          navRight={
+            <TouchableOpacity>
+              <Image source={images.iconlogoOff} />
+            </TouchableOpacity>
+          }
+        />
+        <ScrollView contentContainerStyle={{ marginHorizontal: 16, paddingTop: 40, paddingBottom: 16 }} showsVerticalScrollIndicator={false}>
           <TLight color={colors.grey} fontSize={16} textAlign="left">
           1. ผู้ขอใช้บริการมีความประสงค์ให้ธนาคารหักเงินจากบัญชีเงินฝากของผู้ขอใช้บริการ เพื่อชำระหนี้ และ หรือ ภาระผูกพันใด ๆให้แก่ผู้รับเงิน ตามจำนวนเงินและวันที่ที่ปรากฏในใบแจ้งหนี้ และ หรือ ข้อมูลที่ผู้รับเงินได้นำส่งให้แก่ธนาคารผ่านช่องทางอิเล็กทรอนิกส์ หรือด้วยวิธีใดที่ธนาคารได้ตกลงกับผู้รับเงิน หรือตามคำสั่งที่ธนาคารได้รับจากผู้รับเงิน ตัวแทนของผู้รับเงิน และ หรือบุคคลอื่นใดที่ได้รับแต่งตั้งหรือมอบหมายจากผู้รับเงินให้กระทำการแทน และ หรือในนามของผู้รับเงิน (ต่อไปนี้จะเรียกว่า ”ข้อมูลที่นำส่ง”) และนำเงินดังกล่าวโอนเข้าบัญชีเงินฝากของผู้รับเงิน และ หรือบุคคลดังกล่าว.   	ผู้ขอใช้บริการมีความประสงค์ให้ธนาคารหักเงินจากบัญชีเงินฝากของผู้ขอใช้บริการ เพื่อชำระหนี้ และ/หรือ ภาระผูกพันใด ๆ ให้แก่ผู้รับเงิน ตามจำนวนเงินและวันที่ที่ปรากฏในใบแจ้งหนี้ และ/หรือ ข้อมูลที่ผู้รับเงินได้นำส่งให้แก่ธนาคารผ่านช่องทางอิเล็กทรอนิกส์ หรือด้วยวิธีใดที่ธนาคารได้ตกลงกับผู้รับเงิน หรือตามคำสั่งที่ธนาคารได้รับจากผู้รับเงิน ตัวแทนของผู้รับเงิน และ/หรือบุคคลอื่นใดที่ได้รับแต่งตั้งหรือมอบหมายจากผู้รับเงินให้กระทำการแทน และ/หรือในนามของผู้รับเงิน (ต่อไปนี้จะเรียกว่า ”ข้อมูลที่นำส่ง”) และนำเงินดังกล่าวโอนเข้าบัญชีเงินฝากของผู้รับเงิน และ/หรือบุคคลดังกล่าว.             
           </TLight>
@@ -42,15 +50,15 @@ export default class extends React.Component {
               padding: 16,
               flexDirection: 'row',
               marginHorizontal: 24,
-              marginVertical: 16,
+              marginTop: 16,
               borderRadius: 12,
             }}
           >
             <View style={{ marginRight: 16, marginTop: 5 }}>
               {
                 agree
-                  ? <Image source={{}} style={{ width: 16, height: 16, backgroundColor: 'red' }} />
-                  : <Image source={{}} style={{ width: 16, height: 16, backgroundColor: 'green' }} />
+                  ? <Image source={images.iconCheck} style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: 'red' }} />
+                  : <Image source={{}} style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: colors.white }} />
               }
             </View>
             <View style={{ flex: 1 }}>
@@ -61,6 +69,7 @@ export default class extends React.Component {
             label="ยืนยัน"
             onPress={() => navigateAction({ ...this.props, page: 'tutorialBackCamera' })}
             style={{ marginHorizontal: 24 }}
+            disabled={!agree}
           />
         </View>
       </View>

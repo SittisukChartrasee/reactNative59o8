@@ -24,7 +24,7 @@ const dispatchToProps = dispatch => ({
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   render() {
-    const { navigateAction } = this.props
+    const { navigateAction, navigation } = this.props
     return (
       <Screen>
         <NavBar

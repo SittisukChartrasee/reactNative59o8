@@ -18,13 +18,13 @@ const MainNavigator = createStackNavigator({
   // confirmPasscode,
   // login,
   // otp,
-  // condi,
-  // tutorialBackCamera,
+  condi,
+  tutorialBackCamera,
   // tutorialFrontCamera,
   // turorialBank,
   // lockUser,
   // profile,
-  fatca
+  // fatca
 }, {
   headerMode: 'none',
 });

@@ -11,20 +11,22 @@ export default ({
   onPress=() => {},
   colorBtn=colors.emerald,
   bgTransparent=false,
+  disabled=false,
   style,
 }) => (
   <View style={{ marginTop: 16, ...style }}>
     <TouchableOpacity
       onPress={onPress}
+      disabled={disabled}
       style={{
         width: '100%',
         height: 56,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 56,
-        ...(tran => tran 
+        ...(tran => tran
           ? { backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.white } 
-          : { backgroundColor: colorBtn }
+          : { backgroundColor: disabled ? colors.smoky : colorBtn }
         )(bgTransparent)
       }}
     >

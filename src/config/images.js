@@ -12,8 +12,10 @@ import group3 from '../../assets/image/group3.png'
 import iconLock from '../../assets/image/iconLock.png'
 import iconlogoOff from '../../assets/image/iconlogoff.png'
 import iconinformation from '../../assets/image/iconinformationblack.png'
+import iconCheck from '../../assets/image/check.png'
 
 export default {
+  iconCheck,
   iconinformation,
   iconlogoOff,
   iconLock,
