@@ -20,11 +20,11 @@ const MainNavigator = createStackNavigator({
   // otp,
   condi,
   tutorialBackCamera,
-  // tutorialFrontCamera,
-  // turorialBank,
-  // lockUser,
-  // profile,
-  // fatca
+  tutorialFrontCamera,
+  turorialBank,
+  lockUser,
+  profile,
+  fatca
 }, {
   headerMode: 'none',
 });
