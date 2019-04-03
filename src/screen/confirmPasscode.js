@@ -22,7 +22,7 @@ export default class extends React.Component {
     this.setState({ ...obj })
 
     if (obj.number.length === 6) {
-      navigateAction({ ...this.props, page: 'login' })
+      navigateAction({ ...this.props, page: 'condi' })
     }
   }
   

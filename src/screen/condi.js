@@ -27,11 +27,16 @@ export default class extends React.Component {
   }
   render() {
     const { agree } = this.state
-    const { navigateAction } = this.props
+    const { navigateAction, navigation } = this.props
     return (
       <View style={{ flex: 1, backgroundColor: 'white', marginBottom: isIphoneX() ? '7%' : 16 }}>
         <NavBar
           title="เงื่อนไขการเปิดบัญชี"
+          navLeft={
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image source={images.iconback} />
+            </TouchableOpacity>
+          }
           navRight={
             <TouchableOpacity>
               <Image source={images.iconlogoOff} />

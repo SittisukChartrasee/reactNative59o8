@@ -107,9 +107,10 @@ export default class extends React.Component {
               handleInput: this.handleInput,
             }, key))
           }
-          <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
-          <View style={{ marginBottom: 50 }} />
+          <View style={{ marginBottom: 100 }} />
         </ScrollView>
+        
+        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
       </Screen>
     )
   }

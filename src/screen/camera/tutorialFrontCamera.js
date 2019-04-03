@@ -23,7 +23,7 @@ const dispatchToProps = dispatch => ({
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   render() {
-    const { navigateAction } = this.props
+    const { navigateAction, navigation } = this.props
     return (
       <Screen>
         <NavBar
@@ -57,12 +57,12 @@ export default class extends React.Component {
           </View>
         </View>
         <View style={{ flex: 1, width: widthView, justifyContent: 'flex-end', paddingBottom: 44 }}>
-            <LongButton
-              label="รับทราบ"
-              style={{ marginHorizontal: 24 }}
-              // onPress={() => navigateAction({ ...this.props, page: 'tutorialBackCamera' })}
-            />
-          </View>
+          <LongButton
+            label="รับทราบ"
+            style={{ marginHorizontal: 24 }}
+            onPress={() => navigateAction({ ...this.props, page: 'fatca' })}
+          />
+        </View>
       </Screen>
     )
   }

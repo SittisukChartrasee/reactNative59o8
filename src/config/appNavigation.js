@@ -14,17 +14,17 @@ import fatca from '../screen/fatca'
 
 const MainNavigator = createStackNavigator({
   // welcome,
-  // passcode,
-  // confirmPasscode,
   // login,
   // otp,
-  condi,
-  tutorialBackCamera,
-  tutorialFrontCamera,
-  turorialBank,
-  lockUser,
+  // passcode,
+  // confirmPasscode,
+  // condi,
+  // tutorialBackCamera,
+  // tutorialFrontCamera,
+  // turorialBank,
+  // lockUser,
+  fatca,
   profile,
-  fatca
 }, {
   headerMode: 'none',
 });

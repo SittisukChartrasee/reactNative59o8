@@ -17,10 +17,13 @@ import images from '../config/images'
 import Input from '../component/input'
 import { Choice } from '../component/cardSelect'
 import { fatca } from '../redux/actions/commonAction'
+import { navigateAction } from '../redux/actions'
+
 
 const mapToProps = ({ fatcaReducer }) => ({ fatcaReducer })
 const dispatchToProps = dispatch => ({
-  updateFatca: bindActionCreators(fatca, dispatch)
+  updateFatca: bindActionCreators(fatca, dispatch),
+  navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -35,12 +38,13 @@ export default class extends React.Component {
   }
 
   render() {
+    const { navigation, navigateAction } = this.props
     return (
       <Screen color="transparent">
         <NavBar
           title="สถานะพลเมืองสหรัฐ"
           navLeft={
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity  onPress={() => navigation.goBack()}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
@@ -52,6 +56,7 @@ export default class extends React.Component {
         />
 
         <Choice data={this.props.fatcaReducer.fatca} onPress={this.onPress} scroll={this.scroll} />
+        <NextButton disabled onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
       </Screen>
     )
   }

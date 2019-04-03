@@ -12,8 +12,10 @@ const choice = (onSetLayout, onHandleOnpress, disabledChoice) => ({
   choice=[],
   answer=undefined,
 }, key) => (
-  <View key={key} style={{ marginVertical: 16 }} onLayout={(e) => onSetLayout(e.nativeEvent.layout.y, key)}>
-    <TBold fontSize={16} textAlign="left">{title}</TBold>
+  <View key={key} onLayout={(e) => onSetLayout(e.nativeEvent.layout.y, key)}>
+    <View style={{ backgroundColor: colors.lightgrey, paddingHorizontal: 24, paddingVertical: 16 }}>
+      <TBold fontSize={16} textAlign="left">{title}</TBold>
+    </View>
     { choice.map(point(onHandleOnpress, key, answer, disabledChoice)) }
   </View>
 )
@@ -30,6 +32,7 @@ const point = (onHandleOnpress, inx, answer, disabledChoice) => (title, key) => 
       height: 57,
       borderBottomColor: colors.smoky,
       borderBottomWidth: 1,
+      paddingHorizontal: 24,
     }}
   >
     {
@@ -64,13 +67,11 @@ export default class extends React.Component {
     const { data, disabledChoice } = this.props
     return (
       <ScrollView
-        style={{ paddingHorizontal: 24 }}
         ref={(ref) => { this.scroll = ref }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ marginVertical: 16 }}>
-          { data.map(choice(this.onSetLayout, this.onHandleOnpress, disabledChoice)) }
-        </View>
+        { data.map(choice(this.onSetLayout, this.onHandleOnpress, disabledChoice)) }
+        <View style={{ marginBottom: 100 }} />
       </ScrollView>
     )
   }

@@ -18,7 +18,7 @@ export default class extends React.Component {
   }
 
   setNumber = (obj) => {
-    const { navigation } = this.props
+    const { navigateAction } = this.props
     this.setState({ ...obj })
 
     if (obj.number.length === 6) {
