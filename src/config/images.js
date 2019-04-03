@@ -13,8 +13,12 @@ import iconLock from '../../assets/image/iconLock.png'
 import iconlogoOff from '../../assets/image/iconlogoff.png'
 import iconinformation from '../../assets/image/iconinformationblack.png'
 import iconCheck from '../../assets/image/check.png'
+import iconNextPageBlack from '../../assets/image/iconnextpageblack.png'
+import iconRemove from '../../assets/image/iconremoveblack.png'
 
 export default {
+  iconRemove,
+  iconNextPageBlack,
   iconCheck,
   iconinformation,
   iconlogoOff,

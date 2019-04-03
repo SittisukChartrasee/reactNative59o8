@@ -37,6 +37,7 @@ const fields = [
     field: 'sex',
   }, {
     label: 'คำนำหน้า (ตัวย่อ)',
+    type: 'search',
     field: 'title',
   }, {
     label: 'ชื่อ (ภาษาไทย)',
@@ -61,6 +62,7 @@ const fields = [
     field: 'maritalstatus',
   }, {
     label: 'สัญชาติ',
+    type: 'search',
     field: 'nationality',
   }
 ]

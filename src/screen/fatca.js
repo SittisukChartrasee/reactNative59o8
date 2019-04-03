@@ -19,6 +19,22 @@ import { Choice } from '../component/cardSelect'
 import { fatca } from '../redux/actions/commonAction'
 import { navigateAction } from '../redux/actions'
 
+const checkActiveData = (data) => {
+  return data.reduce((pre, curr, inx, arr) => {
+    if (curr.answer === 0 || curr.answer === 1) pre.count += 1
+    pre.leng = arr.length
+    
+    if (pre.leng === pre.count) pre.IS_SAME = false
+    else pre.IS_SAME = true
+
+    return pre
+  }, {
+    count: 0,
+    leng: 0,
+    IS_SAME: true,
+  })
+}
+
 
 const mapToProps = ({ fatcaReducer }) => ({ fatcaReducer })
 const dispatchToProps = dispatch => ({
@@ -39,6 +55,7 @@ export default class extends React.Component {
 
   render() {
     const { navigation, navigateAction } = this.props
+    const fatca = this.props.fatcaReducer.fatca
     return (
       <Screen color="transparent">
         <NavBar
@@ -56,7 +73,7 @@ export default class extends React.Component {
         />
 
         <Choice data={this.props.fatcaReducer.fatca} onPress={this.onPress} scroll={this.scroll} />
-        <NextButton disabled onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
+        <NextButton disabled={checkActiveData(fatca).IS_SAME} onPress={() => navigateAction({ ...this.props, page: 'profile' })}/>
       </Screen>
     )
   }

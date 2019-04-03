@@ -1,12 +1,14 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, Image, TouchableOpacity } from 'react-native'
 import Imaterial from './inputDefaultMatiral'
 import Imask from './inputDefaultMask'
 import Idown from './inputDefaultDropdown'
 import Iradio from './inputRadio'
 import Input from './inputDefault'
+import InputSearch from './inputSearch'
 import { TMed, TLight, TBold } from '../texts'
 import colors from '../../config/colors';
+import images from '../../config/images';
 
 const Star = () => (
   <View style={{ position: 'absolute', left: -16, top: 13 }}>
@@ -52,6 +54,15 @@ export default (props, key) => {
         <View key={key}>
           <Star />
           <Iradio key={key} {...props} />
+        </View>
+      )
+
+    case 'search':
+      return (
+        <View key={key} style={{ marginTop: 16 }}>
+          <Star />
+          <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={colors.grey}>{props.label}</TLight>
+          <InputSearch />
         </View>
       )
   

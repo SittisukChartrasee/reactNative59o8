@@ -23,7 +23,7 @@ const MainNavigator = createStackNavigator({
   // tutorialFrontCamera,
   // turorialBank,
   // lockUser,
-  fatca,
+  // fatca,
   profile,
 }, {
   headerMode: 'none',
