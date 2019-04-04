@@ -42,16 +42,19 @@ export default class extends React.Component {
   }
 
   onPicker = (text) => {
+    const configPicker = {
+      pickerTitleText: 'กรุณาเลือก',
+      pickerCancelBtnText: 'ยกเลิก',
+      pickerConfirmBtnText: 'ตกลง',
+      pickerConfirmBtnColor: [0, 170, 73, 1],
+      pickerCancelBtnColor: [0, 170, 73, 1],
+      pickerFontFamily: fonts.sukhumvitBold,
+    }
     if (text.indexOf('ปี') > -1) {
       Picker.init({
         pickerData: [...genDate().year],
         selectedValue: [this.state.year],
-        pickerTitleText: 'กรุณาเลือก',
-        pickerCancelBtnText: 'ยกเลิก',
-        pickerConfirmBtnText: 'ตกลง',
-        pickerConfirmBtnColor: [0, 170, 73, 1],
-        pickerCancelBtnColor: [0, 170, 73, 1],
-        pickerFontFamily: fonts.sukhumvitBold,
+        ...configPicker,
         onPickerConfirm: data => {
           this.setState({ year: data[0] })
         }
@@ -60,12 +63,7 @@ export default class extends React.Component {
       Picker.init({
         pickerData: ['-', ...genDate().month],
         selectedValue: [this.state.month],
-        pickerTitleText: 'กรุณาเลือก',
-        pickerCancelBtnText: 'ยกเลิก',
-        pickerConfirmBtnText: 'ตกลง',
-        pickerConfirmBtnColor: [0, 170, 73, 1],
-        pickerCancelBtnColor: [0, 170, 73, 1],
-        pickerFontFamily: fonts.sukhumvitBold,
+        ...configPicker,
         onPickerConfirm: data => {
           this.setState({ month: data[0] })
         }
@@ -75,12 +73,7 @@ export default class extends React.Component {
       Picker.init({
         pickerData: ['-', ...genDate(year, month).day],
         selectedValue: [this.state.day],
-        pickerTitleText: 'กรุณาเลือก',
-        pickerCancelBtnText: 'ยกเลิก',
-        pickerConfirmBtnText: 'ตกลง',
-        pickerConfirmBtnColor: [0, 170, 73, 1],
-        pickerCancelBtnColor: [0, 170, 73, 1],
-        pickerFontFamily: fonts.sukhumvitBold,
+        ...configPicker,
         onPickerConfirm: data => {
           this.setState({ day: data[0] })     
         }
