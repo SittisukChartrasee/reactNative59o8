@@ -14,10 +14,9 @@ import {
   TThin
 } from '../texts'
 import { LongButton } from '../button'
-import images from '../../config/images'
 
 export default ({
-  visible=false,
+  visible=true,
   image,
   labelBtn="รับทราบ",
   dis="รหัส OTP ไม่ถูกต้อง \nคุณสามารถกรอกได้อีก n ครั้ง",
@@ -26,7 +25,7 @@ export default ({
   <Modal isVisible={visible} onSwipeComplete={onPress} swipeDirection="left" useNativeDriver={true}>
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
       <View style={{ flex: 1, padding: 24, backgroundColor: 'white', borderRadius: 8 }}>
-        { image && <Image source={images} style={{ alignSelf: 'center', marginBottom: 24 }} /> }
+        { image && <Image source={image} style={{ alignSelf: 'center', marginBottom: 24 }} /> }
         <TLight>{dis}</TLight>
         <LongButton label={labelBtn} onPress={onPress} />
       </View>

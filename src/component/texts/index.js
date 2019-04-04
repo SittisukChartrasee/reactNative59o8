@@ -35,7 +35,7 @@ export const TMed = styled.Text`
 `
 
 export const TLight = styled.Text`
-  fontSize: ${props => props.fontSize || '18'};
+  fontSize: ${props => props.fontSize || '16'};
   textAlign: ${props => props.textAlign || 'center'};
   color: ${props => props.color || 'black'};
   marginTop: ${props => props.mt || '0'};

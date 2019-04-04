@@ -1,8 +1,6 @@
 import React from 'react'
 import {
-  View,
   TouchableOpacity,
-  Dimensions,
   ScrollView,
   Image,
 } from 'react-native'
@@ -10,11 +8,10 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
-import { TText, TBold, TSemiBold, TLight } from '../../component/texts'
-import colors from '../../config/colors'
-import { LongButton, NextButton } from '../../component/button'
+import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
+import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 
 const fields = [
@@ -82,13 +79,17 @@ const dispatchToProps = dispatch => ({
 
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
+  state = {
+    modal: false,
+  }
+
   handleInput = (props) => {
     console.log(props)
+    if (props.type === 'modal') this.setState({ modal: true })
   }
 
   render() {
     const { navigateAction } = this.props
-
     return (
       <Screen color="transparent">
         <NavBar
@@ -116,10 +117,19 @@ export default class extends React.Component {
               label: d.label,
               type: d.type,
               init: d.init,
-              handleInput: this.handleInput,
+              handleInput: (props) => this.handleInput(props),
             }, key))
           }
         </ScrollView>
+
+        {
+          modal({
+            visible: this.state.modal,
+            image: images.iconBackIdcard,
+            dis: `ด้านหลังบัตรประชาชน ประกอบด้วยอักษรภาษาอังกฤษ 2 ตัว และตัวเลข 10 ตัว \nตัวอย่างการกรอก : JC1234567890`,
+            onPress: () => this.setState({ modal: false })
+          })
+        }
 
         <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
       </Screen>

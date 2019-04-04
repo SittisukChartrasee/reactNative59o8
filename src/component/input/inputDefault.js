@@ -23,7 +23,7 @@ export default class extends React.Component {
       <View style={{ marginTop: 17 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <TLight fontSize={14} textAlign="left" color={colors.grey}>{label}</TLight>
-          <TouchableOpacity onPress={() => handleInput({ modal: field })}>
+          <TouchableOpacity onPress={() => handleInput({ type: 'modal', field })}>
             <Image source={images.iconinformation} />
           </TouchableOpacity>
         </View>
