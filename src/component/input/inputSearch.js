@@ -26,6 +26,7 @@ export default class extends React.Component {
   state = {
     open: false,
     text: '',
+    confirmText: '',
   }
 
   render() {
@@ -36,7 +37,7 @@ export default class extends React.Component {
       <View>
         <TouchableOpacity onPress={() => this.setState({ open: true })}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <TBold textAlign="left" color={colors.midnight}>ไทย</TBold>
+            <TBold textAlign="left" color={colors.midnight}>{this.state.confirmText}</TBold>
             <Image source={images.iconNextPageBlack} />
           </View>
           <View style={{ height: 1, backgroundColor: colors.smoky, marginTop: 5 }} />
@@ -79,16 +80,16 @@ export default class extends React.Component {
             </View>
 
             <ScrollView style={{ flex: 1, backgroundColor: colors.lightgrey }} contentContainerStyle={{ paddingBottom: 30  }}>
-                <TouchableOpacity onPress={() => this.setState({ open: false })}>
+                <TouchableOpacity onPress={() => this.setState({ open: false, confirmText: 'บางกระทึก', text: 'บางกระทึก' })}>
                   <View style={{ marginVertical: 16 }}>
                     <TBold textAlign="left" ml={24} mr={24}>บางกระทึก</TBold>
                   </View>
                   <View style={{ height: 1, backgroundColor: colors.smoky, marginLeft: 24 }} />
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => this.setState({ open: false })}>
+                <TouchableOpacity onPress={() => this.setState({ open: false, confirmText: 'บางกระทาก', text: 'บางกระทาก' })}>
                   <View style={{ marginVertical: 16 }}>
-                    <TBold textAlign="left" ml={24} mr={24}>บางกระทึก</TBold>
+                    <TBold textAlign="left" ml={24} mr={24}>บางกระทาก</TBold>
                   </View>
                   <View style={{ height: 1, backgroundColor: colors.smoky, marginLeft: 24 }} />
                 </TouchableOpacity>

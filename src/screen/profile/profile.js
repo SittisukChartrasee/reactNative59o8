@@ -32,7 +32,7 @@ const fields = [
     field: 'expiredate',
   }, {
     label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
-    type: 'date',
+    type: 'dateExpire',
     field: 'expireDate',
   }, {
     label: 'เพศ',

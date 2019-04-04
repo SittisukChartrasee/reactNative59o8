@@ -38,7 +38,7 @@ export default class extends React.Component {
   state = {
     day: '-',
     month: '-',
-    year: 2553,
+    year: (+moment().format('YYYY') + 543) - 30,
   }
 
   onPicker = (text) => {
@@ -56,7 +56,7 @@ export default class extends React.Component {
         selectedValue: [this.state.year],
         ...configPicker,
         onPickerConfirm: data => {
-          this.setState({ year: data[0] })
+          this.setState({ year: data[0], month: '-', day: '-' })
         }
       });
     } else if (text.indexOf('เดือน') > -1) {
@@ -65,7 +65,7 @@ export default class extends React.Component {
         selectedValue: [this.state.month],
         ...configPicker,
         onPickerConfirm: data => {
-          this.setState({ month: data[0] })
+          this.setState({ month: data[0], day: '-' })
         }
       });
     } else if (text.indexOf('วัน') > -1) {
@@ -85,9 +85,9 @@ export default class extends React.Component {
 
   render() {
     const { year, month, day } = this.state
-    const { handleInput, field } = this.props
+    const { handleInput, field, type } = this.props
     const labelArr = this.props.label.split(',')
-    handleInput({ value: `${day}/${month}/${year}`, type: 'ymd', field })
+    handleInput({ value: `${day}/${month}/${year}`, type, field })
 
     return (
       <View style={{ flexDirection: 'row', flex: 1 }}>
