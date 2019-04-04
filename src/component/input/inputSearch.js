@@ -20,6 +20,7 @@ import {
 import { LongButton } from '../button'
 import images from '../../config/images'
 import colors from '../../config/colors'
+import fonts from '../../config/fonts'
 
 export default class extends React.Component {
   state = {
@@ -58,7 +59,7 @@ export default class extends React.Component {
                 }}
               >
                 <TextInput
-                  style={{ flex: 1, fontSize: 28 }}
+                  style={{ flex: 1, fontSize: 28, fontFamily: fonts.sukhumvitBold }}
                   autoFocus
                   value={this.state.text}
                   onChangeText={(text) => this.setState({ text })}
