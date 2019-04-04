@@ -6,6 +6,7 @@ import Idown from './inputDefaultDropdown'
 import Iradio from './inputRadio'
 import Input from './inputDefault'
 import InputSearch from './inputSearch'
+import InputPicker from './inputPicker'
 import { TMed, TLight, TBold } from '../texts'
 import colors from '../../config/colors';
 import images from '../../config/images';
@@ -63,6 +64,29 @@ export default (props, key) => {
           <Star />
           <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={colors.grey}>{props.label}</TLight>
           <InputSearch />
+        </View>
+      )
+
+    case 'date':
+      return (
+        <View key={key} style={{ marginTop: 16 }}>
+          <Star />
+          <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={colors.grey}>{props.label}</TLight>
+          <TouchableOpacity>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <TBold textAlign="left" color={colors.midnight}>28 มกราคม 2563</TBold>
+              <Image source={images.iconCalenda} />
+            </View>
+            <View style={{ height: 1, backgroundColor: colors.smoky, marginTop: 5 }} />
+          </TouchableOpacity>
+        </View>
+      )
+
+    case 'ymd':
+      return (
+        <View key={key} style={{ marginTop: 16 }}>
+          <Star />
+          <InputPicker label={props.label} {...props}/>
         </View>
       )
   

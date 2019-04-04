@@ -8,7 +8,6 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import Picker from 'react-native-picker'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { TText, TBold, TSemiBold, TLight } from '../../component/texts'
@@ -31,6 +30,10 @@ const fields = [
     type: 'radio',
     init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
     field: 'expiredate',
+  }, {
+    label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
+    type: 'date',
+    field: 'expireDate',
   }, {
     label: 'เพศ',
     type: 'dropdown',
@@ -57,6 +60,10 @@ const fields = [
     type: 'textInput',
     field: 'lastEn',
   }, {
+    label: 'ปีเกิด,เดือนเกิด,วันเกิด',
+    type: 'ymd',
+    field: 'birthDay',
+  }, {
     label: 'สถานภาพสมรส',
     type: 'dropdown',
     init: [{ value: 'โสด' }, { value: 'สมรส' }, { value: 'หย่าร้าง' }],
@@ -79,36 +86,8 @@ export default class extends React.Component {
     console.log(props)
   }
 
-  onPicker = async () => {
-    // let data = [];
-    // for(var i=0;i<100;i++){
-    //     data.push(i);
-    // }
-    await Picker.init({
-        pickerData: [1,2,3,4,59],
-        selectedValue: [59],
-        onPickerConfirm: data => {
-            console.log(data);
-        },
-        onPickerCancel: data => {
-            console.log(data);
-        },
-        onPickerSelect: data => {
-            console.log(data);
-        }
-    });
-
-    await Picker.show()
-  }
-
-//   import Picker from 'react-native-picker';
-
-// 
-
   render() {
     const { navigateAction } = this.props
-
-    
 
     return (
       <Screen color="transparent">
@@ -125,10 +104,6 @@ export default class extends React.Component {
             </TouchableOpacity>
           }
         />
-        <TouchableOpacity onPress={this.onPicker}>
-          <TBold>sdf</TBold>
-        </TouchableOpacity>
-
 
         <ScrollView
           style={{ paddingHorizontal: 24 }}
@@ -146,8 +121,6 @@ export default class extends React.Component {
           }
         </ScrollView>
 
-        
-        
         <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
       </Screen>
     )

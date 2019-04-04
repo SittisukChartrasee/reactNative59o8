@@ -15,8 +15,10 @@ import iconinformation from '../../assets/image/iconinformationblack.png'
 import iconCheck from '../../assets/image/check.png'
 import iconNextPageBlack from '../../assets/image/iconnextpageblack.png'
 import iconRemove from '../../assets/image/iconremoveblack.png'
+import iconCalenda from '../../assets/image/iconcalendablack.png'
 
 export default {
+  iconCalenda,
   iconRemove,
   iconNextPageBlack,
   iconCheck,
