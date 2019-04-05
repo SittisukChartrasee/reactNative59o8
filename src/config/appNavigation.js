@@ -11,6 +11,7 @@ import turorialBank from '../screen/bank/tutorialBank'
 import lockUser from '../screen/lock/lockUser'
 import profile from '../screen/profile/profile'
 import fatca from '../screen/fatca'
+import marry from '../screen/profile/marry'
 
 const MainNavigator = createStackNavigator({
   // welcome,
@@ -24,7 +25,8 @@ const MainNavigator = createStackNavigator({
   // turorialBank,
   // lockUser,
   // fatca,
-  profile,
+  // profile,
+  marry,
 }, {
   headerMode: 'none',
 });

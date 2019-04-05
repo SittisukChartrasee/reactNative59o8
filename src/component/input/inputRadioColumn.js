@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import colors from '../../config/colors'
-import { TText, TMed, TLight } from '../texts'
+import { TText, TMed, TLight, TBold } from '../texts'
 
 const ActiveCycle = ({
   condition
@@ -55,14 +55,23 @@ export default class extends React.Component {
     const { label } = this.props
     return (
       <View>
-        <TLight mt="16" mb="8" textAlign="left" fontSize="14" color={colors.grey}>{label}</TLight>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ backgroundColor: colors.lightgrey, paddingHorizontal: 24, paddingVertical: 16 }}>
+          <TBold textAlign="left">{label}</TBold>
+        </View>
+        <View style={{ paddingHorizontal: 24 }}>
           {
             data.map((d, key) => (
               <TouchableOpacity
                 key={key}
                 onPress={() => this.handleRadio(key)}
-                style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  height: 57,
+                  borderBottomColor: colors.smoky,
+                  borderBottomWidth: 1,
+                }}
               >
                 { d.active ? <View style={{ backgroundColor: colors.emerald, width: 16, height: 16, borderRadius: 16 / 2 }} /> : <ActiveCycle /> }
                 <TLight ml="16" textAlign="left" fontSize="16" color={colors.midnight}>{d.title}</TLight>

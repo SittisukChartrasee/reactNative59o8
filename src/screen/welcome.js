@@ -88,11 +88,13 @@ export default class extends React.Component {
           <LongPositionButton label="ถัดไป" onPress={this.onNext} />
         </ScrollView>
 
-        <Modal
-          visible={modal}
-          dis={`อีเมลหรือหมายเลขโทรศัพท์นี้ \nได้ทำการสมัครเปิดบัญชีแล้ว  `}
-          onPress={() => this.setState({ modal: false })}
-        />
+        {
+          Modal({
+            visible: modal,
+            dis: `อีเมลหรือหมายเลขโทรศัพท์นี้ \nได้ทำการสมัครเปิดบัญชีแล้ว`,
+            onPress: () => this.setState({ modal: false })
+          })
+        }
       </Screen> 
     )
   }

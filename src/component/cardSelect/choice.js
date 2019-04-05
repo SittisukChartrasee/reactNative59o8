@@ -45,6 +45,17 @@ const point = (onHandleOnpress, inx, answer, disabledChoice) => (title, key) => 
 )
 
 export default class extends React.Component {
+  static defaultProps = {
+    init: [
+      {
+        title: 'ท่านเป็นพลเมืองอเมริกัน ใช่หรือไม่',
+        choice: ['ใช่', 'ไม่'],
+      }
+    ],
+    disabledChoice: undefined,
+    paddingBottom: 0,
+    onPress: () => {},
+  }
   state = {
     layout: [],
   }
@@ -64,14 +75,14 @@ export default class extends React.Component {
   }
 
   render() {
-    const { data, disabledChoice } = this.props
+    const { init, disabledChoice, paddingBottom } = this.props
     return (
       <ScrollView
         ref={(ref) => { this.scroll = ref }}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: paddingBottom }}
       >
-        { data.map(choice(this.onSetLayout, this.onHandleOnpress, disabledChoice)) }
-        <View style={{ marginBottom: 100 }} />
+        { init.map(choice(this.onSetLayout, this.onHandleOnpress, disabledChoice)) }
       </ScrollView>
     )
   }

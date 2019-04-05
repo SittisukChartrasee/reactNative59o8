@@ -72,7 +72,7 @@ export default class extends React.Component {
           }
         />
 
-        <Choice data={this.props.fatcaReducer.fatca} onPress={this.onPress} scroll={this.scroll} />
+        <Choice init={this.props.fatcaReducer.fatca} onPress={this.onPress} paddingBottom={100} />
         <NextButton disabled={checkActiveData(fatca).IS_SAME} onPress={() => navigateAction({ ...this.props, page: 'profile' })}/>
       </Screen>
     )

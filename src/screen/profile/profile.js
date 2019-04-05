@@ -107,7 +107,6 @@ export default class extends React.Component {
         />
 
         <ScrollView
-          style={{ paddingHorizontal: 24 }}
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >
