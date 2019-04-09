@@ -8,7 +8,8 @@ import { TBold, TLight, TMed, TSemiBold, TText, TThin } from '../texts'
 
 export default ({
   label="Long button test",
-  onPress=() => {}
+  onPress=() => {},
+  disabled=false,
 }) => (
   <View
     style={{
@@ -21,10 +22,11 @@ export default ({
   >
     <TouchableOpacity
       onPress={onPress}
+      disabled={disabled}
       style={{
         width: '100%',
         height: 56,
-        backgroundColor: colors.emerald,
+        backgroundColor: disabled ? colors.smoky :colors.emerald,
         justifyContent: 'center',
         alignItems: 'center',
         marginHorizontal: 24,

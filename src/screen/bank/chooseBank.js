@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
-import { NextButton } from '../../component/button'
+import { LongPositionButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
 import modal from '../../component/modal'
@@ -75,6 +75,7 @@ export default class extends React.Component {
           }
         </ScrollView>
 
+        <LongPositionButton disabled/>
       </Screen>
     )
   }

@@ -18,12 +18,6 @@ const fields = [
   {
     label: 'ใช้ที่อยู่เดียวกับทะเบียนบ้าน',
     type: 'buttonCard',
-  }, {
-    label: 'ใช้ที่อยู่เดียวกับสถานที่ทำงาน',
-    type: 'buttonCard',
-  }, {
-    label: 'ใช้ที่อยู่เดียวกับที่อยู่ปัจจุบัน',
-    type: 'buttonCard',
   }, { 
     label: 'ใช้ที่อยู่อื่น',
     type: 'buttonCard',
@@ -46,7 +40,7 @@ export default class extends React.Component {
     return (
       <Screen color="transparent">
         <NavBar
-          title="ที่อยู่จัดส่งเอกสาร"
+          title="ที่อยู่ที่ทำงาน"
           navLeft={
             <TouchableOpacity onPress={() => {}}>
               <Image source={images.iconback} />
