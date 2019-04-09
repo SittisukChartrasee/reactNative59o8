@@ -48,7 +48,12 @@ export default class extends React.Component {
         init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
         field: 'marryExpireFlag',
       }, {
-        label: 'วันบัตรหมดอายุ (ปี/เดือน/วัน)',
+        label: 'วันที่หนังสือเดินทางหมดอายุ (วัน/เดือน/ปี)',
+        type: 'dateExpire',
+        field: 'marryPassportExpireDate',
+        inVisible: true,
+      }, {
+        label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'marryExpireDate',
       }, {
@@ -75,25 +80,32 @@ export default class extends React.Component {
   handleInput = (props) => {
     const { fields } = this.state
     if (props.field === 'marryNation') {
-      let a = []
-      if (props.value === 'ไทย') {
-        a = fields.map((d) => {
-          if (d.field === 'marryCountry' || d.field === 'marryPassport') return { ...d, inVisible: true }
-          else if (d.field === 'marryIdCard') return { ...d, inVisible: false }
-          else return d
+      this.setState({
+        fields: fields.map((d) => {
+          if (props.value === 'ไทย') {
+            if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'marryPassportExpireDate') return { ...d, inVisible: true }
+            else if (d.field === 'marryIdCard' || d.field === 'marryExpireDate' || d.field === 'marryExpireFlag') return { ...d, inVisible: false }
+            else return d
+          } else if (props.value === 'ชาวต่างชาติ') {
+            if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'marryPassportExpireDate') return { ...d, inVisible: false }
+            else if (d.field === 'marryIdCard' || d.field === 'marryExpireDate' || d.field === 'marryExpireFlag') return { ...d, inVisible: true }
+            else return d
+          }
         })
-      } else if (props.value === 'ชาวต่างชาติ') {
-        a = fields.map((d) => {
-          if (d.field === 'marryCountry' || d.field === 'marryPassport') return { ...d, inVisible: false }
-          else if (d.field === 'marryIdCard') return { ...d, inVisible: true }
-          else return d
-        })        
-      }
-      this.setState({ fields: a })
+      })
+    } else if (props.field === 'marryExpireFlag') {
+      this.setState({
+        fields: fields.map((d) => {
+          if (props.value === 'มีวันหมดอายุ') {
+            if (d.field === 'marryExpireDate') return { ...d, inVisible: false }
+            else return d
+          } else if (props.value === 'ไม่มีวันหมดอายุ') {
+            if (d.field === 'marryExpireDate') return { ...d, inVisible: true }
+            else return d
+          }
+        })
+      })
     }
-
-    // console.log(props)
-
   }
 
   render() {

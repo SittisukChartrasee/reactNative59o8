@@ -55,7 +55,7 @@ export default class extends React.Component {
     const { label } = this.props
     return (
       <View>
-        <TLight mt="16" mb="8" textAlign="left" fontSize="14" color={colors.grey}>{label}</TLight>
+        <TLight mt="16" mb="6" textAlign="left" fontSize="14" color={colors.grey}>{label}</TLight>
         <View style={{ flexDirection: 'row' }}>
           {
             data.map((d, key) => (

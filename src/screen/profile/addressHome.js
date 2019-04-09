@@ -90,6 +90,7 @@ export default class extends React.Component {
               label: d.label,
               type: d.type,
               init: d.init,
+              // value: 'test',
               handleInput: (props) => this.handleInput(props),
             }, key))
           }

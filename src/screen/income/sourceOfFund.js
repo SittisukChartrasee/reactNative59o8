@@ -3,7 +3,6 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
-  View,
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -13,9 +12,7 @@ import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
 import modal from '../../component/modal'
-import { Select } from '../../component/cardSelect'
 import { navigateAction } from '../../redux/actions'
-import colors from '../../config/colors';
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
@@ -25,66 +22,39 @@ const dispatchToProps = dispatch => ({
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   state = {
+    modal: false,
     fields: [
       {
-        label: 'เงินเดือน',
-        type: 'select',
+        label: 'คุณได้รับเงินทุนจากแหล่งใด',
+        type: 'search',
         field: 'idcard',
       }, {
-        label: 'มรดก',
-        type: 'select',
-        field: 'idcard',
+        label: 'แหล่งที่มาของเงินทุน',
+        type: 'search',
+        field: 'jcnumber',
       }, {
-        label: 'การขายหลักทรัพย์',
-        type: 'select',
-        field: 'idcard',
+        label: 'วัตถุประสงค์การลงทุน',
+        type: 'search',
+        field: 'expireDateFlag',
       }, {
-        label: 'ผลตอบแทนจากการลงทุน',
-        type: 'select',
-        field: 'idcard',
-      }, {
-        label: 'การดำเนินการทางธุรกิจ',
-        type: 'select',
-        field: 'idcard',
-      }, {
-        label: 'ค่านายหน้า',
-        type: 'select',
-        field: 'idcard',
-      }, {
-        label: 'ค่าตอบแทนการให้บริการ',
-        type: 'select',
-        field: 'idcard',
-      }, {
-        label: 'อื่นๆ',
-        type: 'select',
-        field: 'idcard',
-      }
-    ],
-    data: [],
+        label: 'คุณต้องการหักภาษี ณ ที่จ่ายสำหรับเงินปันผลและค่าขายคืน หรือไม่ ?',
+        type: 'radioColumn',
+        init: [{ title: 'ต้องการ หักภาษี ณ ที่จ่าย', active: true }, { title: 'ไม่ใช่' }],
+        field: 'marryFlagPep',
+      },
+    ]
   }
 
-  handleOnpress = (val) => {
-    const { fields } = this.state
-    const result = fields.map((d) => {
-      if (d.label === val.label && !val.active) {
-        return { ...d, active: true }
-      } else if (d.label === val.label && val.active) {
-        return { ...d, active: false }
-      } else {
-        return { ...d }
-      }
-    })
-    const data = result.map((d) => d.active && d.label).filter(d => d !== undefined && d !== false)
-    this.setState({ fields: result, data })
+  handleInput = (props) => {
+    if (props.type === 'modal') this.setState({ modal: true })
   }
-  
+
   render() {
     const { navigateAction } = this.props
-    // console.log(this.state.data)
     return (
       <Screen color="transparent">
         <NavBar
-          title="คุณรับเงินทุนจากแหล่งใด"
+          title="เงินลงทุน"
           navLeft={
             <TouchableOpacity onPress={() => {}}>
               <Image source={images.iconback} />
@@ -98,14 +68,29 @@ export default class extends React.Component {
         />
 
         <ScrollView
-          style={{ backgroundColor: colors.lightgrey }}
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >
-          <View style={{ flex: 1, backgroundColor: colors.white }}>
-            { this.state.fields.map((d, k) => Select({ ...d, onPress: this.handleOnpress }, k))}
-          </View>
+          {
+            this.state.fields.map((d, key) => Input({
+              field: d.field,
+              label: d.label,
+              type: d.type,
+              init: d.init,
+              inVisible: d.inVisible,
+              handleInput: (props) => this.handleInput(props),
+            }, key))
+          }
         </ScrollView>
+
+        {
+          modal({
+            visible: this.state.modal,
+            image: images.iconBackIdcard,
+            dis: `ด้านหลังบัตรประชาชน ประกอบด้วยอักษรภาษาอังกฤษ 2 ตัว และตัวเลข 10 ตัว \nตัวอย่างการกรอก : JC1234567890`,
+            onPress: () => this.setState({ modal: false })
+          })
+        }
 
         <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
       </Screen>

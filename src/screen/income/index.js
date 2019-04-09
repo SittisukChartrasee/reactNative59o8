@@ -1,5 +1,7 @@
 import sourceOfFund from './sourceOfFund'
+import listSourceOfFund from './listSourceOfFund'
 
 export default {
-  sourceOfFund
+  sourceOfFund,
+  listSourceOfFund,
 }
