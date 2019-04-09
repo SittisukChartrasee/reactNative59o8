@@ -17,8 +17,14 @@ import iconNextPageBlack from '../../assets/image/iconnextpageblack.png'
 import iconRemove from '../../assets/image/iconremoveblack.png'
 import iconCalenda from '../../assets/image/iconcalendablack.png'
 import iconBackIdcard from '../../assets/image/picBackidcard.png'
+import iconBbl from '../../assets/image/logoBbl.png'
+import iconkbank from '../../assets/image/ktamCopy.png'
+import iconscb from '../../assets/image/scbam.png'
 
 export default {
+  iconBbl,
+  iconkbank,
+  iconscb,
   iconBackIdcard,
   iconCalenda,
   iconRemove,

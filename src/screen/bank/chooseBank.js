@@ -16,15 +16,15 @@ import { navigateAction } from '../../redux/actions'
 
 const fields = [
   {
-    label: 'ใช้ที่อยู่เดียวกับทะเบียนบ้าน',
+    label: 'ธนาคารกรุงเทพ',
     image: images.iconBbl,
     type: 'buttonCard',
   }, {
-    label: 'ใช้ที่อยู่เดียวกับสถานที่ทำงาน',
+    label: 'ธนาคารกสิกรไทย',
     image: images.iconkbank,
     type: 'buttonCard',
   }, {
-    label: 'ใช้ที่อยู่อื่น',
+    label: 'ธนาคารไทยพาณิชย์',
     image: images.iconscb,
     type: 'buttonCard',
   }
@@ -46,7 +46,7 @@ export default class extends React.Component {
     return (
       <Screen color="transparent">
         <NavBar
-          title="ที่อยู่จัดส่งเอกสาร"
+          title="เลือกธนาคาร"
           navLeft={
             <TouchableOpacity onPress={() => {}}>
               <Image source={images.iconback} />
@@ -69,12 +69,12 @@ export default class extends React.Component {
               label: d.label,
               type: d.type,
               init: d.init,
+              image: d.image,
               handleInput: (props) => this.handleInput(props),
             }, key))
           }
         </ScrollView>
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
       </Screen>
     )
   }

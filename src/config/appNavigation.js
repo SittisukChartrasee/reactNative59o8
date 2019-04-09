@@ -27,11 +27,11 @@ const MainNavigator = createStackNavigator({
   // condi,
   // lockUser,
   // fatca,
-  // ...branchBank,
+  ...branchBank,
   // ...branchProfile,
   // ...branchCamera,
   // ...branchIcome,
-  ...branchProfileChoose,
+  // ...branchProfileChoose,
 }, {
   headerMode: 'none',
 });

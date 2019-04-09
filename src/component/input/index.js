@@ -9,6 +9,7 @@ import Input from './inputDefault'
 import InputSearch from './inputSearch'
 import InputPicker from './inputPicker'
 import InputPickerExpire from './inputPickerExpire'
+import { ButtonCard } from '../cardSelect'
 import { TMed, TLight, TBold } from '../texts'
 import colors from '../../config/colors';
 import images from '../../config/images';
@@ -95,6 +96,13 @@ export default (props, key) => {
         <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
           <InputPicker label={props.label} {...props}/>
           <Star />
+        </View>
+      )
+
+    case 'buttonCard':
+      return (
+        <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
+          <ButtonCard {...props}/>
         </View>
       )
 
