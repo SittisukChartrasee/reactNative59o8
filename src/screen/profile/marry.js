@@ -29,14 +29,14 @@ export default class extends React.Component {
         init: [{ title: 'ไทย', active: true }, { title: 'ชาวต่างชาติ' }],
         field: 'marryNation',
       }, {
+        label: 'หมายเลขบัตรประชาชน',
+        type: 'textInput',
+        field: 'marryIdCard',
+      }, {
         label: 'ประเทศ',
         type: 'search',
         field: 'marryCountry',
         inVisible: true,
-      }, {
-        label: 'หมายเลขบัตรประชาชน',
-        type: 'textInput',
-        field: 'marryIdCard',
       }, {
         label: 'หมายเลขหนังสือเดินทาง',
         type: 'textInput',

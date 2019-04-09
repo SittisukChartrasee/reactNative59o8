@@ -97,7 +97,7 @@ export default (props, key) => {
           <Star />
         </View>
       )
-  
+
     default:
       return (
         <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>

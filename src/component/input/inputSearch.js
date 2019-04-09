@@ -30,14 +30,17 @@ export default class extends React.Component {
   }
 
   render() {
-    const { open } = this.state
+    const { open, confirmText } = this.state
 
     StatusBar.setBarStyle(open ? "dark-content" : "light-content")
     return (
       <View>
         <TouchableOpacity onPress={() => this.setState({ open: true })}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <TBold textAlign="left" color={colors.midnight}>{this.state.confirmText}</TBold>
+          { confirmText 
+              ? <TBold textAlign="left" color={colors.midnight}>{confirmText}</TBold>
+              : <TBold textAlign="left" color={colors.smoky}>กรุณาเลือกข้อมูล</TBold>
+          }
             <Image source={images.iconNextPageBlack} />
           </View>
           <View style={{ height: 1, backgroundColor: colors.smoky, marginTop: 5 }} />

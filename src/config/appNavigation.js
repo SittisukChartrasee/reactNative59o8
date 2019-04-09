@@ -9,9 +9,15 @@ import tutorialBackCamera from '../screen/camera/tutorialBackCamera'
 import tutorialFrontCamera from '../screen/camera/tutorialFrontCamera'
 import turorialBank from '../screen/bank/tutorialBank'
 import lockUser from '../screen/lock/lockUser'
-import profile from '../screen/profile/profile'
 import fatca from '../screen/fatca'
+
+import profile from '../screen/profile/profile'
 import marry from '../screen/profile/marry'
+import addressHome from '../screen/profile/addressHome'
+import addressWork from '../screen/profile/addressWork'
+import addressDoc from '../screen/profile/addressDoc'
+
+import branchIcome from '../screen/income'
 
 const MainNavigator = createStackNavigator({
   // welcome,
@@ -26,7 +32,11 @@ const MainNavigator = createStackNavigator({
   // lockUser,
   // fatca,
   // profile,
-  marry,
+  // marry,
+  // addressHome,
+  // addressWork,
+  // addressDoc,
+  ...branchIcome,
 }, {
   headerMode: 'none',
 });
