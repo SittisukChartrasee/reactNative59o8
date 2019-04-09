@@ -29,10 +29,11 @@ const point = (onHandleOnpress, inx, answer, disabledChoice) => (title, key) => 
       flexDirection: 'row',
       justifyContent: 'flex-start',
       alignItems: 'center',
-      height: 57,
+      minHeight: 57,
       borderBottomColor: colors.smoky,
       borderBottomWidth: 1,
       paddingHorizontal: 24,
+      flexWrap: 'wrap'
     }}
   >
     {
@@ -40,7 +41,9 @@ const point = (onHandleOnpress, inx, answer, disabledChoice) => (title, key) => 
         ? <View style={{ backgroundColor: colors.emerald, width: 16, height: 16, borderRadius: 8, marginRight: 24 }} />
         : <View style={{ borderColor: colors.grey, borderWidth: 1, width: 16, height: 16, borderRadius: 8, marginRight: 24 }} />
     }
-    <TLight fontSize={16}>{title}</TLight>
+    <View style={{ flex: 1, marginVertical: 15 }}>
+      <TLight fontSize={16} textAlign="left">{title}</TLight>
+    </View>
   </TouchableOpacity>
 )
 

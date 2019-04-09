@@ -8,16 +8,16 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import Screen from '../component/screenComponent'
-import { NavBar } from '../component/gradient'
-import { TText, TBold, TSemiBold, TLight } from '../component/texts'
-import colors from '../config/colors'
-import { LongButton, NextButton } from '../component/button'
-import images from '../config/images'
-import Input from '../component/input'
-import { Choice } from '../component/cardSelect'
-import { fatca } from '../redux/actions/commonAction'
-import { navigateAction } from '../redux/actions'
+import Screen from '../../component/screenComponent'
+import { NavBar } from '../../component/gradient'
+import { TText, TBold, TSemiBold, TLight } from '../../component/texts'
+import colors from '../../config/colors'
+import { LongButton, NextButton } from '../../component/button'
+import images from '../../config/images'
+import Input from '../../component/input'
+import { Choice } from '../../component/cardSelect'
+import { suittest } from '../../redux/actions/commonAction'
+import { navigateAction } from '../../redux/actions'
 
 const checkActiveData = (data) => {
   return data.reduce((pre, curr, inx, arr) => {
@@ -36,9 +36,9 @@ const checkActiveData = (data) => {
 }
 
 
-const mapToProps = ({ fatcaReducer }) => ({ fatcaReducer })
+const mapToProps = ({ suitReducer }) => ({ suitReducer })
 const dispatchToProps = dispatch => ({
-  updateFatca: bindActionCreators(fatca, dispatch),
+  updateSuittest: bindActionCreators(suittest, dispatch),
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 
@@ -46,20 +46,20 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
 
   onPress = (obj) => {
-    const fatca = this.props.fatcaReducer.fatca
-    const NewArr = fatca.map((curr, i) => (i === obj.key ? { ...curr, answer: obj.choice } : curr))
-    const checkFatca = NewArr.every(curr => curr.answer === 0)
-    this.props.updateFatca('fatca', NewArr)
-    this.props.updateFatca('sumFatca', checkFatca)
+    const suittest = this.props.suitReducer.suittest
+    const NewArr = suittest.map((curr, i) => (i === obj.key ? { ...curr, answer: obj.choice } : curr))
+    const sum = NewArr.every(curr => curr.answer === 0)
+    this.props.updateSuittest('suittest', NewArr)
+    this.props.updateSuittest('sumSuittest', sum)
   }
 
   render() {
     const { navigation, navigateAction } = this.props
-    const fatca = this.props.fatcaReducer.fatca
+    const suittest = this.props.suitReducer.suittest
     return (
       <Screen color="transparent">
         <NavBar
-          title="สถานะพลเมืองสหรัฐ"
+          title="แบบประเมินความเสี่ยง"
           navLeft={
             <TouchableOpacity  onPress={() => navigation.goBack()}>
               <Image source={images.iconback} />
@@ -73,12 +73,12 @@ export default class extends React.Component {
         />
         {
           Choice({
-            init: this.props.fatcaReducer.fatca,
+            init: this.props.suitReducer.suittest,
             onPress: this.onPress,
             paddingBottom: 100
           })
         }
-        <NextButton disabled={checkActiveData(fatca).IS_SAME} onPress={() => navigateAction({ ...this.props, page: 'profile' })}/>
+        <NextButton disabled={checkActiveData(suittest).IS_SAME} onPress={() => navigateAction({ ...this.props, page: 'profile' })}/>
       </Screen>
     )
   }

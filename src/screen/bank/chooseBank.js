@@ -3,6 +3,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  View,
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -13,22 +14,9 @@ import images from '../../config/images'
 import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
+import colors from '../../config/colors';
 
-const fields = [
-  {
-    label: 'ธนาคารกรุงเทพ',
-    image: images.iconBbl,
-    type: 'buttonCard',
-  }, {
-    label: 'ธนาคารกสิกรไทย',
-    image: images.iconkbank,
-    type: 'buttonCard',
-  }, {
-    label: 'ธนาคารไทยพาณิชย์',
-    image: images.iconscb,
-    type: 'buttonCard',
-  }
-]
+const handleDisabled = arr => arr.find(d => d.active) !== undefined && arr.find(d => d.active)
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
@@ -37,12 +25,45 @@ const dispatchToProps = dispatch => ({
 
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
+  state = {
+    card: [
+      {
+        label: 'ธนาคารกรุงเทพ',
+        image: images.iconBbl,
+        type: 'selectCard',
+      }, {
+        label: 'ธนาคารกสิกรไทย',
+        image: images.iconkbank,
+        type: 'selectCard',
+      }, {
+        label: 'ธนาคารไทยพาณิชย์',
+        image: images.iconscb,
+        type: 'selectCard',
+      }
+    ],
+    fields: [
+      {
+        label: 'สาขาบัญชีธนาคาร',
+        type: 'search',
+      }, {
+        label: 'เลขที่บัญชี',
+        type: 'textInput',
+      }
+    ]
+  }
+
   handleInput = (props) => {
-    console.log(props)
+    // console.log(props)
+    if (props.type === 'selectCard') {
+      this.setState({ card: this.state.card.map((d) => d.label === props.value ? { ...d, active: true } : { ...d, active: false }) })
+    }
+    
   }
 
   render() {
     const { navigateAction } = this.props
+
+    console.log(handleDisabled(this.state.card))
     return (
       <Screen color="transparent">
         <NavBar
@@ -60,22 +81,41 @@ export default class extends React.Component {
         />
 
         <ScrollView
+          style={{ backgroundColor: colors.lightgrey }}
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >
+          <View style={{ backgroundColor: colors.white, paddingBottom: 24 }}>
+            {
+              this.state.card.map((d, key) => Input({
+                field: d.field,
+                label: d.label,
+                type: d.type,
+                init: d.init,
+                image: d.image,
+                active: d.active,
+                handleInput: (props) => this.handleInput(props),
+              }, key))
+            }
+          </View>
+
           {
-            fields.map((d, key) => Input({
-              field: d.field,
-              label: d.label,
-              type: d.type,
-              init: d.init,
-              image: d.image,
-              handleInput: (props) => this.handleInput(props),
-            }, key))
+            handleDisabled(this.state.card).active && (
+              <View style={{ backgroundColor: colors.white, paddingBottom: 24, marginTop: 8 }}>
+                {
+                  this.state.fields.map((d, key) => Input({
+                    field: d.field,
+                    label: d.label+handleDisabled(this.state.card).label,
+                    type: d.type,
+                    handleInput: (props) => this.handleInput(props),
+                  }, key))
+                }
+              </View>
+            )
           }
         </ScrollView>
 
-        <LongPositionButton disabled/>
+        <LongPositionButton disabled={!handleDisabled(this.state.card).active} bg={colors.lightgrey} label="ยืนยัน"/>
       </Screen>
     )
   }

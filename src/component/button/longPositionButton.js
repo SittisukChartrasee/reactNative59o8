@@ -10,10 +10,11 @@ export default ({
   label="Long button test",
   onPress=() => {},
   disabled=false,
+  bg=colors.white,
 }) => (
   <View
     style={{
-      backgroundColor: 'white',
+      backgroundColor: bg,
       justifyContent: 'flex-end',
       alignItems: 'center',
       paddingBottom: 24,

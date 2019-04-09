@@ -20,8 +20,10 @@ import iconBackIdcard from '../../assets/image/picBackidcard.png'
 import iconBbl from '../../assets/image/logoBbl.png'
 import iconkbank from '../../assets/image/ktamCopy.png'
 import iconscb from '../../assets/image/scbam.png'
+import graph from '../../assets/image/graph.png'
 
 export default {
+  graph,
   iconBbl,
   iconkbank,
   iconscb,

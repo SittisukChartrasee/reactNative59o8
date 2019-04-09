@@ -9,7 +9,7 @@ import Input from './inputDefault'
 import InputSearch from './inputSearch'
 import InputPicker from './inputPicker'
 import InputPickerExpire from './inputPickerExpire'
-import { ButtonCard } from '../cardSelect'
+import { ButtonCard, SelectCard } from '../cardSelect'
 import { TMed, TLight, TBold } from '../texts'
 import colors from '../../config/colors';
 import images from '../../config/images';
@@ -103,6 +103,13 @@ export default (props, key) => {
       return (
         <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
           <ButtonCard {...props}/>
+        </View>
+      )
+    
+    case 'selectCard':
+      return (
+        <View  key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
+          <SelectCard {...props}/>
         </View>
       )
 

@@ -18,6 +18,8 @@ import branchCamera from '../screen/camera'
 
 import branchIcome from '../screen/income'
 
+import branchRisk from '../screen/risk'
+
 const MainNavigator = createStackNavigator({
   // welcome,
   // login,
@@ -27,7 +29,8 @@ const MainNavigator = createStackNavigator({
   // condi,
   // lockUser,
   // fatca,
-  ...branchBank,
+  // ...branchBank,
+  ...branchRisk,
   // ...branchProfile,
   // ...branchCamera,
   // ...branchIcome,
