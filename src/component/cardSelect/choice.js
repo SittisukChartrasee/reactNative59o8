@@ -88,6 +88,11 @@ const checkBox = (onHandleOnpress, inx, answer, disabledChoice) => (title, key) 
   </TouchableOpacity>
 )
 
+const findMaxItem = data => {
+  const result = data.map((d, i) => d.select && d.select && i).filter(d => d !== false)
+  return Math.max(...result)
+}
+
 export default class extends React.Component {
   static defaultProps = {
     init: [
@@ -114,21 +119,32 @@ export default class extends React.Component {
   onHandleOnpress = ({ title, key, choice, type }) => {
     const { init } = this.props
     if (type === 'checkbox') {
-      const result = init.map((initData, initIndex) => {
-        if (initIndex === key) {
-          const ch = initData.choice.map((d, i) => {
-            if (i === choice && !d.select) {
-              return { ...d, select: true }
-            } else if (i === choice && d.select) {
-              return { ...d, select: false }
-            } else return d
-          })
-          return { ...initData, choice: [ ...ch ] }
-        } else {
-          return initData
-        }
-      })
-      this.props.onPress({ title, key, choice: result, type })
+      const result = init.map((initData, initIndex) => 
+        (initIndex === key)
+          ? {
+              ...initData,
+                choice: [
+                  ...initData.choice.map((d, i) => {
+                    if (i === choice && !d.select) {
+                      return { ...d, select: true }
+                    } else if (i === choice && d.select) {
+                      return { ...d, select: false }
+                    } else return d
+                  })
+                ],
+                answer: findMaxItem(
+                  initData.choice.map((d, i) => {
+                    if (i === choice && !d.select) {
+                      return { ...d, select: true }
+                    } else if (i === choice && d.select) {
+                      return { ...d, select: false }
+                    } else return d
+                  })
+                ),
+            }
+          : initData
+        )
+      this.props.onPress({ title, key, choice: result })
     } else {
       const result = init.map((curr, i) => (i === key ? { ...curr, answer: choice } : curr))
       this.props.onPress({ title, key, choice: result })

@@ -24,14 +24,14 @@ const checkActiveData = (data) => {
     if (curr.answer === 0 || curr.answer === 1) pre.count += 1
     pre.leng = arr.length
     
-    if (pre.leng === pre.count) pre.IS_SAME = false
-    else pre.IS_SAME = true
+    if (pre.leng === pre.count) pre.IS_TRUE = false
+    else pre.IS_TRUE = true
 
     return pre
   }, {
     count: 0,
     leng: 0,
-    IS_SAME: true,
+    IS_TRUE: true,
   })
 }
 
@@ -76,7 +76,7 @@ export default class extends React.Component {
             paddingBottom: 100
           })
         }
-        <NextButton disabled={checkActiveData(fatca).IS_SAME} onPress={() => navigateAction({ ...this.props, page: 'profile' })}/>
+        <NextButton disabled={checkActiveData(fatca).IS_TRUE} onPress={() => navigateAction({ ...this.props, page: 'profile' })}/>
       </Screen>
     )
   }

@@ -24,14 +24,18 @@ const checkActiveData = (data) => {
     if (curr.answer >= 0) pre.count += 1
     pre.leng = arr.length
     
-    if (pre.leng === pre.count) pre.IS_SAME = false
-    else pre.IS_SAME = true
+    if (pre.leng === pre.count) pre.IS_TRUE = false
+    else pre.IS_TRUE = true
 
+    if (curr.answer >= 0) {
+      pre.IS_SUM += curr.answer + 1
+    }
     return pre
   }, {
     count: 0,
     leng: 0,
-    IS_SAME: true,
+    IS_SUM: 0,
+    IS_TRUE: true,
   })
 }
 
@@ -46,18 +50,15 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
 
   onPress = (obj) => {
-    if (obj.type === 'checkbox') {
-      this.props.updateSuittest('suittest', obj.choice)
-    } else {
-      const sum = obj.choice.every(curr => curr.answer === 0)
-      this.props.updateSuittest('suittest', obj.choice)
-      this.props.updateSuittest('sumSuittest', sum)
-    }
+    this.props.updateSuittest('suittest', obj.choice)
+    this.props.updateSuittest('sumSuittest', checkActiveData(obj.choice).IS_SUM)
   }
 
   render() {
     const { navigation, navigateAction } = this.props
     const suittest = this.props.suitReducer.suittest
+
+    console.log(checkActiveData(suittest))
     return (
       <Screen color="transparent">
         <NavBar
@@ -80,7 +81,7 @@ export default class extends React.Component {
             paddingBottom: 100
           })
         }
-        <NextButton disabled={checkActiveData(suittest).IS_SAME} onPress={() => navigateAction({ ...this.props, page: 'profile' })}/>
+        <NextButton disabled={checkActiveData(suittest).IS_TRUE} onPress={() => navigateAction({ ...this.props, page: 'profile' })}/>
       </Screen>
     )
   }
