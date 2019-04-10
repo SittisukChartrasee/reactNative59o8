@@ -13,17 +13,13 @@ import colors from '../../config/colors';
 import images from '../../config/images';
 
 const subString = (string) => {
-  return string.length >= 25 ? `${string.slice(0, 25)}...` : string
+  return string && string.length >= 25 ? `${string.slice(0, 25)}...` : string
 }
 
 
 export default ({
   navRight,
-  navLeft=(
-    <TouchableOpacity onPress={() => {}}>
-      <Image source={images.iconback} />
-    </TouchableOpacity>
-  ),
+  navLeft,
   title="navBar title",
   color,
 }) => (

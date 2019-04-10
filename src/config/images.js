@@ -21,8 +21,12 @@ import iconBbl from '../../assets/image/logoBbl.png'
 import iconkbank from '../../assets/image/ktamCopy.png'
 import iconscb from '../../assets/image/scbam.png'
 import graph from '../../assets/image/graph.png'
+import iconPassBank from '../../assets/image/iconPassStatus.png'
+import iconFailBank from '../../assets/image/iconFailStatus.png'
 
 export default {
+  iconPassBank,
+  iconFailBank,
   graph,
   iconBbl,
   iconkbank,

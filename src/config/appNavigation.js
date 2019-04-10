@@ -7,6 +7,7 @@ import otp from '../screen/otp'
 import condi from '../screen/condi'
 import lockUser from '../screen/lock/lockUser'
 import fatca from '../screen/fatca'
+import fraud from '../screen/fraud'
 
 import branchBank from '../screen/bank'
 
@@ -29,8 +30,9 @@ const MainNavigator = createStackNavigator({
   // condi,
   // lockUser,
   // fatca,
-  // ...branchBank,
-  ...branchRisk,
+  // fraud,
+  ...branchBank,
+  // ...branchRisk,
   // ...branchProfile,
   // ...branchCamera,
   // ...branchIcome,

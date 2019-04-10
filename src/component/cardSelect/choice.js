@@ -13,11 +13,13 @@ const choice = (onSetLayout, onHandleOnpress, disabledChoice, onScroll, layout) 
   title="test",
   type="choice-type",
   choice=[],
+  titleImage=undefined,
   answer=undefined,
 }, key) => (
   <View key={key} onLayout={(e) => onSetLayout(e.nativeEvent.layout.y, key)}>
     <View style={{ backgroundColor: colors.lightgrey, paddingHorizontal: 24, paddingVertical: 16 }}>
       <TBold fontSize={16} textAlign="left">{title}</TBold>
+      { titleImage && <Image source={titleImage} style={{ alignSelf: 'center', marginVertical: 10 }}/> }
     </View>
     { 
       type === 'checkbox'

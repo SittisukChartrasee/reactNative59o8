@@ -57,8 +57,6 @@ export default class extends React.Component {
   render() {
     const { navigation, navigateAction } = this.props
     const suittest = this.props.suitReducer.suittest
-
-    console.log(checkActiveData(suittest))
     return (
       <Screen color="transparent">
         <NavBar

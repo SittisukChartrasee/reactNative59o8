@@ -39,28 +39,45 @@ const checkActiveData = (data) => {
   })
 }
 
-
-const mapToProps = ({ fatcaReducer }) => ({ fatcaReducer })
+const mapToProps = () => ({ })
 const dispatchToProps = dispatch => ({
-  updateFatca: bindActionCreators(fatca, dispatch),
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
+  state = {
+    choice: [
+      {
+        title: 'ท่านมีประวัติความผิดกฏหมายฟอกเงินย้อนหลังภายใน 3 ปีหรือไม่',
+        choice: [
+          'ใช่',
+          'ไม่ใช่'
+        ]
+      }, {
+        title: 'ท่านมีประวัติความผิดกฏหมายฟอกเงินย้อนหลังภายใน 3 ปีหรือไม่',
+        choice: [
+          'ใช่',
+          'ไม่ใช่'
+        ]
+      }
+    ],
+    sumChoice: 0,
+  }
 
   onPress = (obj) => {
-    this.props.updateFatca('fatca', obj.choice)
-    this.props.updateFatca('sumFatca', checkActiveData(obj.choice).IS_SUM)
+    this.setState({
+      choice: obj.choice,
+      sumChoice: checkActiveData(obj.choice).IS_SUM
+    })
   }
 
   render() {
     const { navigation, navigateAction } = this.props
-    const fatca = this.props.fatcaReducer.fatca
     return (
       <Screen color="transparent">
         <NavBar
-          title="สถานะพลเมืองสหรัฐ"
+          title="สถานะที่ถูกกำหนด"
           navLeft={
             <TouchableOpacity  onPress={() => navigation.goBack()}>
               <Image source={images.iconback} />
@@ -74,12 +91,12 @@ export default class extends React.Component {
         />
         {
           Choice({
-            init: this.props.fatcaReducer.fatca,
+            init: this.state.choice,
             onPress: this.onPress,
             paddingBottom: 100
           })
         }
-        <NextButton disabled={checkActiveData(fatca).IS_TRUE} onPress={() => navigateAction({ ...this.props, page: 'profile' })}/>
+        <NextButton disabled={checkActiveData(this.state.choice).IS_TRUE} onPress={() => navigateAction({ ...this.props, page: 'profile' })}/>
       </Screen>
     )
   }

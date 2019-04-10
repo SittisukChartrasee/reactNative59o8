@@ -4,6 +4,7 @@ import addressDoc from './addressDoc'
 import addressHome from './addressHome'
 import addressWork from './addressWork'
 import career from './career'
+import contact from './contact'
 
 export default {
   marry,
@@ -12,4 +13,5 @@ export default {
   addressHome,
   addressWork,
   career,
+  contact,
 }
