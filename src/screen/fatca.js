@@ -46,11 +46,9 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
 
   onPress = (obj) => {
-    const fatca = this.props.fatcaReducer.fatca
-    const NewArr = fatca.map((curr, i) => (i === obj.key ? { ...curr, answer: obj.choice } : curr))
-    const checkFatca = NewArr.every(curr => curr.answer === 0)
-    this.props.updateFatca('fatca', NewArr)
-    this.props.updateFatca('sumFatca', checkFatca)
+    const sum = obj.choice.every(curr => curr.answer === 0)
+    this.props.updateFatca('fatca', obj.choice)
+    this.props.updateFatca('sumFatca', sum)
   }
 
   render() {

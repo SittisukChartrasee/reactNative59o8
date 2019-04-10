@@ -21,7 +21,7 @@ import { navigateAction } from '../../redux/actions'
 
 const checkActiveData = (data) => {
   return data.reduce((pre, curr, inx, arr) => {
-    if (curr.answer === 0 || curr.answer === 1) pre.count += 1
+    if (curr.answer >= 0) pre.count += 1
     pre.leng = arr.length
     
     if (pre.leng === pre.count) pre.IS_SAME = false
@@ -46,11 +46,13 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
 
   onPress = (obj) => {
-    const suittest = this.props.suitReducer.suittest
-    const NewArr = suittest.map((curr, i) => (i === obj.key ? { ...curr, answer: obj.choice } : curr))
-    const sum = NewArr.every(curr => curr.answer === 0)
-    this.props.updateSuittest('suittest', NewArr)
-    this.props.updateSuittest('sumSuittest', sum)
+    if (obj.type === 'checkbox') {
+      this.props.updateSuittest('suittest', obj.choice)
+    } else {
+      const sum = obj.choice.every(curr => curr.answer === 0)
+      this.props.updateSuittest('suittest', obj.choice)
+      this.props.updateSuittest('sumSuittest', sum)
+    }
   }
 
   render() {
