@@ -4,8 +4,8 @@ import reviewBank from './reviewBank'
 import statusBank from './statusBank'
 
 export default {
-  // reviewBank,
-  // tutorialBank,
-  // chooseBank,
+  reviewBank,
+  tutorialBank,
+  chooseBank,
   statusBank
 }

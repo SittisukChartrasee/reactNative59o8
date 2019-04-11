@@ -21,6 +21,8 @@ import branchIcome from '../screen/income'
 
 import branchRisk from '../screen/risk'
 
+import branchComplete from '../screen/complete'
+
 const MainNavigator = createStackNavigator({
   // welcome,
   // login,
@@ -32,11 +34,12 @@ const MainNavigator = createStackNavigator({
   // fatca,
   // fraud,
   // ...branchBank,
-  ...branchRisk,
+  // ...branchRisk,
   // ...branchProfile,
   // ...branchCamera,
   // ...branchIcome,
   // ...branchProfileChoose,
+  ...branchComplete,
 }, {
   headerMode: 'none',
 });

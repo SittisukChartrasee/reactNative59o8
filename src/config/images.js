@@ -23,8 +23,18 @@ import iconscb from '../../assets/image/scbam.png'
 import graph from '../../assets/image/graph.png'
 import iconPassBank from '../../assets/image/iconPassStatus.png'
 import iconFailBank from '../../assets/image/iconFailStatus.png'
+import iconWaitBank from '../../assets/image/iconWaitingStatus.png'
+import iconPlete from '../../assets/image/completed.png'
+import iconVerifyEmail from '../../assets/image/emailVerifi.png'
+import iconTransfer from '../../assets/image/transfer.png'
+import iconEdit from '../../assets/image/edit.png'
 
 export default {
+  iconEdit,
+  iconTransfer,
+  iconVerifyEmail,
+  iconPlete,
+  iconWaitBank,
   iconPassBank,
   iconFailBank,
   graph,
