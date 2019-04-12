@@ -16,30 +16,7 @@ import { LongButton } from '../../component/button'
 import images from '../../config/images'
 import { RiskList } from '../../component/lists'
 import { navigateAction } from '../../redux/actions'
-
-const data = [
-  {
-    title: 'ตราสารหนี้ไทย',
-    color: rgb(29, 58, 97),
-    percent: 34,
-  }, {
-    title: 'ตราสารหนี้ระยะสั้น',
-    color: rgb(170, 186, 194),
-    percent: 7,
-  }, {
-    title: 'หุ้นต่างประเทศ',
-    color: rgb(123, 191, 159),
-    percent: 29,
-  }, {
-    title: 'หุ้นไทย',
-    color: rgb(137, 36, 33),
-    percent: 23,
-  }, {
-    title: 'กองทุนทางเลือก',
-    color: rgb(212, 188, 144),
-    percent: 7,
-  }
-]
+import { data } from './data'
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
@@ -48,10 +25,10 @@ const dispatchToProps = dispatch => ({
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   static defaultProps = {
-    status: true,
+    risk: 3,
   }
   render() {
-    const { navigateAction, status } = this.props
+    const { navigateAction, risk } = this.props
     return (
       <Screen>
         <NavBar
@@ -71,37 +48,37 @@ export default class extends React.Component {
 
         <ScrollView contentContainerStyle={{ paddingTop: 40, paddingHorizontal: 24 }}>
           <View style={{ flex: 1, alignItems: 'center' }}>
-            <View style={{ borderWidth: 1, borderColor: colors.white, width: 80, height: 80, marginBottom: 19 }}>
-              <TBold fontSize={50} color={colors.white}>3</TBold>
+            <View style={{ marginBottom: 19 }}>
+              <Image source={data[risk].image}/>
             </View>
 
             <View style={{ marginBottom: 10 }}>
-              <TBold fontSize={28} color={colors.white}>ความเสี่ยงปานกลาง</TBold>
-              <TBold fontSize={16} color={colors.white}>ผลตอบแทนที่คาดหวังโดยเฉลี่ย 5.5% ต่อปี</TBold>
+              <TBold fontSize={28} color={colors.white}>{data[risk].title}</TBold>
+              <TBold fontSize={16} color={colors.white}>{data[risk].disTitle}</TBold>
             </View>
 
-            <TLight color={colors.white} mb={40}>คุณเป็นนักลงทุนที่ยอมรับความเสี่ยงได้ปานกลางถึงค่อนข้างต่ำ จัดเป็นผู้ลงทุนที่รับความเสี่ยงได้น้อย เน้นปกป้องเงินลงทุน โดยมุ่งหวังโอกาสรับผลตอบแทนที่สม่ำเสมอจากการลงทุน</TLight>
+            <TLight color={colors.white} mb={40}>{data[risk].discription}</TLight>
 
             <View style={{ backgroundColor: colors.white, width: '100%', minHeight: 352, paddingVertical: 16, borderRadius: 16, overflow: 'hidden' }}>
               <View style={{ height: 80, flexDirection: 'row' }}>
                 <View style={{ flex: 1, paddingHorizontal: 16 }}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <View style={{ width: 11, height: 14, marginRight: 8, borderRadius: 3, backgroundColor: colors.emerald }}/>
+                    <Image source={images.bookmark} style={{ marginRight: 8 }} />
                     <TLight fontSize={14} textAlign="left">กองทุนที่แนะนำ</TLight>
                   </View>
-                  <TBold fontSize={28} textAlign="left">K-FITS</TBold>
+                  <TBold fontSize={28} textAlign="left">{data[risk].risk.title}</TBold>
                 </View>
                 <View style={{ width: 75, justifyContent: 'flex-start', alignItems: 'center' }}>
-                  <PieChart data={data}/>
+                  <PieChart data={data[0].risk.data}/>
                 </View>
               </View>
               
               <View style={{ flex: 1, paddingHorizontal: 16 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <TBold fontSize={14}>ตัวอย่างสัดส่วน</TBold>
-                  <TLight fontSize={12} color={colors.grey}>ณ. วันที่ 4 ม.ค. 62</TLight>
+                  <TLight fontSize={12} color={colors.grey}>{data[risk].risk.time}</TLight>
                 </View>
-                { data.map(RiskList) }
+                { data[risk].risk.data.map(RiskList) }
               </View>
 
             </View>

@@ -9,6 +9,8 @@ import idCardMockup from '../../assets/image/idCardMockup.png'
 import stroke1 from '../../assets/image/stroke1.png'
 import selfie from '../../assets/image/selfieId.png'
 import group3 from '../../assets/image/group3.png'
+import bookmark from '../../assets/image/bookmarkRibbon.png'
+
 import iconLock from '../../assets/image/iconLock.png'
 import iconlogoOff from '../../assets/image/iconlogoff.png'
 import iconinformation from '../../assets/image/iconinformationblack.png'
@@ -29,7 +31,17 @@ import iconVerifyEmail from '../../assets/image/emailVerifi.png'
 import iconTransfer from '../../assets/image/transfer.png'
 import iconEdit from '../../assets/image/edit.png'
 
+import iconrisk12 from '../../assets/image/risk1-2.png'
+import iconrisk34 from '../../assets/image/risk3-4.png'
+import iconrisk56 from '../../assets/image/risk5-6.png'
+import iconrisk78 from '../../assets/image/risk7-8.png'
+
 export default {
+  iconrisk78,
+  iconrisk56,
+  iconrisk34,
+  iconrisk12,
+  bookmark,
   iconEdit,
   iconTransfer,
   iconVerifyEmail,

@@ -34,12 +34,12 @@ const MainNavigator = createStackNavigator({
   // fatca,
   // fraud,
   // ...branchBank,
-  // ...branchRisk,
+  ...branchRisk,
   // ...branchProfile,
   // ...branchCamera,
   // ...branchIcome,
   // ...branchProfileChoose,
-  ...branchComplete,
+  // ...branchComplete,
 }, {
   headerMode: 'none',
 });
