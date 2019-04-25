@@ -23,8 +23,10 @@ import branchRisk from '../screen/risk'
 
 import branchComplete from '../screen/complete'
 
+import branchsignature from '../screen/signature'
+
 const MainNavigator = createStackNavigator({
-  welcome,
+  // welcome,
   // login,
   // otp,
   // passcode,
@@ -40,6 +42,7 @@ const MainNavigator = createStackNavigator({
   // ...branchIcome,
   // ...branchProfileChoose,
   // ...branchComplete,
+  ...branchsignature,
 }, {
   headerMode: 'none',
 });
