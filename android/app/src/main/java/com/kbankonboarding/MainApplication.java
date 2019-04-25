@@ -5,6 +5,7 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.beefe.picker.PickerViewPackage;
+import com.rssignaturecapture.RSSignatureCapturePackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -28,7 +29,8 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
           new LinearGradientPackage(),
           new RNGestureHandlerPackage(),
-          new PickerViewPackage()
+          new PickerViewPackage(),
+          new RSSignatureCapturePackage()
       );
     }
 

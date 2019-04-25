@@ -27,6 +27,7 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		26253A9A225F2199006A90E6 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26253A71225F217D006A90E6 /* libART.a */; };
 		269AF1341079F93886A0CF24 /* libPods-KbankOnboarding.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E8069BC2CC14669CE3C28B /* libPods-KbankOnboarding.a */; };
+		26B2DBA022715A2C00F57ECD /* libRSSignatureCapture.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26B2DB9F22715A2300F57ECD /* libRSSignatureCapture.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -130,6 +131,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 323A12871E5F266B004975B8;
 			remoteInfo = "ART-tvOS";
+		};
+		26B2DB9E22715A2300F57ECD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 26B2DB7222715A2300F57ECD /* RSSignatureCapture.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0C53A99E1B56113D004F2642;
+			remoteInfo = RSSignatureCapture;
 		};
 		26DBA2422254B3450046829E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -371,6 +379,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = KbankOnboarding/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		26253A6B225F217D006A90E6 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
+		26B2DB7222715A2300F57ECD /* RSSignatureCapture.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RSSignatureCapture.xcodeproj; path = "../node_modules/react-native-signature-capture/ios/RSSignatureCapture.xcodeproj"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* KbankOnboarding-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KbankOnboarding-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* KbankOnboarding-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "KbankOnboarding-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -413,6 +422,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26B2DBA022715A2C00F57ECD /* libRSSignatureCapture.a in Frameworks */,
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */,
@@ -585,6 +595,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		26B2DB7322715A2300F57ECD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				26B2DB9F22715A2300F57ECD /* libRSSignatureCapture.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		26DBA21C2254B3450046829E /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -635,6 +653,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				26B2DB7222715A2300F57ECD /* RSSignatureCapture.xcodeproj */,
 				26253A6B225F217D006A90E6 /* ART.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -896,6 +915,10 @@
 					ProductGroup = 26DBA24A2254B3460046829E /* Products */;
 					ProjectRef = 5E49649C823541C6A470160F /* RNGestureHandler.xcodeproj */;
 				},
+				{
+					ProductGroup = 26B2DB7322715A2300F57ECD /* Products */;
+					ProjectRef = 26B2DB7222715A2300F57ECD /* RSSignatureCapture.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -976,6 +999,13 @@
 			fileType = archive.ar;
 			path = "libART-tvOS.a";
 			remoteRef = 26253A72225F217D006A90E6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		26B2DB9F22715A2300F57ECD /* libRSSignatureCapture.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRSSignatureCapture.a;
+			remoteRef = 26B2DB9E22715A2300F57ECD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		26DBA2432254B3450046829E /* libjsi.a */ = {
