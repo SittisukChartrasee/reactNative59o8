@@ -5,8 +5,10 @@ import addressHome from './addressHome'
 import addressWork from './addressWork'
 import career from './career'
 import contact from './contact'
+import child from './child'
 
 export default {
+  child,
   marry,
   profile,
   addressDoc,
