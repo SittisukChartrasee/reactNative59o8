@@ -14,6 +14,14 @@ PODS:
     - React
   - React (0.58.6):
     - React/Core (= 0.58.6)
+  - react-native-camera (2.6.0):
+    - React
+    - react-native-camera/RCT (= 2.6.0)
+    - react-native-camera/RN (= 2.6.0)
+  - react-native-camera/RCT (2.6.0):
+    - React
+  - react-native-camera/RN (2.6.0):
+    - React
   - React/Core (0.58.6):
     - yoga (= 0.58.6.React)
   - React/RCTLinkingIOS (0.58.6):
@@ -26,6 +34,7 @@ DEPENDENCIES:
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Picker (from `../node_modules/react-native-picker`)
+  - react-native-camera (from `../node_modules/react-native-camera`)
   - React/Core (from `../node_modules/react-native`)
   - React/RCTLinkingIOS (from `../node_modules/react-native`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -47,6 +56,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-picker"
   React:
     :path: "../node_modules/react-native"
+  react-native-camera:
+    :path: "../node_modules/react-native-camera"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -58,8 +69,9 @@ SPEC CHECKSUMS:
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
   Picker: 67a2566d9ff6b141d505d88b9177f905aaa5f1a6
   React: 16c4fb7ce3fc30c041bce809ceae33bf57e7c142
+  react-native-camera: 9c50d7def800895e7991ccda6203929553ceec9c
   yoga: 0885622311729a02c2bc02dca97167787a51488b
 
-PODFILE CHECKSUM: 8400c92dba314d92c7579d4d383b737e3382582b
+PODFILE CHECKSUM: 3f72793e981956b25999fdac846ee6b49b72d561
 
 COCOAPODS: 1.5.3

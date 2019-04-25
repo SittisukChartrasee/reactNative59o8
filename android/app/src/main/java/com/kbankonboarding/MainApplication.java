@@ -6,6 +6,7 @@ import com.facebook.react.ReactApplication;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.beefe.picker.PickerViewPackage;
 import com.rssignaturecapture.RSSignatureCapturePackage;
+import org.reactnative.camera.RNCameraPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -30,7 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
           new LinearGradientPackage(),
           new RNGestureHandlerPackage(),
           new PickerViewPackage(),
-          new RSSignatureCapturePackage()
+          new RSSignatureCapturePackage(),
+          new RNCameraPackage()
       );
     }
 
