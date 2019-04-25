@@ -18,12 +18,15 @@ export default class extends React.Component {
           <TouchableHighlight style={{ flex: .2, justifyContent: 'center', alignItems: 'center' }}>
             <Image source={images.iconback} />
           </TouchableHighlight>
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <TLight fontSize={16} color={colors.white}>{`กรุณาถ่ายรูปบัตรประชาชน\nคู่กับใบหน้า ตามรอยเส้นประ`}</TLight>
+          </View>
           <View style={{ flex: .2 }} />
         </View>
         <Camera
+          switchCamera
           filter={
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <TLight fontSize={16} color={colors.white}>{`กรุณาถ่ายรูปบัตรประชาชน\nให้อยู่ในกรอบเส้นประที่กำหนดไว้ `}</TLight>
               <Image source={images.iconFIllterCameraBack} style={{ marginTop: 12 }} />
             </View>
           }

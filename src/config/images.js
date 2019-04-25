@@ -30,6 +30,10 @@ import iconPlete from '../../assets/image/completed.png'
 import iconVerifyEmail from '../../assets/image/emailVerifi.png'
 import iconTransfer from '../../assets/image/transfer.png'
 import iconEdit from '../../assets/image/edit.png'
+import iconCameraRefresh from '../../assets/image/iconflipcamerawhite.png'
+import iconFillterCameraFront1 from '../../assets/image/camera/filterFont1.png'
+import iconFillterCameraFront2 from '../../assets/image/camera/filterFont2.png'
+import iconFIllterCameraBack from '../../assets/image/camera/filterback.png'
 
 import iconrisk12 from '../../assets/image/risk1-2.png'
 import iconrisk34 from '../../assets/image/risk3-4.png'
@@ -37,6 +41,10 @@ import iconrisk56 from '../../assets/image/risk5-6.png'
 import iconrisk78 from '../../assets/image/risk7-8.png'
 
 export default {
+  iconFIllterCameraBack,
+  iconFillterCameraFront2,
+  iconFillterCameraFront1,
+  iconCameraRefresh,
   iconrisk78,
   iconrisk56,
   iconrisk34,
