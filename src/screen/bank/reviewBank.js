@@ -26,6 +26,7 @@ const card = [
     type: 'selectCard',
   }, {
     label: 'สาขาบัญชีธนาคาร',
+    value: 'สาขาสำนักสีลม'
   }
 ]
 
@@ -65,6 +66,7 @@ export default class extends React.Component {
             {
               card.map((d, key) => Input({
                 label: d.label,
+                value: d.value,
                 type: d.type,
                 image: d.image,
                 number: d.number,

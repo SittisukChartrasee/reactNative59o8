@@ -8,6 +8,7 @@ import condi from '../screen/condi'
 import lockUser from '../screen/lock/lockUser'
 import fatca from '../screen/fatca'
 import fraud from '../screen/fraud'
+import forgetPasscode from '../screen/forgetPasscode'
 
 import branchBank from '../screen/bank'
 
@@ -35,10 +36,11 @@ const MainNavigator = createStackNavigator({
   // lockUser,
   // fatca,
   // fraud,
-  // ...branchBank,
+  // forgetPasscode,
+  ...branchBank,
   // ...branchRisk,
   // ...branchProfile,
-  ...branchCamera,
+  // ...branchCamera,
   // ...branchIcome,
   // ...branchProfileChoose,
   // ...branchComplete,
