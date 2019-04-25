@@ -24,7 +24,7 @@ import branchRisk from '../screen/risk'
 import branchComplete from '../screen/complete'
 
 const MainNavigator = createStackNavigator({
-  // welcome,
+  welcome,
   // login,
   // otp,
   // passcode,
@@ -34,7 +34,7 @@ const MainNavigator = createStackNavigator({
   // fatca,
   // fraud,
   // ...branchBank,
-  ...branchRisk,
+  // ...branchRisk,
   // ...branchProfile,
   // ...branchCamera,
   // ...branchIcome,
