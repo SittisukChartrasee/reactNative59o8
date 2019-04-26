@@ -120,6 +120,15 @@ export default (props, key) => {
         </View>
       )
 
+    case 'titleHead':
+      return (
+        <View key={key} style={{ marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
+          <View style={{ backgroundColor: colors.lightgrey, paddingHorizontal: 24, paddingVertical: 16 }}>
+            <TBold textAlign="left">{props.label}</TBold>
+          </View>
+        </View>
+      )
+
     default:
       return (
         <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>

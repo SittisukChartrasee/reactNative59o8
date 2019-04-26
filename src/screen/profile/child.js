@@ -25,30 +25,13 @@ export default class extends React.Component {
     modal: false,
     fields: [
       {
-        label: 'เลขบัตรประชาชน',
+        label: 'ข้อมูลบุตรคนที่ 1',
         field: 'idcard',
-      }, {
-        label: 'หมายเลขบัตรประชาชน ( ดย. JT9-9999999-99 )',
-        type: 'Icustom',
-        field: 'jcnumber',
-      }, {
-        label: 'วันบัตรหมดอายุ',
-        type: 'radio',
-        init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
-        field: 'expireDateFlag',
-      }, {
-        label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
-        type: 'dateExpire',
-        field: 'expireDate',
-      }, {
-        label: 'เพศ',
-        type: 'dropdown',
-        init: [{ value: 'ชาย' }, { value: 'หญิง' }],
-        field: 'sex',
+        type: 'titleHead'
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
-        type: 'search',
-        field: 'title',
+        type: 'dropdown',
+        field: 'jcnumber',
       }, {
         label: 'ชื่อ (ภาษาไทย)',
         type: 'textInput',
@@ -58,26 +41,56 @@ export default class extends React.Component {
         type: 'textInput',
         field: 'lastTh'
       }, {
-        label: 'ชื่อ (ภาษาอังกฤษ)',
-        type: 'textInput',
-        field: 'nameEn',
+        label: 'ปีเกิด,เดือนเกิด,วันเกิด',
+        type: 'ymd',
+        field: 'birthDay',
       }, {
-        label: 'นามสกุล (ภาษาอังกฤษ)',
+        label: 'เลขบัตรประชาชน',
         type: 'textInput',
-        field: 'lastEn',
+        field: 'lastTh'
+      }, {
+        label: 'วันบัตรหมดอายุ',
+        type: 'radio',
+        init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
+        field: 'expireDateFlag',
+      }, {
+        label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
+        type: 'dateExpire',
+        field: 'expireDate',
+      },
+      {
+        label: 'ข้อมูลบุตรคนที่ 2',
+        field: 'idcard',
+        type: 'titleHead'
+      }, {
+        label: 'คำนำหน้า (ตัวย่อ)',
+        type: 'dropdown',
+        field: 'jcnumber',
+      }, {
+        label: 'ชื่อ (ภาษาไทย)',
+        type: 'textInput',
+        field: 'nameTh',
+      }, {
+        label: 'นามสกุล (ภาษาไทย)',
+        type: 'textInput',
+        field: 'lastTh'
       }, {
         label: 'ปีเกิด,เดือนเกิด,วันเกิด',
         type: 'ymd',
         field: 'birthDay',
       }, {
-        label: 'สถานภาพสมรส',
-        type: 'dropdown',
-        init: [{ value: 'โสด' }, { value: 'สมรส' }, { value: 'หย่าร้าง' }],
-        field: 'maritalstatus',
+        label: 'เลขบัตรประชาชน',
+        type: 'textInput',
+        field: 'lastTh'
       }, {
-        label: 'สัญชาติ',
-        type: 'search',
-        field: 'nationality',
+        label: 'วันบัตรหมดอายุ',
+        type: 'radio',
+        init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
+        field: 'expireDateFlag',
+      }, {
+        label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
+        type: 'dateExpire',
+        field: 'expireDate',
       }
     ]
   }
