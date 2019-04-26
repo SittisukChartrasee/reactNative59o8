@@ -18,18 +18,18 @@ const fields = [
   {
     label: 'โทรศัพท์ที่ทำงาน',
     type: 'textInput',
-    field: 'idcard',
+    field: 'workPhone',
   }, {
     label: 'โทรศัพท์บ้าน',
     type: 'textInput',
-    field: 'jcnumber',
+    field: 'homePhone',
   }, {
     label: 'หมายเลขโทรศัพท์มือถืิอ',
     type: 'textInput',
-    field: 'expireDateFlag',
+    field: 'mobilePhone',
   }, {
     label: 'อีเมล',
-    field: 'expireDate',
+    field: 'email',
   }
 ]
 

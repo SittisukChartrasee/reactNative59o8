@@ -13,45 +13,45 @@ import images from '../../config/images'
 import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
-
+  
 const fields = [
   {
     label: 'ประเทศ',
     type: 'search',
-    field: 'idcard',
+    field: 'country', // countryCode
   }, {
     label: 'เลขที่',
     type: 'textInput',
-    field: 'idcard',
+    field: 'addressNoTH',
   }, {
     label: 'หมู่ที่',
     type: 'textInput',
-    field: 'idcard',
+    field: 'moo',
   }, {
     label: 'อาคาร/หมู่บ้าน',
     type: 'textInput',
-    field: 'idcard',
+    field: 'addressVillageTH',
   }, {
     label: 'ตรอก/ซอย/แยก',
     type: 'textInput',
-    field: 'idcard',
+    field: 'trokSoiYaek',
   }, {
     label: 'ถนน',
     type: 'textInput',
-    field: 'idcard',
+    field: 'thanon',
   }, {
     label: 'แขวง/ตำบล',
     type: 'search',
-    field: 'idcard',
+    field: 'subDistrict', // subDistrictCode
   }, {
     label: 'เขต/อำเภอ',
-    field: 'idcard',
+    field: 'district', // districtCode
   }, {
     label: 'จังหวัด',
-    field: 'idcard',
+    field: 'province', // provinceCode
   }, {
     label: 'รหัสไปรษณีย์',
-    field: 'idcard',
+    field: 'zipCode',
   }
 ]
 

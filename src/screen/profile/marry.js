@@ -27,73 +27,73 @@ export default class extends React.Component {
         label: 'สัญชาติ',
         type: 'radio',
         init: [{ title: 'ไทย', active: true }, { title: 'ชาวต่างชาติ' }],
-        field: 'marryNation',
+        field: 'nationFlag',
       }, {
         label: 'หมายเลขบัตรประชาชน',
         type: 'textInput',
-        field: 'marryIdCard',
+        field: 'IDCardNo',
       }, {
         label: 'ประเทศ',
         type: 'search',
-        field: 'marryCountry',
+        field: 'marryCountry', // ต้อง save ที่ field => nationalityCode
         inVisible: true,
       }, {
         label: 'หมายเลขหนังสือเดินทาง',
         type: 'textInput',
-        field: 'marryPassport',
+        field: 'marryPassport', // ต้อง save ที่ field => IDCardNo
         inVisible: true,
       }, {
         label: 'วันบัตรหมดอายุ',
         type: 'radio',
         init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
-        field: 'marryExpireFlag',
+        field: 'expireFlag', // ต้อง save ที่ field => isIDCardExpDate
       }, {
         label: 'วันที่หนังสือเดินทางหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
-        field: 'marryPassportExpireDate',
+        field: 'cardExpiredDate', // ต้อง save ที่ field => cardExpiredDate
         inVisible: true,
       }, {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
-        field: 'marryExpireDate',
+        field: 'marryExpireDate', // ต้อง save ที่ field => cardExpiredDate
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',    
         type: 'dropdown',
         init: [{ value: 'นาย' }, { value: 'นางสาว' }],
-        field: 'marryTitle',
+        field: 'title',
       }, {
         label: 'ชื่อ',
         type: 'textInput',
-        field: 'marryName',
+        field: 'fistName',
       }, {
         label: 'นาม-สกุล',
         type: 'textInput',
-        field: 'marryLastName',
+        field: 'lastName',
       }, {
         label: 'คุณเป็นนักการเมือง มีความเกี่ยวข้องกับนักการเมือง หรือบุคคลที่มีสถานภาพทางการเมือง ใช่หรือไม่',
         type: 'radioColumn',
         init: [{ title: 'ใช่', active: true }, { title: 'ไม่ใช่' }],
-        field: 'marryFlagPep',
+        field: 'pepFlag',
       },
     ]
   }
   handleInput = (props) => {
     const { fields } = this.state
-    if (props.field === 'marryNation') {
+    if (props.field === 'nationFlag') {
       this.setState({
         fields: fields.map((d) => {
           if (props.value === 'ไทย') {
-            if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'marryPassportExpireDate') return { ...d, inVisible: true }
-            else if (d.field === 'marryIdCard' || d.field === 'marryExpireDate' || d.field === 'marryExpireFlag') return { ...d, inVisible: false }
+            if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'cardExpiredDate') return { ...d, inVisible: true }
+            else if (d.field === 'IDCardNo' || d.field === 'marryExpireDate' || d.field === 'expireFlag') return { ...d, inVisible: false }
             else return d
           } else if (props.value === 'ชาวต่างชาติ') {
-            if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'marryPassportExpireDate') return { ...d, inVisible: false }
-            else if (d.field === 'marryIdCard' || d.field === 'marryExpireDate' || d.field === 'marryExpireFlag') return { ...d, inVisible: true }
+            if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'cardExpiredDate') return { ...d, inVisible: false }
+            else if (d.field === 'IDCardNo' || d.field === 'marryExpireDate' || d.field === 'expireFlag') return { ...d, inVisible: true }
             else return d
           }
         })
       })
-    } else if (props.field === 'marryExpireFlag') {
+    } else if (props.field === 'expireFlag') {
       this.setState({
         fields: fields.map((d) => {
           if (props.value === 'มีวันหมดอายุ') {

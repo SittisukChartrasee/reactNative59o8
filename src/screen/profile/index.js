@@ -8,7 +8,7 @@ import contact from './contact'
 import child from './child'
 
 export default {
-  child,
+  // child,
   marry,
   profile,
   addressDoc,

@@ -35,10 +35,24 @@ const genDate = (y=2539, m=2) => {
 
 
 export default class extends React.Component {
+  static defaultProps = {
+    value: '-/-/2532',
+  }
+
   state = {
     day: '-',
     month: '-',
     year: (+moment().format('YYYY') + 543) - 30,
+  }
+
+  componentDidMount = () => {
+    const { value } = this.props
+    const splitText = value.split('/')
+    this.setState({
+      day: splitText[0],
+      month: splitText[1],
+      year: splitText[2],
+    })
   }
 
   onPicker = (text) => {

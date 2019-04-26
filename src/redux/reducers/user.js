@@ -1,0 +1,85 @@
+
+const init = {
+  profile: {
+    docNo: '',
+    jcNumber: '',
+    expireDateFlag: '',
+    isNoDocExpDate: false,
+    docExpDate: '',
+    gender: '',
+    genderCode: '',
+    titleTH: '',
+    firstNameTH: '',
+    lastNameTH: '',
+    firstNameEN: '',
+    lastNameEN: '',
+    birthDay: '',
+    yearOfBirth: '',
+    monthOfBirth: '',
+    dayOfBirth: '',
+    martialStatus: '',
+    martialStatusCode: '',
+    nationality: '',
+    nationalityCode: '',
+  },
+  addressDoc: {
+    country: '',
+    countryCode: '',
+    addressNoTH: '',
+    moo: '',
+    addressVillageTH: '',
+    trokSoiYaek: '',
+    thanon: '',
+    district: '',
+    districtCode: '',
+    subDistrict: '',
+    subDistrictCode: '',
+    province: '',
+    provinceCode: '',
+    zipCode: '',
+  },
+  addressHome: {
+    country: '',
+    countryCode: '',
+    addressNoTH: '',
+    moo: '',
+    addressVillageTH: '',
+    trokSoiYaek: '',
+    thanon: '',
+    district: '',
+    districtCode: '',
+    subDistrict: '',
+    subDistrictCode: '',
+    province: '',
+    provinceCode: '',
+    zipCode: '',
+  },
+  contact: {
+    workPhone: '',
+    homePhone: '',
+    mobilePhone: '',
+    email: '',
+  },
+  spouse: {
+    nationFlag: '',
+    nationalityCode: '',
+    IDCardNo: '',
+    marryCountry: '',
+    marryPassport: '',
+    expireFlag: '',
+    isIDCardExpDate: false,
+    cardExpiredDate: '',
+    marryExpireDate: '',
+    title: '',
+    fistName: '',
+    lastName: '',
+    pepFlag: '',
+  }
+}
+
+export default (state=init, action) => {
+  switch (action.type) {
+    case 'CHA_USER': return {}
+    default: return state
+  }
+}
