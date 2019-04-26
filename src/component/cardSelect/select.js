@@ -12,7 +12,9 @@ import { TBold } from '../texts';
 export default ({
   label='label',
   active=false,
-  onPress=() => {}
+  value='',
+  onPress=() => {},
+  onChangeText=() => {}
 }) => (
   <View>
     <TouchableOpacity onPress={() => onPress({ label, active })}>
@@ -24,7 +26,7 @@ export default ({
         ? <View style={{ height: 1, marginLeft: 24, backgroundColor: colors.smoky }} />
         : active && (
           <View style={{ marginHorizontal: 24, marginBottom: 33, marginTop: -20 }}>
-            <TextInput label="โปรดระบุแหล่งเงินทุน" />
+            <TextInput label="โปรดระบุแหล่งเงินทุน" handleInput={onChangeText} value={value} />
           </View>
         )
       }

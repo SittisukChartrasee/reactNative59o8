@@ -1,5 +1,6 @@
 import marry from './marry'
 import profile from './profile'
+import addressCurr from './addressCurr'
 import addressDoc from './addressDoc'
 import addressHome from './addressHome'
 import addressWork from './addressWork'
@@ -8,9 +9,10 @@ import contact from './contact'
 import child from './child'
 
 export default {
-  // child,
+  child,
   marry,
   profile,
+  addressCurr,
   addressDoc,
   addressHome,
   addressWork,

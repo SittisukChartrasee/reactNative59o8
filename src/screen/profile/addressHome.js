@@ -32,6 +32,10 @@ const fields = [
     type: 'textInput',
     field: 'addressVillageTH',
   }, {
+    label: 'ชั้น',
+    type: 'textInput',
+    field: 'floorNo',
+  }, {
     label: 'ตรอก/ซอย/แยก',
     type: 'textInput',
     field: 'trokSoiYaek',

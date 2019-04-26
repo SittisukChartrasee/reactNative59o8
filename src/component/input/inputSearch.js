@@ -69,7 +69,7 @@ export default class extends React.Component {
                   onChangeText={(text) => this.setState({ text })}
                 />
                 <TouchableOpacity
-                  onPress={() => this.setState({ text: '' })}
+                  onPress={() => this.setState({ text: '', confirmText: '' })}
                   style={{
                     width: 30,
                     height: 30,

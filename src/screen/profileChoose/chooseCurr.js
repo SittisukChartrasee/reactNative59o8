@@ -14,6 +14,19 @@ import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 
+const fields = [
+  {
+    label: 'ใช้ที่อยู่เดียวกับทะเบียนบ้าน',
+    type: 'buttonCard',
+  }, {
+    label: 'ใช้ที่อยู่เดียวกับสถานที่ทำงาน',
+    type: 'buttonCard',
+  }, { 
+    label: 'ใช้ที่อยู่อื่น',
+    type: 'buttonCard',
+  }
+]
+
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
@@ -21,33 +34,8 @@ const dispatchToProps = dispatch => ({
 
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
-  state = {
-    modal: false,
-    fields: [
-      {
-        label: 'คุณได้รับเงินทุนจากแหล่งใด',
-        type: 'modal',
-        field: 'investmentSource',
-      }, {
-        label: 'แหล่งที่มาของเงินทุน',
-        type: 'search',
-        field: 'investmentSourceCountry',
-      }, {
-        label: 'วัตถุประสงค์การลงทุน',
-        type: 'search',
-        field: 'investmentPurpose',
-      }, {
-        label: 'คุณต้องการหักภาษี ณ ที่จ่ายสำหรับเงินปันผลและค่าขายคืน หรือไม่ ?',
-        type: 'radioColumn',
-        init: [{ title: 'ต้องการ หักภาษี ณ ที่จ่าย', active: true }, { title: 'ไม่ใช่' }],
-        field: 'dividendWithHoldingTax',
-      },
-    ]
-  }
-
   handleInput = (props) => {
     console.log(props)
-    if (props.type === 'modal') this.setState({ modal: true })
   }
 
   render() {
@@ -55,7 +43,7 @@ export default class extends React.Component {
     return (
       <Screen color="transparent">
         <NavBar
-          title="เงินลงทุน"
+          title="ที่อยู่ปัจจุบัน"
           navLeft={
             <TouchableOpacity onPress={() => {}}>
               <Image source={images.iconback} />
@@ -73,25 +61,15 @@ export default class extends React.Component {
           showsVerticalScrollIndicator={false}
         >
           {
-            this.state.fields.map((d, key) => Input({
+            fields.map((d, key) => Input({
               field: d.field,
               label: d.label,
               type: d.type,
               init: d.init,
-              inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
             }, key))
           }
         </ScrollView>
-
-        {
-          modal({
-            visible: this.state.modal,
-            image: images.iconBackIdcard,
-            dis: `ด้านหลังบัตรประชาชน ประกอบด้วยอักษรภาษาอังกฤษ 2 ตัว และตัวเลข 10 ตัว \nตัวอย่างการกรอก : JC1234567890`,
-            onPress: () => this.setState({ modal: false })
-          })
-        }
 
         <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
       </Screen>

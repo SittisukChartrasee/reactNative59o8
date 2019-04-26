@@ -9,6 +9,7 @@ import Input from './inputDefault'
 import InputSearch from './inputSearch'
 import InputPicker from './inputPicker'
 import InputPickerExpire from './inputPickerExpire'
+import InputModal from './inputModal'
 import { ButtonCard, SelectCard, LinkCard } from '../cardSelect'
 import { TMed, TLight, TBold } from '../texts'
 import colors from '../../config/colors';
@@ -126,6 +127,15 @@ export default (props, key) => {
           <View style={{ backgroundColor: colors.lightgrey, paddingHorizontal: 24, paddingVertical: 16 }}>
             <TBold textAlign="left">{props.label}</TBold>
           </View>
+        </View>
+      )
+
+    case 'modal':
+      return (
+        <View key={key} style={{ paddingHorizontal: 24, marginTop: 10, display: props.inVisible ? 'none' : 'flex' }}>
+          <TLight fontSize="14" mt="10" textAlign="left" color={colors.grey}>{props.label}</TLight>
+          <InputModal {...props} />
+          <Star />
         </View>
       )
 

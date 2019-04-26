@@ -107,21 +107,21 @@ input NewCareer {
 //   email: String
 // }
 
-input NewCurrentAddress {
-  countryCode: String!
-  addressNoTH: String!
-  moo: String
-  addressVillageTH: String
-  trokSoiYaek: String
-  thanon: String!
-  district: String!
-  districtCode: String!
-  subDistrict: String!
-  subDistrictCode: String!
-  province: String!
-  provinceCode: String!
-  zipCode: String!
-}
+// input NewCurrentAddress {
+//   countryCode: String!
+//   addressNoTH: String!
+//   moo: String
+//   addressVillageTH: String
+//   trokSoiYaek: String
+//   thanon: String!
+//   district: String!
+//   districtCode: String!
+//   subDistrict: String!
+//   subDistrictCode: String!
+//   province: String!
+//   provinceCode: String!
+//   zipCode: String!
+// }
 
 input NewFatca {
   isUSCitizen: Boolean!
@@ -129,7 +129,7 @@ input NewFatca {
 }
 
 input NewFraud {
-  hasLaunderingRecord: Boolean!
+  hasLaunderingRecord: Boolean! // 
   isPolitician: Boolean!
 }
 

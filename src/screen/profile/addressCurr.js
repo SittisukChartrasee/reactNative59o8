@@ -71,7 +71,7 @@ export default class extends React.Component {
     return (
       <Screen color="transparent">
         <NavBar
-          title="ที่อยุ่จัดส่งเอกสาร"
+          title="ที่อยู่ปัจจุบัน"
           navLeft={
             <TouchableOpacity onPress={() => {}}>
               <Image source={images.iconback} />

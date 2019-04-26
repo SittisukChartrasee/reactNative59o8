@@ -57,7 +57,7 @@ export default class extends React.Component {
       }, {
         label: 'อื่นๆ',
         type: 'select',
-        field: 'idcard',
+        field: 'investmentSourceOther',
       }
     ],
     data: [],
@@ -80,7 +80,6 @@ export default class extends React.Component {
   
   render() {
     const { navigateAction } = this.props
-    // console.log(this.state.data)
     return (
       <Screen color="transparent">
         <NavBar
@@ -88,11 +87,6 @@ export default class extends React.Component {
           navLeft={
             <TouchableOpacity onPress={() => {}}>
               <Image source={images.iconback} />
-            </TouchableOpacity>
-          }
-          navRight={
-            <TouchableOpacity>
-              <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }
         />
@@ -107,7 +101,6 @@ export default class extends React.Component {
           </View>
         </ScrollView>
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
       </Screen>
     )
   }
