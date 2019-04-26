@@ -34,6 +34,7 @@ import iconCameraRefresh from '../../assets/image/iconflipcamerawhite.png'
 import iconFillterCameraFront1 from '../../assets/image/camera/filterFont1.png'
 import iconFillterCameraFront2 from '../../assets/image/camera/filterFont2.png'
 import iconFIllterCameraBack from '../../assets/image/camera/filterback.png'
+import iconsign from '../../assets/image/iconsign.png'
 
 import iconrisk12 from '../../assets/image/risk1-2.png'
 import iconrisk34 from '../../assets/image/risk3-4.png'
@@ -41,6 +42,7 @@ import iconrisk56 from '../../assets/image/risk5-6.png'
 import iconrisk78 from '../../assets/image/risk7-8.png'
 
 export default {
+  iconsign,
   iconFIllterCameraBack,
   iconFillterCameraFront2,
   iconFillterCameraFront1,

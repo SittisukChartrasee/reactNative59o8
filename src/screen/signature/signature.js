@@ -1,7 +1,26 @@
 import React, {Component} from 'react';
-import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableHighlight,
+  TouchableOpacity,
+  SafeAreaView
+} from 'react-native';
 import SignatureCapture from 'react-native-signature-capture'
+import Screen from '../../component/screenComponent'
+import { NavBar } from '../../component/gradient'
+import images from '../../config/images'
+import { TLight, TBold } from '../../component/texts';
+import colors from '../../config/colors';
+
 export default class Demo extends Component {
+  state = {
+    dragged: null,
+  }
+
+
   saveSign() {
     this.signature.saveImage()
   }
@@ -22,57 +41,88 @@ export default class Demo extends Component {
 
   render = () => {
     const styles = StyleSheet.create({
-      signature: {
-          flex: 1,
-          borderColor: '#000033',
-          borderWidth: 1,
-      },
       buttonStyle: {
-          flex: 1, justifyContent: "center", alignItems: "center", height: 50,
-          backgroundColor: "#eeeeee",
-          margin: 10
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        height: 50,
+        borderRadius: 50/2,
+        backgroundColor: colors.grey,
+        margin: 10
+      }, 
+      buttonCancelStyle: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        height: 50,
+        borderRadius: 50/2,
+        borderColor: colors.grey,
+        borderWidth: 1,
+        margin: 10
       }
-  })
+    })
+    
     return (
-      <View style={{ flex: 1, flexDirection: "column" }}>
-        <Text style={{alignItems:"center",justifyContent:"center"}}>Signature Capture Extended </Text>
-        {/* <SignatureCapture
-          style={[{flex:1},styles.signature]}
-          ref={ref => { this.sign = ref }}
-          onSaveEvent={this._onSaveEvent}
-          onDragEvent={this._onDragEvent}
-          saveImageFileInExtStorage={false}
-          showNativeButtons={false}
-          showTitleLabel={false}
-          viewMode={"portrait"}/> */}
-
-        <SignatureCapture
-          // onTouchStart={e => this.setState({ dragged: !!e.nativeEvent })}
-          style={{
-            flex: 1
-            // width: '100%', height: '99.99%', opacity: 0.5,
-          }}
-          ref={(ref) => { this.signature = ref }}
-          showBorder
-          saveImageFileInExtStorage
-          onSaveEvent={this._onSaveEvent}
-          showNativeButtons={false}
-          showTitleLabel={false}
-          viewMode="portrait"
+      <Screen color="transparent">
+        <NavBar
+          title="ลายเซ็นอิเล็กทรอนิกส์"
+          navLeft={
+            <TouchableOpacity  onPress={() => navigation.goBack()}>
+              <Image source={images.iconback} />
+            </TouchableOpacity>
+          }
+          navRight={
+            <TouchableOpacity>
+              <Image source={images.iconlogoOff} />
+            </TouchableOpacity>
+          }
         />
 
-        <View style={{ flex: 1, flexDirection: "row" }}>
-          <TouchableHighlight style={styles.buttonStyle}
-              onPress={() => { this.saveSign() } } >
-              <Text>Save</Text>
-          </TouchableHighlight>
+        <SafeAreaView style={{ flex: 1 }}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems:'center' }}>
+            {
+              this.state.dragged === null
+              && (
+                <View style={{ position: 'absolute', width: '70%' }}>
+                  <View style={{ alignItems: 'center' }}>
+                    <Image source={images.iconsign} />
+                    <TLight color={colors.smoky} fontSize={14} mt={15}>เซ็นลายเซ็นของคุณที่นี่</TLight>
+                  </View>
+                  <View style={{ borderWidth: 1, marginTop: 7 }}/>
+                </View>
+              )
+            }
 
-          <TouchableHighlight style={styles.buttonStyle}
-              onPress={() => { this.resetSign() } } >
-              <Text>Reset</Text>
-          </TouchableHighlight>
-        </View>
-    </View>
+            <SignatureCapture
+              onTouchStart={e => this.setState({ dragged: !!e.nativeEvent })}
+              style={{
+                width: '100%',
+                height: '80%',
+                opacity: .5,
+                transform: [{ rotateX: '180deg' }]
+              }}
+              ref={(ref) => { this.signature = ref }}
+              showBorder={false}
+              saveImageFileInExtStorage
+              onSaveEvent={this._onSaveEvent}
+              showNativeButtons={false}
+              showTitleLabel={false}
+              viewMode="portrait"
+            />
+          </View>
+
+
+          <View style={{ flexDirection: "row", marginHorizontal: 20 }}>
+            <TouchableHighlight style={styles.buttonCancelStyle} onPress={() => this.resetSign()}>
+              <TBold fontSize={16} color={colors.grey}>ล้าง</TBold>
+            </TouchableHighlight>
+
+            <TouchableHighlight style={styles.buttonStyle} onPress={() => this.saveSign()}>
+              <TBold fontSize={16} color={colors.white}>ยืนยัน</TBold>
+            </TouchableHighlight>
+          </View>
+        </SafeAreaView>
+      </Screen>
     )
   }
 }

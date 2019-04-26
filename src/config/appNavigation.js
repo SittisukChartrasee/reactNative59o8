@@ -41,10 +41,10 @@ const MainNavigator = createStackNavigator({
   // ...branchRisk,
   // ...branchProfile,
   // ...branchCamera,
-  ...branchIcome,
+  // ...branchIcome,
   // ...branchProfileChoose,
   // ...branchComplete,
-  // ...branchsignature,
+  ...branchsignature,
 }, {
   headerMode: 'none',
 });
