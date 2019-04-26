@@ -96,7 +96,7 @@ export default class extends React.Component {
         <Modal visible={open} animationType="slide">
           <View style={{ flex: 1 }}>
             <NavBar
-              title="คุณได้รับเงินทุนจากแหล่งใด "
+              title="ได้รับเงินทุนจากแหล่งใด"
               navLeft={
                 <TouchableOpacity onPress={() => this.setState({ open: false })}>
                   <Image source={images.iconback} />
