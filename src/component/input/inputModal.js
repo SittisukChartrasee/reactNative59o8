@@ -77,9 +77,9 @@ export default class extends React.Component {
 
   render() {
     const { open, data, otherField } = this.state
-    const { handleInput } = this.props
+    const { handleInput, field } = this.props
 
-    handleInput({ otherField, data })
+    handleInput({ field, otherField, data, type: 'MODAL' })
     return (
       <View>
         <TouchableOpacity onPress={() => this.setState({ open: true })}>

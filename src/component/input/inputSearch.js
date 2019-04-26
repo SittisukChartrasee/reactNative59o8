@@ -31,8 +31,10 @@ export default class extends React.Component {
 
   render() {
     const { open, confirmText } = this.state
-
+    const { handleInput, field } = this.props
     StatusBar.setBarStyle(open ? "dark-content" : "light-content")
+
+    handleInput({ type: 'SEARCH', field, value: confirmText })
     return (
       <View>
         <TouchableOpacity onPress={() => this.setState({ open: true })}>

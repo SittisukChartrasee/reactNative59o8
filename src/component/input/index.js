@@ -78,7 +78,7 @@ export default (props, key) => {
       return (
         <View key={key} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
           <TLight fontSize="14" mt="13" textAlign="left" color={colors.grey}>{props.label}</TLight>
-          <InputSearch />
+          <InputSearch {...props}/>
           <Star top={8}/>
         </View>
       )
