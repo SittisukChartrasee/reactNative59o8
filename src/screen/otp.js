@@ -21,17 +21,6 @@ export default class extends React.Component {
     dot: [false, false, false, false, false, false],
     number: '',
     currentDot: '',
-    start: 120,
-    end: 0,
-  }
-  
-  timer = () => {
-    if (this.state.start > this.state.end) {
-      setTimeout(() => {
-        this.setState({ start: this.state.start -1 })
-        this.timer()
-      }, 1000)
-    }
   }
   
   setNumber = (obj) => {
@@ -53,17 +42,16 @@ export default class extends React.Component {
 
   onPress = () => {
     console.log('kok')
-    this.timer()
   }
   
   render() {
-    const { dot, number, start } = this.state
-
     return (
       <Screen>
         {
           headerotp({
             ...this.state,
+            start: 60,
+            end: 59,
             onPress: this.onPress,
           })
         }

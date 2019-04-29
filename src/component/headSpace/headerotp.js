@@ -14,11 +14,27 @@ export default class extends React.Component {
   static defaultProps = {
     dot: [false, false, false, false, false, false],
     currentDot: '',
-    start: '',
+    start: 0,
+    end: 0,
     onPress: () => {},
   }
+  state = {
+    startState: this.props.start,
+    endState: this.props.end
+  }
+
+  timer = () => {
+    if (this.state.startState > this.state.endState) {
+      setTimeout(() => {
+        this.setState({ startState: this.state.startState -1 })
+        this.timer()
+      }, 1000)
+    }
+  }
+
   render() {
-    const { dot, start, onPress } = this.props
+    const { startState } = this.state
+    const { dot, onPress } = this.props
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 0.8, justifyContent: 'flex-end' }}>
@@ -31,26 +47,49 @@ export default class extends React.Component {
           </View>
           <View style={{ backgroundColor: 'transparent', alignItems: 'center' }}>
             <View style={{ backgroundColor: colors.white, height: 60/2, width: '100%', position: 'absolute', bottom: 0 }}/>
-            <TouchableOpacity
-              onPress={onPress}
-              style={{
-                width: 160,
-                height: 40,
-                borderRadius: 40/2,
-                backgroundColor: colors.white,
-                shadowColor: colors.black,
-                shadowOpacity: 0.5,
-                shadowRadius: 5,
-                shadowOffset: {
-                  height: 0,
-                  width: 0
-                },
-                marginBottom: 10,
-                justifyContent: 'center',
-              }}
-            >
-              <TBold>{secToMinute(start)}</TBold>
-            </TouchableOpacity>
+            {
+              startState !== 59
+                ? (
+                  <TouchableOpacity
+                    onPress={() => this.timer()}
+                    style={{
+                      width: 160,
+                      height: 40,
+                      borderRadius: 40/2,
+                      backgroundColor: colors.white,
+                      shadowColor: colors.black,
+                      shadowOpacity: 0.5,
+                      shadowRadius: 5,
+                      shadowOffset: {
+                        height: 0,
+                        width: 0
+                      },
+                      marginBottom: 10,
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <TBold>{secToMinute(startState)}</TBold>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={
+                      () => {
+                        this.timer()
+                        onPress()
+                    }}
+                    style={{
+                      width: 160,
+                      height: 40,
+                      borderRadius: 40/2,
+                      backgroundColor: colors.emerald,
+                      marginBottom: 10,
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <TBold color={colors.white}>ขอรับรหัสใหม่</TBold>
+                  </TouchableOpacity>
+                )
+            }
           </View>
         </View>
 
