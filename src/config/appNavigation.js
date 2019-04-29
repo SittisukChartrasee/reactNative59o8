@@ -29,7 +29,7 @@ import branchsignature from '../screen/signature'
 const MainNavigator = createStackNavigator({
   // welcome,
   // login,
-  // otp,
+  otp,
   // passcode,
   // confirmPasscode,
   // condi,

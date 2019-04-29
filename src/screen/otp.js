@@ -24,10 +24,6 @@ export default class extends React.Component {
     start: 120,
     end: 0,
   }
-
-  componentDidMount() {
-    this.timer()
-  }
   
   timer = () => {
     if (this.state.start > this.state.end) {
@@ -57,6 +53,7 @@ export default class extends React.Component {
 
   onPress = () => {
     console.log('kok')
+    this.timer()
   }
   
   render() {

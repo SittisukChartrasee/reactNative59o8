@@ -80,18 +80,13 @@ export default class Demo extends Component {
 
         <SafeAreaView style={{ flex: 1 }}>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems:'center' }}>
-            {
-              this.state.dragged === null
-              && (
-                <View style={{ position: 'absolute', width: '70%' }}>
-                  <View style={{ alignItems: 'center' }}>
-                    <Image source={images.iconsign} />
-                    <TLight color={colors.smoky} fontSize={14} mt={15}>เซ็นลายเซ็นของคุณที่นี่</TLight>
-                  </View>
-                  <View style={{ borderWidth: 1, marginTop: 7 }}/>
-                </View>
-              )
-            }
+            <View style={{ position: 'absolute', width: '70%' }}>
+              <View style={{ alignItems: 'center', opacity: this.state.dragged === null ? 1 : 0 }}>
+                <Image source={images.iconsign} />
+                <TLight color={colors.smoky} fontSize={14} mt={15}>เซ็นลายเซ็นของคุณที่นี่</TLight>
+              </View>
+              <View style={{ borderWidth: 1, marginTop: 7, }}/>
+            </View>
 
             <SignatureCapture
               onTouchStart={e => this.setState({ dragged: !!e.nativeEvent })}
