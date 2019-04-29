@@ -45,7 +45,7 @@ export default class extends React.Component {
     ]
   }
 
-  onChangeText = (props) => {
+  handleInput = (props) => {
     console.log(props)
     if (props.type === 'modal') this.setState({ modal: true })
   }
@@ -79,7 +79,7 @@ export default class extends React.Component {
               type: d.type,
               init: d.init,
               inVisible: d.inVisible,
-              onChangeText: (props) => this.onChangeText(props),
+              handleInput: (props) => this.handleInput(props),
             }, key))
           }
         </ScrollView>

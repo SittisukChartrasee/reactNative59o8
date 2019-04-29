@@ -53,12 +53,12 @@ export default class extends React.Component {
     modal: false,
   }
 
-  // onChangeText = (id) => (value) => {
+  // handleInput = (id) => (value) => {
   //   console.log(id, value)
   //   this.setState({ [id]: value })
   // }
 
-  onChangeText = (obj) => {
+  handleInput = (obj) => {
     console.log(obj)
   }
 
@@ -82,8 +82,8 @@ export default class extends React.Component {
             fields.map((setField, key) => Input({
                 ...setField,
                 // value: this.state[setField.field] ? this.state[setField.field] : value,
-                // onChangeText: this.onChangeText(setField.field),
-                onChangeText: value => this.onChangeText(value),
+                // handleInput: this.handleInput(setField.field),
+                handleInput: value => this.handleInput(value),
               }, key)
             )
           }

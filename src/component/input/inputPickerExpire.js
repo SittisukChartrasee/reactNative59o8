@@ -103,9 +103,9 @@ export default class extends React.Component {
     Picker.show()
   }
   render() {
-    const { onChangeText, field, type } = this.props
+    const { handleInput, field, type } = this.props
     const { date } = this.state
-    onChangeText({ value: `${date[2]}/${date[1]}/${date[0]}`, type, field })
+    handleInput({ value: `${date[2]}/${date[1]}/${date[0]}`, type, field })
     return (
       <View>
         <TouchableOpacity onPress={() => this.onPicker()}>

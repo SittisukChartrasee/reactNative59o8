@@ -11,7 +11,7 @@ import { TBold, TLight } from '../texts'
 const handleNumberBank = (number) => number.slice(5, 9)
 
 export default ({
-  onChangeText=() => {},
+  handleInput=() => {},
   image=undefined,
   label='label',
   type='type',
@@ -20,7 +20,7 @@ export default ({
   number=undefined,
 }) => (
   <TouchableOpacity
-    onPress={() => onChangeText({ value: label, type })}
+    onPress={() => handleInput({ value: label, type })}
     disabled={disabled}
     style={{
       borderWidth: active ? 2 : 1,

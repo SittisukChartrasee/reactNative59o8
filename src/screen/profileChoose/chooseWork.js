@@ -31,7 +31,7 @@ const dispatchToProps = dispatch => ({
 
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
-  onChangeText = (props) => {
+  handleInput = (props) => {
     console.log(props)
   }
 
@@ -63,7 +63,7 @@ export default class extends React.Component {
               label: d.label,
               type: d.type,
               init: d.init,
-              onChangeText: (props) => this.onChangeText(props),
+              handleInput: (props) => this.handleInput(props),
             }, key))
           }
         </ScrollView>

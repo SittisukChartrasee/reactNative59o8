@@ -37,14 +37,13 @@ export default class extends React.Component {
   render() {
     const {
       maskingOptions,
-      onChangeText,
+      handleInput,
       value,
       option,
       label,
       field
     } = this.props
 
-    console.log('mask', onChangeText, field)
     return (
       <TextMask
         type={'custom'}
@@ -56,7 +55,7 @@ export default class extends React.Component {
           label,
         }}
         value={value}
-        onChangeText={text => onChangeText({ text })}
+        onChangeText={value => handleInput({ value, type: 'mask', field })}
       />
     )
   }
@@ -80,7 +79,7 @@ export default class extends React.Component {
 // checkField={valifie ? (value.length === 13 && value.length > 13) : true}
 // options={extendedMaskingOptions}
 // value={value}
-// onChangeText={this.onChangeTextInput}
+// onChangeText={this.handleInputInput}
 // placeholder={placeholder}
 // autoCorrect={false}
 // autoComplete="off"

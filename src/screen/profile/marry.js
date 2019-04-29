@@ -77,7 +77,7 @@ export default class extends React.Component {
       },
     ]
   }
-  onChangeText = (props) => {
+  handleInput = (props) => {
     const { fields } = this.state
     if (props.field === 'nationFlag') {
       this.setState({
@@ -138,7 +138,7 @@ export default class extends React.Component {
               type: d.type,
               init: d.init,
               inVisible: d.inVisible,
-              onChangeText: (props) => this.onChangeText(props),
+              handleInput: (props) => this.handleInput(props),
             }, key))
           }
         </ScrollView>

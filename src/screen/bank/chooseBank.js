@@ -52,7 +52,7 @@ export default class extends React.Component {
     ]
   }
 
-  onChangeText = (props) => {
+  handleInput = (props) => {
     // console.log(props)
     if (props.type === 'selectCard') {
       this.setState({ card: this.state.card.map((d) => d.label === props.value ? { ...d, active: true } : { ...d, active: false }) })
@@ -94,7 +94,7 @@ export default class extends React.Component {
                 init: d.init,
                 image: d.image,
                 active: d.active,
-                onChangeText: (props) => this.onChangeText(props),
+                handleInput: (props) => this.handleInput(props),
               }, key))
             }
           </View>
@@ -107,7 +107,7 @@ export default class extends React.Component {
                     field: d.field,
                     label: d.label+handleDisabled(this.state.card).label,
                     type: d.type,
-                    onChangeText: (props) => this.onChangeText(props),
+                    handleInput: (props) => this.handleInput(props),
                   }, key))
                 }
               </View>

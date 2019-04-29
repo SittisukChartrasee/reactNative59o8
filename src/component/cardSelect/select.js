@@ -14,7 +14,7 @@ export default ({
   active=false,
   value='',
   onPress=() => {},
-  onChangeText=() => {}
+  handleInput=() => {}
 }) => (
   <View>
     <TouchableOpacity onPress={() => onPress({ label, active })}>
@@ -26,7 +26,7 @@ export default ({
         ? <View style={{ height: 1, marginLeft: 24, backgroundColor: colors.smoky }} />
         : active && (
           <View style={{ marginHorizontal: 24, marginBottom: 33, marginTop: -20 }}>
-            <TextInput label="โปรดระบุแหล่งเงินทุน" onChangeText={onChangeText} value={value} />
+            <TextInput label="โปรดระบุแหล่งเงินทุน" onChangeText={handleInput} value={value} />
           </View>
         )
       }

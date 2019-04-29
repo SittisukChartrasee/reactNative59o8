@@ -8,7 +8,7 @@ const Drop = props => (
     {...props}
     label={props.label}
     data={props.init}
-    onChangeText={(value) => props.onChangeText({ value, type: 'dropdown', field: props.field })}
+    onChangeText={(value) => props.handleInput({ value, type: 'dropdown', field: props.field })}
 
     tintColor={colors.darkSage}
     baseColor={colors.grey}
@@ -34,7 +34,7 @@ Drop.defaultProps = {
   ],
   label: 'test label',
   field: 'fieldName',
-  onChangeText: () => {},
+  handleInput: () => {},
 }
 
 export default Drop
