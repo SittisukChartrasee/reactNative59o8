@@ -26,7 +26,7 @@ export default class extends React.Component {
     fields: [
       {
         label: 'เลขบัตรประชาชน',
-        field: 'docNo',
+        field: 'idCard',
       }, {
         label: 'หมายเลขบัตรประชาชน ( ดย. JT9-9999999-99 )',
         type: 'Icustom',
@@ -76,8 +76,8 @@ export default class extends React.Component {
         field: 'martialStatus', // martialStatusCode
       }, {
         label: 'สัญชาติ',
-        type: 'search',
         field: 'nationality', // nationalityCode
+        value: 'ไทย'
       }
     ]
   }
@@ -129,6 +129,7 @@ export default class extends React.Component {
               label: d.label,
               type: d.type,
               init: d.init,
+              value: d.value,
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
             }, key))

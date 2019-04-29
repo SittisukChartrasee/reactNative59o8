@@ -1,7 +1,8 @@
+import { CHANGE_USER } from '../types'
 
 const init = {
   profile: {
-    docNo: '',
+    idCard: "1111111111111",
     jcNumber: '',
     expireDateFlag: '',
     isNoDocExpDate: false,
@@ -76,8 +77,8 @@ const init = {
   contact: {
     workPhone: '',
     homePhone: '',
-    mobilePhone: '',
-    email: '',
+    mobilePhone: "0830015610",
+    email: "b@b.com"
   },
   spouse: {
     nationFlag: '',
@@ -96,9 +97,11 @@ const init = {
   }
 }
 
-export default (state=init, action) => {
+export default (state = init, action) => {
   switch (action.type) {
-    case 'CHA_USER': return {}
-    default: return state
+    case CHANGE_USER:
+      return { ...state, [action.key]: action.value }
+    default:
+      return state
   }
 }

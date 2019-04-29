@@ -7,12 +7,14 @@ import Screen from '../component/screenComponent'
 import { headerotp } from '../component/headSpace'
 import { navigateAction } from '../redux/actions'
 import colors from '../config/colors'
-import { TLight, TBold, TMed } from '../component/texts';
-import images from '../config/images';
+import { TLight, TBold, TMed } from '../component/texts'
+import images from '../config/images'
+import { velidateOtp } from '../redux/actions/root-active'
 
-const mapToProps = () => ({})
+const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  velidateOtp: bindActionCreators(velidateOtp, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -24,12 +26,23 @@ export default class extends React.Component {
   }
   
   setNumber = (obj) => {
-    const { navigateAction } = this.props
-    this.setState({ ...obj })
+    const { navigateAction, root } = this.props
+    const data = {
+      trans_id: root.trans_id,
+      ref_no: root.ref_no,
+      phone_no: root.phone_no,
+      secret: obj.number,
+    }
 
+    this.setState({ ...obj })
     obj.dot.map(d => d && this.delayDot(d))
+
     if (obj.number.length === 6) {
-      navigateAction({ ...this.props, page: 'passcode' })
+      const res = this.props.velidateOtp(data)
+      console.log('otp : ', data)
+      // if (res) {
+      //   navigateAction({ ...this.props, page: 'passcode' })
+      // }
     }
   }
 
@@ -41,17 +54,18 @@ export default class extends React.Component {
   }
 
   onPress = () => {
-    console.log('kok')
+    
   }
   
   render() {
+    const { ref_no } = this.props.root
     return (
       <Screen>
         {
           headerotp({
             ...this.state,
-            start: 60,
-            end: 59,
+            start: 180,
+            refNo: ref_no || null,
             onPress: this.onPress,
           })
         }

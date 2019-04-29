@@ -18,6 +18,8 @@ import Input from '../component/input'
 import { LongPositionButton, NextButton } from '../component/button'
 import Modal from '../component/modal'
 import { navigateAction } from '../redux/actions'
+import { requestOtp } from '../redux/actions/root-active'
+import { updateUser } from '../redux/actions/commonAction'
 
 const { width: widthScreen } = Dimensions.get('window')
 
@@ -26,49 +28,63 @@ const fields = [
     type: 'mask',
     label: 'หมายเลขบัตรประชาชน',
     field: 'idCard',
-    option: '999 999 999 999',
+    option: '999 999 999 9999',
   },
   {
     type: 'textInput',
     label: 'อีเมล',
     field: 'email',
   },
-  // {
-  //   type: 'mask',
-  //   label: 'หมายเลขโทรศัพท์มือถือ',
-  //   field: 'phone',
-  //   option: '099 999 9999',
-  // }
+  {
+    type: 'mask',
+    label: 'หมายเลขโทรศัพท์มือถือ',
+    field: 'mobilePhone',
+    option: '099 999 9999',
+  }
 ]
 
-const mapToProps = ({ root }) => ({ root })
+const mapToProps = ({ root, user }) => ({ root, user })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  requestOtp: bindActionCreators(requestOtp, dispatch),
+  updateUser: bindActionCreators(updateUser, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   state = {
-    value: '',
     modal: false,
   }
 
-  // handleInput = (id) => (value) => {
-  //   console.log(id, value)
-  //   this.setState({ [id]: value })
-  // }
-
   handleInput = (obj) => {
-    console.log(obj)
+    const { user } = this.props
+    if (obj.field === 'idCard') {
+      this.props.updateUser('profile', { ...user.profile, [obj.field]: obj.value.split(' ').join('') })
+    } else if (obj.field === 'email') {
+      this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value })
+    } else if (obj.field === 'mobilePhone') {
+      this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value.split(' ').join('') })      
+    }
   }
 
-  onNext = () => {
-    const { navigateAction } = this.props
-    navigateAction({ ...this.props, page: 'otp' })
+  onNext = async () => {
+    const { navigateAction, user } = this.props
+    
+    const data = {
+      idCard: user.profile.idCard,
+      email: user.contact.email,
+      mobilePhone: user.contact.mobilePhone,
+    }
+
+    const res = await this.props.requestOtp(data)
+    console.log(res)
+    if (res.success) {
+      navigateAction({ ...this.props, page: 'otp' })
+    }
   }
 
   render() {
-    const { value, modal } = this.state
+    const { modal } = this.state
     const sizing = widthScreen <= 320 ? { width: 160, height: 110 } : {}
     return (
       <Screen>
@@ -80,12 +96,10 @@ export default class extends React.Component {
 
           {
             fields.map((setField, key) => Input({
-                ...setField,
-                // value: this.state[setField.field] ? this.state[setField.field] : value,
-                // handleInput: this.handleInput(setField.field),
-                handleInput: value => this.handleInput(value),
-              }, key)
-            )
+              ...setField,
+              // value: user
+              handleInput: value => this.handleInput(value)
+            }, key))
           }
         
         </View>

@@ -16,6 +16,7 @@ export default class extends React.Component {
     currentDot: '',
     start: 0,
     end: 0,
+    refNo: null,
     onPress: () => {},
   }
   state = {
@@ -32,9 +33,13 @@ export default class extends React.Component {
     }
   }
 
+  componentDidMount = () => {
+    this.timer()
+  }
+
   render() {
     const { startState } = this.state
-    const { dot, onPress } = this.props
+    const { dot, onPress, refNo } = this.props
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 0.8, justifyContent: 'flex-end' }}>
@@ -48,10 +53,9 @@ export default class extends React.Component {
           <View style={{ backgroundColor: 'transparent', alignItems: 'center' }}>
             <View style={{ backgroundColor: colors.white, height: 60/2, width: '100%', position: 'absolute', bottom: 0 }}/>
             {
-              startState !== 59
+              startState !== 0
                 ? (
                   <TouchableOpacity
-                    onPress={() => this.timer()}
                     style={{
                       width: 160,
                       height: 40,
@@ -73,9 +77,10 @@ export default class extends React.Component {
                 ) : (
                   <TouchableOpacity
                     onPress={
-                      () => {
-                        this.timer()
-                        onPress()
+                      async () => {
+                        await this.setState({ start: 180 })
+                        await this.timer()
+                        await onPress()
                     }}
                     style={{
                       width: 160,
@@ -95,7 +100,7 @@ export default class extends React.Component {
 
         <View style={{ flex: 1, paddingHorizontal: 24, paddingTop: 16, backgroundColor: colors.white }}>
           <TLight color={colors.grey}>กรุณากรอกรหัสผ่านแบบใช้ครั้งเดียว ( SMS OTP) ที่ได้รับทาง SMS บนมือถือของท่าน (รหัส OTP มีอายุการใช้งาน 3 นาที)</TLight>
-          <TBold color={colors.emerald} fontSize={16} mt={16}>รหัสอ้างอิง : KaS4TEd</TBold>
+          <TBold color={colors.emerald} fontSize={16} mt={16}>รหัสอ้างอิง : {refNo}</TBold>
 
             <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 16 }}>
               {

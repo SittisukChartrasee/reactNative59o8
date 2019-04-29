@@ -16,15 +16,19 @@ export default class extends React.PureComponent {
     field: 'fieldName',
   }
 
+  state = {
+    value: '',
+  }
+
   handleInput = (value) => {
+    console.log('onChangeText', value)
     const { handleInput, field, onChangeText } = this.props
+    this.setState({ value })
     onChangeText(value)
     handleInput({ value, type: 'textInput', field })
   }
 
-
   render() {
-    const { field } = this.props
     return (
       <TextField
         {...this.props}

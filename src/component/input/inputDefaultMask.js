@@ -31,14 +31,19 @@ export default class extends React.Component {
   }
 
   state = {
-    text: '',
+    value: '',
+  }
+
+  handleInput = (value) => {
+    const { handleInput, field } = this.props
+    this.setState({ value })
+    handleInput({ value, type: 'mask', field })
   }
 
   render() {
     const {
       maskingOptions,
       handleInput,
-      value,
       option,
       label,
       field
@@ -54,8 +59,8 @@ export default class extends React.Component {
         customTextInputProps={{
           label,
         }}
-        value={value}
-        onChangeText={value => handleInput({ value, type: 'mask', field })}
+        value={this.state.value}
+        onChangeText={this.handleInput}
       />
     )
   }
