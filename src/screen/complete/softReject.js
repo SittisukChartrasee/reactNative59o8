@@ -37,7 +37,7 @@ export default class extends React.Component {
     ],
   }
 
-  handleInput = (props) => {
+  onChangeText = (props) => {
     console.log(props)
   }
 
@@ -71,7 +71,7 @@ export default class extends React.Component {
                 init: d.init,
                 image: d.image,
                 active: d.active,
-                handleInput: (props) => this.handleInput(props),
+                onChangeText: (props) => this.onChangeText(props),
               }, key))
             }
           </View>

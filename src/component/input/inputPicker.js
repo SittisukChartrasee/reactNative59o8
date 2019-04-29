@@ -99,9 +99,9 @@ export default class extends React.Component {
 
   render() {
     const { year, month, day } = this.state
-    const { handleInput, field, type } = this.props
+    const { onChangeText, field, type } = this.props
     const labelArr = this.props.label.split(',')
-    handleInput({ value: `${day}/${month}/${year}`, type, field })
+    onChangeText({ value: `${day}/${month}/${year}`, type, field })
 
     return (
       <View style={{ flexDirection: 'row', flex: 1 }}>

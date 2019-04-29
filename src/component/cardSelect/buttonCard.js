@@ -10,13 +10,13 @@ import { TBold } from '../texts'
 
 
 export default ({
-  handleInput=() => {},
+  onChangeText=() => {},
   image=undefined,
   label='label',
   type='type'
 }) => (
   <TouchableOpacity
-    onPress={() => handleInput({ value: label, type })}
+    onPress={() => onChangeText({ value: label, type })}
     style={{
       borderWidth: 1,
       borderRadius: 10,

@@ -95,7 +95,7 @@ export default class extends React.Component {
               type: d.type,
               init: d.init,
               // value: 'test',
-              handleInput: (props) => this.handleInput(props),
+              onChangeText: (props) => this.onChangeText(props),
             }, key))
           }
         </ScrollView>

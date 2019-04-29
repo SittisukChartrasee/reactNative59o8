@@ -11,13 +11,18 @@ export default class extends React.PureComponent {
     label: 'label',
     fs: 16,
     styled: {},
-    handleInput: () => {},
+    onChangeText: () => {},
     field: 'fieldName',
+  }
+
+  onChangeText = (value) => {
+    const { onChangeText, field } = this.props
+    onChangeText({ value, type: 'textInput', field })
   }
 
 
   render() {
-    const { handleInput, field } = this.props
+    const { onChangeText, field } = this.props
     return (
       <TextField
         {...this.props}
@@ -35,7 +40,7 @@ export default class extends React.PureComponent {
         activeLineWidth={this.props.activeLineWidth !== undefined ? 0 : 2}
         fontSize={18}
         value={this.props.value}
-        onChangeText={value => handleInput({ value, type: 'textInput', field })}
+        onChangeText={text => onChangeText(text)}
         height="100%"
         autoCorrect={false}
         autoComplete="off"

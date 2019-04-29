@@ -40,8 +40,11 @@ export default class extends React.Component {
       onChangeText,
       value,
       option,
-      label
+      label,
+      field
     } = this.props
+
+    console.log('mask', onChangeText, field)
     return (
       <TextMask
         type={'custom'}
@@ -53,7 +56,7 @@ export default class extends React.Component {
           label,
         }}
         value={value}
-        onChangeText={text => onChangeText(text)}
+        onChangeText={text => onChangeText({ text })}
       />
     )
   }

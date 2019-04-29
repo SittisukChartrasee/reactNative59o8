@@ -33,12 +33,12 @@ const fields = [
     label: 'อีเมล',
     field: 'email',
   },
-  {
-    type: 'mask',
-    label: 'หมายเลขโทรศัพท์มือถือ',
-    field: 'phone',
-    option: '099 999 9999',
-  }
+  // {
+  //   type: 'mask',
+  //   label: 'หมายเลขโทรศัพท์มือถือ',
+  //   field: 'phone',
+  //   option: '099 999 9999',
+  // }
 ]
 
 const mapToProps = ({ root }) => ({ root })
@@ -53,8 +53,13 @@ export default class extends React.Component {
     modal: false,
   }
 
-  onChangeText = (id) => (value) => {
-    this.setState({ [id]: value })
+  // onChangeText = (id) => (value) => {
+  //   console.log(id, value)
+  //   this.setState({ [id]: value })
+  // }
+
+  onChangeText = (obj) => {
+    console.log(obj)
   }
 
   onNext = () => {
@@ -74,11 +79,11 @@ export default class extends React.Component {
         <View style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}>
 
           {
-            fields.map(
-              (setField, key) => Input({
+            fields.map((setField, key) => Input({
                 ...setField,
-                value: this.state[setField.field] ? this.state[setField.field] : value,
-                onChangeText: this.onChangeText(setField.field),
+                // value: this.state[setField.field] ? this.state[setField.field] : value,
+                // onChangeText: this.onChangeText(setField.field),
+                onChangeText: value => this.onChangeText(value),
               }, key)
             )
           }

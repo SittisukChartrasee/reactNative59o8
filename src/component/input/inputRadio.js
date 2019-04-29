@@ -36,16 +36,16 @@ export default class extends React.Component {
     ],
     label: 'labelRadio',
     field: 'fieldName',
-    handleInput: () => {},
+    onChangeText: () => {},
   }
 
   state = { data: this.props.init }
 
   handleRadio = (key) => {
     const { data } = this.state
-    const { handleInput, field } = this.props
+    const { onChangeText, field } = this.props
     const maping = data.map((dd, inx) => inx === key
-      ? { ...dd, active: true, output: handleInput({ value: dd.title, type: 'radio', field }) }
+      ? { ...dd, active: true, output: onChangeText({ value: dd.title, type: 'radio', field }) }
       : { ...dd, active: false })
     this.setState({ data: maping })
   }

@@ -9,14 +9,14 @@ import colors from '../../config/colors';
 import { TBold, TLight } from '../texts'
 
 export default ({
-  handleInput=() => {},
+  onChangeText=() => {},
   image=undefined,
   label='label',
   type='type',
   active=false,
 }) => (
   <TouchableOpacity
-    onPress={() => handleInput({ value: label, type })}
+    onPress={() => onChangeText({ value: label, type })}
     disabled={active}
     style={{
       borderRadius: 10,
