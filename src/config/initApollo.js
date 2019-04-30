@@ -27,19 +27,24 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 })
 
+const aatoken = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY2ODE3MjgsImlkZW50aXR5IjoiNGNqOWtqd3hoeURSWnYxZ1E5QW1RMFVPeDI4TzJITkxGUGJoQzZwOHp6WFdRT3lZUDdtVldPQUp3OGtMdGhEaWlScjl1TDBhN05NMlZLTmlIeGZZVmdaUEQrRkdBSGpKRytTWFFsK0UifQ.t3apUMpSopUCUTbib3JDRPHic2oJo5Tgtrwtyu4ZI_ht8dwfGxUtJxaknO-q0gCPzcMpW82bsWY5hJ0wd3xPTTkCa8G5q7mwnyK1ajEgp7tSNhmDaB-u3nrUJdGD8eT9YbSQlcpncuZFAnpkuiMfkZubpyylQahJFCNmWW4c_lIx-O9DEH5vLAoqlZf9uwqjthtSwNUmjuZr0Lm1O_GXTTKaH1PpAwyW4FoRDkT9fRlMqCsQQ9Q92RQ90NGe3EHO0D-oR1-Rxveu_o1AMdkDuYxHLFbkbBOjd8pFV-BkTUh1aaUMVbuIx8Hb2NiFHZsfSAVtS8hWV1Fmf4Clq6S41g'
 const handleToken = (otpSubmit, token) => {
   if (token) {
     console.log('=========== ', token, '=========', otpSubmit)
-    if (otpSubmit && token) {
-      return {
-        authorization: otpSubmit ? `Bearer ${otpSubmit}` : '',
-      }
-    }
-    return {
-      authorization: token ? `Bearer ${token}` : '',
-    }
+    // if (otpSubmit && token) {
+    //   return {
+    //     authorization: otpSubmit ? `Bearer ${otpSubmit}` : '',
+    //   }
+    // }
+    // return {
+    //   authorization: token ? `Bearer ${token}` : '',
+    // }
+    
   }
-  return {}
+  return {
+    authorization: `Bearer ${aatoken}`
+  }
+  // return {}
 }
 
 
@@ -67,6 +72,6 @@ export default (store) => {
     // case 'UAT': return getAuthLink(`${env.API_PATH_UAT}/graphql`, store)
     // case 'SIT': return getAuthLink(`${env.API_PATH_SIT}/graphql`, store)
     // default: return getAuthLink(`${env.API_PATH}/graphql`, store)
-    default: return getAuthLink('https://ka-ob-client-dev.codefin.io', store)
+    default: return getAuthLink('https://ka-ob-client-dev.codefin.io/query', store)
   }
 }

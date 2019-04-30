@@ -58,8 +58,7 @@ export default class extends React.Component {
         field: 'marryExpireDate', // ต้อง save ที่ field => cardExpiredDate
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',    
-        type: 'dropdown',
-        init: [{ value: 'นาย' }, { value: 'นางสาว' }],
+        type: 'search',
         field: 'title',
       }, {
         label: 'ชื่อ',
