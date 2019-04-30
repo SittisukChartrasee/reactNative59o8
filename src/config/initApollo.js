@@ -29,6 +29,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 const handleToken = (otpSubmit, token) => {
   if (token) {
+    console.log('=========== ', token, '=========', otpSubmit)
     if (otpSubmit && token) {
       return {
         authorization: otpSubmit ? `Bearer ${otpSubmit}` : '',
@@ -42,13 +43,12 @@ const handleToken = (otpSubmit, token) => {
 }
 
 
-// const otherToken = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYjhlMzZmNGEwYmUxNjg4NmIzMGUwNzE3MGIyN2M4NDdlNWQ5NDE5YTZhZTU2NTQzODU0ZmU0ZDViMWIzZjM1NDZjMzRjMjYyMzY3YmI5MjEiLCJ0eXBlIjoiOGFjMTVhMmUyOGI0ZDkzN2QyMTQ1ZGM3YTg5MGEzNTM0ZDI1ZTAyNjM2IiwiaWF0IjoxNTQ1NjM4NzQwLCJleHAiOjE1NDU2NDA1NDB9.RBKNgaudNX_ux9cd4EHebZtAEexipKBKk5di9TDd7_fwuO1ekB8rsq8ZiVBthqgZ06LWdF6hSlAnZcmf6xEzQQU1amVMNbkz6MVTTfUmUhH4qoxm6jEV6hAMwZJ6HdD4PTijVswsNw2L025sC2lzrLRseqR5kxbWavqm8TsYJepDcyqLenwEhil9sln4sU1xDp5w-A710Eq6RWeQn09TiUBaTqNAeaBZns_ke_dSH8Y4e5eBTZmdBN_ZU6OoMhk2vR-VlHsGq83Ic8XMwBO7H44buaAjUW83GHHH0Q4-UXpvQLsTO5hKykpNKLs469h_mikma7PnF_hH4hKX4JPltA'
 const authLink = store => setContext(async (_, { headers }) => {
   const { root } = store.getState()
   return ({
     headers: {
       ...headers,
-      ...((otpSubmit, token) => handleToken(otpSubmit, token))(root.otpSubmit, root.token),
+      ...((otpSubmit, token) => handleToken(otpSubmit, token))(root.otpSubmit, root.access_token),
     },
   })
 })

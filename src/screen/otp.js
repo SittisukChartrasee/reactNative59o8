@@ -25,7 +25,7 @@ export default class extends React.Component {
     currentDot: '',
   }
   
-  setNumber = (obj) => {
+  setNumber = async (obj) => {
     const { navigateAction, root } = this.props
     const data = {
       trans_id: root.trans_id,
@@ -38,11 +38,10 @@ export default class extends React.Component {
     obj.dot.map(d => d && this.delayDot(d))
 
     if (obj.number.length === 6) {
-      const res = this.props.velidateOtp(data)
-      console.log('otp : ', data)
-      // if (res) {
-      //   navigateAction({ ...this.props, page: 'passcode' })
-      // }
+      const res = await this.props.velidateOtp(data)
+      if (res.success) {
+        navigateAction({ ...this.props, page: 'passcode' })
+      }
     }
   }
 

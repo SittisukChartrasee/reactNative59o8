@@ -77,7 +77,6 @@ export default class extends React.Component {
     }
 
     const res = await this.props.requestOtp(data)
-    console.log(res)
     if (res.success) {
       navigateAction({ ...this.props, page: 'otp' })
     }

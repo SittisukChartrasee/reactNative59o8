@@ -12,18 +12,14 @@ export const requestOtp = (obj) => async dispatch => {
     }),
   })
 
-  if (res.success) {
-    const {
-      phone_no,
-      ref_no,
-      trans_id
-    } = res.result
-    dispatch({ type: CHANGE_ROOT, key: 'phone_no', value: phone_no })
-    dispatch({ type: CHANGE_ROOT, key: 'ref_no', value: ref_no })
-    dispatch({ type: CHANGE_ROOT, key: 'trans_id', value: trans_id })
-    return res
+  if (res) {
+    if (res.success) {
+      for (const key in res.result ) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    }
+
+    for (const key in res.result ) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    return { ...res }
   }
-  return res
 }
 
 export const velidateOtp = (obj) => async dispatch => {
@@ -38,18 +34,32 @@ export const velidateOtp = (obj) => async dispatch => {
     }),
   })
 
-  console.log('objobjobj', obj)
+  if (res) {
+    if (res.success) {
+      for (const key in res.result ) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    }
 
-  // if (res.success) {
-  //   const {
-  //     phone_no,
-  //     ref_no,
-  //     trans_id
-  //   } = res.result
-  //   // dispatch({ type: CHANGE_ROOT, key: 'phone_no', value: phone_no })
-  //   // dispatch({ type: CHANGE_ROOT, key: 'ref_no', value: ref_no })
-  //   // dispatch({ type: CHANGE_ROOT, key: 'trans_id', value: trans_id })
-  //   return res
-  // }
-  return res
+    for (const key in res.result ) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    return { ...res }
+  }
+}
+
+export const requestRegister = (obj, token) => async dispatch => {
+  const url = 'user/register'
+  
+  const res = await request(url, {
+    method: 'POST',
+    body: JSON.stringify({
+      password: obj.password,
+    }),
+  }, token)
+
+  if (res) {
+    if (res.success) {
+      for (const key in res.result ) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    }
+
+    for (const key in res.result ) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    return { ...res }
+  }
 }

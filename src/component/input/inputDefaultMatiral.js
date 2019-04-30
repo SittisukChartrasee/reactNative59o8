@@ -21,7 +21,6 @@ export default class extends React.PureComponent {
   }
 
   handleInput = (value) => {
-    console.log('onChangeText', value)
     const { handleInput, field, onChangeText } = this.props
     this.setState({ value })
     onChangeText(value)

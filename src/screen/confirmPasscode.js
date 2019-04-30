@@ -5,10 +5,12 @@ import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
 import { HeadSpace } from '../component/headSpace'
 import { navigateAction } from '../redux/actions'
+import { requestRegister } from '../redux/actions/root-active'
 
-const mapToProps = () => ({})
+const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  requestRegister: bindActionCreators(requestRegister, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
@@ -17,12 +19,20 @@ export default class extends React.Component {
     number: '',
   }
 
-  setNumber = (obj) => {
-    const { navigateAction } = this.props
+  setNumber = async (obj) => {
+    const { navigateAction, root } = this.props
     this.setState({ ...obj })
 
+    const data = {
+      password: obj.number,
+    }
+
     if (obj.number.length === 6) {
-      navigateAction({ ...this.props, page: 'condi' })
+      const res = await this.props.requestRegister(data, root.access_token)
+      console.log(res)
+      if (res.success) {
+        navigateAction({ ...this.props, page: 'condi' })
+      }
     }
   }
   
