@@ -93,12 +93,12 @@ type Mutation {
   saveContact(input: NewContact!): Response!
 }
 
-input NewCareer {
-  isicCode: String!
-  occupationCode: String!
-  incomeRangeCode: String!
-  countrySourceOfIncome: String!
-}
+// input NewCareer {
+//   isicCode: String!
+//   occupationCode: String!
+//   incomeRangeCode: String!
+//   countrySourceOfIncome: String!
+// }
 
 // input NewContact {
 //   workPhone: String
@@ -311,23 +311,23 @@ type User {
   title: String
 }
 
-type WorkplaceAddress {
-  countryCode: String!
-  companyName: String!
-  addressNoTH: String!
-  addressVillageTH: String
-  floorNo: String
-  unitNo: String
-  moo: String
-  trokSoiYaek: String
-  thanon: String!
-  district: String!
-  districtCode: String!
-  subDistrict: String!
-  subDistrictCode: String!
-  province: String!
-  provinceCode: String!
-  zipCode: String!
-}
+// type WorkplaceAddress {
+//   countryCode: String!
+//   companyName: String!
+//   addressNoTH: String!
+//   addressVillageTH: String
+//   floorNo: String
+//   unitNo: String
+//   moo: String
+//   trokSoiYaek: String
+//   thanon: String!
+//   district: String!
+//   districtCode: String!
+//   subDistrict: String!
+//   subDistrictCode: String!
+//   province: String!
+//   provinceCode: String!
+//   zipCode: String!
+// }
 
 

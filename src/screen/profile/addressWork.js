@@ -13,6 +13,7 @@ import images from '../../config/images'
 import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
+import { updateUser } from '../../redux/actions/commonAction'
 
 const fields = [
   {
@@ -57,23 +58,42 @@ const fields = [
     field: 'subDistrict', // subDistrictCode
   }, {
     label: 'เขต/อำเภอ',
-    field: 'district', // districtCode
+    field: 'districtNameTH', // districtCode
   }, {
     label: 'จังหวัด',
-    field: 'province', // provinceCode
+    field: 'provinceNameTH', // provinceCode
   }, {
     label: 'รหัสไปรษณีย์',
     field: 'zipCode',
   }
 ]
 
-const mapToProps = () => ({})
+const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateUser: bindActionCreators(updateUser, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
+  handleInput = (props) => {
+    console.log(props)
+  }
+
+  onHandleDistrict = ({ data, val }) => {
+    const { user } = this.props
+    const mapData = {
+      subDistrictCode: data.code,
+      subDistrict: data.nameTH,
+      zipCode: data.postcode,
+      districtNameTH: val.data.getAddressCode.districtNameTH,
+      districtCode: val.data.getAddressCode.districtCode,
+      provinceCode: val.data.getAddressCode.provinceCode,
+      provinceNameTH: val.data.getAddressCode.provinceNameTH
+    }
+    this.props.updateUser('addressWork', { ...user.addressWork, ...mapData })
+  }
+
   render() {
     const { navigateAction } = this.props
     return (
@@ -102,6 +122,8 @@ export default class extends React.Component {
               label: d.label,
               type: d.type,
               init: d.init,
+              onHandleDistrict: this.onHandleDistrict,
+              value: this.props.user.addressWork[d.field],
               handleInput: (props) => this.handleInput(props),
             }, key))
           }

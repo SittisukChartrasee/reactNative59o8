@@ -9,6 +9,8 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import _ from 'lodash'
 import { withApollo } from 'react-apollo'
 import {
@@ -23,7 +25,13 @@ import { LongButton } from '../button'
 import images from '../../config/images'
 import colors from '../../config/colors'
 import fonts from '../../config/fonts'
-import { getUserTitle, getCountry } from '../../containers/query'
+import {
+  getUserTitle,
+  getCountry,
+  getSubDistrict,
+  getAddressCode,
+} from '../../containers/query'
+import { updateUser } from '../../redux/actions/commonAction'
 
 const checkTitle = (field) => {
   if (field.toLowerCase().search('title') > -1) return 'ค้นหาคำนำหน้า (ตัวย่อ)'
@@ -31,8 +39,25 @@ const checkTitle = (field) => {
   return 'ค้นหาตำบลของคุณ'
 }
 
+const query = _.debounce((client, obj, setState) => {
+  client.query({ ...obj })
+    .then((val) => setState(val))
+    .catch(err => console.error(err))
+}, 300)
+
+const mapToProps = ({ user }) => ({ user })
+const dispatchToProps = dispatch => ({
+  updateUser: bindActionCreators(updateUser, dispatch)
+})
+
+@connect(mapToProps, dispatchToProps)
 @withApollo
 export default class extends React.Component {
+  static defaultProps = {
+    handleInput: () => console.log('required this func "handleInput"'),
+    onHandleDistrict: () => console.log('required this func "onHandleDistrict"')
+  }
+
   state = {
     open: false,
     text: '',
@@ -40,42 +65,52 @@ export default class extends React.Component {
     result: [],
   }
 
-  queryTitle = _.debounce((value) => {
-    this.props.client.query({
-      query: getUserTitle,
-      variables: {
-        text: value,
-      },
-    })
-      .then((val) => {
-        this.setState({ result: val.data.getUserTitle })
-      })
-      .catch(err => console.error(err))
-  }, 300)
-
-  queryCountry = _.debounce((value) => {
-    this.props.client.query({
-      query: getCountry,
-      variables: {
-        text: value,
-      },
-    })
-      .then((val) => {
-        this.setState({ result: val.data.getCountry })
-      })
-      .catch(err => console.error(err))
-  }, 300)
-
   onHandleSetText = ({ text, field }) => {
     this.setState({ text })
 
-    if (field.toLowerCase().search('title') > -1) this.queryTitle(text.trim())
-    else if (field.toLowerCase().search('country') > -1) this.queryCountry(text.trim())
+    if (field.toLowerCase().search('title') > -1) {
+      query(this.props.client, {
+          query: getUserTitle,
+          variables: { text: text.trim() }
+        }, val => this.setState({ result: val.data.getUserTitle })
+      )
+    } else if (field.toLowerCase().search('country') > -1) {
+      query(this.props.client, {
+          query: getCountry,
+          variables: { text: text.trim() }
+        }, val => this.setState({ result: val.data.getCountry })
+      )
+    } else if (field.toLowerCase().search('district') > -1) {
+      query(this.props.client, {
+          query: getSubDistrict,
+          variables: { text: text.trim() }
+        }, val => {
+          this.setState({ result: val.data.getSubDistrict })
+        }
+      )
+    }
+  }
+
+  onHandleOnPress = data => {
+    const { field, user, onHandleDistrict } = this.props
+    this.setState({ open: false, confirmText: data.nameTH, text: data.nameTH })
+    this.props.handleInput && this.props.handleInput({ type: 'SEARCH', field, value: data.nameTH })
+
+    if (data.displayName) {
+      query(this.props.client, {
+          query: getAddressCode,
+          variables: { code: data.code }
+        }, val => {
+          console.log(data, val)
+          onHandleDistrict({ data, val })
+        }
+      )
+    }
   }
 
   render() {
     const { open, confirmText } = this.state
-    const { handleInput, field } = this.props
+    const { field } = this.props
     StatusBar.setBarStyle(open ? "dark-content" : "light-content")
     return (
       <View>
@@ -129,16 +164,9 @@ export default class extends React.Component {
             <ScrollView style={{ flex: 1, backgroundColor: colors.lightgrey }} contentContainerStyle={{ paddingBottom: 30  }}>
               {
                 this.state.result.map((d, key) => (
-                  <TouchableOpacity
-                    key={key}
-                    onPress={
-                      () => {
-                        this.setState({ open: false, confirmText: d.nameTH, text: d.nameTH })
-                        handleInput({ type: 'SEARCH', field, value: confirmText })
-                      }}
-                  >
+                  <TouchableOpacity key={key} onPress={() => this.onHandleOnPress(d)}>
                     <View style={{ marginVertical: 16 }}>
-                      <TBold textAlign="left" ml={24} mr={24}>{d.nameTH}</TBold>
+                      <TBold textAlign="left" ml={24} mr={24}>{d.displayName || d.nameTH}</TBold>
                     </View>
                     <View style={{ height: 1, backgroundColor: colors.smoky, marginLeft: 24 }} />
                   </TouchableOpacity>

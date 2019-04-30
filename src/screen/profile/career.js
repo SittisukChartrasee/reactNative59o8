@@ -27,24 +27,35 @@ export default class extends React.Component {
       {
         label: 'ประเภทธุรกิจ',
         type: 'search',
-        field: 'idcard',
+        field: 'isic', // isicCode
       }, {
         label: 'อาชีพ',
         type: 'search',
-        field: 'jcnumber',
+        field: 'occupation', // occupationCode
       }, {
         label: 'รายได้ต่อเดือน (บาท)',
-        type: 'search',
-        field: 'expireDateFlag',
+        type: 'dropdown',
+        init: [
+          { value: 'ไม่เกิน 10,000 บาท' },
+          { value: '10,001 - 20,000 บาท' },
+          { value: '20,001 - 30,000 บาท' },
+          { value: '30,001 - 50,000 บาท' },
+          { value: '50,001 - 100,000 บาท' },
+          { value: '100,001 - 200,000 บาท' },
+          { value: 'มากกว่า 200,000 บาท' },
+          { value: 'ไม่มีรายได้' }
+        ],
+        field: 'incomeRange', //incomeRangeCode
       }, {
         label: 'ประเทศของแหล่งที่มารายได้',
         type: 'search',
-        field: 'expireDate',
+        field: 'countrySourceOfIncome',
       }
     ]
   }
 
   handleInput = (props) => {
+    console.log(props)
     if (props.type === 'modal') this.setState({ modal: true })
   }
 

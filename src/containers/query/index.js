@@ -19,7 +19,24 @@ export const getCountry = gql`
   }
 `
 
-export default compose(
-  graphql(getUserTitle, { name: 'getUserTitle' }),
-  // graphql(getCountry, { name: 'getCounty' })
-)
+export const getSubDistrict = gql`
+  query getSubDistrict($text: String!) {
+    getSubDistrict(text: $text) {
+      nameTH
+      displayName
+      postcode
+      code
+    }
+  }
+`
+
+export const getAddressCode = gql`
+  query getAddressCode($code: String!) {
+    getAddressCode(code: $code){
+      provinceCode
+      provinceNameTH
+      districtCode
+      districtNameTH
+    }
+  }
+`
