@@ -30,12 +30,16 @@ import {
   getCountry,
   getSubDistrict,
   getAddressCode,
+  getBusinessType,
+  getOccupation
 } from '../../containers/query'
 import { updateUser } from '../../redux/actions/commonAction'
 
 const checkTitle = (field) => {
   if (field.toLowerCase().search('title') > -1) return 'ค้นหาคำนำหน้า (ตัวย่อ)'
   if (field.toLowerCase().search('country') > -1) return 'ค้นหาประเทศ'
+  if (field.toLowerCase().search('bustype') > -1) return 'ค้นหาประเภทธุรกิจ'
+  if (field.toLowerCase().search('occupation') > -1) return 'ค้นหาอาชีพ'
   return 'ค้นหาตำบลของคุณ'
 }
 
@@ -68,6 +72,7 @@ export default class extends React.Component {
   onHandleSetText = ({ text, field }) => {
     this.setState({ text })
 
+
     if (field.toLowerCase().search('title') > -1) {
       query(this.props.client, {
           query: getUserTitle,
@@ -88,6 +93,22 @@ export default class extends React.Component {
           this.setState({ result: val.data.getSubDistrict })
         }
       )
+    } else if (field.toLowerCase().search('bustype') > -1) {
+      query(this.props.client, {
+          query: getBusinessType,
+          variables: { text: text.trim() }
+        }, val => {
+          this.setState({ result: val.data.getBusinessType })
+        }
+      )
+    } else if (field.toLowerCase().search('occupation') > -1) {
+      query(this.props.client, {
+          query: getOccupation,
+          variables: { text: text.trim() }
+        }, val => {
+          this.setState({ result: val.data.getOccupation })
+        }
+      )
     }
   }
 
@@ -101,7 +122,6 @@ export default class extends React.Component {
           query: getAddressCode,
           variables: { code: data.code }
         }, val => {
-          console.log(data, val)
           onHandleDistrict({ data, val })
         }
       )

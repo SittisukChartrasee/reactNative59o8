@@ -7,6 +7,7 @@ import {
   TextInput,
   ScrollView,
   Dimensions,
+  AsyncStorage,
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -54,6 +55,11 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     modal: false,
+  }
+
+  componentDidMount = async () => {
+    const a = await AsyncStorage.getItem('access_token')
+    console.log('token', a)
   }
 
   handleInput = (obj) => {

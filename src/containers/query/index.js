@@ -40,3 +40,21 @@ export const getAddressCode = gql`
     }
   }
 `
+
+export const getBusinessType = gql`
+  query getBusinessType($text: String!) {
+    getBusinessType(text: $text) {
+      nameTH
+      code
+    }
+  }
+`
+
+export const getOccupation = gql`
+  query getOccupation($text: String!) {
+    getOccupation(text: $text) {
+      nameTH
+      code
+    }
+  }
+`
