@@ -1,3 +1,4 @@
+import { AsyncStorage } from 'react-native'
 import { ApolloClient } from 'apollo-client'
 import { ApolloLink } from 'apollo-link'
 import { onError } from 'apollo-link-error'
@@ -27,33 +28,17 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 })
 
-const aatoken = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY2ODE3MjgsImlkZW50aXR5IjoiNGNqOWtqd3hoeURSWnYxZ1E5QW1RMFVPeDI4TzJITkxGUGJoQzZwOHp6WFdRT3lZUDdtVldPQUp3OGtMdGhEaWlScjl1TDBhN05NMlZLTmlIeGZZVmdaUEQrRkdBSGpKRytTWFFsK0UifQ.t3apUMpSopUCUTbib3JDRPHic2oJo5Tgtrwtyu4ZI_ht8dwfGxUtJxaknO-q0gCPzcMpW82bsWY5hJ0wd3xPTTkCa8G5q7mwnyK1ajEgp7tSNhmDaB-u3nrUJdGD8eT9YbSQlcpncuZFAnpkuiMfkZubpyylQahJFCNmWW4c_lIx-O9DEH5vLAoqlZf9uwqjthtSwNUmjuZr0Lm1O_GXTTKaH1PpAwyW4FoRDkT9fRlMqCsQQ9Q92RQ90NGe3EHO0D-oR1-Rxveu_o1AMdkDuYxHLFbkbBOjd8pFV-BkTUh1aaUMVbuIx8Hb2NiFHZsfSAVtS8hWV1Fmf4Clq6S41g'
-const handleToken = (otpSubmit, token) => {
-  if (token) {
-    console.log('=========== ', token, '=========', otpSubmit)
-    // if (otpSubmit && token) {
-    //   return {
-    //     authorization: otpSubmit ? `Bearer ${otpSubmit}` : '',
-    //   }
-    // }
-    // return {
-    //   authorization: token ? `Bearer ${token}` : '',
-    // }
-    
-  }
-  return {
-    authorization: `Bearer ${aatoken}`
-  }
-  // return {}
-}
+const handleToken = token => token ? { authorization: `Bearer ${token}` } : {}
 
 
 const authLink = store => setContext(async (_, { headers }) => {
   const { root } = store.getState()
+  const token = await AsyncStorage.getItem('access_token')
+  
   return ({
     headers: {
       ...headers,
-      ...((otpSubmit, token) => handleToken(otpSubmit, token))(root.otpSubmit, root.access_token),
+      ...((token) => handleToken(token))(token),
     },
   })
 })
