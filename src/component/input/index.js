@@ -143,7 +143,7 @@ export default (props, key) => {
       return (
         <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
           <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={colors.grey}>{props.label}</TLight>
-          <TBold textAlign="left" color={colors.midnight}>{props.value || '1 1234 12345'}</TBold>
+          <TBold textAlign="left" color={colors.midnight}>{props.value || ''}</TBold>
         </View>
       )
   }

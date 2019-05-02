@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   View,
+  StatusBar,
 } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import colors from '../../config/colors';
@@ -28,17 +29,24 @@ const PendingView = () => (
 export default class extends React.Component {
   static defaultProps = {
     switchCamera: false,
+    handleInput: () => console.log('neet this func "handleInput"'),
     filter: <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <Image source={images.iconFillterCameraFront1} />
               <Image source={images.iconFillterCameraFront2} style={{ marginTop: 12 }} />
             </View>
   }
+
+  state = {
+    switch: true,
+  }
+  
   render() {
+    StatusBar.setBarStyle("light-content")
     return (
       <View style={styles.container}>
         <RNCamera
           style={styles.preview}
-          type={RNCamera.Constants.Type.back}
+          type={this.state.switch ? RNCamera.Constants.Type.back : RNCamera.Constants.Type.front}
           flashMode={RNCamera.Constants.FlashMode.on}
           androidCameraPermissionOptions={{
             title: 'Permission to use camera',
@@ -97,7 +105,7 @@ export default class extends React.Component {
   takePicture = async function(camera) {
     const options = { quality: 0.5, base64: true };
     const data = await camera.takePictureAsync(options)
-    console.log(data.uri);
+    this.props.handleInput({ type: 'camera', uri: data.uri })
   };
 }
 

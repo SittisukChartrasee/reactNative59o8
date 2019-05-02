@@ -4,30 +4,56 @@ import {
   Image,
   SafeAreaView,
   TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native'
 import { Camera } from '../../component/camera'
 import colors from '../../config/colors'
-import { TLight } from '../../component/texts'
+import { TLight, TBold } from '../../component/texts'
 import images from '../../config/images'
 
 export default class extends React.Component {
+  state = {
+    photo: '',
+  }
   render() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.black }}>
-        <View style={{ height: 56, flexDirection: 'row' }}>
-          <TouchableHighlight style={{ flex: .2, justifyContent: 'center', alignItems: 'center' }}>
-            <Image source={images.iconback} />
-          </TouchableHighlight>
-          <View style={{ flex: .2 }} />
-        </View>
-        <Camera
-          filter={
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <TLight fontSize={16} color={colors.white}>{`กรุณาถ่ายรูปบัตรประชาชน\nให้อยู่ในกรอบเส้นประที่กำหนดไว้ `}</TLight>
-              <Image source={images.iconFIllterCameraBack} style={{ marginTop: 12 }} />
-            </View>
+        {
+          this.state.photo
+            ? (
+              <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, marginHorizontal: 32, marginTop: 48, justifyContent: 'center' }}>
+                  <Image source={{ uri: this.state.photo }} style={{ height: 215, backgroundColor: 'red' }} />
+                </View>
+                <View style={{ paddingTop: 51, paddingBottom: 24, flexDirection: 'row', justifyContent: 'space-around' }}>
+                  <TouchableOpacity style={{ backgroundColor: colors.white, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
+                    <TBold color={colors.grey}>ถ่ายใหม่</TBold>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ backgroundColor: colors.emerald, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
+                    <TBold color={colors.white}>ยืนยัน</TBold>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ) : (
+              <View style={{ flex: 1 }}>
+                <View style={{ height: 56, flexDirection: 'row' }}>
+                  <TouchableHighlight style={{ flex: .2, justifyContent: 'center', alignItems: 'center' }}>
+                    <Image source={images.iconback} />
+                  </TouchableHighlight>
+                  <View style={{ flex: .2 }} />
+                </View>
+                <Camera
+                  filter={
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                      <TLight fontSize={16} color={colors.white}>{`กรุณาถ่ายรูปบัตรประชาชน\nให้อยู่ในกรอบเส้นประที่กำหนดไว้ `}</TLight>
+                      <Image source={images.iconFIllterCameraBack} style={{ marginTop: 12 }} />
+                    </View>
+                  }
+                  handleInput={photo => this.setState({ photo: photo.uri })}
+                />
+              </View>
+            )
           }
-        />
       </SafeAreaView>
     )
   }
