@@ -13,13 +13,15 @@ import images from '../../config/images'
 import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
+import setMutation from '../../containers/mutation'
 
-const mapToProps = () => ({})
+const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
   state = {
     modal: false,
@@ -28,14 +30,64 @@ export default class extends React.Component {
         label: 'คุณได้รับเงินทุนจากแหล่งใด',
         type: 'modal',
         field: 'investmentSource',
+        init: [
+          {
+            label: 'เงินเดือน',
+            type: 'select',
+          }, {
+            label: 'มรดก',
+            type: 'select',
+          }, {
+            label: 'การขายหลักทรัพย์',
+            type: 'select',
+          }, {
+            label: 'ผลตอบแทนจากการลงทุน',
+            type: 'select',
+          }, {
+            label: 'การดำเนินการทางธุรกิจ',
+            type: 'select',
+          }, {
+            label: 'ค่านายหน้า',
+            type: 'select',
+          }, {
+            label: 'ค่าตอบแทนการให้บริการ',
+            type: 'select',
+          }, {
+            label: 'อื่นๆ',
+            type: 'select',
+            field: 'investmentSourceOther',
+          }
+        ]
       }, {
         label: 'แหล่งที่มาของเงินทุน',
         type: 'search',
         field: 'investmentSourceCountry',
       }, {
         label: 'วัตถุประสงค์การลงทุน',
-        type: 'search',
+        type: 'modal',
         field: 'investmentPurpose',
+        init: [
+          { 
+            label: "เพื่อการลงทุนระยะสั้น",
+            type: 'select',
+          }, {
+            label: "เพื่อการลงทุนระยะยาว",
+            type: 'select',
+          }, {
+            label: "เพื่อการเกษียณ",
+            type: 'select',
+          }, {
+            label: "เพื่อเก็บออม",
+            type: 'select',
+          }, {
+            label: "เพื่อสิทธิประโยชน์ทางภาษี",
+            type: 'select',
+          }, {
+            label: "อื่นๆ",
+            type: 'select',
+            field: 'investmentPurposeOther',
+          }
+        ]
       }, {
         label: 'คุณต้องการหักภาษี ณ ที่จ่ายสำหรับเงินปันผลและค่าขายคืน หรือไม่ ?',
         type: 'radioColumn',
@@ -46,8 +98,36 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
-    console.log(props)
     if (props.type === 'modal') this.setState({ modal: true })
+
+
+  }
+
+  onNext = async () => {
+    const { navigateAction, user } = this.props
+    const {
+      investmentSource,
+      investmentPurposeOther,
+      investmentSourceCountry,
+      investmentPurpose,
+      dividendWithHoldingTax,
+    } = user.sourceOfFund
+    
+
+    const data = {
+      investmentSource: [],
+      investmentPurposeOther: '',
+      investmentSourceCountry: '',
+      investmentPurpose: '',
+      dividendWithHoldingTax: false,
+    }
+
+
+    const res = await this.props.saveSourceOfFund({ variables: { input: data } })
+    console.log(res)
+    // if (res.data.saveSourceOfFund.success) {
+    //   navigateAction({ ...this.props, page: 'addressHome' })
+    // }
   }
 
   render() {
@@ -93,7 +173,7 @@ export default class extends React.Component {
           })
         }
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
+        <NextButton onPress={this.onNext}/>
       </Screen>
     )
   }

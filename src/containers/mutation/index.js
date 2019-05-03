@@ -10,6 +10,26 @@ const saveSpouse = gql`
   }
 `
 
+const saveCareer = gql`
+  mutation saveCareer($input: NewCareer!) {
+    saveCareer(input: $input) {
+      success
+      message
+    }
+  }
+`
+
+const saveSourceOfFund = gql`
+  mutation saveSourceOfFund($input: NewSourceOfFund!) {
+    saveSourceOfFund(input: $input) {
+      success
+      message
+    }
+  }
+`
+
 export default compose(
-  graphql(saveSpouse, { name: 'saveSpouse' })
+  graphql(saveSpouse, { name: 'saveSpouse' }),
+  graphql(saveCareer, { name: 'saveCareer' }),
+  graphql(saveSourceOfFund, { name: 'saveSourceOfFund' })
 )

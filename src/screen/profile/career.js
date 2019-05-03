@@ -13,13 +13,15 @@ import images from '../../config/images'
 import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
+import setMutation from '../../containers/mutation'
 
-const mapToProps = () => ({})
+const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
   state = {
     modal: false,
@@ -57,6 +59,29 @@ export default class extends React.Component {
   handleInput = (props) => {
     console.log(props)
     if (props.type === 'modal') this.setState({ modal: true })
+  }
+
+  onNext = async () => {
+    const { navigateAction, user } = this.props
+    const {
+      isicCode,
+      occupationCode,
+      incomeRangeCode,
+      countrySourceOfIncome,
+    } = user.career
+    
+
+    const data = {
+      isicCode,
+      occupationCode,
+      incomeRangeCode,
+      countrySourceOfIncome,
+    }
+
+    const res = await this.props.saveCareer({ variables: { input: data } })
+    if (res.data.saveCareer.success) {
+      navigateAction({ ...this.props, page: 'sourceOfFund' })
+    }
   }
 
   render() {
@@ -102,7 +127,7 @@ export default class extends React.Component {
           })
         }
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
+        <NextButton onPress={this.onNext}/>
       </Screen>
     )
   }

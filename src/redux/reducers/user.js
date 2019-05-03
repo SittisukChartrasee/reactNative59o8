@@ -120,6 +120,13 @@ const init = {
     fistName: 'ttt',
     lastName: 'yyy',
     pepFlag: false,
+  },
+  sourceOfFund: {
+    investmentSource: '',
+    investmentSourceOther: '',
+    investmentSourceCountry: '',
+    investmentPurpose: '',
+    dividendWithHoldingTax: false,
   }
 }
 

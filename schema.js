@@ -183,13 +183,13 @@ input NewFraud {
 //   zipCode: String!
 // }
 
-input NewSourceOfFund {
-  investmentSource: [String!]!
-  investmentSourceOther: String
-  investmentSourceCountry: String!
-  investmentPurpose: String!
-  dividendWithHoldingTax: Boolean!
-}
+// input NewSourceOfFund {
+//   investmentSource: [String!]!
+//   investmentSourceOther: String
+//   investmentSourceCountry: String!
+//   investmentPurpose: String!
+//   dividendWithHoldingTax: Boolean!
+// }
 
 // input NewSpouse {
 //   nationalityCode: String!

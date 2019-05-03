@@ -13,11 +13,10 @@ export default ({
   label='label',
   active=false,
   value='',
-  onPress=() => {},
   handleInput=() => {}
 }) => (
   <View>
-    <TouchableOpacity onPress={() => onPress({ label, active })}>
+    <TouchableOpacity onPress={() => handleInput({ label, active })}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginHorizontal: 24, marginVertical: 16 }}>
         <TBold textAlign="left">{label}</TBold>
         { active && <Image source={images.stroke1} style={{ tintColor: colors.emerald }} /> }
@@ -26,7 +25,7 @@ export default ({
         ? <View style={{ height: 1, marginLeft: 24, backgroundColor: colors.smoky }} />
         : active && (
           <View style={{ marginHorizontal: 24, marginBottom: 33, marginTop: -20 }}>
-            <TextInput label="โปรดระบุแหล่งเงินทุน" onChangeText={handleInput} value={value} />
+            <TextInput label="โปรดระบุแหล่งเงินทุน" onChangeText={value => handleInput({ label, value })} value={value} />
           </View>
         )
       }

@@ -25,9 +25,8 @@ import fonts from '../../config/fonts'
 import { Select } from '../../component/cardSelect'
 
 export default class extends React.Component {
-  state = {
-    open: false,
-    fields: [
+  static defaultProps = {
+    init: [
       {
         label: 'เงินเดือน',
         type: 'select',
@@ -54,13 +53,21 @@ export default class extends React.Component {
         type: 'select',
         field: 'investmentSourceOther',
       }
-    ],
+    ]
+  }
+
+  state = {
+    open: false,
+    fields: this.props.init,
     data: '',
-    otherField: '',
+    otherField: 'A',
   }
 
   handleOnpress = (val) => {
-    const { fields } = this.state
+    const { fields, otherField } = this.state
+    const { handleInput, field } = this.props
+    if (val.label === 'อื่นๆ') this.setState({ otherField: val.value })
+    
     const result = fields.map((d) => {
       if (d.label === val.label && !val.active) {
         return { ...d, active: true }
@@ -71,15 +78,21 @@ export default class extends React.Component {
         return { ...d }
       }
     })
+
     const data = result.map((d) => d.active && d.label).filter(d => d !== undefined && d !== false)
     this.setState({ fields: result, data: data.toString() })
+
+    handleInput({
+      field,
+      otherField: val.label === 'อื่นๆ' && val.value ? val.value : '',
+      data: data.toString(),
+      type: 'MODAL'
+    })
   }
 
   render() {
-    const { open, data, otherField } = this.state
-    const { handleInput, field } = this.props
+    const { open, data } = this.state
 
-    handleInput({ field, otherField, data, type: 'MODAL' })
     return (
       <View>
         <TouchableOpacity onPress={() => this.setState({ open: true })}>
@@ -114,8 +127,7 @@ export default class extends React.Component {
                     this.state.fields.map(
                       (d, k) => Select({
                         ...d,
-                        onPress: this.handleOnpress,
-                        handleInput: (v) => this.setState({ otherField: v.value }),
+                        handleInput: this.handleOnpress,
                         value: this.state.otherField
                       }, k)
                     )
