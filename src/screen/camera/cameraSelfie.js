@@ -7,16 +7,25 @@ import {
   TouchableOpacity,
   TouchableHighlight,
 } from 'react-native'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { Camera } from '../../component/camera'
 import colors from '../../config/colors'
 import { TLight, TBold } from '../../component/texts'
 import images from '../../config/images'
+import { navigateAction } from '../../redux/actions'
 
+const mapToProps = () => ({})
+const dispatchToProps = dispatch => ({
+  navigateAction: bindActionCreators(navigateAction, dispatch)
+})
+@connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   state = {
     photo: '',
   }
   render() {
+    const { navigateAction, navigation } = this.props
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.black }}>
         {
@@ -30,7 +39,7 @@ export default class extends React.Component {
                   <TouchableOpacity onPress={() => this.setState({ photo: '' })} style={{ backgroundColor: colors.white, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
                     <TBold color={colors.grey}>ถ่ายใหม่</TBold>
                   </TouchableOpacity>
-                  <TouchableOpacity style={{ backgroundColor: colors.emerald, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
+                  <TouchableOpacity onPress={() => navigateAction({ ...this.props, page: 'signature' })} style={{ backgroundColor: colors.emerald, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
                     <TBold color={colors.white}>ยืนยัน</TBold>
                   </TouchableOpacity>
                 </View>

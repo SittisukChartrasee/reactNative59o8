@@ -7,25 +7,36 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   SafeAreaView
-} from 'react-native';
+} from 'react-native'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import SignatureCapture from 'react-native-signature-capture'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import images from '../../config/images'
 import { TLight, TBold } from '../../component/texts';
 import colors from '../../config/colors';
+import { navigateAction } from '../../redux/actions'
 
+const mapToProps = () => ({})
+const dispatchToProps = dispatch => ({
+  navigateAction: bindActionCreators(navigateAction, dispatch)
+})
+@connect(mapToProps, dispatchToProps)
 export default class Demo extends Component {
   state = {
     dragged: null,
   }
 
 
-  saveSign() {
-    this.signature.saveImage()
+  saveSign = () => {
+    const { navigateAction } = this.props    
+    // this.signature.saveImage()
+
+    navigateAction({ ...this.props, page: 'fraud' })
   }
 
-  resetSign() {
+  resetSign = () => {
     this.signature.resetImage()
   }
 
