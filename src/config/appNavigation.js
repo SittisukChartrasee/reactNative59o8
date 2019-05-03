@@ -43,9 +43,9 @@ const MainNavigator = createStackNavigator({
   // ...branchProfile,
   // ...branchBank,
   // ...branchRisk,
-  ...branchCamera,
+  // ...branchCamera,
   // ...branchIcome,
-  ...branchComplete,
+  // ...branchComplete,
   ...branchsignature,
 }, {
   headerMode: 'none',

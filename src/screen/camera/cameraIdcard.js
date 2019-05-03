@@ -4,6 +4,7 @@ import {
   Image,
   SafeAreaView,
   TouchableHighlight,
+  AsyncStorage,
   TouchableOpacity,
 } from 'react-native'
 import { connect } from 'react-redux'
@@ -13,6 +14,7 @@ import colors from '../../config/colors'
 import { TLight, TBold } from '../../component/texts'
 import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
+import request from '../../utility/requestApi'
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
@@ -23,6 +25,24 @@ export default class extends React.Component {
   state = {
     photo: '',
   }
+
+  onNext = async () => {
+    const { navigateAction } = this.props
+    const token = await AsyncStorage.getItem("access_token")
+    const data = new FormData()
+    data.append('file', {
+      uri: this.state.photo,
+      type: 'image/jpg',
+      name: 'Idcard.jpg'
+    })
+    const url = 'upload'
+    const res = await request(url, {
+      method: 'POST',
+      body: data
+    }, token)
+    if (res.success) navigateAction({ ...this.props, page: 'tutorialFrontCamera' })
+  }
+
   render() {
     const { navigateAction, navigation } = this.props
     return (
@@ -38,7 +58,7 @@ export default class extends React.Component {
                   <TouchableOpacity onPress={() => this.setState({ photo: '' })} style={{ backgroundColor: colors.white, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
                     <TBold color={colors.grey}>ถ่ายใหม่</TBold>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigateAction({ ...this.props, page: 'tutorialFrontCamera' })} style={{ backgroundColor: colors.emerald, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
+                  <TouchableOpacity onPress={this.onNext} style={{ backgroundColor: colors.emerald, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
                     <TBold color={colors.white}>ยืนยัน</TBold>
                   </TouchableOpacity>
                 </View>

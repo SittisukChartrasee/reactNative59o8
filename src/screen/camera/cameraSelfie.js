@@ -29,25 +29,19 @@ export default class extends React.Component {
 
   onNext = async () => {
     const { navigateAction } = this.props
-
+    const token = await AsyncStorage.getItem("access_token")
     const data = new FormData()
-    const store = await AsyncStorage.getItem("access_token")
-
-    // navigateAction({ ...this.props, page: 'signature' })
-
     data.append('file', {
       uri: this.state.photo,
       type: 'image/jpg',
-      name: 'image123.jpg'
+      name: 'selfie.jpg'
     })
-
     const url = 'upload'
     const res = await request(url, {
       method: 'POST',
       body: data
-    }, store)
-
-    console.log(this.state.photo, typeof this.state.photo,store)
+    }, token)
+    if (res.success) navigateAction({ ...this.props, page: 'signature' })
   }
 
   render() {

@@ -6,7 +6,8 @@ import {
   StyleSheet,
   TouchableHighlight,
   TouchableOpacity,
-  SafeAreaView
+  SafeAreaView,
+  AsyncStorage
 } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -17,6 +18,7 @@ import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
 import { TLight, TBold } from '../../component/texts';
 import colors from '../../config/colors';
+import request from '../../utility/requestApi'
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
@@ -29,20 +31,32 @@ export default class Demo extends Component {
   }
 
 
-  saveSign = () => {
-    const { navigateAction } = this.props
+  saveSign = async () => {
     this.signature.saveImage()
-    navigateAction({ ...this.props, page: 'fatca' })
   }
 
   resetSign = () => {
     this.signature.resetImage()
   }
 
-  _onSaveEvent(result) {
-      //result.encoded - for the base64 encoded png
-      //result.pathName - for the file path name
-      console.log(result);
+  _onSaveEvent = async (result) => {
+    const token = await AsyncStorage.getItem("access_token")
+
+    const data = new FormData()
+    data.append('file', {
+      uri: `file://${result.pathName}`,
+      type: 'image/jpg',
+      name: 'sign.jpg'
+    })
+    const url = 'upload'
+    const res = await request(url, {
+      method: 'POST',
+      body: data
+    }, token)
+
+    if (res.success) {
+      navigateAction({ ...this.props, page: 'fatca' })
+    }
   }
   _onDragEvent() {
       // This callback will be called when the user enters signature
