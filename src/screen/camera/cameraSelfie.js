@@ -17,18 +17,17 @@ export default class extends React.Component {
     photo: '',
   }
   render() {
-    console.log(this.state.photo)
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.black }}>
         {
           this.state.photo
             ? (
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 1, backgroundColor: colors.midnight }}>
                 <View style={{ flex: 1, marginHorizontal: 32, marginTop: 48 }}>
                   <Image source={{ uri: this.state.photo }} style={{ flex: 1 }} />
                 </View>
                 <View style={{ paddingTop: 51, paddingBottom: 24, flexDirection: 'row', justifyContent: 'space-around' }}>
-                  <TouchableOpacity style={{ backgroundColor: colors.white, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
+                  <TouchableOpacity onPress={() => this.setState({ photo: '' })} style={{ backgroundColor: colors.white, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
                     <TBold color={colors.grey}>ถ่ายใหม่</TBold>
                   </TouchableOpacity>
                   <TouchableOpacity style={{ backgroundColor: colors.emerald, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>

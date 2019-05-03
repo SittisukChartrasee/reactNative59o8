@@ -6,30 +6,39 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from 'react-native'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { Camera } from '../../component/camera'
 import colors from '../../config/colors'
 import { TLight, TBold } from '../../component/texts'
 import images from '../../config/images'
+import { navigateAction } from '../../redux/actions'
 
+const mapToProps = () => ({})
+const dispatchToProps = dispatch => ({
+  navigateAction: bindActionCreators(navigateAction, dispatch)
+})
+@connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   state = {
     photo: '',
   }
   render() {
+    const { navigateAction, navigation } = this.props
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.black }}>
         {
           this.state.photo
             ? (
-              <View style={{ flex: 1 }}>
-                <View style={{ flex: 1, marginHorizontal: 32, marginTop: 48, justifyContent: 'center' }}>
-                  <Image source={{ uri: this.state.photo }} style={{ height: 215, backgroundColor: 'red' }} />
+              <View style={{ flex: 1, backgroundColor: colors.midnight }}>
+                <View style={{ flex: 1, marginHorizontal: 32, marginTop: 48 }}>
+                  <Image source={{ uri: this.state.photo }} style={{ flex: 1 }} />
                 </View>
                 <View style={{ paddingTop: 51, paddingBottom: 24, flexDirection: 'row', justifyContent: 'space-around' }}>
-                  <TouchableOpacity style={{ backgroundColor: colors.white, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
+                  <TouchableOpacity onPress={() => this.setState({ photo: '' })} style={{ backgroundColor: colors.white, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
                     <TBold color={colors.grey}>ถ่ายใหม่</TBold>
                   </TouchableOpacity>
-                  <TouchableOpacity style={{ backgroundColor: colors.emerald, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
+                  <TouchableOpacity onPress={() => navigateAction({ ...this.props, page: 'tutorialFrontCamera' })} style={{ backgroundColor: colors.emerald, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
                     <TBold color={colors.white}>ยืนยัน</TBold>
                   </TouchableOpacity>
                 </View>

@@ -4,7 +4,7 @@ import cameraSelfie from './cameraSelfie'
 import cameraIdcard from './cameraIdcard'
 
 export default {
-  // cameraSelfie,
+  cameraSelfie,
   cameraIdcard,
   tutorialBackCamera,
   tutorialFrontCamera
