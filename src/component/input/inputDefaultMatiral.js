@@ -45,7 +45,7 @@ export default class extends React.PureComponent {
         labelFontSize={this.props.labelFontSize !== undefined ? 20 : 14}
         activeLineWidth={this.props.activeLineWidth !== undefined ? 0 : 2}
         fontSize={18}
-        value={this.state.value}
+        value={this.props.value || this.state.value}
         onChangeText={this.handleInput}
         height="100%"
         autoCorrect={false}

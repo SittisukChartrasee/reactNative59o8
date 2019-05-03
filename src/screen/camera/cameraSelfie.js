@@ -35,10 +35,10 @@ export default class extends React.Component {
 
     // navigateAction({ ...this.props, page: 'signature' })
 
-    data.append('photo', {
+    data.append('file', {
       uri: this.state.photo,
       type: 'image/jpg',
-      name: 'selfie.jpg'
+      name: 'image123.jpg'
     })
 
     const url = 'upload'
@@ -47,7 +47,7 @@ export default class extends React.Component {
       body: data
     }, store)
 
-    console.log(res, this.state.photo, store)
+    console.log(this.state.photo, typeof this.state.photo,store)
   }
 
   render() {
