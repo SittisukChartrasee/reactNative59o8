@@ -17,7 +17,6 @@ import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
 import { TLight, TBold } from '../../component/texts';
 import colors from '../../config/colors';
-import { navigateAction } from '../../redux/actions'
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
@@ -30,7 +29,8 @@ export default class Demo extends Component {
   }
 
 
-  saveSign() {
+  saveSign = () => {
+    const { navigateAction } = this.props
     this.signature.saveImage()
     navigateAction({ ...this.props, page: 'fatca' })
   }
