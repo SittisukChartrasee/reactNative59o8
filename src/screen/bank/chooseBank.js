@@ -16,7 +16,7 @@ import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import colors from '../../config/colors';
 
-const handleDisabled = arr => arr.find(d => d.active) !== undefined && arr.find(d => d.active)
+const handleDisabled = arr => arr && arr.find(d => d.active) !== undefined && arr.find(d => d.active)
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
@@ -53,17 +53,17 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
-    // console.log(props)
     if (props.type === 'selectCard') {
       this.setState({ card: this.state.card.map((d) => d.label === props.value ? { ...d, active: true } : { ...d, active: false }) })
     }
-    
+  }
+
+  onNext = () => {
+    const { navigateAction } = this.props
+    navigateAction({ ...this.props, page: 'connectBank' })
   }
 
   render() {
-    const { navigateAction } = this.props
-
-    console.log(handleDisabled(this.state.card))
     return (
       <Screen color="transparent">
         <NavBar
@@ -115,7 +115,7 @@ export default class extends React.Component {
           }
         </ScrollView>
 
-        <LongPositionButton disabled={!handleDisabled(this.state.card).active} bg={colors.lightgrey} label="ยืนยัน"/>
+        <LongPositionButton onPress={this.onNext} disabled={!handleDisabled(this.state.card).active} bg={colors.lightgrey} label="ยืนยัน"/>
       </Screen>
     )
   }

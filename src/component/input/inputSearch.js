@@ -35,7 +35,7 @@ import {
 } from '../../containers/query'
 import { updateUser } from '../../redux/actions/commonAction'
 
-const checkTitle = (field) => {
+const checkTitle = (field='') => {
   if (field.toLowerCase().search('title') > -1) return 'ค้นหาคำนำหน้า (ตัวย่อ)'
   if (field.toLowerCase().search('country') > -1) return 'ค้นหาประเทศ'
   if (field.toLowerCase().search('bustype') > -1) return 'ค้นหาประเภทธุรกิจ'

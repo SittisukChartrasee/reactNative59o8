@@ -33,14 +33,26 @@ const fields = [
   }
 ]
 
-const mapToProps = () => ({})
+const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
+
+  handleInput = (props) => {
+    console.log(props)
+  }
+
+  onNext = () => {
+    const { navigateAction } = this.props
+    navigateAction({ ...this.props, page: 'tutorialBank' })
+    console.log('ok')
+  }
+
   render() {
+    const { user } = this.props
     return (
       <Screen color="transparent">
         <NavBar
@@ -67,13 +79,14 @@ export default class extends React.Component {
               label: d.label,
               type: d.type,
               init: d.init,
+              value: user.contact[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
             }, key))
           }
         </ScrollView>
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
+        <NextButton onPress={this.onNext}/>
       </Screen>
     )
   }

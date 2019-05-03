@@ -123,8 +123,8 @@ export default class extends React.Component {
     }
 
 
-    const res = await this.props.saveSourceOfFund({ variables: { input: data } })
-    console.log(res)
+    // const res = await this.props.saveSourceOfFund({ variables: { input: data } })
+    // console.log(res)
     // if (res.data.saveSourceOfFund.success) {
     //   navigateAction({ ...this.props, page: 'addressHome' })
     // }

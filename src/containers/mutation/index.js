@@ -28,8 +28,22 @@ const saveSourceOfFund = gql`
   }
 `
 
+const saveContact = gql`
+  mutation saveContact($input: NewSourceOfFund!) {
+    saveContact(input: $input) {
+      success
+      message
+    }
+  }
+`
+
+// const saveCurrentSameWork = gql`
+//   mutation saveCurrentSameWork($input: )
+// `
+
 export default compose(
   graphql(saveSpouse, { name: 'saveSpouse' }),
   graphql(saveCareer, { name: 'saveCareer' }),
-  graphql(saveSourceOfFund, { name: 'saveSourceOfFund' })
+  graphql(saveSourceOfFund, { name: 'saveSourceOfFund' }),
+  graphql(saveContact, { name: 'saveContact'})
 )

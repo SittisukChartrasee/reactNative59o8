@@ -37,9 +37,13 @@ const dispatchToProps = dispatch => ({
 
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
-  render() {
-    const { navigateAction } = this.props
 
+  onNext = () => {
+    const { navigateAction } = this.props
+    navigateAction({ ...this.props, page: 'suittest' })
+  }
+
+  render() {
     return (
       <Screen color="transparent">
         <NavBar
@@ -76,7 +80,7 @@ export default class extends React.Component {
           </View>
         </ScrollView>
 
-        <LongPositionButton bg={colors.lightgrey} label="ถัดไป"/>
+        <LongPositionButton bg={colors.lightgrey} label="ถัดไป" onPress={this.onNext}/>
       </Screen>
     )
   }

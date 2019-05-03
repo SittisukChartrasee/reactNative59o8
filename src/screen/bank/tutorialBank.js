@@ -71,7 +71,7 @@ export default class extends React.Component {
             <LongButton
               label="รับทราบ"
               style={{ marginHorizontal: 24 }}
-              onPress={() => navigateAction({ ...this.props, page: 'tutorialFrontCamera' })}
+              onPress={() => navigateAction({ ...this.props, page: 'chooseBank' })}
             />
           </View>
         </View>
