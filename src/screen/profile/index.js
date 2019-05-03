@@ -9,13 +9,13 @@ import contact from './contact'
 import child from './child'
 
 export default {
-  // child,
-  // marry,
+  child,
+  marry,
   profile,
-  // addressCurr,
-  // addressDoc,
-  // addressHome,
-  // addressWork,
-  // career,
-  // contact,
+  addressCurr,
+  addressDoc,
+  addressHome,
+  addressWork,
+  career,
+  contact,
 }

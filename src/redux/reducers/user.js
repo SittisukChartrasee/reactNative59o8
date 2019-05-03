@@ -99,7 +99,7 @@ const init = {
     email: "b@b.com"
   },
   career: {
-    isic: '',
+    busType: '',
     isicCode: '',
     occupation: '',
     occupationCode: '',

@@ -1,4 +1,7 @@
 import React from 'react'
+import {
+  AsyncStorage,
+} from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Keyboard from '../component/keyboard'
@@ -32,6 +35,7 @@ export default class extends React.Component {
       console.log(res)
       if (res.success) {
         navigateAction({ ...this.props, page: 'condi' })
+        AsyncStorage.setItem('access_token', res.result.access_token)
       }
     }
   }

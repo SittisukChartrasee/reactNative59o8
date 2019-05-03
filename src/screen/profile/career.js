@@ -27,7 +27,7 @@ export default class extends React.Component {
       {
         label: 'ประเภทธุรกิจ',
         type: 'search',
-        field: 'isic', // isicCode
+        field: 'busType', // isicCode
       }, {
         label: 'อาชีพ',
         type: 'search',

@@ -7,9 +7,9 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   SafeAreaView
-} from 'react-native';
-import { bindActionCreators } from 'redux'
+} from 'react-native'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import SignatureCapture from 'react-native-signature-capture'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -17,10 +17,11 @@ import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
 import { TLight, TBold } from '../../component/texts';
 import colors from '../../config/colors';
+import { navigateAction } from '../../redux/actions'
 
-const mapToProps = ({ root }) => ({ root })
+const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch),
+  navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
 export default class Demo extends Component {
@@ -34,7 +35,7 @@ export default class Demo extends Component {
     navigateAction({ ...this.props, page: 'fatca' })
   }
 
-  resetSign() {
+  resetSign = () => {
     this.signature.resetImage()
   }
 
