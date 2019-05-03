@@ -1,5 +1,6 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import welcome from '../screen/welcome'
+import checkpoint from '../screen/checkpoint'
 import passcode from '../screen/passcode'
 import confirmPasscode from '../screen/confirmPasscode'
 import login from '../screen/login'
@@ -29,6 +30,7 @@ import branchsignature from '../screen/signature'
 const MainNavigator = createStackNavigator({
   // welcome,
   // login,
+  // checkpoint,
   // otp,
   // passcode,
   // confirmPasscode,

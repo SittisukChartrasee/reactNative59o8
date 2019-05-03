@@ -21,9 +21,9 @@ export default class extends React.Component {
     const { navigateAction } = this.props
     this.setState({ ...obj })
 
-    // if (obj.number.length === 6) {
-    //   navigateAction({ ...this.props, page: 'confirmPasscode' })
-    // }
+    if (obj.number.length === 6) {
+      navigateAction({ ...this.props, page: 'checkpoint' })
+    }
   }
   
   render() {

@@ -11,11 +11,11 @@ import child from './child'
 export default {
   // child,
   // marry,
-  // profile,
+  profile,
   // addressCurr,
   // addressDoc,
   // addressHome,
   // addressWork,
-  career,
-  contact,
+  // career,
+  // contact,
 }
