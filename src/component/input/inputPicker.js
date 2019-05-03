@@ -56,6 +56,8 @@ export default class extends React.Component {
   }
 
   onPicker = (text) => {
+    const { handleInput, field, type } = this.props
+    const { year, month, day } = this.state
     const configPicker = {
       pickerTitleText: 'กรุณาเลือก',
       pickerCancelBtnText: 'ยกเลิก',
@@ -71,6 +73,7 @@ export default class extends React.Component {
         ...configPicker,
         onPickerConfirm: data => {
           this.setState({ year: data[0], month: '-', day: '-' })
+          handleInput({ value: `-/-/${data[0]}`, type, field })
         }
       });
     } else if (text.indexOf('เดือน') > -1) {
@@ -80,6 +83,7 @@ export default class extends React.Component {
         ...configPicker,
         onPickerConfirm: data => {
           this.setState({ month: data[0], day: '-' })
+          handleInput({ value: `${day}/${data[0]}/${year}`, type, field })
         }
       });
     } else if (text.indexOf('วัน') > -1) {
@@ -90,6 +94,7 @@ export default class extends React.Component {
         ...configPicker,
         onPickerConfirm: data => {
           this.setState({ day: data[0] })     
+          handleInput({ value: `${data[0]}/${month}/${year}`, type, field })
         }
       });
     }
@@ -101,7 +106,7 @@ export default class extends React.Component {
     const { year, month, day } = this.state
     const { handleInput, field, type } = this.props
     const labelArr = this.props.label.split(',')
-    handleInput({ value: `${day}/${month}/${year}`, type, field })
+    // handleInput({ value: `${day}/${month}/${year}`, type, field })
 
     return (
       <View style={{ flexDirection: 'row', flex: 1 }}>

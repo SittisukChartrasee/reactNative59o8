@@ -83,6 +83,7 @@ export default class extends React.Component {
   }
 
   onPicker = () => {
+    const { handleInput, field, type } = this.props
     const configPicker = {
       pickerTitleText: 'กรุณาเลือก',
       pickerCancelBtnText: 'ยกเลิก',
@@ -98,14 +99,12 @@ export default class extends React.Component {
       ...configPicker,
       onPickerConfirm: date => {
         this.setState({ date })
+        handleInput({ value: `${date[2]}/${date[1]}/${date[0]}`, type, field })
       }
     });
     Picker.show()
   }
   render() {
-    const { handleInput, field, type } = this.props
-    const { date } = this.state
-    handleInput({ value: `${date[2]}/${date[1]}/${date[0]}`, type, field })
     return (
       <View>
         <TouchableOpacity onPress={() => this.onPicker()}>

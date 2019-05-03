@@ -83,6 +83,7 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
+    console.log(props)
     if (props.type === 'modal') this.setState({ modal: true })
     else if (props.field === 'gender') {}
     else if (props.field === 'expireDateFlag') {

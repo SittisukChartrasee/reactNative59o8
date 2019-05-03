@@ -13,10 +13,12 @@ import images from '../../config/images'
 import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
+import { updateUser } from '../../redux/actions/commonAction'
 
-const mapToProps = () => ({})
+const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateUser: bindActionCreators(updateUser, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -78,6 +80,10 @@ export default class extends React.Component {
   }
   handleInput = (props) => {
     const { fields } = this.state
+    const { updateUser, user } = this.props
+
+    updateUser('spouse', { ...user.spouse, [props.field]: props.value } )
+
     if (props.field === 'nationFlag') {
       this.setState({
         fields: fields.map((d) => {
@@ -108,7 +114,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { navigateAction } = this.props
+    const { navigateAction, user } = this.props
     const { fields } = this.state
     return (
       <Screen color="transparent">
@@ -136,13 +142,14 @@ export default class extends React.Component {
               label: d.label,
               type: d.type,
               init: d.init,
+              value: user.spouse[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
             }, key))
           }
         </ScrollView>
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
+        <NextButton onPress={() => navigateAction({ ...this.props, page: 'career' })}/>
       </Screen>
     )
   }

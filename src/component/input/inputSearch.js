@@ -58,6 +58,7 @@ const dispatchToProps = dispatch => ({
 @withApollo
 export default class extends React.Component {
   static defaultProps = {
+    value: '',
     handleInput: () => console.log('required this func "handleInput"'),
     onHandleDistrict: () => console.log('required this func "onHandleDistrict"')
   }
@@ -130,14 +131,14 @@ export default class extends React.Component {
 
   render() {
     const { open, confirmText } = this.state
-    const { field } = this.props
+    const { field, value } = this.props
     StatusBar.setBarStyle(open ? "dark-content" : "light-content")
     return (
       <View>
         <TouchableOpacity onPress={() => this.setState({ open: true })}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          { confirmText 
-              ? <TBold textAlign="left" color={colors.midnight}>{confirmText}</TBold>
+          { confirmText || value
+              ? <TBold textAlign="left" color={colors.midnight}>{value || confirmText}</TBold>
               : <TBold textAlign="left" color={colors.smoky}>กรุณาเลือกข้อมูล</TBold>
           }
             <Image source={images.iconNextPageBlack} />
