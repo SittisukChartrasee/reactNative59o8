@@ -48,7 +48,6 @@ export default class extends React.Component {
 
   handleInput = (props) => {
     const { updateUser, user } = this.props
-
     updateUser('contact', { ...user.contact, [props.field]: props.value })
   }
 
@@ -71,7 +70,6 @@ export default class extends React.Component {
 
     const res = await this.props.saveContact({ variables: { input: data } })
     if (res.data.saveContact.success) {
-      console.log('OK')
       navigateAction({ ...this.props, page: 'tutorialBank' })
     }
   }
