@@ -37,10 +37,6 @@ const fields = [
     type: 'textInput',
     field: 'floorNo',
   }, {
-    label: 'ห้อง',
-    type: 'textInput',
-    field: 'unitNo',
-  }, {
     label: 'หมู่ที่',
     type: 'textInput',
     field: 'moo',

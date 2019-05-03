@@ -3,6 +3,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  AsyncStorage,
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -14,6 +15,7 @@ import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
+import setMutation from '../../containers/mutation'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -22,6 +24,7 @@ const dispatchToProps = dispatch => ({
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
   state = {
     fields: [
@@ -113,8 +116,39 @@ export default class extends React.Component {
     }
   }
 
-  render() {
+  onNext = async () => {
     const { navigateAction, user } = this.props
+    const {
+      title,
+      lastName,
+      pepFlag,
+      nationalityCode,
+      IDCardNo,
+      isIDCardExpDate,
+      cardExpiredDate,
+      fistName,
+    } = user.spouse
+    
+
+    const data = {
+      title,
+      lastName,
+      pepFlag,
+      nationalityCode,
+      IDCardNo,
+      isIDCardExpDate,
+      cardExpiredDate,
+      fistName,
+    }
+
+    const res = await this.props.saveSpouse({ variables: { input: data } })
+    if (res.data.saveSpouse.success) {
+      navigateAction({ ...this.props, page: 'career' })
+    }
+  }
+
+  render() {
+    const { user } = this.props
     const { fields } = this.state
     return (
       <Screen color="transparent">
@@ -149,7 +183,7 @@ export default class extends React.Component {
           }
         </ScrollView>
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'career' })}/>
+        <NextButton onPress={this.onNext}/>
       </Screen>
     )
   }

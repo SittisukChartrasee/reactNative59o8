@@ -80,7 +80,6 @@ const init = {
     addressNoTH: '',
     addressVillageTH: '',
     floorNo: '',
-    unitNo: '',
     moo: '',
     trokSoiYaek: '',
     thanon: '',
@@ -109,7 +108,7 @@ const init = {
   },
   spouse: {
     nationFlag: '',
-    nationalityCode: 'jjj',
+    nationalityCode: 'M',
     IDCardNo: '1111',
     marryCountry: 'bbbb',
     marryPassport: 'cccc',
@@ -120,7 +119,7 @@ const init = {
     title: 'rrr',
     fistName: 'ttt',
     lastName: 'yyy',
-    pepFlag: 'uuu',
+    pepFlag: false,
   }
 }
 
