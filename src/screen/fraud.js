@@ -18,6 +18,8 @@ import Input from '../component/input'
 import { Choice } from '../component/cardSelect'
 import { fatca } from '../redux/actions/commonAction'
 import { navigateAction } from '../redux/actions'
+import setMutation from '../containers/mutation'
+
 
 const checkActiveData = (data) => {
   return data.reduce((pre, curr, inx, arr) => {
@@ -45,6 +47,7 @@ const dispatchToProps = dispatch => ({
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
   state = {
     choice: [
@@ -72,6 +75,21 @@ export default class extends React.Component {
     })
   }
 
+  onNext = async () => {
+    const { navigateAction } = this.props
+
+    const data = {
+      hasLaunderingRecord: true,
+      isPolitician: true
+    }
+
+    const res = await this.props.saveFraud({ variables: { input: data } })
+    if (res.data.saveFraud.success) {
+      console.log('OK')
+      navigateAction({ ...this.props, page: 'profile' })
+    }
+  }
+
   render() {
     const { navigation, navigateAction } = this.props
     return (
@@ -96,7 +114,7 @@ export default class extends React.Component {
             paddingBottom: 100
           })
         }
-        <NextButton disabled={checkActiveData(this.state.choice).IS_TRUE} onPress={() => navigateAction({ ...this.props, page: 'profile' })}/>
+        <NextButton disabled={checkActiveData(this.state.choice).IS_TRUE} onPress={this.onNext}/>
       </Screen>
     )
   }

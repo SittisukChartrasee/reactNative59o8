@@ -62,20 +62,17 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction, user } = this.props
-    const {
-      isicCode,
-      occupationCode,
-      incomeRangeCode,
-      countrySourceOfIncome,
-    } = user.career
-    
+    const { navigateAction } = this.props
+    // const {
+
+    // } = user.career
+
 
     const data = {
-      isicCode,
-      occupationCode,
-      incomeRangeCode,
-      countrySourceOfIncome,
+      isicCode: "t",
+      occupationCode: "t",
+      incomeRangeCode: "t",
+      countrySourceOfIncome: "t"
     }
 
     const res = await this.props.saveCareer({ variables: { input: data } })

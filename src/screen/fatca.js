@@ -18,6 +18,7 @@ import Input from '../component/input'
 import { Choice } from '../component/cardSelect'
 import { fatca } from '../redux/actions/commonAction'
 import { navigateAction } from '../redux/actions'
+import setMutation from '../containers/mutation'
 
 const checkActiveData = (data) => {
   return data.reduce((pre, curr, inx, arr) => {
@@ -47,11 +48,27 @@ const dispatchToProps = dispatch => ({
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
 
   onPress = (obj) => {
     this.props.updateFatca('fatca', obj.choice)
     this.props.updateFatca('sumFatca', checkActiveData(obj.choice).IS_SUM)
+  }
+
+  onNext = async () => {
+    const { navigateAction, fatcaReducer } = this.props
+
+    const data = {
+      isUSCitizen: true,
+      isHoldingUsCard: true
+    }
+
+    const res = await this.props.saveFatca({ variables: { input: data } })
+    if (res.data.saveFatca.success) {
+      console.log('OK')
+      navigateAction({ ...this.props, page: 'profile' })
+    }
   }
 
   render() {
@@ -79,7 +96,7 @@ export default class extends React.Component {
             paddingBottom: 100
           })
         }
-        <NextButton disabled={checkActiveData(fatca).IS_TRUE} onPress={() => navigateAction({ ...this.props, page: 'profile' })}/>
+        <NextButton disabled={checkActiveData(fatca).IS_TRUE} onPress={this.onNext}/>
       </Screen>
     )
   }

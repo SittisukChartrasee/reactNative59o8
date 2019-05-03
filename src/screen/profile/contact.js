@@ -14,6 +14,8 @@ import images from '../../config/images'
 import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
+import { updateUser } from '../../redux/actions/commonAction'
+import setMutation from '../../containers/mutation'
 
 const fields = [
   {
@@ -36,20 +38,42 @@ const fields = [
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateUser: bindActionCreators(updateUser, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
 
   handleInput = (props) => {
-    console.log(props)
+    const { updateUser, user } = this.props
+
+    updateUser('contact', { ...user.contact, [props.field]: props.value })
   }
 
-  onNext = () => {
-    const { navigateAction } = this.props
-    navigateAction({ ...this.props, page: 'tutorialBank' })
-    console.log('ok')
+  onNext = async () => {
+    const { navigateAction, user } = this.props
+
+    const {
+      workPhone,
+      homePhone,
+      mobilePhone,
+      email
+    } = user.contact
+
+    const data = {
+      workPhone: "0888888888",
+      homePhone: "0888888888",
+      mobilePhone: "0888888888",
+      email: "test@gmail.com"
+    }
+
+    const res = await this.props.saveContact({ variables: { input: data } })
+    if (res.data.saveContact.success) {
+      console.log('OK')
+      navigateAction({ ...this.props, page: 'tutorialBank' })
+    }
   }
 
   render() {
