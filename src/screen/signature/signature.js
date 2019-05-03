@@ -77,7 +77,7 @@ export default class Demo extends Component {
         <NavBar
           title="ลายเซ็นอิเล็กทรอนิกส์"
           navLeft={
-            <TouchableOpacity  onPress={() => navigation.goBack()}>
+            <TouchableOpacity  onPress={() => this.props.navigation.goBack()}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
@@ -95,7 +95,9 @@ export default class Demo extends Component {
                 <Image source={images.iconsign} />
                 <TLight color={colors.smoky} fontSize={14} mt={15}>เซ็นลายเซ็นของคุณที่นี่</TLight>
               </View>
-              <View style={{ borderWidth: 1, marginTop: 7, }}/>
+              <View style={{ justifyContent: 'center' }}>
+                <Image source={images.iconlinepath} style={{ width: '100%' }} resizeMode="contain" />
+              </View>
             </View>
 
             <SignatureCapture

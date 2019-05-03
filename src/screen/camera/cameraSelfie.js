@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   TouchableHighlight,
+  AsyncStorage,
 } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -14,8 +15,9 @@ import colors from '../../config/colors'
 import { TLight, TBold } from '../../component/texts'
 import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
+import request from '../../utility/requestApi'
 
-const mapToProps = () => ({})
+const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
@@ -24,8 +26,31 @@ export default class extends React.Component {
   state = {
     photo: '',
   }
+
+  onNext = async () => {
+    const { navigateAction } = this.props
+
+    const data = new FormData()
+    const store = await AsyncStorage.getItem("access_token")
+
+    // navigateAction({ ...this.props, page: 'signature' })
+
+    data.append('photo', {
+      uri: this.state.photo,
+      type: 'image/jpg',
+      name: 'selfie.jpg'
+    })
+
+    const url = 'upload'
+    const res = await request(url, {
+      method: 'POST',
+      body: data
+    }, store)
+
+    console.log(res, this.state.photo, store)
+  }
+
   render() {
-    const { navigateAction, navigation } = this.props
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.black }}>
         {
@@ -39,7 +64,7 @@ export default class extends React.Component {
                   <TouchableOpacity onPress={() => this.setState({ photo: '' })} style={{ backgroundColor: colors.white, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
                     <TBold color={colors.grey}>ถ่ายใหม่</TBold>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigateAction({ ...this.props, page: 'signature' })} style={{ backgroundColor: colors.emerald, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
+                  <TouchableOpacity onPress={this.onNext} style={{ backgroundColor: colors.emerald, paddingVertical: 12, paddingHorizontal: 30, borderRadius: 50 }}>
                     <TBold color={colors.white}>ยืนยัน</TBold>
                   </TouchableOpacity>
                 </View>
