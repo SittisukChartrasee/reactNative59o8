@@ -14,6 +14,7 @@ import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
+import setMutation from '../../containers/mutation'
 
 const fields = [
   {
@@ -71,6 +72,7 @@ const dispatchToProps = dispatch => ({
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
   handleInput = (props) => {
     console.log(props)
@@ -88,6 +90,52 @@ export default class extends React.Component {
       provinceNameTH: val.data.getAddressCode.provinceNameTH
     }
     this.props.updateUser('addressWork', { ...user.addressWork, ...mapData })
+  }
+
+  onNext = async () => {
+    const { navigateAction, user } = this.props
+    const {
+      countryCode,
+      companyName,
+      addressNoTH,
+      addressVillageTH,
+      floorNo,
+      moo,
+      trokSoiYaek,
+      thanon,
+      district,
+      districtCode,
+      subDistrict,
+      subDistrictCode,
+      province,
+      provinceCode,
+      zipCode
+    } = user.addressWork
+    
+
+    const data = {
+      countryCode: "TH",
+      companyName: "Codefin",
+      addressNoTH: "2",
+      addressVillageTH: "test",
+      floorNo: "5",
+      moo: "2",
+      trokSoiYaek: "สีลม7",
+      thanon: "สีลม",
+      district: "test",
+      districtCode: "test",
+      subDistrict: "test",
+      subDistrictCode: "test",
+      province: "test",
+      provinceCode: "12346",
+      zipCode: "11000"
+    }
+
+    const res = await this.props.saveWorkplaceAddress({ variables: { input: data } })
+    if (res.data.saveWorkplaceAddress.success) {
+      console.log('OK')
+      navigateAction({ ...this.props, page: 'passcode' })
+    }
   }
 
   render() {
@@ -125,7 +173,7 @@ export default class extends React.Component {
           }
         </ScrollView>
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
+        <NextButton onPress={this.onNext}/>
       </Screen>
     )
   }

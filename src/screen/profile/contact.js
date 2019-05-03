@@ -13,6 +13,8 @@ import images from '../../config/images'
 import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
+import { updateUser } from '../../redux/actions/commonAction'
+import setMutation from '../../containers/mutation'
 
 const fields = [
   {
@@ -33,20 +35,53 @@ const fields = [
   }
 ]
 
-const mapToProps = () => ({})
+const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateUser: bindActionCreators(updateUser, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
+
+  handleInput = (props) => {
+    const { updateUser, user } = this.props
+
+    updateUser('contact', { ...user.contact, [props.field]: props.value })
+  }
+
+  onNext = async () => {
+    const { navigateAction, user } = this.props
+
+    const {
+      workPhone,
+      homePhone,
+      mobilePhone,
+      email
+    } = user.contact
+
+    const data = {
+      workPhone: "0888888888",
+      homePhone: "0888888888",
+      mobilePhone: "0888888888",
+      email: "test@gmail.com"
+    }
+
+    const res = await this.props.saveContact({ variables: { input: data } })
+    if (res.data.saveContact.success) {
+      console.log('OK')
+      navigateAction({ ...this.props, page: 'passcode' })
+    }
+  }
+
   render() {
     return (
       <Screen color="transparent">
         <NavBar
           title="ข้อมูลการติดต่อ"
           navLeft={
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => { }}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
@@ -73,7 +108,7 @@ export default class extends React.Component {
           }
         </ScrollView>
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
+        <NextButton onPress={this.onNext} />
       </Screen>
     )
   }

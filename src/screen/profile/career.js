@@ -13,6 +13,7 @@ import images from '../../config/images'
 import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
+import setMutation from '../../containers/mutation'
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
@@ -20,6 +21,7 @@ const dispatchToProps = dispatch => ({
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
   state = {
     modal: false,
@@ -57,6 +59,27 @@ export default class extends React.Component {
   handleInput = (props) => {
     console.log(props)
     if (props.type === 'modal') this.setState({ modal: true })
+  }
+
+  onNext = async () => {
+    const { navigateAction } = this.props
+    // const {
+
+    // } = user.career
+
+
+    const data = {
+      isicCode: "t",
+      occupationCode: "t",
+      incomeRangeCode: "t",
+      countrySourceOfIncome: "t"
+    }
+
+    const res = await this.props.saveCareer({ variables: { input: data } })
+    if (res.data.saveCareer.success) {
+      console.log('OK')
+      navigateAction({ ...this.props, page: 'passcode' })
+    }
   }
 
   render() {
@@ -102,7 +125,7 @@ export default class extends React.Component {
           })
         }
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
+        <NextButton onPress={this.onNext} />
       </Screen>
     )
   }

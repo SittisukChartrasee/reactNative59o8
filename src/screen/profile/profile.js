@@ -13,13 +13,17 @@ import images from '../../config/images'
 import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
+import { updateUser } from '../../redux/actions/commonAction'
+import setMutation from '../../containers/mutation'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateUser: bindActionCreators(updateUser, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
   state = {
     modal: false,
@@ -83,7 +87,10 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
-    console.log(props)
+    const { updateUser, user } = this.props
+
+    updateUser('profile', { ...user.profile, [props.field]: props.value } )
+
     if (props.type === 'modal') this.setState({ modal: true })
     else if (props.field === 'gender') {}
     else if (props.field === 'expireDateFlag') {
@@ -101,8 +108,54 @@ export default class extends React.Component {
     }
   }
 
-  render() {
+  onNext = async () => {
     const { navigateAction, user } = this.props
+    const {
+      idCard,
+      jcNumber,
+      isNoDocExpDate,
+      docExpDate,
+      genderCode,
+      titleTH,
+      firstNameTH,
+      lastNameTH,
+      firstNameEN,
+      lastNameEN,
+      dayOfBirth,
+      monthOfBirth,
+      yearOfBirth,
+      nationalityCode,
+      martialStatusCode,
+    } = user.profile
+    
+
+    const data = {
+      docNo: "1840100464891",
+  	  jcNumber: "ME1130764207",
+  	  isNoDocExpDate: false,
+  	  docExpDate: "9999-12-31T23:59:59Z",
+  	  genderCode: "M",
+  	  titleTH: "นาย",
+  	  firstNameTH: "ทดสอบ",
+  	  lastNameTH: "สอบทด",
+  	  firstNameEN: "Nantapol",
+  	  lastNameEN: "Kerdsom",
+  	  dayOfBirth: "23",
+  	  monthOfBirth: "11",
+  	  yearOfBirth: "2536",
+  	  nationalityCode: "TH",
+  	  martialStatusCode: "U",
+    }
+
+    const res = await this.props.saveIdentity({ variables: { input: data } })
+    if (res.data.saveIdentity.success) {
+      console.log('OK')
+      navigateAction({ ...this.props, page: 'passcode' })
+    }
+  }
+
+  render() {    
+    const { user } = this.props
     return (
       <Screen color="transparent">
         <NavBar
@@ -145,7 +198,7 @@ export default class extends React.Component {
           })
         }
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
+        <NextButton onPress={this.onNext}/>
       </Screen>
     )
   }

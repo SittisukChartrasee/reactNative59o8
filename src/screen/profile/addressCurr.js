@@ -12,8 +12,9 @@ import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
 import modal from '../../component/modal'
-import { navigateAction,  } from '../../redux/actions'
+import { navigateAction, } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
+import setMutation from '../../containers/mutation'
 
 const fields = [
   {
@@ -67,6 +68,7 @@ const dispatchToProps = dispatch => ({
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
   handleInput = (props) => {
     console.log(props)
@@ -86,6 +88,50 @@ export default class extends React.Component {
     this.props.updateUser('addressCurr', { ...user.addressCurr, ...mapData })
   }
 
+  onNext = async () => {
+    const { navigateAction, user } = this.props
+    const {
+      countryCode,
+      addressNoTH,
+      addressVillageTH,
+      floorNo,
+      moo,
+      trokSoiYaek,
+      thanon,
+      district,
+      districtCode,
+      subDistrict,
+      subDistrictCode,
+      province,
+      provinceCode,
+      zipCode
+    } = user.addressWork
+
+
+    const data = {
+      countryCode: "TH",
+      addressNoTH: "2",
+      addressVillageTH: "test",
+      floorNo: "5",
+      moo: "2",
+      trokSoiYaek: "สีลม7",
+      thanon: "สีลม",
+      district: "test",
+      districtCode: "test",
+      subDistrict: "test",
+      subDistrictCode: "test",
+      province: "test",
+      provinceCode: "12346",
+      zipCode: "11000",
+    }
+
+    const res = await this.props.saveCurrentAddress({ variables: { input: data } })
+    if (res.data.saveCurrentAddress.success) {
+      console.log('OK')
+      navigateAction({ ...this.props, page: 'passcode' })
+    }
+  }
+
   render() {
     const { navigateAction } = this.props
     return (
@@ -93,7 +139,7 @@ export default class extends React.Component {
         <NavBar
           title="ที่อยู่ปัจจุบัน"
           navLeft={
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => { }}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
@@ -121,7 +167,7 @@ export default class extends React.Component {
           }
         </ScrollView>
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
+        <NextButton onPress={this.onNext} />
       </Screen>
     )
   }

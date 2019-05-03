@@ -14,6 +14,7 @@ import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
+import setMutation from '../../containers/mutation'
   
 const fields = [
   {
@@ -67,6 +68,7 @@ const dispatchToProps = dispatch => ({
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
   handleInput = (props) => {
     console.log(props)
@@ -84,6 +86,50 @@ export default class extends React.Component {
       provinceNameTH: val.data.getAddressCode.provinceNameTH
     }
     this.props.updateUser('addressHome', { ...user.addressHome, ...mapData })
+  }
+
+  onNext = async () => {
+    const { navigateAction, user } = this.props
+    const {
+      countryCode,
+  	  addressNoTH,
+  	  moo,
+      addressVillageTH,
+      floorNo,
+  	  trokSoiYaek,
+  	  thanon,
+  	  district,
+  	  districtCode,
+  	  subDistrict,
+  	  subDistrictCode,
+  	  province,
+  	  provinceCode,
+  	  zipCode
+    } = user.addressHome
+    
+
+    const data = {
+      countryCode: "TH",
+  	  addressNoTH: "31/54",
+  	  moo: "2",
+      addressVillageTH: "ลัดลาแลน",
+      floorNo: "5",
+  	  trokSoiYaek: "22",
+  	  thanon: "รัชดา",
+  	  district: "2345",
+  	  districtCode: "1234",
+  	  subDistrict: "1234",
+  	  subDistrictCode: "1234",
+  	  province: "1234",
+  	  provinceCode: "1234",
+  	  zipCode: "84000"
+    }
+
+    const res = await this.props.savePermanentAddress({ variables: { input: data } })
+    if (res.data.savePermanentAddress.success) {
+      console.log('OK')
+      navigateAction({ ...this.props, page: 'passcode' })
+    }
   }
 
   render() {
@@ -121,7 +167,7 @@ export default class extends React.Component {
           }
         </ScrollView>
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
+        <NextButton onPress={this.onNext}/>
       </Screen>
     )
   }

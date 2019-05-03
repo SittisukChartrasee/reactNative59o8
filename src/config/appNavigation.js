@@ -34,7 +34,6 @@ const MainNavigator = createStackNavigator({
   // otp,
   // passcode,
   // confirmPasscode,
-  
   // condi,
   // lockUser,
   // fatca,
