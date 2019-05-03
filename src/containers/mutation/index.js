@@ -9,7 +9,6 @@ const saveSpouse = gql`
     }
   }
 `
-
 const saveCareer = gql`
   mutation saveCareer($input: NewCareer!) {
     saveCareer(input: $input) {
@@ -18,7 +17,6 @@ const saveCareer = gql`
     }
   }
 `
-
 const saveSourceOfFund = gql`
   mutation saveSourceOfFund($input: NewSourceOfFund!) {
     saveSourceOfFund(input: $input) {
@@ -27,7 +25,6 @@ const saveSourceOfFund = gql`
     }
   }
 `
-
 const saveContact = gql`
   mutation saveContact($input: NewSourceOfFund!) {
     saveContact(input: $input) {
@@ -37,13 +34,66 @@ const saveContact = gql`
   }
 `
 
-// const saveCurrentSameWork = gql`
-//   mutation saveCurrentSameWork($input: )
-// `
+const saveCurrentSameWork = gql`
+  mutation saveCurrentSameWork {
+    saveCurrentSameWork {
+      success
+      message
+    }
+  }
+`
+const SaveCurrentSamePermanent = gql`
+  mutation SaveCurrentSamePermanent {
+    SaveCurrentSamePermanent {
+      success
+      message
+    }
+  }
+`
+
+const saveMailingSamePermanent = gql`
+  mutation saveMailingSamePermanent {
+    saveMailingSamePermanent {
+      success
+      message
+    }
+  }
+`
+const saveMailingSameWork = gql`
+  mutation saveMailingSameWork {
+    saveMailingSameWork {
+      success
+      message
+    }
+  }
+`
+const saveMailingSameCurrent = gql`
+  mutation saveMailingSameCurrent {
+    saveMailingSameCurrent {
+      success
+      message
+    }
+  }
+`
+
+const saveWorkSamePermanent = gql`
+  mutation saveWorkSamePermanent {
+    saveWorkSamePermanent {
+      success
+      message
+    }
+  }
+`
 
 export default compose(
   graphql(saveSpouse, { name: 'saveSpouse' }),
   graphql(saveCareer, { name: 'saveCareer' }),
   graphql(saveSourceOfFund, { name: 'saveSourceOfFund' }),
-  graphql(saveContact, { name: 'saveContact'})
+  graphql(saveContact, { name: 'saveContact'}),
+  graphql(saveCurrentSameWork, { name: 'saveCurrentSameWork' }),
+  graphql(SaveCurrentSamePermanent, { name: 'SaveCurrentSamePermanent' }),
+  graphql(saveMailingSamePermanent, { name: 'saveMailingSamePermanent' }),
+  graphql(saveMailingSameWork, { name: 'saveMailingSameWork' }),
+  graphql(saveMailingSameCurrent, { name: 'saveMailingSameCurrent' }),
+  graphql(saveWorkSamePermanent, { name: 'saveWorkSamePermanent' })
 )

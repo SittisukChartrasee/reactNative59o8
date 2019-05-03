@@ -13,6 +13,7 @@ import images from '../../config/images'
 import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
+import setMutation from '../../containers/mutation'
 
 const fields = [
   {
@@ -33,19 +34,29 @@ const dispatchToProps = dispatch => ({
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
-  handleInput = (props) => {
-    console.log(props)
+  handleInput = async props => {
+    const { navigateAction } = this.props
+    
+    if (props.value === 'ใช้ที่อยู่เดียวกับสถานที่ทำงาน') {
+      const res = await this.props.saveCurrentSameWork()
+      if (res.data.saveCurrentSameWork.success) navigateAction({ ...this.props, page: 'chooseDoc' })
+    } else if (props.value === 'ใช้ที่อยู่เดียวกับทะเบียนบ้าน') {
+      const res = await this.props.SaveCurrentSamePermanent()
+      if (res.data.SaveCurrentSamePermanent.success) navigateAction({ ...this.props, page: 'chooseDoc' })
+    } else {
+      navigateAction({ ...this.props, page: 'addressCurr' })
+    }
   }
 
   render() {
-    const { navigateAction } = this.props
     return (
       <Screen color="transparent">
         <NavBar
           title="ที่อยู่ปัจจุบัน"
           navLeft={
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
@@ -71,7 +82,6 @@ export default class extends React.Component {
           }
         </ScrollView>
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
       </Screen>
     )
   }

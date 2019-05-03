@@ -13,6 +13,7 @@ import images from '../../config/images'
 import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
+import setMutation from '../../containers/mutation'
 
 const fields = [
   {
@@ -36,19 +37,32 @@ const dispatchToProps = dispatch => ({
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
-  handleInput = (props) => {
-    console.log(props)
+  handleInput = async (props) => {
+    const { navigateAction } = this.props
+
+    if (props.value === 'ใช้ที่อยู่เดียวกับทะเบียนบ้าน') {
+      const res = await this.props.saveMailingSamePermanent()
+      if (res.data.saveMailingSamePermanent.success) navigateAction({ ...this.props, page: 'contact' })
+    } else if (props.value === 'ใช้ที่อยู่เดียวกับสถานที่ทำงาน') {
+      const res = await this.props.saveMailingSameWork()
+      if (res.data.saveMailingSameWork.success) navigateAction({ ...this.props, page: 'contact' })
+    } else if (props.value === 'ใช้ที่อยู่เดียวกับที่อยู่ปัจจุบัน') {
+      const res = await this.props.saveMailingSameCurrent()
+      if (res.data.saveMailingSameCurrent.success) navigateAction({ ...this.props, page: 'contact' })
+    } else {
+      navigateAction({ ...this.props, page: 'addressDoc' })
+    }
   }
 
   render() {
-    const { navigateAction } = this.props
     return (
       <Screen color="transparent">
         <NavBar
           title="ที่อยู่จัดส่งเอกสาร"
           navLeft={
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
@@ -74,7 +88,6 @@ export default class extends React.Component {
           }
         </ScrollView>
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
       </Screen>
     )
   }

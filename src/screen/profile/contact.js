@@ -3,6 +3,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  AsyncStorage,
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -58,7 +59,7 @@ export default class extends React.Component {
         <NavBar
           title="ข้อมูลการติดต่อ"
           navLeft={
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
