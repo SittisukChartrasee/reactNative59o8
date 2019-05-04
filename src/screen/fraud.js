@@ -79,8 +79,8 @@ export default class extends React.Component {
     const { navigateAction } = this.props
 
     const data = {
-      hasLaunderingRecord: true,
-      isPolitician: true
+      hasLaunderingRecord: checkActiveData(this.state.choice).IS_TRUE,
+      isPolitician: checkActiveData(this.state.choice).IS_TRUE
     }
 
     const res = await this.props.saveFraud({ variables: { input: data } })

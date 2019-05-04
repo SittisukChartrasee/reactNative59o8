@@ -99,7 +99,7 @@ export default class extends React.Component {
       ...configPicker,
       onPickerConfirm: date => {
         this.setState({ date })
-        handleInput({ value: `${date[2]}/${date[1]}/${date[0]}`, type, field })
+        handleInput({ value: `${date[2]}-${date[1]}-${date[0]}`, type, field })
       }
     });
     Picker.show()

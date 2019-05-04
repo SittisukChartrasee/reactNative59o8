@@ -19,7 +19,7 @@ import branchProfileChoose from '../screen/profileChoose'
 
 import branchCamera from '../screen/camera'
 
-import branchIcome from '../screen/income'
+// import branchIcome from '../screen/income'
 
 import branchRisk from '../screen/risk'
 
@@ -39,14 +39,15 @@ const MainNavigator = createStackNavigator({
   // fatca,
   // fraud,
   // forgetPasscode,
-  ...branchProfileChoose,
+  // ...branchProfileChoose,
   ...branchProfile,
+  // ...branchProfileChoose,
   // ...branchBank,
   // ...branchRisk,
   // ...branchCamera,
   // ...branchIcome,
-  ...branchComplete,
-  ...branchsignature,
+  // ...branchComplete,
+  // ...branchsignature,
 }, {
   headerMode: 'none',
 });

@@ -58,16 +58,17 @@ export default class extends React.Component {
 
   onNext = async () => {
     const { navigateAction, fatcaReducer } = this.props
-
+    const fatca = fatcaReducer.fatca
+    
     const data = {
-      isUSCitizen: true,
-      isHoldingUsCard: true
+      isUSCitizen: checkActiveData(fatca).IS_TRUE,
+      isHoldingUsCard: checkActiveData(fatca).IS_TRUE
     }
 
     const res = await this.props.saveFatca({ variables: { input: data } })
     if (res.data.saveFatca.success) {
       console.log('OK')
-      navigateAction({ ...this.props, page: 'profile' })
+      navigateAction({ ...this.props, page: 'fraud' })
     }
   }
 

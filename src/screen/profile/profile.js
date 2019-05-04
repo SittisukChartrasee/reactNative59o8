@@ -15,6 +15,7 @@ import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
+import { convertDate, getOfBirth } from '../../utility/helper'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -89,10 +90,10 @@ export default class extends React.Component {
   handleInput = (props) => {
     const { updateUser, user } = this.props
 
-    updateUser('profile', { ...user.profile, [props.field]: props.value } )
+    updateUser('profile', { ...user.profile, [props.field]: props.value })
 
     if (props.type === 'modal') this.setState({ modal: true })
-    else if (props.field === 'gender') {}
+    else if (props.field === 'gender') { }
     else if (props.field === 'expireDateFlag') {
       this.setState({
         fields: this.state.fields.map((d) => {
@@ -121,47 +122,53 @@ export default class extends React.Component {
       lastNameTH,
       firstNameEN,
       lastNameEN,
-      dayOfBirth,
-      monthOfBirth,
-      yearOfBirth,
+      birthDay,
       nationalityCode,
       martialStatusCode,
     } = user.profile
-    
 
     const data = {
-      docNo: "1840100464891",
-  	  jcNumber: "ME1130764207",
-  	  isNoDocExpDate: false,
-  	  docExpDate: "9999-12-31T23:59:59Z",
-  	  genderCode: "M",
-  	  titleTH: "นาย",
-  	  firstNameTH: "ทดสอบ",
-  	  lastNameTH: "สอบทด",
-  	  firstNameEN: "Nantapol",
-  	  lastNameEN: "Kerdsom",
-  	  dayOfBirth: "23",
-  	  monthOfBirth: "11",
-  	  yearOfBirth: "2536",
-  	  nationalityCode: "TH",
-  	  martialStatusCode: "U",
+      docNo: idCard,
+      jcNumber,
+      isNoDocExpDate,
+      docExpDate: convertDate(docExpDate),
+      genderCode,
+      titleTH,
+      firstNameTH,
+      lastNameTH,
+      firstNameEN,
+      lastNameEN,
+      dayOfBirth: getOfBirth(birthDay, 'day'),
+      monthOfBirth: `${getOfBirth(birthDay, 'month')}`,
+      yearOfBirth: getOfBirth(birthDay, 'year'),
+      nationalityCode,
+      martialStatusCode,
     }
 
     const res = await this.props.saveIdentity({ variables: { input: data } })
     if (res.data.saveIdentity.success) {
       console.log('OK')
-      navigateAction({ ...this.props, page: 'passcode' })
+      switch (martialStatusCode) {
+        case 'U':
+          navigateAction({ ...this.props, page: 'career' })
+          break;
+        case 'M':
+          navigateAction({ ...this.props, page: 'marry' })
+          break;
+        default:
+          break;
+      }
     }
   }
 
-  render() {    
+  render() {
     const { user } = this.props
     return (
       <Screen color="transparent">
         <NavBar
           title="ข้อมูลส่วนตัว"
           navLeft={
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => { }}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
@@ -198,7 +205,7 @@ export default class extends React.Component {
           })
         }
 
-        <NextButton onPress={this.onNext}/>
+        <NextButton onPress={this.onNext} />
       </Screen>
     )
   }

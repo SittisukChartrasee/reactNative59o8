@@ -62,14 +62,15 @@ export default class extends React.Component {
     } = user.contact
 
     const data = {
-      workPhone: "0888888888",
-      homePhone: "0888888888",
-      mobilePhone: "0888888888",
-      email: "test@gmail.com"
+      workPhone,
+      homePhone,
+      mobilePhone,
+      email
     }
 
     const res = await this.props.saveContact({ variables: { input: data } })
     if (res.data.saveContact.success) {
+      console.log('OK')
       navigateAction({ ...this.props, page: 'tutorialBank' })
     }
   }
@@ -109,7 +110,7 @@ export default class extends React.Component {
           }
         </ScrollView>
 
-        <NextButton onPress={this.onNext}/>
+        <NextButton onPress={this.onNext} />
       </Screen>
     )
   }

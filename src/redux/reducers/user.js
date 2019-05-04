@@ -2,13 +2,13 @@ import { CHANGE_USER } from '../types'
 
 const init = {
   profile: {
-    idCard: "1111111111111",
+    idCard: '1840100464891',
     jcNumber: '',
     expireDateFlag: '',
     isNoDocExpDate: false,
     docExpDate: '',
     gender: '',
-    genderCode: '',
+    genderCode: 'M',
     titleTH: '',
     firstNameTH: '',
     lastNameTH: '',
@@ -19,9 +19,9 @@ const init = {
     monthOfBirth: '',
     dayOfBirth: '',
     martialStatus: '',
-    martialStatusCode: '',
-    nationality: '',
-    nationalityCode: '',
+    martialStatusCode: 'U',
+    nationality: 'ไทย',
+    nationalityCode: 'TH',
   },
   addressDoc: {
     country: '',
@@ -42,7 +42,7 @@ const init = {
   },
   addressHome: {
     country: '',
-    countryCode: '',
+    countryCode: 'TH',
     addressNoTH: '',
     moo: '',
     addressVillageTH: '',
@@ -59,7 +59,7 @@ const init = {
   },
   addressCurr: {
     country: '',
-    countryCode: '',
+    countryCode: 'TH',
     addressNoTH: '',
     moo: '',
     addressVillageTH: '',
@@ -75,7 +75,7 @@ const init = {
     zipCode: '',
   },
   addressWork: {
-    countryCode: '',
+    countryCode: 'TH',
     companyName: '',
     addressNoTH: '',
     addressVillageTH: '',

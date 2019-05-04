@@ -71,7 +71,9 @@ const dispatchToProps = dispatch => ({
 @setMutation
 export default class extends React.Component {
   handleInput = (props) => {
-    console.log(props)
+    const { updateUser, user } = this.props
+
+    updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value })
   }
 
   onHandleDistrict = ({ data, val }) => {
@@ -98,37 +100,37 @@ export default class extends React.Component {
       moo,
       trokSoiYaek,
       thanon,
-      district,
+      districtNameTH,
       districtCode,
       subDistrict,
       subDistrictCode,
-      province,
+      provinceNameTH,
       provinceCode,
       zipCode
     } = user.addressWork
 
 
     const data = {
-      countryCode: "TH",
-      addressNoTH: "2",
-      addressVillageTH: "test",
-      floorNo: "5",
-      moo: "2",
-      trokSoiYaek: "สีลม7",
-      thanon: "สีลม",
-      district: "test",
-      districtCode: "test",
-      subDistrict: "test",
-      subDistrictCode: "test",
-      province: "test",
-      provinceCode: "12346",
-      zipCode: "11000",
+      countryCode,
+      addressNoTH,
+      addressVillageTH,
+      floorNo,
+      moo,
+      trokSoiYaek,
+      thanon,
+      district: districtNameTH,
+      districtCode,
+      subDistrict,
+      subDistrictCode,
+      province: provinceNameTH,
+      provinceCode,
+      zipCode,
     }
 
     const res = await this.props.saveCurrentAddress({ variables: { input: data } })
     if (res.data.saveCurrentAddress.success) {
       console.log('OK')
-      navigateAction({ ...this.props, page: 'passcode' })
+      navigateAction({ ...this.props, page: 'chooseDoc' })
     }
   }
 
