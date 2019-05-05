@@ -116,7 +116,7 @@ export default class extends React.Component {
   onHandleOnPress = data => {
     const { field, user, onHandleDistrict } = this.props
     this.setState({ open: false, confirmText: data.nameTH, text: data.nameTH })
-    this.props.handleInput && this.props.handleInput({ type: 'SEARCH', field, value: data.nameTH })
+    this.props.handleInput && this.props.handleInput({ type: 'SEARCH', field, value: data.nameTH, ...(code => code ? ({ code, risk: data.risk }) : {})(data.code) })
 
     if (data.displayName) {
       query(this.props.client, {

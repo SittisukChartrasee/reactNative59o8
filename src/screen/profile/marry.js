@@ -12,10 +12,11 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import modal from '../../component/modal'
+import Modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
+import { convertDate, getOfBirth, getStatusGender, getStatusMartial } from '../../utility/helper'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -27,6 +28,9 @@ const dispatchToProps = dispatch => ({
 @setMutation
 export default class extends React.Component {
   state = {
+    modal: false,
+    expireSatus: 'มีวันหมดอายุ',
+    nationSatus: 'ไทย',
     fields: [
       {
         label: 'สัญชาติ',
@@ -85,10 +89,12 @@ export default class extends React.Component {
     const { fields } = this.state
     const { updateUser, user } = this.props
 
-    updateUser('spouse', { ...user.spouse, [props.field]: props.value } )
+
 
     if (props.field === 'nationFlag') {
+      updateUser('spouse', { ...user.spouse, [props.field]: props.value } )
       this.setState({
+        nationSatus: props.value,
         fields: fields.map((d) => {
           if (props.value === 'ไทย') {
             if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'cardExpiredDate') return { ...d, inVisible: true }
@@ -102,7 +108,9 @@ export default class extends React.Component {
         })
       })
     } else if (props.field === 'expireFlag') {
+      updateUser('spouse', { ...user.spouse, [props.field]: props.value } )
       this.setState({
+        expireSatus: props.value,
         fields: fields.map((d) => {
           if (props.value === 'มีวันหมดอายุ') {
             if (d.field === 'marryExpireDate') return { ...d, inVisible: false }
@@ -113,18 +121,27 @@ export default class extends React.Component {
           }
         })
       })
+    } else if (props.field === 'marryCountry') {
+      updateUser('spouse', { ...user.spouse, nationalityCode: props.code, nationalityRisk: props.risk } )
+    } else {
+      updateUser('spouse', { ...user.spouse, [props.field]: props.value } )
     }
   }
 
   onNext = async () => {
+    const { expireSatus, nationSatus } = this.state
     const { navigateAction, user } = this.props
+    const redirec = this.props.navigation.getParam('redirec', '')
+
     const {
       title,
       lastName,
       pepFlag,
       nationalityCode,
       IDCardNo,
+      marryPassport,
       isIDCardExpDate,
+      marryExpireDate,
       cardExpiredDate,
       fistName,
     } = user.spouse
@@ -135,16 +152,29 @@ export default class extends React.Component {
       lastName,
       pepFlag,
       nationalityCode,
-      IDCardNo,
+      IDCardNo: nationSatus === 'ไทย' ? IDCardNo : marryPassport,
       isIDCardExpDate,
-      cardExpiredDate,
+      cardExpiredDate: (expireSatus === 'มีวันหมดอายุ')
+        ? (nationSatus === 'ไทย')
+          ? convertDate(marryExpireDate)
+          : convertDate(cardExpiredDate)
+        : new Date('9999-12-31'),
       fistName,
     }
 
-    const res = await this.props.saveSpouse({ variables: { input: data } })
-    if (res.data.saveSpouse.success) {
-      navigateAction({ ...this.props, page: 'career' })
-    }
+    this.props.saveSpouse({ variables: { input: data } })
+      .then(res => {
+        if (user.spouse.nationalityRisk) {
+          this.setState({ modal: true })
+        } else if (res.data.saveSpouse.success) {
+          if (redirec) return navigateAction({ ...this.props, page: redirec })
+          navigateAction({ ...this.props, page: 'career' })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    
   }
 
   render() {
@@ -182,6 +212,12 @@ export default class extends React.Component {
             }, key))
           }
         </ScrollView>
+
+        <Modal
+          visible={this.state.modal}
+          dis={`ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`}
+          onPress={() => this.setState({ modal: false })}
+        />
 
         <NextButton onPress={this.onNext}/>
       </Screen>

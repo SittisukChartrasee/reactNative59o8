@@ -15,7 +15,7 @@ import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
-import { convertDate, getOfBirth } from '../../utility/helper'
+import { convertDate, getOfBirth, getStatusGender, getStatusMartial } from '../../utility/helper'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -28,6 +28,8 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     modal: false,
+    expireSatus: 'มีวันหมดอายุ',
+    flagChlid: 'ไม่มี',
     fields: [
       {
         label: 'เลขบัตรประชาชน',
@@ -80,6 +82,11 @@ export default class extends React.Component {
         init: [{ value: 'โสด' }, { value: 'สมรส' }, { value: 'หย่าร้าง' }],
         field: 'martialStatus', // martialStatusCode
       }, {
+        label: 'คุณมีบุตร หรือบุตรบุญธรรมหรือไม่ ',
+        type: 'radio',
+        init: [{ title: 'ไม่มี', active: true }, { title: 'มี' }],
+        field: 'flagChlid', // isNoDocExpDate
+      }, {
         label: 'สัญชาติ',
         field: 'nationality', // nationalityCode
         value: 'ไทย'
@@ -93,9 +100,10 @@ export default class extends React.Component {
     updateUser('profile', { ...user.profile, [props.field]: props.value })
 
     if (props.type === 'modal') this.setState({ modal: true })
-    else if (props.field === 'gender') { }
+    else if (props.field === 'flagChlid') this.setState({ flagChlid: props.value })
     else if (props.field === 'expireDateFlag') {
       this.setState({
+        expireSatus: props.value,
         fields: this.state.fields.map((d) => {
           if (props.value === 'มีวันหมดอายุ') {
             if (d.field === 'docExpDate') return { ...d, inVisible: false }
@@ -110,13 +118,14 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
+    const { expireSatus, flagChlid } = this.state
     const { navigateAction, user } = this.props
     const {
       idCard,
       jcNumber,
       isNoDocExpDate,
       docExpDate,
-      genderCode,
+      gender,
       titleTH,
       firstNameTH,
       lastNameTH,
@@ -124,15 +133,15 @@ export default class extends React.Component {
       lastNameEN,
       birthDay,
       nationalityCode,
-      martialStatusCode,
+      martialStatus,
     } = user.profile
 
     const data = {
       docNo: idCard,
       jcNumber,
       isNoDocExpDate,
-      docExpDate: convertDate(docExpDate),
-      genderCode,
+      docExpDate: expireSatus === 'มีวันหมดอายุ' ? convertDate(docExpDate) : new Date('9999-12-31'),
+      genderCode: getStatusGender(gender),
       titleTH,
       firstNameTH,
       lastNameTH,
@@ -142,23 +151,26 @@ export default class extends React.Component {
       monthOfBirth: `${getOfBirth(birthDay, 'month')}`,
       yearOfBirth: getOfBirth(birthDay, 'year'),
       nationalityCode,
-      martialStatusCode,
+      martialStatusCode: getStatusMartial(martialStatus),
     }
 
-    const res = await this.props.saveIdentity({ variables: { input: data } })
-    if (res.data.saveIdentity.success) {
-      console.log('OK')
-      switch (martialStatusCode) {
-        case 'U':
-          navigateAction({ ...this.props, page: 'career' })
-          break;
-        case 'M':
-          navigateAction({ ...this.props, page: 'marry' })
-          break;
-        default:
-          break;
-      }
-    }
+    this.props.saveIdentity({ variables: { input: data } })
+      .then(res => {
+        console.log(data, res)
+        if (res.data.saveIdentity.success) {
+          
+          
+          if (martialStatus === 'สมรส' && flagChlid === 'มี') {
+            navigateAction({ ...this.props, page: 'marry' })
+            this.props.navigation.navigate('marry', { redirec: 'child' })
+          } else if (flagChlid === 'ไม่มี') navigateAction({ ...this.props, page: 'career' })
+          else if (flagChlid === 'มี') navigateAction({ ...this.props, page: 'child' })
+
+        }
+      })
+      .catch(err => {
+        console.log(err.toString())
+      })
   }
 
   render() {

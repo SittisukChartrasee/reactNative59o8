@@ -15,6 +15,7 @@ export default class extends React.Component {
     handleInput: () => {},
     field: 'fieldName',
     label: 'label',
+    value: '',
   }
 
   render() {
@@ -33,6 +34,7 @@ export default class extends React.Component {
             fontFamily: font.sukhumvitBold,
             fontSize: 18
           }}
+          value={this.props.value}
           onChangeText={value => handleInput({ value, type: 'Icustom', field })}
           placeholder="ตัวอย่าง JT9-9999999-99"
         />
