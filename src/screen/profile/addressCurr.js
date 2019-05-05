@@ -70,10 +70,16 @@ const dispatchToProps = dispatch => ({
 @connect(mapToProps, dispatchToProps)
 @setMutation
 export default class extends React.Component {
+  state = {
+    modal: false
+  }
   handleInput = (props) => {
     const { updateUser, user } = this.props
-
-    updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value })
+    if (props.field === 'country') {
+      updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value, countryCode: props.code, countryRisk: props.risk })
+    } else {
+      updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value })
+    }
   }
 
   onHandleDistrict = ({ data, val }) => {
@@ -107,7 +113,7 @@ export default class extends React.Component {
       provinceNameTH,
       provinceCode,
       zipCode
-    } = user.addressWork
+    } = user.addressDoc
 
 
     const data = {
@@ -127,11 +133,14 @@ export default class extends React.Component {
       zipCode,
     }
 
-    const res = await this.props.saveCurrentAddress({ variables: { input: data } })
-    if (res.data.saveCurrentAddress.success) {
-      console.log('OK')
-      navigateAction({ ...this.props, page: 'chooseDoc' })
-    }
+    this.props.saveCurrentAddress({ variables: { input: data } })
+      .then(res => {
+        if (user.addressCurr.countryRisk) {
+          return this.setState({ modal: true })
+        } else if (res.data.saveCurrentAddress.success) {
+          navigateAction({ ...this.props, page: 'chooseDoc' })
+        }
+      })
   }
 
   render() {
@@ -168,6 +177,14 @@ export default class extends React.Component {
             }, key))
           }
         </ScrollView>
+
+        {
+          modal({
+            visible: this.state.modal,
+            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
+            onPress: () => this.setState({ modal: false })
+          })
+        }
 
         <NextButton onPress={this.onNext} />
       </Screen>

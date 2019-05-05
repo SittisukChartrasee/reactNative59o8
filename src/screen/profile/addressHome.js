@@ -70,10 +70,18 @@ const dispatchToProps = dispatch => ({
 @connect(mapToProps, dispatchToProps)
 @setMutation
 export default class extends React.Component {
+  state = {
+    modal: false,
+  }
+
+
   handleInput = (props) => {
     const { updateUser, user } = this.props
-
-    updateUser('addressHome', { ...user.addressHome, [props.field]: props.value })
+    if (props.field === 'country') {
+      updateUser('addressHome', { ...user.addressHome, [props.field]: props.value, countryCode: props.code, countryRisk: props.risk })
+    } else {
+      updateUser('addressHome', { ...user.addressHome, [props.field]: props.value })
+    }
   }
 
   onHandleDistrict = ({ data, val }) => {
@@ -127,15 +135,17 @@ export default class extends React.Component {
   	  zipCode
     }
     
-    const res = await this.props.savePermanentAddress({ variables: { input: data } })
-    if (res.data.savePermanentAddress.success) {
-      console.log('OK')
-      navigateAction({ ...this.props, page: 'chooseWork' })
-    }
+    this.props.savePermanentAddress({ variables: { input: data } })
+      .then(res => {
+        if (user.addressHome.countryRisk) {
+          return this.setState({ modal: true })
+        } else if (res.data.savePermanentAddress.success) {
+          navigateAction({ ...this.props, page: 'chooseWork' })
+        }
+      })
   }
 
   render() {
-    const { navigateAction } = this.props
     return (
       <Screen color="transparent">
         <NavBar
@@ -168,6 +178,14 @@ export default class extends React.Component {
             }, key))
           }
         </ScrollView>
+
+        {
+          modal({
+            visible: this.state.modal,
+            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
+            onPress: () => this.setState({ modal: false })
+          })
+        }
 
         <NextButton onPress={this.onNext}/>
       </Screen>

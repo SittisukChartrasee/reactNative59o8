@@ -14,10 +14,12 @@ import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
+import { updateUser } from '../../redux/actions/commonAction'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateUser: bindActionCreators(updateUser, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -57,32 +59,56 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
+    const { updateUser, user } = this.props
     console.log(props)
     if (props.type === 'modal') this.setState({ modal: true })
+    else if (props.field === 'busType') {
+      updateUser('career', { ...user.career, [props.field]: props.value, isicCode: props.code }) 
+    } else if (props.field === 'busType') {
+      updateUser('career', { ...user.career, [props.field]: props.value, isicCode: props.code }) 
+    } else if (props.field === 'occupation') {
+      updateUser('career', { ...user.career, [props.field]: props.value, occupationCode: props.code })
+    } else if (props.field === 'incomeRange') {
+      updateUser('career', { ...user.career, [props.field]: props.value })
+    } if (props.field === 'countrySourceOfIncome') {
+      updateUser('career', { ...user.career, [props.field]: props.value, countyCode: props.code, countryRisk: props.risk })
+    }
   }
 
   onNext = async () => {
-    const { navigateAction } = this.props
-    // const {
-
-    // } = user.career
+    const { navigateAction, user } = this.props
+    const {
+      isicCode,
+      occupationCode,
+      incomeRange,
+      incomeRangeCode,
+      countrySourceOfIncome,
+    } = user.career
 
 
     const data = {
-      isicCode: "t",
-      occupationCode: "t",
-      incomeRangeCode: "t",
-      countrySourceOfIncome: "t"
+      isicCode,
+      occupationCode,
+      incomeRangeCode: incomeRange,
+      countrySourceOfIncome
     }
 
-    const res = await this.props.saveCareer({ variables: { input: data } })
-    if (res.data.saveCareer.success) {
-      navigateAction({ ...this.props, page: 'sourceOfFund' })
-    }
+    this.props.saveCareer({ variables: { input: data } })
+      .then(res => {
+        if (user.career.countryRisk) {
+          return this.setState({ modal: true })
+        } else if (res.data.saveCareer.success) {
+          navigateAction({ ...this.props, page: 'sourceOfFund' })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    
   }
 
   render() {
-    const { navigateAction } = this.props
+    const { navigateAction, user } = this.props
     return (
       <Screen color="transparent">
         <NavBar
@@ -109,6 +135,7 @@ export default class extends React.Component {
               label: d.label,
               type: d.type,
               init: d.init,
+              value: user.career[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
             }, key))
@@ -118,8 +145,7 @@ export default class extends React.Component {
         {
           modal({
             visible: this.state.modal,
-            image: images.iconBackIdcard,
-            dis: `ด้านหลังบัตรประชาชน ประกอบด้วยอักษรภาษาอังกฤษ 2 ตัว และตัวเลข 10 ตัว \nตัวอย่างการกรอก : JC1234567890`,
+            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
             onPress: () => this.setState({ modal: false })
           })
         }

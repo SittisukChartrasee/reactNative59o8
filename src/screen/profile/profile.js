@@ -99,7 +99,7 @@ export default class extends React.Component {
 
     updateUser('profile', { ...user.profile, [props.field]: props.value })
 
-    if (props.type === 'modal') this.setState({ modal: true })
+    if (props.type === 'modal') return this.setState({ modal: true })
     else if (props.field === 'flagChlid') this.setState({ flagChlid: props.value })
     else if (props.field === 'expireDateFlag') {
       this.setState({

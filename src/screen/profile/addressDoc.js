@@ -14,6 +14,7 @@ import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
+import setMutation from '../../containers/mutation'
 
 const fields = [
   {
@@ -67,9 +68,19 @@ const dispatchToProps = dispatch => ({
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
+  state = {
+    modal: false
+  }
+
   handleInput = (props) => {
-    console.log(props)
+    const { updateUser, user } = this.props
+    if (props.field === 'country') {
+      updateUser('addressDoc', { ...user.addressDoc, [props.field]: props.value, countryCode: props.code, countryRisk: props.risk })
+    } else {
+      updateUser('addressDoc', { ...user.addressDoc, [props.field]: props.value })
+    }
   }
 
   onHandleDistrict = ({ data, val }) => {
@@ -86,8 +97,55 @@ export default class extends React.Component {
     this.props.updateUser('addressDoc', { ...user.addressDoc, ...mapData })
   }
 
+  onNext = async () => {
+    const { navigateAction, user } = this.props
+    const {
+      countryCode,
+      addressNoTH,
+      addressVillageTH,
+      floorNo,
+      moo,
+      trokSoiYaek,
+      thanon,
+      districtNameTH,
+      districtCode,
+      subDistrict,
+      subDistrictCode,
+      provinceNameTH,
+      provinceCode,
+      zipCode
+    } = user.addressDoc
+
+
+    const data = {
+      countryCode,
+      addressNoTH,
+      addressVillageTH,
+      floorNo,
+      moo,
+      trokSoiYaek,
+      thanon,
+      district: districtNameTH,
+      districtCode,
+      subDistrict,
+      subDistrictCode,
+      province: provinceNameTH,
+      provinceCode,
+      zipCode,
+    }
+
+    this.props.saveMailingAddress({ variables: { input: data } })
+      .then(res => {
+        console.log(res)
+        if (user.addressDoc.countryRisk) {
+          return this.setState({ modal: true })
+        } else if (res.data.saveMailingAddress.success) {
+          navigateAction({ ...this.props, page: 'contact' })
+        }
+      })
+  }
+
   render() {
-    const { navigateAction } = this.props
     return (
       <Screen color="transparent">
         <NavBar
@@ -121,7 +179,15 @@ export default class extends React.Component {
           }
         </ScrollView>
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'passcode' })}/>
+        {
+          modal({
+            visible: this.state.modal,
+            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
+            onPress: () => this.setState({ modal: false })
+          })
+        }
+
+        <NextButton onPress={this.onNext}/>
       </Screen>
     )
   }

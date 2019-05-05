@@ -43,6 +43,7 @@ const init = {
   addressHome: {
     country: '',
     countryCode: 'TH',
+    countryRisk: false,
     addressNoTH: '',
     moo: '',
     addressVillageTH: '',
@@ -123,10 +124,10 @@ const init = {
     pepFlag: false,
   },
   sourceOfFund: {
-    investmentSource: '',
-    investmentSourceOther: '',
-    investmentSourceCountry: '',
-    investmentPurpose: '',
+    investmentSource: ['gf', 'dd'],
+    investmentSourceOther: 'a',
+    investmentSourceCountry: 'b',
+    investmentPurpose: 'c',
     dividendWithHoldingTax: false,
   }
 }

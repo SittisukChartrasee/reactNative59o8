@@ -12,7 +12,7 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import Modal from '../../component/modal'
+import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
@@ -150,7 +150,7 @@ export default class extends React.Component {
     const data = {
       title,
       lastName,
-      pepFlag,
+      pepFlag: pepFlag === 'ใช่',
       nationalityCode,
       IDCardNo: nationSatus === 'ไทย' ? IDCardNo : marryPassport,
       isIDCardExpDate,
@@ -165,7 +165,7 @@ export default class extends React.Component {
     this.props.saveSpouse({ variables: { input: data } })
       .then(res => {
         if (user.spouse.nationalityRisk) {
-          this.setState({ modal: true })
+          return this.setState({ modal: true })
         } else if (res.data.saveSpouse.success) {
           if (redirec) return navigateAction({ ...this.props, page: redirec })
           navigateAction({ ...this.props, page: 'career' })
@@ -213,11 +213,13 @@ export default class extends React.Component {
           }
         </ScrollView>
 
-        <Modal
-          visible={this.state.modal}
-          dis={`ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`}
-          onPress={() => this.setState({ modal: false })}
-        />
+        {
+          modal({
+            visible: this.state.modal,
+            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
+            onPress: () => this.setState({ modal: false })
+          })
+        }
 
         <NextButton onPress={this.onNext}/>
       </Screen>

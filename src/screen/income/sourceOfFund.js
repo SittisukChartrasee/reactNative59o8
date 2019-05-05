@@ -14,10 +14,12 @@ import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
+import { updateUser } from '../../redux/actions/commonAction'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateUser: bindActionCreators(updateUser, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -98,46 +100,59 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
+    const { updateUser, user } = this.props
+
+    console.log(props)
     if (props.type === 'modal') this.setState({ modal: true })
-
-
+    else if (props.field === 'investmentSource') {
+      const arr = props.data.split(',')
+      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: arr, investmentSourceOther: props.otherField } )
+    } else if (props.field === 'investmentSourceCountry') {
+      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value, nationalityCode: props.code, nationalityRisk: props.risk } )
+    } else if (props.field === 'investmentPurpose') {
+      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.data } )
+    } else {
+      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value } )
+    }
   }
 
   onNext = async () => {
     const { navigateAction, user } = this.props
     const {
       investmentSource,
-      investmentPurposeOther,
+      investmentSourceOther,
       investmentSourceCountry,
       investmentPurpose,
       dividendWithHoldingTax,
     } = user.sourceOfFund
     
-
     const data = {
-      investmentSource: [],
-      investmentPurposeOther: '',
-      investmentSourceCountry: '',
-      investmentPurpose: '',
-      dividendWithHoldingTax: false,
+      investmentSource,
+      investmentSourceOther,
+      investmentSourceCountry,
+      investmentPurpose,
+      dividendWithHoldingTax: !(dividendWithHoldingTax === 'ไม่ใช่'),
     }
 
-
-    // const res = await this.props.saveSourceOfFund({ variables: { input: data } })
-    // console.log(res)
-    // if (res.data.saveSourceOfFund.success) {
-    //   navigateAction({ ...this.props, page: 'addressHome' })
-    // }
+    this.props.saveSourceOfFund({ variables: { input: data } })
+      .then(res => {
+        if (user.sourceOfFund.nationalityRisk) {
+          this.setState({ modal: true })
+        } else if (res.data.saveSourceOfFund.success) {
+          navigateAction({ ...this.props, page: 'addressHome' })
+        }
+      })
   }
 
   render() {
-    const { navigateAction } = this.props
+    const { user } = this.props
+
     return (
       <Screen color="transparent">
         <NavBar
           title="เงินลงทุน"
           navLeft={
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
@@ -158,6 +173,7 @@ export default class extends React.Component {
               label: d.label,
               type: d.type,
               init: d.init,
+              value: user.sourceOfFund[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
             }, key))
@@ -167,8 +183,7 @@ export default class extends React.Component {
         {
           modal({
             visible: this.state.modal,
-            image: images.iconBackIdcard,
-            dis: `ด้านหลังบัตรประชาชน ประกอบด้วยอักษรภาษาอังกฤษ 2 ตัว และตัวเลข 10 ตัว \nตัวอย่างการกรอก : JC1234567890`,
+            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
             onPress: () => this.setState({ modal: false })
           })
         }

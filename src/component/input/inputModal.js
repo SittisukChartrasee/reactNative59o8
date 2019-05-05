@@ -26,6 +26,7 @@ import { Select } from '../../component/cardSelect'
 
 export default class extends React.Component {
   static defaultProps = {
+    value: '',
     init: [
       {
         label: 'เงินเดือน',
@@ -92,13 +93,14 @@ export default class extends React.Component {
 
   render() {
     const { open, data } = this.state
+    const { value } = this.props
 
     return (
       <View>
         <TouchableOpacity onPress={() => this.setState({ open: true })}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', overflow: 'hidden' }}>
-          { data 
-              ? <TBold textAlign="left" color={colors.midnight}>{data}</TBold>
+          { data || value
+              ? <TBold textAlign="left" color={colors.midnight}>{value.toString() || data}</TBold>
               : <TBold textAlign="left" color={colors.smoky}>กรุณาเลือกข้อมูล</TBold>
           }
             <Image source={images.iconNextPageBlack} />

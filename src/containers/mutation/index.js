@@ -141,6 +141,15 @@ const saveContact = gql`
   }
 `
 
+const saveMailingAddress = gql`
+  mutation saveMailingAddress($input: NewMailingAddress!) {
+    saveMailingAddress(input: $input) {
+      success
+      message
+    }
+  }
+`
+
 export default compose(
   graphql(saveSpouse, { name: 'saveSpouse' }),
   graphql(saveCareer, { name: 'saveCareer' }),
@@ -158,4 +167,5 @@ export default compose(
   graphql(savePermanentAddress, { name: 'savePermanentAddress' }),
   graphql(saveWorkplaceAddress, { name: 'saveWorkplaceAddress' }),
   graphql(saveCurrentAddress, { name: 'saveCurrentAddress' }),
+  graphql(saveMailingAddress, { name: 'saveMailingAddress' })
 )
