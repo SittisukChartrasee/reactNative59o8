@@ -75,7 +75,7 @@ export default class extends React.Component {
             label={renderText(status).titleBtn}
             bgTransparent={renderText(status).btnStatus}
             style={{ marginHorizontal: 24 }}
-            onPress={() => navigateAction({ ...this.props, page: 'tutorialBackCamera' })}
+            onPress={() => navigateAction({ ...this.props, page: '' })}
           />
         </View>
       </Screen>

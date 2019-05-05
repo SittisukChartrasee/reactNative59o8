@@ -30,7 +30,7 @@ export default class extends React.Component {
           color="transparent"
           title="ยืนยันการสมัคร"
           navLeft={
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
@@ -51,7 +51,7 @@ export default class extends React.Component {
           <LongButton
             label="ส่งอีเมลยืนยันอีกครั้ง"
             style={{ marginHorizontal: 24 }}
-            onPress={() => navigateAction({ ...this.props, page: 'tutorialBackCamera' })}
+            onPress={() => navigateAction({ ...this.props, page: 'verifyEmail' })}
           />
         </View>
       </Screen>

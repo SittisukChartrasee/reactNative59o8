@@ -68,11 +68,18 @@ export default class extends React.Component {
       email
     }
 
-    const res = await this.props.saveContact({ variables: { input: data } })
-    if (res.data.saveContact.success) {
-      console.log('OK')
-      navigateAction({ ...this.props, page: 'tutorialBank' })
-    }
+    this.props.saveContact({ variables: { input: data } })
+      .then(res => {
+        if (res.data.saveContact.success) {
+          console.log('OK')
+          navigateAction({ ...this.props, page: 'suittest' })
+          // navigateAction({ ...this.props, page: 'tutorialBank' })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    
   }
 
   render() {

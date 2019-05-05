@@ -34,7 +34,7 @@ export default class extends React.Component {
         <NavBar
           title="เชื่อมบัญชีธนาคาร"
           navLeft={
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }

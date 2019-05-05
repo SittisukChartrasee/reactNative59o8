@@ -24,14 +24,14 @@ const dispatchToProps = dispatch => ({
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   render() {
-    const { navigateAction, navigation } = this.props
+    const { navigateAction } = this.props
     return (
       <Screen>
         <NavBar
           color="transparent"
           title="ถ่ายบัตรประชาชน"
           navLeft={
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }

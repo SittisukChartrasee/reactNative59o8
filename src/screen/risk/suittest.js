@@ -79,7 +79,7 @@ export default class extends React.Component {
             paddingBottom: 100
           })
         }
-        <NextButton disabled={checkActiveData(suittest).IS_TRUE} onPress={() => navigateAction({ ...this.props, page: 'profile' })}/>
+        <NextButton disabled={checkActiveData(suittest).IS_TRUE} onPress={() => navigateAction({ ...this.props, page: 'reviewScore' })}/>
       </Screen>
     )
   }

@@ -50,7 +50,7 @@ export default class extends React.Component {
             label="ส่งอีเมลยืนยันอีกครั้ง"
             bgTransparent
             style={{ marginHorizontal: 24 }}
-            onPress={() => navigateAction({ ...this.props, page: 'tutorialBackCamera' })}
+            onPress={() => navigateAction({ ...this.props, page: 'waiting' })}
           />
         </View>
       </Screen>
