@@ -71,7 +71,9 @@ const dispatchToProps = dispatch => ({
 @setMutation
 export default class extends React.Component {
   handleInput = (props) => {
-    console.log(props)
+    const { updateUser, user } = this.props
+
+    updateUser('addressHome', { ...user.addressHome, [props.field]: props.value })
   }
 
   onHandleDistrict = ({ data, val }) => {
@@ -98,37 +100,37 @@ export default class extends React.Component {
       floorNo,
   	  trokSoiYaek,
   	  thanon,
-  	  district,
+  	  districtNameTH,
   	  districtCode,
   	  subDistrict,
   	  subDistrictCode,
-  	  province,
+  	  provinceNameTH,
   	  provinceCode,
   	  zipCode
     } = user.addressHome
     
 
     const data = {
-      countryCode: "TH",
-  	  addressNoTH: "31/54",
-  	  moo: "2",
-      addressVillageTH: "ลัดลาแลน",
-      floorNo: "5",
-  	  trokSoiYaek: "22",
-  	  thanon: "รัชดา",
-  	  district: "2345",
-  	  districtCode: "1234",
-  	  subDistrict: "1234",
-  	  subDistrictCode: "1234",
-  	  province: "1234",
-  	  provinceCode: "1234",
-  	  zipCode: "84000"
+      countryCode,
+  	  addressNoTH,
+  	  moo,
+      addressVillageTH,
+      floorNo,
+  	  trokSoiYaek,
+  	  thanon,
+  	  district: districtNameTH,
+  	  districtCode,
+  	  subDistrict,
+  	  subDistrictCode,
+  	  province: provinceNameTH,
+  	  provinceCode,
+  	  zipCode
     }
-
+    
     const res = await this.props.savePermanentAddress({ variables: { input: data } })
     if (res.data.savePermanentAddress.success) {
       console.log('OK')
-      navigateAction({ ...this.props, page: 'passcode' })
+      navigateAction({ ...this.props, page: 'chooseWork' })
     }
   }
 
