@@ -40,6 +40,7 @@ export default class Demo extends Component {
   }
 
   _onSaveEvent = async (result) => {
+    const { navigateAction } = this.props
     const token = await AsyncStorage.getItem("access_token")
 
     const data = new FormData()
