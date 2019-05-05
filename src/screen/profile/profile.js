@@ -163,7 +163,9 @@ export default class extends React.Component {
           if (martialStatus === 'สมรส' && flagChlid === 'มี') {
             navigateAction({ ...this.props, page: 'marry' })
             this.props.navigation.navigate('marry', { redirec: 'child' })
-          } else if (flagChlid === 'ไม่มี') navigateAction({ ...this.props, page: 'career' })
+          } 
+          else if (martialStatus === 'สมรส') navigateAction({ ...this.props, page: 'marry' })
+          else if (flagChlid === 'ไม่มี') navigateAction({ ...this.props, page: 'career' })
           else if (flagChlid === 'มี') navigateAction({ ...this.props, page: 'child' })
 
         }
@@ -180,7 +182,7 @@ export default class extends React.Component {
         <NavBar
           title="ข้อมูลส่วนตัว"
           navLeft={
-            <TouchableOpacity onPress={() => { }}>
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }

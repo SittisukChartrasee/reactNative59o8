@@ -185,7 +185,7 @@ export default class extends React.Component {
         <NavBar
           title="ข้อมูลคู่สมรส"
           navLeft={
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }

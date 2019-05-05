@@ -66,7 +66,7 @@ export default class extends React.Component {
             ) : (
               <View style={{ flex: 1 }}>
                 <View style={{ height: 56, flexDirection: 'row' }}>
-                  <TouchableHighlight style={{ flex: .2, justifyContent: 'center', alignItems: 'center' }}>
+                  <TouchableHighlight onPress={() => this.props.navigation.goBack()} style={{ flex: .2, justifyContent: 'center', alignItems: 'center' }}>
                     <Image source={images.iconback} />
                   </TouchableHighlight>
                   <View style={{ flex: .2 }} />

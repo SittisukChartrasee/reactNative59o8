@@ -83,11 +83,17 @@ export default class extends React.Component {
       isPolitician: checkActiveData(this.state.choice).IS_TRUE
     }
 
-    const res = await this.props.saveFraud({ variables: { input: data } })
-    if (res.data.saveFraud.success) {
-      console.log('OK')
-      navigateAction({ ...this.props, page: 'profile' })
-    }
+    this.props.saveFraud({ variables: { input: data } })
+      .then(res => {
+        console.log(res)
+        if (res.data.saveFraud.success) {
+          navigateAction({ ...this.props, page: 'profile' })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    
   }
 
   render() {
