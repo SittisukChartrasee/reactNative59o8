@@ -53,7 +53,7 @@ export default class extends React.Component {
   }
 
   onPress = () => {
-    
+    this.props.navigation.goBack()
   }
   
   render() {

@@ -1,11 +1,7 @@
 import React from 'react'
 import {
   View,
-  Text,
   Image,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
   Dimensions,
   AsyncStorage,
 } from 'react-native'
@@ -16,7 +12,7 @@ import Screen from '../component/screenComponent'
 import colors from '../config/colors'
 import images from '../config/images'
 import Input from '../component/input'
-import { LongPositionButton, NextButton } from '../component/button'
+import { LongPositionButton } from '../component/button'
 import Modal from '../component/modal'
 import { navigateAction } from '../redux/actions'
 import { requestOtp } from '../redux/actions/root-active'
@@ -103,7 +99,9 @@ export default class extends React.Component {
           {
             fields.map((setField, key) => Input({
               ...setField,
-              // value: user
+              value: (setField.field === 'idCard')
+                ? this.props.user.profile.idCard
+                : this.props.user.contact[setField.field],
               handleInput: value => this.handleInput(value)
             }, key))
           }

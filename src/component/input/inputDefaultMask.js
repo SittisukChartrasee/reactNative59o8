@@ -28,10 +28,11 @@ export default class extends React.Component {
 
     option: "999 AAA SSS ***",
     label: 'label',
+    value: '',
   }
 
   state = {
-    value: '',
+    value: this.props.value,
   }
 
   handleInput = (value) => {

@@ -28,12 +28,12 @@ import branchComplete from '../screen/complete'
 import branchsignature from '../screen/signature'
 
 const MainNavigator = createStackNavigator({
-  // welcome,
-  // login,
-  // checkpoint,
-  // otp,
-  // passcode,
-  // confirmPasscode,
+  welcome,
+  login,
+  checkpoint,
+  otp,
+  passcode,
+  confirmPasscode,
   condi,
   lockUser,
   fatca,
