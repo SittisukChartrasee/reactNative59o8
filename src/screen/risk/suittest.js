@@ -10,9 +10,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
-import { TText, TBold, TSemiBold, TLight } from '../../component/texts'
-import colors from '../../config/colors'
-import { LongButton, NextButton } from '../../component/button'
+import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
 import { Choice } from '../../component/cardSelect'
@@ -53,7 +51,6 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
 
   onPress = (obj) => {
-    console.log(obj.choice[0].answer)
     this.props.updateSuittest('suittest', obj.choice)
     this.props.updateSuittest('sumSuittest', checkActiveData(obj.choice).IS_SUM)
   }

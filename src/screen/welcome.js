@@ -59,7 +59,8 @@ export default class extends React.Component {
 
   componentDidMount = async () => {
     const a = await AsyncStorage.getItem('access_token')
-    console.log('token', a)
+    const b = await AsyncStorage.getItem('user_token')
+    console.log('token', a, 'user_token', b)
   }
 
   handleInput = (obj) => {

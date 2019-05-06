@@ -13,30 +13,35 @@ import images from '../config/images'
 import { isIphoneX } from '../config/helper'
 import { TLight } from '../component/texts'
 import { NavBar } from '../component/gradient'
-import { LongButton } from '../component/button'
 import { navigateAction } from '../redux/actions'
+import setMutation from '../containers/mutation'
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
   state = {
     agree: false,
   }
+
+  onNext = async () => {
+    const { navigateAction } = this.props
+
+    const res = await this.props.acceptTerm()
+    if (res.data.acceptTerm.success) {
+      navigateAction({ ...this.props, page: 'tutorialBackCamera' })
+    }
+  }
+  
   render() {
     const { agree } = this.state
-    const { navigateAction, navigation } = this.props
     return (
       <View style={{ flex: 1, backgroundColor: 'white', marginBottom: isIphoneX() ? '7%' : 16 }}>
         <NavBar
           title="เงื่อนไขการเปิดบัญชี"
-          // navLeft={
-          //   <TouchableOpacity onPress={() => navigation.goBack()}>
-          //     <Image source={images.iconback} />
-          //   </TouchableOpacity>
-          // }
           navRight={
             <TouchableOpacity>
               <Image source={images.iconlogoOff} />
@@ -73,7 +78,7 @@ export default class extends React.Component {
           </TouchableOpacity>
           <LongButton
             label="ยืนยัน"
-            onPress={() => navigateAction({ ...this.props, page: 'tutorialBackCamera' })}
+            onPress={this.onNext}
             style={{ marginHorizontal: 24 }}
             disabled={!agree}
           />
