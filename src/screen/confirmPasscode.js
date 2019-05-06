@@ -36,6 +36,7 @@ export default class extends React.Component {
       if (res.success) {
         navigateAction({ ...this.props, page: 'condi' })
         AsyncStorage.setItem('access_token', res.result.access_token)
+        AsyncStorage.setItem('user_token', res.result.user_token)
       }
     }
   }

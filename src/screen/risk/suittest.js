@@ -18,6 +18,7 @@ import Input from '../../component/input'
 import { Choice } from '../../component/cardSelect'
 import { suittest } from '../../redux/actions/commonAction'
 import { navigateAction } from '../../redux/actions'
+import setMutation from '../../containers/mutation'
 
 const checkActiveData = (data) => {
   return data.reduce((pre, curr, inx, arr) => {
@@ -39,6 +40,7 @@ const checkActiveData = (data) => {
   })
 }
 
+const getBoolean = (arr) => arr.map(d => d.select)
 
 const mapToProps = ({ suitReducer }) => ({ suitReducer })
 const dispatchToProps = dispatch => ({
@@ -47,15 +49,48 @@ const dispatchToProps = dispatch => ({
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
 
   onPress = (obj) => {
+    console.log(obj.choice[0].answer)
     this.props.updateSuittest('suittest', obj.choice)
     this.props.updateSuittest('sumSuittest', checkActiveData(obj.choice).IS_SUM)
   }
 
+  onNext = () => {
+    const { navigateAction, suitReducer } = this.props
+
+    const data = {
+      suit01: suitReducer.suittest[0].answer,
+      suit02: suitReducer.suittest[1].answer,
+      suit03: suitReducer.suittest[2].answer,
+      suit04: suitReducer.suittest[3].answer,
+      suit04Array: getBoolean(suitReducer.suittest[3].choice),
+      suit05: suitReducer.suittest[4].answer,
+      suit06: suitReducer.suittest[5].answer,
+      suit07: suitReducer.suittest[6].answer,
+      suit08: suitReducer.suittest[7].answer,
+      suit09: suitReducer.suittest[8].answer,
+      suit10: suitReducer.suittest[9].answer,
+      suit11: suitReducer.suittest[10].answer,
+      suit12: suitReducer.suittest[11].answer,
+    }
+
+    this.props.saveSuittest({ variables: { input: data } })
+      .then(res => {
+        console.log(res)
+        if (res.data.saveSuittest.success) {
+          navigateAction({ ...this.props, page: 'reviewScore' })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
   render() {
-    const { navigation, navigateAction } = this.props
+    const { navigation } = this.props
     const suittest = this.props.suitReducer.suittest
     return (
       <Screen color="transparent">
@@ -79,7 +114,7 @@ export default class extends React.Component {
             paddingBottom: 100
           })
         }
-        <NextButton disabled={checkActiveData(suittest).IS_TRUE} onPress={() => navigateAction({ ...this.props, page: 'reviewScore' })}/>
+        <NextButton disabled={checkActiveData(suittest).IS_TRUE} onPress={this.onNext}/>
       </Screen>
     )
   }

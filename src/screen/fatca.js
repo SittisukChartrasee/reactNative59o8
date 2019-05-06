@@ -65,11 +65,16 @@ export default class extends React.Component {
       isHoldingUsCard: checkActiveData(fatca).IS_TRUE
     }
 
-    const res = await this.props.saveFatca({ variables: { input: data } })
-    if (res.data.saveFatca.success) {
-      console.log('OK')
-      navigateAction({ ...this.props, page: 'fraud' })
-    }
+    this.props.saveFatca({ variables: { input: data } })
+      .then(res => {
+        if (res.data.saveFatca.success) {
+          navigateAction({ ...this.props, page: 'fraud' })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    
   }
 
   render() {

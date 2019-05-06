@@ -150,6 +150,15 @@ const saveMailingAddress = gql`
   }
 `
 
+const saveSuittest = gql`
+  mutation saveSuittest($input: NewSuitTest!) {
+    saveSuittest(input: $input) {
+      success
+      message
+    }
+  }
+`
+
 export default compose(
   graphql(saveSpouse, { name: 'saveSpouse' }),
   graphql(saveCareer, { name: 'saveCareer' }),
@@ -167,5 +176,6 @@ export default compose(
   graphql(savePermanentAddress, { name: 'savePermanentAddress' }),
   graphql(saveWorkplaceAddress, { name: 'saveWorkplaceAddress' }),
   graphql(saveCurrentAddress, { name: 'saveCurrentAddress' }),
-  graphql(saveMailingAddress, { name: 'saveMailingAddress' })
+  graphql(saveMailingAddress, { name: 'saveMailingAddress' }),
+  graphql(saveSuittest, { name: 'saveSuittest' })
 )
