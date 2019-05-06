@@ -18,7 +18,7 @@ export default class extends React.PureComponent {
   }
 
   state = {
-    value: this.props.value,
+    value: '',
   }
 
   handleInput = (value) => {
