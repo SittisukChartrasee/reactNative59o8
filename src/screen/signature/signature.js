@@ -61,7 +61,7 @@ export default class Demo extends Component {
       type: 'image/jpg',
       name: 'sign.jpg'
     })
-    const url = 'upload'
+    const url = 'upload-signature'
     const res = await request(url, {
       method: 'POST',
       body: data
