@@ -35,7 +35,7 @@ export default class extends React.Component {
       type: 'image/jpg',
       name: 'Idcard.jpg'
     })
-    const url = 'upload'
+    const url = 'upload-idcard'
     const res = await request(url, {
       method: 'POST',
       body: data

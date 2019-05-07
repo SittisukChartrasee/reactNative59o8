@@ -36,7 +36,7 @@ export default class extends React.Component {
       type: 'image/jpg',
       name: 'selfie.jpg'
     })
-    const url = 'upload'
+    const url = 'upload-selfie'
     const res = await request(url, {
       method: 'POST',
       body: data

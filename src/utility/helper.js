@@ -15,7 +15,7 @@ const month = [
 
 export const convertDate = (date) => {
   const splitDate = date.split('-')
-  const convert = `${splitDate[0]}-${month.indexOf(splitDate[1]) + 1}-${splitDate[2]}`
+  const convert = `${splitDate[2]}-${(month.indexOf(splitDate[1]) + 1).toString().padStart(2, '00')}-${splitDate[0].toString().padStart(2, '00')}`
   return new Date(convert)
 }
 

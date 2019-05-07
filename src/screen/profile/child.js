@@ -31,6 +31,7 @@ export default class extends React.Component {
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
         type: 'dropdown',
+        init: [{ value: 'นาย' }, { value: 'นาง' }, { value: 'นางสาว' }],
         field: 'jcnumber',
       }, {
         label: 'ชื่อ (ภาษาไทย)',
@@ -65,6 +66,7 @@ export default class extends React.Component {
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
         type: 'dropdown',
+        init: [{ value: 'นาย' }, { value: 'นาง' }, { value: 'นางสาว' }],
         field: 'jcnumber',
       }, {
         label: 'ชื่อ (ภาษาไทย)',
