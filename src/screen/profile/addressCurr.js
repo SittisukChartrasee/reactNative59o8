@@ -48,10 +48,10 @@ const fields = [
   }, {
     label: 'แขวง/ตำบล',
     type: 'search',
-    field: 'districtNameTH', // districtCode
+    field: 'subDistrict', //subDistrictCode
   }, {
     label: 'เขต/อำเภอ',
-    field: 'subDistrict', //subDistrictCode
+    field: 'districtNameTH', // districtCode
   }, {
     label: 'จังหวัด',
     field: 'provinceNameTH', // provinceCode
