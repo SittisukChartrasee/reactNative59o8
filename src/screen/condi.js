@@ -15,6 +15,7 @@ import { TLight } from '../component/texts'
 import { NavBar } from '../component/gradient'
 import { navigateAction } from '../redux/actions'
 import setMutation from '../containers/mutation'
+import { LongButton } from '../component/button'
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({

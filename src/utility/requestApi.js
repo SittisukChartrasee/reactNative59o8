@@ -7,7 +7,7 @@ export default async (url, options, verifytoken) => {
       ...options,
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
+        // 'Content-Type': 'application/json',
         ...(token => ((token) ? ({
           Authorization: token ? `Bearer ${token}` : '',
         }) : {}))(verifytoken),
