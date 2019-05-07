@@ -3,10 +3,12 @@ import {
   View,
   Text,
   Image,
+  Platform,
   StyleSheet,
   TouchableHighlight,
   TouchableOpacity,
   SafeAreaView,
+  PermissionsAndroid,
   AsyncStorage
 } from 'react-native'
 import { connect } from 'react-redux'
@@ -30,6 +32,16 @@ export default class Demo extends Component {
     dragged: null,
   }
 
+  componentWillMount = async () => {
+    
+    if (Platform.OS === 'android') {
+      PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+      ])
+    }
+  }
+
 
   saveSign = async () => {
     this.signature.saveImage()
@@ -39,7 +51,7 @@ export default class Demo extends Component {
     this.signature.resetImage()
   }
 
-  _onSaveEvent = async (result) => {
+  _onSaveEvent = async result => {
     const { navigateAction } = this.props
     const token = await AsyncStorage.getItem("access_token")
 
@@ -102,6 +114,8 @@ export default class Demo extends Component {
             </TouchableOpacity>
           }
         />
+
+        <Image source={{ uri: '/storage/emulated/0/saved_signature/signature.png' }}/>
 
         <SafeAreaView style={{ flex: 1 }}>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems:'center' }}>

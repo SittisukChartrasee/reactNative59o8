@@ -46,7 +46,7 @@ export default class extends React.Component {
       <View style={styles.container}>
         <RNCamera
           style={styles.preview}
-          type={this.state.switch ? RNCamera.Constants.Type.back : RNCamera.Constants.Type.front}
+          type={this.props.switchCamera ? this.state.switch ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back : RNCamera.Constants.Type.back}
           flashMode={RNCamera.Constants.FlashMode.on}
           androidCameraPermissionOptions={{
             title: 'Permission to use camera',
@@ -83,8 +83,8 @@ export default class extends React.Component {
                       <View style={{ flex: 1, backgroundColor: colors.white, borderRadius: 72/2, borderColor: colors.black, borderWidth: 3 }} />
                     </TouchableHighlight>
                   </View>
-                  { this.props.switchCamera ? <TouchableHighlight
-                    onPress={() => {}}
+                  { this.props.switchCamera ? <TouchableOpacity
+                    onPress={() => this.setState({ switch: !this.state.switch })}
                     style={{
                       flex: 1,
                       justifyContent: 'center',
@@ -92,7 +92,7 @@ export default class extends React.Component {
                     }}
                   >
                     <Image source={images.iconCameraRefresh} />
-                  </TouchableHighlight> : <View style={{ flex: 1 }}/>}
+                  </TouchableOpacity> : <View style={{ flex: 1 }}/>}
                 </View>
               </View>
             )

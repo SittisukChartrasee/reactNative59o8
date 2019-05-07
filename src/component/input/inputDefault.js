@@ -30,7 +30,7 @@ export default class extends React.Component {
         </View>
         <TextInput
           style={{
-            height: 40,
+            height: 45,
             fontFamily: font.sukhumvitBold,
             fontSize: 18
           }}
