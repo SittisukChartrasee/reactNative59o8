@@ -131,7 +131,7 @@ export default class extends React.Component {
                 ? this.props.user.profile.idCard
                 : this.props.user.contact[setField.field],
               handleInput: value => this.handleInput(value),
-              error: this.onValidation(setField.field)
+              err: this.onValidation(setField.field)
             }, key))
           }
         

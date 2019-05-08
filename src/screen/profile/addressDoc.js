@@ -201,7 +201,7 @@ export default class extends React.Component {
               onHandleDistrict: this.onHandleDistrict,
               value: this.props.user.addressDoc[d.field],
               handleInput: (props) => this.handleInput(props),
-              error: this.onValidation(d.field)
+              err: this.onValidation(d.field)
             }, key))
           }
         </ScrollView>

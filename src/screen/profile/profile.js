@@ -201,7 +201,6 @@ export default class extends React.Component {
 
   render() {
     const { user } = this.props
-    const { error } = this.state
     return (
       <Screen color="transparent">
         <NavBar
@@ -231,7 +230,7 @@ export default class extends React.Component {
               value: user.profile[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
-              error: this.onValidation(d.field)
+              err: this.onValidation(d.field)
             }, key))
           }
         </ScrollView>
