@@ -30,6 +30,7 @@ export default class extends React.Component {
     modal: false,
     expireSatus: 'มีวันหมดอายุ',
     flagChlid: 'ไม่มี',
+    error: [],
     fields: [
       {
         label: 'เลขบัตรประชาชน',
@@ -158,8 +159,6 @@ export default class extends React.Component {
       .then(res => {
         console.log(data, res)
         if (res.data.saveIdentity.success) {
-          
-          
           if (martialStatus === 'สมรส' && flagChlid === 'มี') {
             navigateAction({ ...this.props, page: 'marry' })
             this.props.navigation.navigate('marry', { redirec: 'child' })
@@ -168,6 +167,8 @@ export default class extends React.Component {
           else if (flagChlid === 'ไม่มี') navigateAction({ ...this.props, page: 'career' })
           else if (flagChlid === 'มี') navigateAction({ ...this.props, page: 'child' })
 
+        } else if (!res.data.saveIdentity.success) {
+          this.setState({error: []})
         }
       })
       .catch(err => {
@@ -177,6 +178,7 @@ export default class extends React.Component {
 
   render() {
     const { user } = this.props
+    const { error } = this.state
     return (
       <Screen color="transparent">
         <NavBar
@@ -206,6 +208,7 @@ export default class extends React.Component {
               value: user.profile[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
+              error: error.findIndex(x => x.field === d.field) !== -1 ? error[error.findIndex(x => x.field === d.field)].errorText : null
             }, key))
           }
         </ScrollView>

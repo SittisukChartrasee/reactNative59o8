@@ -2,7 +2,7 @@ import { CHANGE_USER } from '../types'
 
 const init = {
   profile: {
-    idCard: '1840100464891',
+    idCard: '',
     jcNumber: 'ME1122454670',
     expireDateFlag: 'Fri Jan 01 2562 00:00:00 GMT+0700 (+07)',
     isNoDocExpDate: false,
@@ -95,8 +95,8 @@ const init = {
   contact: {
     workPhone: '',
     homePhone: '',
-    mobilePhone: "0830015610",
-    email: "b@b.com"
+    mobilePhone: "",
+    email: ""
   },
   career: {
     busType: '',

@@ -47,18 +47,20 @@ export default class extends React.Component {
       handleInput,
       option,
       label,
-      field
+      field,
+      error
     } = this.props
 
     return (
       <TextMask
         type={'custom'}
         options={{
-          mask: option
+          mask: option,
         }}
         customTextInput={Imaterial}
         customTextInputProps={{
           label,
+          error
         }}
         value={this.state.value}
         onChangeText={this.handleInput}

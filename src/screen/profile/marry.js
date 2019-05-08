@@ -31,6 +31,7 @@ export default class extends React.Component {
     modal: false,
     expireSatus: 'มีวันหมดอายุ',
     nationSatus: 'ไทย',
+    error: [],
     fields: [
       {
         label: 'สัญชาติ',
@@ -169,6 +170,8 @@ export default class extends React.Component {
         } else if (res.data.saveSpouse.success) {
           if (redirec) return navigateAction({ ...this.props, page: redirec })
           navigateAction({ ...this.props, page: 'career' })
+        } else if (!res.data.saveSpouse.success) {
+          this.setState({error: []})
         }
       })
       .catch(err => {
@@ -179,7 +182,7 @@ export default class extends React.Component {
 
   render() {
     const { user } = this.props
-    const { fields } = this.state
+    const { fields, error } = this.state
     return (
       <Screen color="transparent">
         <NavBar
@@ -209,6 +212,7 @@ export default class extends React.Component {
               value: user.spouse[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
+              error: error.findIndex(x => x.field === d.field) !== -1 ? error[error.findIndex(x => x.field === d.field)].errorText : null
             }, key))
           }
         </ScrollView>

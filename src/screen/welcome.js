@@ -7,6 +7,7 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import findIndex from 'lodash/findIndex'
 import { TBold } from '../component/texts'
 import Screen from '../component/screenComponent'
 import colors from '../config/colors'
@@ -17,6 +18,7 @@ import Modal from '../component/modal'
 import { navigateAction } from '../redux/actions'
 import { requestOtp } from '../redux/actions/root-active'
 import { updateUser } from '../redux/actions/commonAction'
+// import * as validate from '../utility/validation'
 
 const { width: widthScreen } = Dimensions.get('window')
 
@@ -25,18 +27,18 @@ const fields = [
     type: 'mask',
     label: 'หมายเลขบัตรประชาชน',
     field: 'idCard',
-    option: '999 999 999 9999',
+    option: '999 999 999 9999'
   },
   {
     type: 'textInput',
     label: 'อีเมล',
-    field: 'email',
+    field: 'email'
   },
   {
     type: 'mask',
     label: 'หมายเลขโทรศัพท์มือถือ',
     field: 'mobilePhone',
-    option: '099 999 9999',
+    option: '099 999 9999'
   }
 ]
 
@@ -51,6 +53,7 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     modal: false,
+    details: []
   }
 
   componentDidMount = async () => {
@@ -61,32 +64,42 @@ export default class extends React.Component {
 
   handleInput = (obj) => {
     const { user } = this.props
+    const { details } = this.state
     if (obj.field === 'idCard') {
       this.props.updateUser('profile', { ...user.profile, [obj.field]: obj.value.split(' ').join('') })
     } else if (obj.field === 'email') {
       this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value })
     } else if (obj.field === 'mobilePhone') {
-      this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value.split(' ').join('') })      
+      this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value.split(' ').join('') })
     }
   }
 
   onNext = async () => {
     const { navigateAction, user } = this.props
-    
+
     const data = {
       idCard: user.profile.idCard,
-      email: user.contact.email,
+      email: (user.contact.email).trim().toLowerCase(),
       mobilePhone: user.contact.mobilePhone,
     }
 
     const res = await this.props.requestOtp(data)
+    console.log(res)
     if (res.success) {
-      navigateAction({ ...this.props, page: 'otp' })
+      // navigateAction({ ...this.props, page: 'otp' })
+    } else {
+      this.setState({
+        details: [
+          { field: 'idCard', description: "เลขบัตรประชาชนไม่ถูกต้อง" },
+          { field: 'email', description: 'รูปแบบอีเมลไม่ถูกต้อง ตัวอย่าง example@email.com' },
+          { field: 'mobilePhone', description: 'รูปแบบเบอร์โทรศัทพ์ไม่ถูกต้อง' }
+        ]
+      })
     }
   }
 
   render() {
-    const { modal } = this.state
+    const { modal, details } = this.state
     const sizing = widthScreen <= 320 ? { width: 160, height: 110 } : {}
     return (
       <Screen>
@@ -102,10 +115,12 @@ export default class extends React.Component {
               value: (setField.field === 'idCard')
                 ? this.props.user.profile.idCard
                 : this.props.user.contact[setField.field],
-              handleInput: value => this.handleInput(value)
+              handleInput: value => this.handleInput(value),
+              // error: details.findIndex(x => x.field === setField.field) !== -1 ? details[details.findIndex(x => x.field === setField.field)].description : null
+              // error: details[findIndex(details, setField.field)].description
             }, key))
           }
-        
+
         </View>
         <LongPositionButton label="ถัดไป" onPress={this.onNext} />
 
@@ -116,7 +131,7 @@ export default class extends React.Component {
             onPress: () => this.setState({ modal: false })
           })
         }
-      </Screen> 
+      </Screen>
     )
   }
 }
