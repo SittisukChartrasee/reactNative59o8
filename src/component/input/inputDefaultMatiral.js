@@ -11,8 +11,8 @@ export default class extends React.PureComponent {
     label: 'label',
     fs: 16,
     styled: {},
-    handleInput: () => {},
-    onChangeText: () => {},
+    handleInput: () => { },
+    onChangeText: () => { },
     field: 'fieldName',
     value: '',
   }

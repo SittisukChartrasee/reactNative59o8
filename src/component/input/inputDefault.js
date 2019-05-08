@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native'
+import TextField from './inputDefaultMatiral'
 import font from '../../config/fonts'
 import images from '../../config/images'
 import { TLight } from '../texts'
@@ -15,30 +16,30 @@ export default class extends React.Component {
     handleInput: () => {},
     field: 'fieldName',
     label: 'label',
+    err: '',
     value: '',
   }
 
   render() {
-    const { handleInput, field, label } = this.props
+    const { handleInput, field, label, err } = this.props
     return (
       <View style={{ marginTop: 17 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <TLight fontSize={14} textAlign="left" color={colors.grey}>{label}</TLight>
-          <TouchableOpacity onPress={() => handleInput({ type: 'modal', field, value: this.props.value })}>
-            <Image source={images.iconinformation} />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: -25 }}>
+          <TLight fontSize={14} textAlign="left" color={err ? 'red' :colors.grey}>{label}</TLight>
+          <TouchableOpacity onPress={() => handleInput({ type: 'modal', field })}>
+            <Image source={images.iconinformation} style={{ ...(err => err && ({ tintColor: 'red' }))(err) }}/>
           </TouchableOpacity>
         </View>
-        <TextInput
-          style={{
-            height: 45,
-            fontFamily: font.sukhumvitBold,
-            fontSize: 18
+        <TextField
+          label=''
+          styled={{
+            textAlign: 'left',
           }}
+          error={ err ? err : ''}
           value={this.props.value}
           onChangeText={value => handleInput({ value, type: 'Icustom', field })}
           placeholder="ตัวอย่าง JT9-9999999-99"
         />
-        <View style={{ height: 1, backgroundColor: colors.smoky }} />
       </View>
     )
   }

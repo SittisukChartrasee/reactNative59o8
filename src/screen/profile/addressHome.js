@@ -6,6 +6,7 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import find from 'lodash/find'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
@@ -72,6 +73,11 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     modal: false,
+    ReconditionRequired: [],
+    InvalidArgument: [
+      { field: 'floorNo', description: 'รูปแบบไม่ถูกต้อง' },
+      { field: 'thanon', description: 'รูปแบบไม่ถูกต้อง' }
+    ],
   }
 
 
@@ -96,6 +102,18 @@ export default class extends React.Component {
       provinceNameTH: val.data.getAddressCode.provinceNameTH
     }
     this.props.updateUser('addressHome', { ...user.addressHome, ...mapData })
+  }
+
+  onValidation = (field) => {
+    const { ReconditionRequired, InvalidArgument } = this.state
+    const Required = find(ReconditionRequired, (o) => o.field === field)
+    const Invalid = find(InvalidArgument, (o) => o.field === field)
+    if (Required) {
+      return Required.description
+    } else if (Invalid) {
+      return Invalid.description
+    }
+    return null
   }
 
   onNext = async () => {
@@ -175,6 +193,7 @@ export default class extends React.Component {
               onHandleDistrict: this.onHandleDistrict,
               value: this.props.user.addressHome[d.field],
               handleInput: (props) => this.handleInput(props),
+              error: this.onValidation(d.field)
             }, key))
           }
         </ScrollView>

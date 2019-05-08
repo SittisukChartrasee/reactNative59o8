@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import findIndex from 'lodash/findIndex'
+import find from 'lodash/find'
 import { TBold } from '../component/texts'
 import Screen from '../component/screenComponent'
 import colors from '../config/colors'
@@ -54,7 +54,10 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     modal: false,
-    details: []
+    ReconditionRequired: [],
+    InvalidArgument: [
+      { field: 'mobilePhone', description: 'รูปแบบเบอร์โทรศัทพ์ไม่ถูกต้อง' }
+    ],
   }
 
   componentDidMount = async () => {
@@ -75,6 +78,18 @@ export default class extends React.Component {
     }
   }
 
+  onValidation = (field) => {
+    const { ReconditionRequired, InvalidArgument } = this.state
+    const Required = find(ReconditionRequired, (o) => o.field === field)
+    const Invalid = find(InvalidArgument, (o) => o.field === field)
+    if (Required) {
+      return Required.description
+    } else if (Invalid) {
+      return Invalid.description
+    }
+    return null
+  }
+
   onNext = async () => {
     const { navigateAction, user } = this.props
 
@@ -85,22 +100,21 @@ export default class extends React.Component {
     }
 
     const res = await this.props.requestOtp(data)
-    console.log(res)
     if (res.success) {
-      // navigateAction({ ...this.props, page: 'otp' })
-    } else {
-      this.setState({
-        details: [
-          { field: 'idCard', description: "เลขบัตรประชาชนไม่ถูกต้อง" },
-          { field: 'email', description: 'รูปแบบอีเมลไม่ถูกต้อง ตัวอย่าง example@email.com' },
-          { field: 'mobilePhone', description: 'รูปแบบเบอร์โทรศัทพ์ไม่ถูกต้อง' }
-        ]
-      })
+      navigateAction({ ...this.props, page: 'otp' })
+    } else if (!res.success) {
+      switch (res.message) {
+        case 'ReconditionRequired':
+          this.setState({ ReconditionRequired: res.details })
+        case 'InvalidArgument':
+          this.setState({ InvalidArgument: res.details })
+        default: return null
+      }
     }
   }
 
   render() {
-    const { modal, details } = this.state
+    const { modal } = this.state
     const sizing = widthScreen <= 320 ? { width: 160, height: 110 } : {}
     return (
       <Screen>
@@ -117,8 +131,7 @@ export default class extends React.Component {
                 ? this.props.user.profile.idCard
                 : this.props.user.contact[setField.field],
               handleInput: value => this.handleInput(value),
-              // error: details.findIndex(x => x.field === setField.field) !== -1 ? details[details.findIndex(x => x.field === setField.field)].description : null
-              // error: details[findIndex(details, setField.field)].description
+              error: this.onValidation(setField.field)
             }, key))
           }
         
