@@ -42,6 +42,7 @@ export default class extends React.PureComponent {
         tintColor={colors.grey}
         baseColor={colors.grey}
         titleFontSize={12}
+        error={this.props.error}
         labelFontSize={this.props.labelFontSize !== undefined ? 20 : 14}
         activeLineWidth={this.props.activeLineWidth !== undefined ? 0 : 2}
         fontSize={18}
