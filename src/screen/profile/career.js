@@ -163,7 +163,7 @@ export default class extends React.Component {
               value: user.career[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
-              error: this.onValidation(d.field)
+              err: this.onValidation(d.field)
             }, key))
           }
         </ScrollView>

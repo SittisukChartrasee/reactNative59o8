@@ -15,6 +15,7 @@ export default class extends React.PureComponent {
     onChangeText: () => { },
     field: 'fieldName',
     value: '',
+    err: ''
   }
 
   state = {
@@ -22,7 +23,7 @@ export default class extends React.PureComponent {
   }
 
   handleInput = (value) => {
-    const { handleInput, field, onChangeText } = this.props
+    const { handleInput, field, onChangeText, err } = this.props
     this.setState({ value })
     onChangeText(value)
     handleInput({ value, type: 'textInput', field })
@@ -42,7 +43,7 @@ export default class extends React.PureComponent {
         tintColor={colors.grey}
         baseColor={colors.grey}
         titleFontSize={12}
-        error={this.props.error}
+        error={this.props.err}
         labelFontSize={this.props.labelFontSize !== undefined ? 20 : 14}
         activeLineWidth={this.props.activeLineWidth !== undefined ? 0 : 2}
         fontSize={18}
