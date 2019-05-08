@@ -4,6 +4,7 @@ import {
   Image,
   Dimensions,
   AsyncStorage,
+  ScrollView,
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -94,7 +95,7 @@ export default class extends React.Component {
           <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
           <TBold fontSize={20} color={colors.white} mt="10" mb="40">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
         </View>
-        <View style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}>
+        <ScrollView style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}>
 
           {
             fields.map((setField, key) => Input({
@@ -106,7 +107,7 @@ export default class extends React.Component {
             }, key))
           }
         
-        </View>
+        </ScrollView>
         <LongPositionButton label="ถัดไป" onPress={this.onNext} />
 
         {
