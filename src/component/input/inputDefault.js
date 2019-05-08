@@ -35,7 +35,7 @@ export default class extends React.Component {
           styled={{
             textAlign: 'left',
           }}
-          error={ err ? err : ''}
+          err={err}
           value={this.props.value}
           onChangeText={value => handleInput({ value, type: 'Icustom', field })}
           placeholder="ตัวอย่าง JT9-9999999-99"

@@ -4,6 +4,7 @@ import React from 'react'
 import {
   View,
   Image,
+  Text,
   TouchableOpacity,
 } from 'react-native'
 import { TBold, TLight } from '../texts';
@@ -78,6 +79,9 @@ const renderFormatText = (date) => {
 
 
 export default class extends React.Component {
+  static defaultProps = {
+    err: 'asdf',
+  }
   state = {
     date: [2562,'มกราคม',1]
   }
@@ -105,14 +109,16 @@ export default class extends React.Component {
     Picker.show()
   }
   render() {
+    const { err } = this.props
     return (
       <View>
         <TouchableOpacity onPress={() => this.onPicker()}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <TBold textAlign="left" color={colors.midnight}>{renderFormatText(this.state.date)}</TBold>
-            <Image source={images.iconCalenda} />
+            <Image source={images.iconCalenda} style={{ ...(err => err && ({ tintColor: 'rgb(213, 0, 0)' }))(err) }}/>
           </View>
-          <View style={{ height: 1, backgroundColor: colors.smoky, marginTop: 5 }} />
+          <View style={{ height: err ? 2 : 1, backgroundColor: err ? 'rgb(213, 0, 0)' : colors.smoky, marginTop: 5 }} />
+          <Text style={{ fontSize: 12, color: err ? 'rgb(213, 0, 0)' : undefined, marginTop: 4 }}>{err}</Text>
         </TouchableOpacity>
       </View>
     )

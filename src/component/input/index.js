@@ -86,7 +86,7 @@ export default (props, key) => {
     case 'dateExpire':
       return (
         <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
-          <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={colors.grey}>{props.label}</TLight>
+          <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={props.err ? 'rgb(213, 0, 0)' : colors.grey}>{props.label}</TLight>
           <InputPickerExpire {...props}/>
           <Star top={8}/>
         </View>

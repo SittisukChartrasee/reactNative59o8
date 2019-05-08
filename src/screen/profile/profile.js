@@ -34,7 +34,8 @@ export default class extends React.Component {
     ReconditionRequired: [],
     InvalidArgument: [
       { field: 'firstNameTH', description: 'รูปแบบไม่ถูกต้อง' },
-      { field: 'jcNumber', description: 'รูปแบบไม่ถูกต้อง' }
+      { field: 'jcNumber', description: 'รูปแบบไม่ถูกต้อง' },
+      { field: 'docExpDate', description: 'รูปแบบไม่ถูกต้อง' },
     ],
     fields: [
       {
