@@ -11,8 +11,8 @@ export default class extends React.PureComponent {
     label: 'label',
     fs: 16,
     styled: {},
-    handleInput: () => {},
-    onChangeText: () => {},
+    handleInput: () => { },
+    onChangeText: () => { },
     field: 'fieldName',
     value: '',
   }
@@ -29,6 +29,7 @@ export default class extends React.PureComponent {
   }
 
   render() {
+    const { error } = this.props
     return (
       <TextField
         {...this.props}
@@ -42,7 +43,8 @@ export default class extends React.PureComponent {
         tintColor={colors.grey}
         baseColor={colors.grey}
         titleFontSize={12}
-        error={this.props.error}
+        error={error ? error.description : null}
+        errorColor={colors.sunflower}
         labelFontSize={this.props.labelFontSize !== undefined ? 20 : 14}
         activeLineWidth={this.props.activeLineWidth !== undefined ? 0 : 2}
         fontSize={18}

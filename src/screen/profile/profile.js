@@ -208,7 +208,6 @@ export default class extends React.Component {
               value: user.profile[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
-              error: error.findIndex(x => x.field === d.field) !== -1 ? error[error.findIndex(x => x.field === d.field)].errorText : null
             }, key))
           }
         </ScrollView>

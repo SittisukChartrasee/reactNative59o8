@@ -7,7 +7,7 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import findIndex from 'lodash/findIndex'
+import find from 'lodash/find'
 import { TBold } from '../component/texts'
 import Screen from '../component/screenComponent'
 import colors from '../config/colors'
@@ -53,7 +53,10 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     modal: false,
-    details: []
+    ReconditionRequired: [
+      { field: 'email', description: 'รูปแบบอีเมลไม่ถูกต้อง ตัวอย่าง example@email.com' },
+    ],
+    InvalidArgument: [],
   }
 
   componentDidMount = async () => {
@@ -74,6 +77,18 @@ export default class extends React.Component {
     }
   }
 
+  handleValidation = (field) => {
+    const { ReconditionRequired, InvalidArgument } = this.state
+    const Required = find(ReconditionRequired, (o) => o.field === field)
+    const Invalid = find(ReconditionRequired, (o) => o.field === field)
+    if (Required) {
+      return { description: Required.description, status: 'R' }
+    } else if (Invalid) {
+      return { description: Invalid.description, status: 'I' }
+    }
+    return null
+  }
+
   onNext = async () => {
     const { navigateAction, user } = this.props
 
@@ -83,19 +98,27 @@ export default class extends React.Component {
       mobilePhone: user.contact.mobilePhone,
     }
 
-    const res = await this.props.requestOtp(data)
-    console.log(res)
-    if (res.success) {
-      // navigateAction({ ...this.props, page: 'otp' })
-    } else {
-      this.setState({
-        details: [
-          { field: 'idCard', description: "เลขบัตรประชาชนไม่ถูกต้อง" },
-          { field: 'email', description: 'รูปแบบอีเมลไม่ถูกต้อง ตัวอย่าง example@email.com' },
-          { field: 'mobilePhone', description: 'รูปแบบเบอร์โทรศัทพ์ไม่ถูกต้อง' }
-        ]
-      })
-    }
+    this.setState({
+      details: [
+        { field: 'idCard', description: "เลขบัตรประชาชนไม่ถูกต้อง" },
+        { field: 'email', description: 'รูปแบบอีเมลไม่ถูกต้อง ตัวอย่าง example@email.com' },
+        { field: 'mobilePhone', description: 'รูปแบบเบอร์โทรศัทพ์ไม่ถูกต้อง' }
+      ]
+    })
+
+    // const res = await this.props.requestOtp(data)
+    // console.log(res)
+    // if (res.success) {
+    //   navigateAction({ ...this.props, page: 'otp' })
+    // } else if (!res.success) {
+    //   switch (res.message) {
+    //     case 'ReconditionRequired':
+    //       this.setState({ ReconditionRequired: res.details })
+    //     case 'InvalidArgument':
+    //       this.setState({ InvalidArgument: res.details })
+    //     default: return null
+    //   }
+    // }
   }
 
   render() {
@@ -116,8 +139,7 @@ export default class extends React.Component {
                 ? this.props.user.profile.idCard
                 : this.props.user.contact[setField.field],
               handleInput: value => this.handleInput(value),
-              // error: details.findIndex(x => x.field === setField.field) !== -1 ? details[details.findIndex(x => x.field === setField.field)].description : null
-              // error: details[findIndex(details, setField.field)].description
+              error: this.handleValidation(setField.field)
             }, key))
           }
 
