@@ -24,7 +24,7 @@ export default class extends React.Component {
     const { handleInput, field, label, err } = this.props
     return (
       <View style={{ marginTop: 17 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: -25 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: -25, zIndex: 3 }}>
           <TLight fontSize={14} textAlign="left" color={err ? 'red' :colors.grey}>{label}</TLight>
           <TouchableOpacity onPress={() => handleInput({ type: 'modal', field })}>
             <Image source={images.iconinformation} style={{ ...(err => err && ({ tintColor: 'red' }))(err) }}/>

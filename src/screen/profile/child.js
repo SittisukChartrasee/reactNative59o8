@@ -30,9 +30,8 @@ export default class extends React.Component {
         type: 'titleHead'
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
-        type: 'dropdown',
-        init: [{ value: 'นาย' }, { value: 'นาง' }, { value: 'นางสาว' }],
-        field: 'jcnumber',
+        type: 'search',
+        field: 'titleChild1',
       }, {
         label: 'ชื่อ (ภาษาไทย)',
         type: 'textInput',
@@ -65,9 +64,8 @@ export default class extends React.Component {
         type: 'titleHead'
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
-        type: 'dropdown',
-        init: [{ value: 'นาย' }, { value: 'นาง' }, { value: 'นางสาว' }],
-        field: 'jcnumber',
+        type: 'search',
+        field: 'titleChild2',
       }, {
         label: 'ชื่อ (ภาษาไทย)',
         type: 'textInput',
