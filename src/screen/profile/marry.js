@@ -7,6 +7,7 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import find from 'lodash/find'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
@@ -31,7 +32,11 @@ export default class extends React.Component {
     modal: false,
     expireSatus: 'มีวันหมดอายุ',
     nationSatus: 'ไทย',
-    error: [],
+    ReconditionRequired: [],
+    InvalidArgument: [
+      { field: 'IDCardNo', description: 'รูปแบบไม่ถูกต้อง' },
+      { field: 'fistName', description: 'รูปแบบไม่ถูกต้อง' }
+    ],
     fields: [
       {
         label: 'สัญชาติ',
@@ -90,8 +95,6 @@ export default class extends React.Component {
     const { fields } = this.state
     const { updateUser, user } = this.props
 
-
-
     if (props.field === 'nationFlag') {
       updateUser('spouse', { ...user.spouse, [props.field]: props.value } )
       this.setState({
@@ -127,6 +130,18 @@ export default class extends React.Component {
     } else {
       updateUser('spouse', { ...user.spouse, [props.field]: props.value } )
     }
+  }
+
+  onValidation = (field) => {
+    const { ReconditionRequired, InvalidArgument } = this.state
+    const Required = find(ReconditionRequired, (o) => o.field === field)
+    const Invalid = find(InvalidArgument, (o) => o.field === field)
+    if (Required) {
+      return Required.description
+    } else if (Invalid) {
+      return Invalid.description
+    }
+    return null
   }
 
   onNext = async () => {
@@ -171,13 +186,18 @@ export default class extends React.Component {
           if (redirec) return navigateAction({ ...this.props, page: redirec })
           navigateAction({ ...this.props, page: 'career' })
         } else if (!res.data.saveSpouse.success) {
-          this.setState({error: []})
+          switch (res.data.saveSpouse.message) {
+            case 'ReconditionRequired':
+              this.setState({ ReconditionRequired: res.details })
+            case 'InvalidArgument':
+              this.setState({ InvalidArgument: res.details })
+            default: return null
+          }
         }
       })
       .catch(err => {
         console.log(err)
       })
-    
   }
 
   render() {
@@ -212,7 +232,7 @@ export default class extends React.Component {
               value: user.spouse[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
-              error: error.findIndex(x => x.field === d.field) !== -1 ? error[error.findIndex(x => x.field === d.field)].errorText : null
+              error: this.onValidation(d.field)
             }, key))
           }
         </ScrollView>

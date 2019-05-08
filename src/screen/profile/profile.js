@@ -6,6 +6,7 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import find from 'lodash/find'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
@@ -30,7 +31,11 @@ export default class extends React.Component {
     modal: false,
     expireSatus: 'มีวันหมดอายุ',
     flagChlid: 'ไม่มี',
-    error: [],
+    ReconditionRequired: [],
+    InvalidArgument: [
+      { field: 'firstNameTH', description: 'รูปแบบไม่ถูกต้อง' },
+      { field: 'jcNumber', description: 'รูปแบบไม่ถูกต้อง' }
+    ],
     fields: [
       {
         label: 'เลขบัตรประชาชน',
@@ -118,6 +123,18 @@ export default class extends React.Component {
     }
   }
 
+  onValidation = (field) => {
+    const { ReconditionRequired, InvalidArgument } = this.state
+    const Required = find(ReconditionRequired, (o) => o.field === field)
+    const Invalid = find(InvalidArgument, (o) => o.field === field)
+    if (Required) {
+      return Required.description
+    } else if (Invalid) {
+      return Invalid.description
+    }
+    return null
+  }
+
   onNext = async () => {
     const { expireSatus, flagChlid } = this.state
     const { navigateAction, user } = this.props
@@ -168,7 +185,13 @@ export default class extends React.Component {
           else if (flagChlid === 'มี') navigateAction({ ...this.props, page: 'child' })
 
         } else if (!res.data.saveIdentity.success) {
-          this.setState({error: []})
+          switch (res.data.saveIdentity.message) {
+            case 'ReconditionRequired':
+              this.setState({ ReconditionRequired: res.details })
+            case 'InvalidArgument':
+              this.setState({ InvalidArgument: res.details })
+            default: return null
+          }
         }
       })
       .catch(err => {
@@ -208,6 +231,7 @@ export default class extends React.Component {
               value: user.profile[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
+              error: this.onValidation(d.field)
             }, key))
           }
         </ScrollView>

@@ -53,10 +53,10 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     modal: false,
-    ReconditionRequired: [
-      { field: 'email', description: 'รูปแบบอีเมลไม่ถูกต้อง ตัวอย่าง example@email.com' },
+    ReconditionRequired: [],
+    InvalidArgument: [
+      { field: 'mobilePhone', description: 'รูปแบบเบอร์โทรศัทพ์ไม่ถูกต้อง' }
     ],
-    InvalidArgument: [],
   }
 
   componentDidMount = async () => {
@@ -77,14 +77,14 @@ export default class extends React.Component {
     }
   }
 
-  handleValidation = (field) => {
+  onValidation = (field) => {
     const { ReconditionRequired, InvalidArgument } = this.state
     const Required = find(ReconditionRequired, (o) => o.field === field)
-    const Invalid = find(ReconditionRequired, (o) => o.field === field)
+    const Invalid = find(InvalidArgument, (o) => o.field === field)
     if (Required) {
-      return { description: Required.description, status: 'R' }
+      return Required.description
     } else if (Invalid) {
-      return { description: Invalid.description, status: 'I' }
+      return Invalid.description
     }
     return null
   }
@@ -98,31 +98,22 @@ export default class extends React.Component {
       mobilePhone: user.contact.mobilePhone,
     }
 
-    this.setState({
-      details: [
-        { field: 'idCard', description: "เลขบัตรประชาชนไม่ถูกต้อง" },
-        { field: 'email', description: 'รูปแบบอีเมลไม่ถูกต้อง ตัวอย่าง example@email.com' },
-        { field: 'mobilePhone', description: 'รูปแบบเบอร์โทรศัทพ์ไม่ถูกต้อง' }
-      ]
-    })
-
-    // const res = await this.props.requestOtp(data)
-    // console.log(res)
-    // if (res.success) {
-    //   navigateAction({ ...this.props, page: 'otp' })
-    // } else if (!res.success) {
-    //   switch (res.message) {
-    //     case 'ReconditionRequired':
-    //       this.setState({ ReconditionRequired: res.details })
-    //     case 'InvalidArgument':
-    //       this.setState({ InvalidArgument: res.details })
-    //     default: return null
-    //   }
-    // }
+    const res = await this.props.requestOtp(data)
+    if (res.success) {
+      navigateAction({ ...this.props, page: 'otp' })
+    } else if (!res.success) {
+      switch (res.message) {
+        case 'ReconditionRequired':
+          this.setState({ ReconditionRequired: res.details })
+        case 'InvalidArgument':
+          this.setState({ InvalidArgument: res.details })
+        default: return null
+      }
+    }
   }
 
   render() {
-    const { modal, details } = this.state
+    const { modal } = this.state
     const sizing = widthScreen <= 320 ? { width: 160, height: 110 } : {}
     return (
       <Screen>
@@ -139,7 +130,7 @@ export default class extends React.Component {
                 ? this.props.user.profile.idCard
                 : this.props.user.contact[setField.field],
               handleInput: value => this.handleInput(value),
-              error: this.handleValidation(setField.field)
+              error: this.onValidation(setField.field)
             }, key))
           }
 
