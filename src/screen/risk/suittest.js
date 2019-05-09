@@ -78,10 +78,11 @@ export default class extends React.Component {
       .then(res => {
         console.log(res)
         if (res.data.saveSuittest.success) {
-          navigateAction({ ...this.props, page: 'reviewScore' })
+          navigateAction({ ...this.props, page: 'reviewScore', params: { sumSuittest: suitReducer.sumSuittest } })
         }
       })
       .catch(err => {
+        alert('time out')
         console.log(err)
       })
   }

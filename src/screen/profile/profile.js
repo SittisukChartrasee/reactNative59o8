@@ -178,8 +178,7 @@ export default class extends React.Component {
         console.log(data, res)
         if (res.data.saveIdentity.success) {
           if (martialStatus === 'สมรส' && flagChlid === 'มี') {
-            navigateAction({ ...this.props, page: 'marry' })
-            this.props.navigation.navigate('marry', { redirec: 'child' })
+            navigateAction({ ...this.props, page: 'marry', params: { redirec: 'child' } })
           } 
           else if (martialStatus === 'สมรส') navigateAction({ ...this.props, page: 'marry' })
           else if (flagChlid === 'ไม่มี') navigateAction({ ...this.props, page: 'career' })
