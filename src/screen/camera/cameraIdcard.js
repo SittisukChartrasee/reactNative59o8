@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import { connect } from 'react-redux'
+import ImageMarker from "react-native-image-marker"
 import { bindActionCreators } from 'redux'
 import { Camera } from '../../component/camera'
 import colors from '../../config/colors'
@@ -24,23 +25,47 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     photo: '',
+    imgs: '',
   }
 
   onNext = async () => {
     const { navigateAction } = this.props
     const token = await AsyncStorage.getItem("access_token")
-    const data = new FormData()
-    data.append('file', {
-      uri: this.state.photo,
-      type: 'image/jpg',
-      name: 'Idcard.jpg'
+    
+    ImageMarker.markImage({
+        src: this.state.photo, 
+        markerSrc: images.iconFillterCameraFront2,
+        X: 100,
+        Y: 150,
+        scale: 1,
+        markerScale: 0.5,
+        quality: 100
+    }).then((path) => {
+      console.log(path, this.state.photo)
+        this.setState({
+          imgs: 'file://' + path,
+          loading: false
+        })
+    }).catch((err) => {
+        console.log(err, 'err')
+        this.setState({
+            loading: false,
+            err
+        })
     })
-    const url = 'upload-idcard'
-    const res = await request(url, {
-      method: 'POST',
-      body: data
-    }, token)
-    if (res.success) navigateAction({ ...this.props, page: 'tutorialFrontCamera' })
+    
+    // const data = new FormData()
+    // data.append('file', {
+    //   uri: this.state.photo,
+    //   type: 'image/jpg',
+    //   name: 'Idcard.jpg'
+    // })
+    // const url = 'upload-idcard'
+    // const res = await request(url, {
+    //   method: 'POST',
+    //   body: data
+    // }, token)
+    // if (res.success) navigateAction({ ...this.props, page: 'tutorialFrontCamera' })
   }
 
   render() {
@@ -52,6 +77,7 @@ export default class extends React.Component {
             ? (
               <View style={{ flex: 1, backgroundColor: colors.midnight }}>
                 <View style={{ flex: 1, marginHorizontal: 32, marginTop: 48 }}>
+                  <Image source={{ uri: this.state.imgs }} style={{ flex: 1 }} />
                   <Image source={{ uri: this.state.photo }} style={{ flex: 1 }} />
                 </View>
                 <View style={{ paddingTop: 51, paddingBottom: 24, flexDirection: 'row', justifyContent: 'space-around' }}>
