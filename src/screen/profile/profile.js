@@ -7,6 +7,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
@@ -16,7 +17,12 @@ import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
-import { convertDate, getOfBirth, getStatusGender, getStatusMartial } from '../../utility/helper'
+import {
+  convertDate,
+  getOfBirth,
+  getStatusGender,
+  getStatusMartial
+} from '../../utility/helper'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -217,7 +223,9 @@ export default class extends React.Component {
           }
         />
 
-        <ScrollView
+        <KeyboardAwareScrollView
+          extraScrollHeight={50}
+          enableOnAndroid
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >
@@ -233,7 +241,7 @@ export default class extends React.Component {
               err: this.onValidation(d.field)
             }, key))
           }
-        </ScrollView>
+        </KeyboardAwareScrollView>
 
         {
           modal({

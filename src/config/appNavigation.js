@@ -41,7 +41,7 @@ const MainNavigator = createStackNavigator({
   forgetPasscode,
   ...branchProfile,
   ...branchIcome,
-  ...branchProfileChoose, 
+  ...branchProfileChoose,
   ...branchBank,
   ...branchRisk,
   ...branchCamera,

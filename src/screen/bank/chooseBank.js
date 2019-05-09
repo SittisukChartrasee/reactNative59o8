@@ -7,6 +7,7 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { LongPositionButton } from '../../component/button'
@@ -80,7 +81,9 @@ export default class extends React.Component {
           }
         />
 
-        <ScrollView
+        <KeyboardAwareScrollView
+          extraScrollHeight={50}
+          enableOnAndroid
           style={{ backgroundColor: colors.lightgrey }}
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
@@ -113,7 +116,7 @@ export default class extends React.Component {
               </View>
             )
           }
-        </ScrollView>
+        </KeyboardAwareScrollView>
 
         <LongPositionButton onPress={this.onNext} disabled={!handleDisabled(this.state.card).active} bg={colors.lightgrey} label="ยืนยัน"/>
       </Screen>
