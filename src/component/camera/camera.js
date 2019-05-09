@@ -47,7 +47,7 @@ export default class extends React.Component {
         <RNCamera
           style={styles.preview}
           type={this.props.switchCamera ? this.state.switch ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back : RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.on}
+          flashMode={RNCamera.Constants.FlashMode.off}
           androidCameraPermissionOptions={{
             title: 'Permission to use camera',
             message: 'We need your permission to use your camera',
@@ -103,7 +103,12 @@ export default class extends React.Component {
   }
 
   takePicture = async function(camera) {
-    const options = { quality: 0.5, base64: true };
+    const options = {
+      quality: 0.5,
+      base64: true,
+      fixOrientation: true,
+      skipProcessing: true,
+    }
     const data = await camera.takePictureAsync(options)
     this.props.handleInput({ type: 'camera', uri: data.uri })
   };
