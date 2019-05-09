@@ -23,7 +23,7 @@ export default class extends React.PureComponent {
   }
 
   handleInput = (value) => {
-    const { handleInput, field, onChangeText, err } = this.props
+    const { handleInput, field, onChangeText } = this.props
     this.setState({ value })
     onChangeText(value)
     handleInput({ value, type: 'textInput', field })

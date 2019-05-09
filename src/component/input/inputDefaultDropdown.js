@@ -23,6 +23,7 @@ const Drop = props => (
     style={{ fontFamily: fonts.sukhumvitBold }}
     labelTextStyle={{ fontFamily: fonts.sukhumvitText }}
     itemTextStyle={{ fontFamily: fonts.sukhumvitBold }}
+    error={props.err}
   />
 )
 
@@ -35,6 +36,7 @@ Drop.defaultProps = {
   label: 'test label',
   field: 'fieldName',
   handleInput: () => {},
+  err : '',
 }
 
 export default Drop

@@ -48,7 +48,7 @@ export default class extends React.Component {
       option,
       label,
       field,
-      error
+      err
     } = this.props
 
     return (
@@ -60,7 +60,7 @@ export default class extends React.Component {
         customTextInput={Imaterial}
         customTextInputProps={{
           label,
-          error
+          err
         }}
         value={this.state.value}
         onChangeText={this.handleInput}
