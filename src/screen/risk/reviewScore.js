@@ -24,11 +24,21 @@ const dispatchToProps = dispatch => ({
 })
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
-  static defaultProps = {
-    risk: 3,
+  state = {
+    risk: 0
   }
+
+  componentDidMount = () => {
+    const sumSuittest = this.props.navigation.getParam('sumSuittest', 0)
+    if (sumSuittest <= 15) this.setState({ risk: 0 })
+    else if (sumSuittest <= 21) this.setState({ risk: 1 })
+    else if (sumSuittest <= 29) this.setState({ risk: 2 })
+    else if (sumSuittest > 30) this.setState({ risk: 3 })
+  }
+
   render() {
-    const { navigateAction, risk } = this.props
+    const { navigateAction } = this.props
+    const { risk } = this.state
     return (
       <Screen>
         <NavBar

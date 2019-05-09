@@ -1,4 +1,12 @@
 import images from '../../config/images'
+const colors = {
+  item1: rgb(29, 58, 97),
+  item2: rgb(170, 186, 194),
+  item3: rgb(123, 191, 159),
+  item4: rgb(137, 36, 33),
+  item5: rgb(212, 188, 144),
+}
+
 export const data = [
   {
     title: 'ความเสี่ยงต่ำ',
@@ -11,23 +19,23 @@ export const data = [
       data: [
         {
           title: 'ตราสารหนี้ไทย',
-          color: rgb(29, 58, 97),
+          color: colors.item1,
           percent: 34,
         }, {
           title: 'ตราสารหนี้ระยะสั้น',
-          color: rgb(170, 186, 194),
+          color: colors.item2,
           percent: 7,
         }, {
           title: 'หุ้นต่างประเทศ',
-          color: rgb(123, 191, 159),
+          color: colors.item3,
           percent: 29,
         }, {
           title: 'หุ้นไทย',
-          color: rgb(137, 36, 33),
+          color: colors.item4,
           percent: 23,
         }, {
           title: 'กองทุนทางเลือก',
-          color: rgb(212, 188, 144),
+          color: colors.item5,
           percent: 7,
         }
       ]
@@ -43,23 +51,23 @@ export const data = [
       data: [
         {
           title: 'ตราสารหนี้ไทย',
-          color: rgb(29, 58, 97),
+          color: colors.item1,
           percent: 34,
         }, {
           title: 'ตราสารหนี้ระยะสั้น',
-          color: rgb(170, 186, 194),
+          color: colors.item2,
           percent: 7,
         }, {
           title: 'หุ้นต่างประเทศ',
-          color: rgb(123, 191, 159),
+          color: colors.item3,
           percent: 29,
         }, {
           title: 'หุ้นไทย',
-          color: rgb(137, 36, 33),
+          color: colors.item4,
           percent: 23,
         }, {
           title: 'กองทุนทางเลือก',
-          color: rgb(212, 188, 144),
+          color: colors.item5,
           percent: 7,
         }
       ]
@@ -75,23 +83,23 @@ export const data = [
       data: [
         {
           title: 'ตราสารหนี้ไทย',
-          color: rgb(29, 58, 97),
+          color: colors.item1,
           percent: 34,
         }, {
           title: 'ตราสารหนี้ระยะสั้น',
-          color: rgb(170, 186, 194),
+          color: colors.item2,
           percent: 7,
         }, {
           title: 'หุ้นต่างประเทศ',
-          color: rgb(123, 191, 159),
+          color: colors.item3,
           percent: 29,
         }, {
           title: 'หุ้นไทย',
-          color: rgb(137, 36, 33),
+          color: colors.item4,
           percent: 23,
         }, {
           title: 'กองทุนทางเลือก',
-          color: rgb(212, 188, 144),
+          color: colors.item5,
           percent: 7,
         }
       ]
@@ -107,23 +115,23 @@ export const data = [
       data: [
         {
           title: 'ตราสารหนี้ไทย',
-          color: rgb(29, 58, 97),
+          color: colors.item1,
           percent: 34,
         }, {
           title: 'ตราสารหนี้ระยะสั้น',
-          color: rgb(170, 186, 194),
+          color: colors.item2,
           percent: 7,
         }, {
           title: 'หุ้นต่างประเทศ',
-          color: rgb(123, 191, 159),
+          color: colors.item3,
           percent: 29,
         }, {
           title: 'หุ้นไทย',
-          color: rgb(137, 36, 33),
+          color: colors.item4,
           percent: 23,
         }, {
           title: 'กองทุนทางเลือก',
-          color: rgb(212, 188, 144),
+          color: colors.item5,
           percent: 7,
         }
       ]
