@@ -5,6 +5,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  Text,
 } from 'react-native'
 import { TBold, TLight } from '../texts';
 import images from '../../config/images'
@@ -17,14 +18,14 @@ const checkField = (data, value) => {
   if (data.indexOf('วัน') > -1) return value.day
 }
 
-const genDate = (y=2539, m=2) => {
+const genDate = (y = 2539, m = 2) => {
   const year = []
   const month = []
   const day = []
-  const mL = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม']
-  for (let i = +moment().format('YYYY') + 443;i <= +moment().format('YYYY') + 543; i += 1) year.push(i)
-  for (let i = 0;i <= 11; i += 1) month.push(mL[i])
-  for (let i = 1;i <= new Date(y - 543, mL.indexOf(m) + 1, 0).getDate(); i += 1) day.push(i)
+  const mL = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']
+  for (let i = +moment().format('YYYY') + 443; i <= +moment().format('YYYY') + 543; i += 1) year.push(i)
+  for (let i = 0; i <= 11; i += 1) month.push(mL[i])
+  for (let i = 1; i <= new Date(y - 543, mL.indexOf(m) + 1, 0).getDate(); i += 1) day.push(i)
 
   return {
     year,
@@ -43,6 +44,7 @@ export default class extends React.Component {
     day: '-',
     month: '-',
     year: (+moment().format('YYYY') + 543) - 30,
+    err: '',
   }
 
   componentDidMount = () => {
@@ -93,7 +95,7 @@ export default class extends React.Component {
         selectedValue: [this.state.day],
         ...configPicker,
         onPickerConfirm: data => {
-          this.setState({ day: data[0] })     
+          this.setState({ day: data[0] })
           handleInput({ value: `${data[0]}/${month}/${year}`, type, field })
         }
       });
@@ -104,22 +106,26 @@ export default class extends React.Component {
 
   render() {
     const labelArr = this.props.label.split(',')
+    const { err } = this.props
     return (
-      <View style={{ flexDirection: 'row', flex: 1 }}>
-        {
-          labelArr.map((d, i) => (
-            <View key={i} style={{ flex: 1, marginLeft: i > 0 ? 16 : 0 }}>
-              <TLight fontSize='14' mb='10' mt='10' textAlign='left' color={colors.grey}>{d}</TLight>
-              <TouchableOpacity onPress={() => this.onPicker(d)}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <TBold textAlign='left' color={colors.midnight}>{checkField(d, this.state)}</TBold>
-                  <Image source={images.iconNextPageBlack} style={{ transform: [{ rotate: '90deg' }] }} />
-                </View>
-                <View style={{ height: 1, backgroundColor: colors.smoky, marginTop: 5 }} />
-              </TouchableOpacity>
-            </View>
-          ))
-        }
+      <View>
+        <View style={{ flexDirection: 'row', flex: 1 }}>
+          {
+            labelArr.map((d, i) => (
+              <View key={i} style={{ flex: 1, marginLeft: i > 0 ? 16 : 0 }}>
+                <TLight fontSize='14' mb='10' mt='10' textAlign='left' color={err ? 'rgb(213, 0, 0)' : colors.grey}>{d}</TLight>
+                <TouchableOpacity onPress={() => this.onPicker(d)}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <TBold textAlign='left' color={colors.midnight}>{checkField(d, this.state)}</TBold>
+                    <Image source={images.iconNextPageBlack} style={{ transform: [{ rotate: '90deg' }], ...(err => err && ({ tintColor: 'rgb(213, 0, 0)' }))(err) }} />
+                  </View>
+                  <View style={{ height: err ? 2 : 1, backgroundColor: err ? 'rgb(213, 0, 0)' : colors.smoky, marginTop: 5 }} />
+                </TouchableOpacity>
+              </View>
+            ))
+          }
+        </View>
+        <Text style={{ fontSize: 12, color: err ? 'rgb(213, 0, 0)' : undefined, marginTop: 4 }}>{err}</Text>
       </View>
     )
   }

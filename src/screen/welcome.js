@@ -55,9 +55,7 @@ export default class extends React.Component {
   state = {
     modal: false,
     ReconditionRequired: [],
-    InvalidArgument: [
-      { field: 'mobilePhone', description: 'รูปแบบเบอร์โทรศัทพ์ไม่ถูกต้อง' }
-    ],
+    InvalidArgument: [],
   }
 
   componentDidMount = async () => {
@@ -134,7 +132,7 @@ export default class extends React.Component {
               err: this.onValidation(setField.field)
             }, key))
           }
-        
+
         </ScrollView>
         <LongPositionButton label="ถัดไป" onPress={this.onNext} />
 

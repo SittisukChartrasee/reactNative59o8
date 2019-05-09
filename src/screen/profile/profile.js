@@ -33,7 +33,7 @@ export default class extends React.Component {
     flagChlid: 'ไม่มี',
     ReconditionRequired: [],
     InvalidArgument: [
-      { field: 'firstNameTH', description: 'รูปแบบไม่ถูกต้อง' },
+      { field: 'birthDay', description: 'รูปแบบไม่ถูกต้อง' },
       { field: 'jcNumber', description: 'รูปแบบไม่ถูกต้อง' },
       { field: 'docExpDate', description: 'รูปแบบไม่ถูกต้อง' },
     ],
