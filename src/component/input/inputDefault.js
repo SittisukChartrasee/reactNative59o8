@@ -2,7 +2,6 @@ import React from 'react'
 import {
   View,
   Image,
-  TextInput,
   TouchableOpacity,
 } from 'react-native'
 import TextField from './inputDefaultMatiral'

@@ -32,11 +32,7 @@ export default class extends React.Component {
     expireSatus: 'มีวันหมดอายุ',
     flagChlid: 'ไม่มี',
     ReconditionRequired: [],
-    InvalidArgument: [
-      { field: 'birthDay', description: 'รูปแบบไม่ถูกต้อง' },
-      { field: 'jcNumber', description: 'รูปแบบไม่ถูกต้อง' },
-      { field: 'docExpDate', description: 'รูปแบบไม่ถูกต้อง' },
-    ],
+    InvalidArgument: [],
     fields: [
       {
         label: 'เลขบัตรประชาชน',

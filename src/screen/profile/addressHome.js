@@ -16,49 +16,60 @@ import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
-  
+
 const fields = [
   {
     label: 'ประเทศ',
     type: 'search',
     field: 'country', // countryCode
+    required: true,
   }, {
     label: 'เลขที่',
     type: 'textInput',
     field: 'addressNoTH',
+    required: true,
   }, {
     label: 'หมู่ที่',
     type: 'textInput',
     field: 'moo',
+    required: false,
   }, {
     label: 'อาคาร/หมู่บ้าน',
     type: 'textInput',
     field: 'addressVillageTH',
+    required: false,
   }, {
     label: 'ชั้น',
     type: 'textInput',
     field: 'floorNo',
+    required: false,
   }, {
     label: 'ตรอก/ซอย/แยก',
     type: 'textInput',
     field: 'trokSoiYaek',
+    required: true,
   }, {
     label: 'ถนน',
     type: 'textInput',
     field: 'thanon',
+    required: true,
   }, {
     label: 'แขวง/ตำบล',
     type: 'search',
     field: 'subDistrict', // subDistrictCode
+    required: false,
   }, {
     label: 'เขต/อำเภอ',
     field: 'districtNameTH', // districtCode
+    required: false,
   }, {
     label: 'จังหวัด',
     field: 'provinceNameTH', // provinceCode
+    required: false,
   }, {
     label: 'รหัสไปรษณีย์',
     field: 'zipCode',
+    required: false,
   }
 ]
 
@@ -73,11 +84,8 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     modal: false,
-    ReconditionRequired: [],
-    InvalidArgument: [
-      { field: 'floorNo', description: 'รูปแบบไม่ถูกต้อง' },
-      { field: 'thanon', description: 'รูปแบบไม่ถูกต้อง' }
-    ],
+    PreconditionRequired: [],
+    InvalidArgument: [],
   }
 
 
@@ -105,9 +113,19 @@ export default class extends React.Component {
   }
 
   onValidation = (field) => {
-    const { ReconditionRequired, InvalidArgument } = this.state
-    const Required = find(ReconditionRequired, (o) => o.field === field)
-    const Invalid = find(InvalidArgument, (o) => o.field === field)
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => {
+      if (o.field === 'countryCode' && field === 'country') {
+        return o
+      }
+      return o.field === field
+    })
+    const Invalid = find(InvalidArgument, (o) => {
+      if (o.field === 'countryCode' && field === 'country') {
+        return o
+      }
+      return o.field === field
+    })
     if (Required) {
       return Required.description
     } else if (Invalid) {
@@ -120,45 +138,54 @@ export default class extends React.Component {
     const { navigateAction, user } = this.props
     const {
       countryCode,
-  	  addressNoTH,
-  	  moo,
+      addressNoTH,
+      moo,
       addressVillageTH,
       floorNo,
-  	  trokSoiYaek,
-  	  thanon,
-  	  districtNameTH,
-  	  districtCode,
-  	  subDistrict,
-  	  subDistrictCode,
-  	  provinceNameTH,
-  	  provinceCode,
-  	  zipCode
+      trokSoiYaek,
+      thanon,
+      districtNameTH,
+      districtCode,
+      subDistrict,
+      subDistrictCode,
+      provinceNameTH,
+      provinceCode,
+      zipCode
     } = user.addressHome
-    
+
 
     const data = {
       countryCode,
-  	  addressNoTH,
-  	  moo,
+      addressNoTH,
+      moo,
       addressVillageTH,
       floorNo,
-  	  trokSoiYaek,
-  	  thanon,
-  	  district: districtNameTH,
-  	  districtCode,
-  	  subDistrict,
-  	  subDistrictCode,
-  	  province: provinceNameTH,
-  	  provinceCode,
-  	  zipCode
+      trokSoiYaek,
+      thanon,
+      district: districtNameTH,
+      districtCode,
+      subDistrict,
+      subDistrictCode,
+      province: provinceNameTH,
+      provinceCode,
+      zipCode
     }
-    
+
     this.props.savePermanentAddress({ variables: { input: data } })
       .then(res => {
+        console.log(res)
         if (user.addressHome.countryRisk) {
           return this.setState({ modal: true })
         } else if (res.data.savePermanentAddress.success) {
           navigateAction({ ...this.props, page: 'chooseWork' })
+        } else if (!res.data.savePermanentAddress.success) {
+          switch (res.data.savePermanentAddress.message) {
+            case 'PreconditionRequired':
+              this.setState({ PreconditionRequired: res.data.savePermanentAddress.details })
+            case 'InvalidArgument':
+              this.setState({ InvalidArgument: res.data.savePermanentAddress.details })
+            default: return null
+          }
         }
       })
   }
@@ -189,6 +216,7 @@ export default class extends React.Component {
               field: d.field,
               label: d.label,
               type: d.type,
+              required: d.required,
               init: d.init,
               onHandleDistrict: this.onHandleDistrict,
               value: this.props.user.addressHome[d.field],
@@ -206,7 +234,7 @@ export default class extends React.Component {
           })
         }
 
-        <NextButton onPress={this.onNext}/>
+        <NextButton onPress={this.onNext} />
       </Screen>
     )
   }

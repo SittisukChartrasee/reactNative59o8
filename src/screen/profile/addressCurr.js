@@ -22,43 +22,54 @@ const fields = [
     label: 'ประเทศ',
     type: 'search',
     field: 'country', // countryCode
+    required: true,
   }, {
     label: 'เลขที่',
     type: 'textInput',
     field: 'addressNoTH',
+    required: true,
   }, {
     label: 'หมู่ที่',
     type: 'textInput',
     field: 'moo',
+    required: false,
   }, {
     label: 'อาคาร/หมู่บ้าน',
     type: 'textInput',
     field: 'addressVillageTH',
+    required: false,
   }, {
     label: 'ชั้น',
     type: 'textInput',
     field: 'floorNo',
+    required: false,
   }, {
     label: 'ตรอก/ซอย/แยก',
     type: 'textInput',
     field: 'trokSoiYaek',
+    required: true,
   }, {
     label: 'ถนน',
     type: 'textInput',
     field: 'thanon',
+    required: true,
   }, {
     label: 'แขวง/ตำบล',
     type: 'search',
     field: 'subDistrict', //subDistrictCode
+    required: false,
   }, {
     label: 'เขต/อำเภอ',
     field: 'districtNameTH', // districtCode
+    required: false,
   }, {
     label: 'จังหวัด',
     field: 'provinceNameTH', // provinceCode
+    required: false,
   }, {
     label: 'รหัสไปรษณีย์',
     field: 'zipCode',
+    required: false,
   }
 ]
 
@@ -73,11 +84,8 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     modal: false,
-    ReconditionRequired: [],
-    InvalidArgument: [
-      { field: 'floorNo', description: 'รูปแบบไม่ถูกต้อง' },
-      { field: 'thanon', description: 'รูปแบบไม่ถูกต้อง' }
-    ],
+    PreconditionRequired: [],
+    InvalidArgument: [],
   }
   handleInput = (props) => {
     const { updateUser, user } = this.props
@@ -103,9 +111,19 @@ export default class extends React.Component {
   }
 
   onValidation = (field) => {
-    const { ReconditionRequired, InvalidArgument } = this.state
-    const Required = find(ReconditionRequired, (o) => o.field === field)
-    const Invalid = find(InvalidArgument, (o) => o.field === field)
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => {
+      if (o.field === 'countryCode' && field === 'country') {
+        return o
+      }
+      return o.field === field
+    })
+    const Invalid = find(InvalidArgument, (o) => {
+      if (o.field === 'countryCode' && field === 'country') {
+        return o
+      }
+      return o.field === field
+    })
     if (Required) {
       return Required.description
     } else if (Invalid) {
@@ -116,6 +134,7 @@ export default class extends React.Component {
 
   onNext = async () => {
     const { navigateAction, user } = this.props
+    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       countryCode,
       addressNoTH,
@@ -131,7 +150,7 @@ export default class extends React.Component {
       provinceNameTH,
       provinceCode,
       zipCode
-    } = user.addressDoc
+    } = user.addressCurr
 
 
     const data = {
@@ -151,18 +170,21 @@ export default class extends React.Component {
       zipCode,
     }
 
+    console.log(data)
+
     this.props.saveCurrentAddress({ variables: { input: data } })
       .then(res => {
+        console.log(res)
         if (user.addressCurr.countryRisk) {
           return this.setState({ modal: true })
         } else if (res.data.saveCurrentAddress.success) {
           navigateAction({ ...this.props, page: 'chooseDoc' })
         } else if (!res.data.saveCurrentAddress.success) {
           switch (res.data.saveCurrentAddress.message) {
-            case 'ReconditionRequired':
-              this.setState({ ReconditionRequired: res.details })
+            case 'PreconditionRequired':
+              this.setState({ PreconditionRequired: res.data.saveCurrentAddress.details })
             case 'InvalidArgument':
-              this.setState({ InvalidArgument: res.details })
+              this.setState({ InvalidArgument: res.data.saveCurrentAddress.details })
             default: return null
           }
         }
@@ -196,6 +218,7 @@ export default class extends React.Component {
               field: d.field,
               label: d.label,
               type: d.type,
+              required: d.required,
               init: d.init,
               onHandleDistrict: this.onHandleDistrict,
               value: this.props.user.addressCurr[d.field],

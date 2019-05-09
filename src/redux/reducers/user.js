@@ -41,7 +41,7 @@ const init = {
   },
   addressDoc: {
     country: '',
-    countryCode: '',
+    countryCode: 'TH',
     addressNoTH: '',
     moo: '',
     addressVillageTH: '',
@@ -146,7 +146,7 @@ const init = {
     IDCardNo: '',
     marryPassport: '',
     marryCountry: '',
-    nationalityCode: '',
+    nationalityCode: 'TH',
     nationalityRisk: false,
     expireFlag: '',
     isIDCardExpDate: false,

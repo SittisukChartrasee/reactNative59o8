@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Image, TouchableOpacity } from 'react-native'
+import { View, Image, TouchableOpacity, Text } from 'react-native'
 import Imaterial from './inputDefaultMatiral'
 import Imask from './inputDefaultMask'
 import Idown from './inputDefaultDropdown'
@@ -16,14 +16,14 @@ import colors from '../../config/colors';
 import images from '../../config/images';
 
 const Star = ({
-  position='absolute',
-  left=10,
-  top=13,
+  position = 'absolute',
+  left = 10,
+  top = 13,
 }) => (
-  <View style={{ position, left, top }}>
-    <TLight color={colors.softRed} textAlign="left">*</TLight>
-  </View>
-)
+    <View style={{ position, left, top }}>
+      <TLight color={colors.softRed} textAlign="left">*</TLight>
+    </View>
+  )
 
 export default (props, key) => {
   switch (props.type) {
@@ -31,14 +31,14 @@ export default (props, key) => {
       return (
         <View key={key} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
           <Imask key={key} {...props} />
-          <Star />
+          {props.required ? <Star /> : null}
         </View>
       )
     case 'dropdown':
-      return  (
+      return (
         <View key={key} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
           <Idown {...props} />
-          <Star />
+          {props.required ? <Star /> : null}
         </View>
       )
 
@@ -46,7 +46,7 @@ export default (props, key) => {
       return (
         <View key={key} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
           <Imaterial {...props} />
-          <Star />
+          {props.required ? <Star /> : null}
         </View>
       )
 
@@ -54,7 +54,7 @@ export default (props, key) => {
       return (
         <View key={key} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
           <Input {...props} />
-          <Star />
+          {props.required ? <Star /> : null}
         </View>
       )
 
@@ -62,24 +62,25 @@ export default (props, key) => {
       return (
         <View key={key} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
           <Iradio key={key} {...props} />
-          <Star />
+          {props.required ? <Star /> : null}
         </View>
       )
 
     case 'radioColumn':
       return (
         <View key={key} style={{ marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
-          <IradioColumn {...props}/>
-          <Star />
+          <IradioColumn {...props} />
+          {props.required ? <Star /> : null}
         </View>
       )
 
     case 'search':
       return (
         <View key={key} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
-          <TLight fontSize="14" mt="13" textAlign="left" color={colors.grey}>{props.label}</TLight>
-          <InputSearch {...props}/>
-          <Star top={8}/>
+          <TLight fontSize="14" mt="13" textAlign="left" color={props.err ? 'rgb(213, 0, 0)' : colors.grey}>{props.label}</TLight>
+          <InputSearch {...props} />
+          {props.required ? <Star top={8} /> : null}
+
         </View>
       )
 
@@ -87,37 +88,37 @@ export default (props, key) => {
       return (
         <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
           <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={props.err ? 'rgb(213, 0, 0)' : colors.grey}>{props.label}</TLight>
-          <InputPickerExpire {...props}/>
-          <Star top={8}/>
+          <InputPickerExpire {...props} />
+          {props.required ? <Star top={8} /> : null}
         </View>
       )
 
     case 'ymd':
       return (
         <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
-          <InputPicker label={props.label} {...props}/>
-          <Star />
+          <InputPicker label={props.label} {...props} />
+          {props.required ? <Star /> : null}
         </View>
       )
 
     case 'buttonCard':
       return (
         <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
-          <ButtonCard {...props}/>
+          <ButtonCard {...props} />
         </View>
       )
-    
+
     case 'selectCard':
       return (
-        <View  key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
-          <SelectCard {...props}/>
+        <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
+          <SelectCard {...props} />
         </View>
       )
 
     case 'linkCard':
       return (
-        <View  key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
-          <LinkCard {...props}/>
+        <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
+          <LinkCard {...props} />
         </View>
       )
 
@@ -135,15 +136,17 @@ export default (props, key) => {
         <View key={key} style={{ paddingHorizontal: 24, marginTop: 10, display: props.inVisible ? 'none' : 'flex' }}>
           <TLight fontSize="14" mt="10" textAlign="left" color={colors.grey}>{props.label}</TLight>
           <InputModal {...props} />
-          <Star />
+          {props.required ? <Star /> : null}
         </View>
       )
 
     default:
       return (
         <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
-          <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={colors.grey}>{props.label}</TLight>
+          <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={props.err ? 'rgb(213, 0, 0)' : colors.grey}>{props.label}</TLight>
           <TBold textAlign="left" color={colors.midnight}>{props.value || ''}</TBold>
+          {props.required ? <Star /> : null}
+          <Text style={{ fontSize: 12, color: props.err ? 'rgb(213, 0, 0)' : undefined, marginTop: 4 }}>{props.err}</Text>
         </View>
       )
   }

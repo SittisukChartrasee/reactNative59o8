@@ -48,10 +48,7 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     ReconditionRequired: [],
-    InvalidArgument: [
-      { field: 'workPhone', description: 'รูปแบบไม่ถูกต้อง' },
-      { field: 'mobilePhone', description: 'รูปแบบไม่ถูกต้อง' }
-    ],
+    InvalidArgument: [],
   }
 
   handleInput = (props) => {
@@ -91,7 +88,6 @@ export default class extends React.Component {
     this.props.saveContact({ variables: { input: data } })
       .then(res => {
         if (res.data.saveContact.success) {
-          console.log('OK')
           navigateAction({ ...this.props, page: 'suittest' })
           // navigateAction({ ...this.props, page: 'tutorialBank' })
         } else if (!res.data.saveContact.success) {

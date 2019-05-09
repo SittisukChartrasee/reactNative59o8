@@ -32,62 +32,70 @@ export default class extends React.Component {
     modal: false,
     expireSatus: 'มีวันหมดอายุ',
     nationSatus: 'ไทย',
-    ReconditionRequired: [],
-    InvalidArgument: [
-      { field: 'IDCardNo', description: 'รูปแบบไม่ถูกต้อง' },
-      { field: 'fistName', description: 'รูปแบบไม่ถูกต้อง' }
-    ],
+    PreconditionRequired: [],
+    InvalidArgument: [],
     fields: [
       {
         label: 'สัญชาติ',
         type: 'radio',
         init: [{ title: 'ไทย', active: true }, { title: 'ชาวต่างชาติ' }],
         field: 'nationFlag',
+        required: true,
       }, {
         label: 'หมายเลขบัตรประชาชน',
         type: 'textInput',
         field: 'IDCardNo',
+        required: true,
       }, {
         label: 'ประเทศ',
         type: 'search',
         field: 'marryCountry', // ต้อง save ที่ field => nationalityCode
         inVisible: true,
+        required: true,
       }, {
         label: 'หมายเลขหนังสือเดินทาง',
         type: 'textInput',
         field: 'marryPassport', // ต้อง save ที่ field => IDCardNo
         inVisible: true,
+        required: true,
       }, {
         label: 'วันบัตรหมดอายุ',
         type: 'radio',
         init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
         field: 'expireFlag', // ต้อง save ที่ field => isIDCardExpDate
+        required: true,
       }, {
         label: 'วันที่หนังสือเดินทางหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'cardExpiredDate', // ต้อง save ที่ field => cardExpiredDate
         inVisible: true,
+        required: true,
       }, {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'marryExpireDate', // ต้อง save ที่ field => cardExpiredDate
+        required: true,
       }, {
-        label: 'คำนำหน้า (ตัวย่อ)',    
+        label: 'คำนำหน้า (ตัวย่อ)',
         type: 'search',
         field: 'title',
+        required: true,
       }, {
         label: 'ชื่อ',
         type: 'textInput',
         field: 'fistName',
+        required: true,
       }, {
         label: 'นาม-สกุล',
         type: 'textInput',
         field: 'lastName',
+        required: true,
       }, {
         label: 'คุณเป็นนักการเมือง มีความเกี่ยวข้องกับนักการเมือง หรือบุคคลที่มีสถานภาพทางการเมือง ใช่หรือไม่',
         type: 'radioColumn',
         init: [{ title: 'ใช่', active: true }, { title: 'ไม่ใช่' }],
         field: 'pepFlag',
+        required: true,
       },
     ]
   }
@@ -96,7 +104,7 @@ export default class extends React.Component {
     const { updateUser, user } = this.props
 
     if (props.field === 'nationFlag') {
-      updateUser('spouse', { ...user.spouse, [props.field]: props.value } )
+      updateUser('spouse', { ...user.spouse, [props.field]: props.value })
       this.setState({
         nationSatus: props.value,
         fields: fields.map((d) => {
@@ -112,7 +120,7 @@ export default class extends React.Component {
         })
       })
     } else if (props.field === 'expireFlag') {
-      updateUser('spouse', { ...user.spouse, [props.field]: props.value } )
+      updateUser('spouse', { ...user.spouse, [props.field]: props.value })
       this.setState({
         expireSatus: props.value,
         fields: fields.map((d) => {
@@ -126,16 +134,38 @@ export default class extends React.Component {
         })
       })
     } else if (props.field === 'marryCountry') {
-      updateUser('spouse', { ...user.spouse, nationalityCode: props.code, nationalityRisk: props.risk } )
+      updateUser('spouse', { ...user.spouse, nationalityCode: props.code, nationalityRisk: props.risk })
     } else {
-      updateUser('spouse', { ...user.spouse, [props.field]: props.value } )
+      updateUser('spouse', { ...user.spouse, [props.field]: props.value })
     }
   }
 
   onValidation = (field) => {
-    const { ReconditionRequired, InvalidArgument } = this.state
-    const Required = find(ReconditionRequired, (o) => o.field === field)
-    const Invalid = find(InvalidArgument, (o) => o.field === field)
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => {
+      if (o.field === 'nationalityCode' && field === 'marryCountry') {
+        return o
+      }
+      if (o.field === 'IDCardNo' && field === 'marryPassport') {
+        return o
+      }
+      if (o.field === 'cardExpiredDate' && field === 'marryExpireDate') {
+        return o
+      }
+      return o.field === field
+    })
+    const Invalid = find(InvalidArgument, (o) => {
+      if (o.field === 'nationalityCode' && field === 'marryCountry') {
+        return o
+      }
+      if (o.field === 'IDCardNo' && field === 'marryPassport') {
+        return o
+      }
+      if (o.field === 'cardExpiredDate' && field === 'marryExpireDate') {
+        return o
+      }
+      return o.field === field
+    })
     if (Required) {
       return Required.description
     } else if (Invalid) {
@@ -148,6 +178,7 @@ export default class extends React.Component {
     const { expireSatus, nationSatus } = this.state
     const { navigateAction, user } = this.props
     const redirec = this.props.navigation.getParam('redirec', '')
+    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
     const {
       title,
@@ -161,7 +192,7 @@ export default class extends React.Component {
       cardExpiredDate,
       fistName,
     } = user.spouse
-    
+
 
     const data = {
       title,
@@ -178,6 +209,8 @@ export default class extends React.Component {
       fistName,
     }
 
+    console.log(data)
+
     this.props.saveSpouse({ variables: { input: data } })
       .then(res => {
         if (user.spouse.nationalityRisk) {
@@ -187,10 +220,10 @@ export default class extends React.Component {
           navigateAction({ ...this.props, page: 'career' })
         } else if (!res.data.saveSpouse.success) {
           switch (res.data.saveSpouse.message) {
-            case 'ReconditionRequired':
-              this.setState({ ReconditionRequired: res.details })
+            case 'PreconditionRequired':
+              this.setState({ PreconditionRequired: res.data.saveSpouse.details })
             case 'InvalidArgument':
-              this.setState({ InvalidArgument: res.details })
+              this.setState({ InvalidArgument: res.data.saveSpouse.details })
             default: return null
           }
         }
@@ -228,6 +261,7 @@ export default class extends React.Component {
               field: d.field,
               label: d.label,
               type: d.type,
+              required: d.required,
               init: d.init,
               value: user.spouse[d.field],
               inVisible: d.inVisible,
@@ -245,7 +279,7 @@ export default class extends React.Component {
           })
         }
 
-        <NextButton onPress={this.onNext}/>
+        <NextButton onPress={this.onNext} />
       </Screen>
     )
   }
