@@ -4,6 +4,7 @@ import {
   Image,
   Dimensions,
   AsyncStorage,
+  Platform,
   ScrollView,
 } from 'react-native'
 import { bindActionCreators } from 'redux'
@@ -122,7 +123,7 @@ export default class extends React.Component {
           <TBold fontSize={20} color={colors.white} mt="10" mb="40">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
         </View>
         <KeyboardAwareScrollView
-          extraScrollHeight={50}
+          extraScrollHeight={Platform.OS === 'ios' ? 0 : 50}
           enableOnAndroid
           style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}
         >

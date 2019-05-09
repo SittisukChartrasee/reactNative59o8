@@ -7,6 +7,7 @@ import {
   TextInput,
   ScrollView,
   Dimensions,
+  SafeAreaView,
   Platform,
 } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -59,12 +60,12 @@ export default class extends React.Component {
     let sizing = { width: 108, height: 78 }
     return (
       <Screen>
-        <KeyboardAwareScrollView>
-          <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', paddingTop: widthScreen <= 480 ? 25 : 0 }}>
+        <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
+          <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 20 }}>
             <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
-            <TBold fontSize={18} color={colors.white} mt="24" mb="32">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
-          </View>
-          <View style={{ flex: 2, backgroundColor: '#fff', justifyContent: 'flex-start' }}>
+            <TBold fontSize={18} color={colors.white} mt="10" mb="20">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
+          </SafeAreaView>
+          <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'flex-start' }}>
             {checkPoint.map((props, index) => (
               <View
                 key={props.point}
@@ -128,8 +129,8 @@ export default class extends React.Component {
               </View>
             ))}
           </View>
-        </KeyboardAwareScrollView>
         <LongPositionButton label="ดำเนินการต่อ" onPress={navigateAction({ ...this.props, page: 'welcome' })} />
+        </KeyboardAwareScrollView>
       </Screen>
     )
   }
