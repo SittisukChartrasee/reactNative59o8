@@ -36,7 +36,7 @@ export default ({
           justifyContent: 'center',
           marginHorizontal: 15,
           ...((platform) => platform === 'android' 
-            ? { marginTop: 25, marginBottom: 8 } 
+            ? { marginTop: 30, marginBottom: 8 } 
             : {}
           )(Platform.OS)
         }}
