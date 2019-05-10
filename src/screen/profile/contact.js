@@ -24,17 +24,17 @@ const fields = [
     label: 'โทรศัพท์ที่ทำงาน',
     type: 'textInput',
     field: 'workPhone',
-    required: true,
+    required: false,
   }, {
     label: 'โทรศัพท์บ้าน',
     type: 'textInput',
     field: 'homePhone',
-    required: true,
+    required: false,
   }, {
     label: 'หมายเลขโทรศัพท์มือถืิอ',
     type: 'textInput',
     field: 'mobilePhone',
-    required: true,
+    required: false,
   }, {
     label: 'อีเมล',
     field: 'email',

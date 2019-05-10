@@ -20,7 +20,7 @@ const init = {
     // martialStatus: 'โสด',
     // nationality: 'ไทย',
     // nationalityCode: 'TH',
-    idCard: '1840100464891',
+    idCard: '',
     jcNumber: '',
     expireDateFlag: 'Fri Jan 01 2562 00:00:00 GMT+0700 (+07)',
     isNoDocExpDate: false,
@@ -42,7 +42,7 @@ const init = {
   },
   addressDoc: {
     country: '',
-    countryCode: 'TH',
+    countryCode: '',
     addressNoTH: '',
     moo: '',
     addressVillageTH: '',
@@ -59,7 +59,7 @@ const init = {
   },
   addressHome: {
     country: '',
-    countryCode: 'TH',
+    countryCode: '',
     countryRisk: false,
     addressNoTH: '',
     moo: '',
@@ -77,7 +77,7 @@ const init = {
   },
   addressCurr: {
     country: '',
-    countryCode: 'TH',
+    countryCode: '',
     addressNoTH: '',
     moo: '',
     addressVillageTH: '',
@@ -93,7 +93,7 @@ const init = {
     zipCode: '',
   },
   addressWork: {
-    countryCode: 'TH',
+    countryCode: '',
     companyName: '',
     addressNoTH: '',
     addressVillageTH: '',

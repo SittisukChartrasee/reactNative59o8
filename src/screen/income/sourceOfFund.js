@@ -143,12 +143,13 @@ export default class extends React.Component {
       investmentSourceCountry,
       investmentPurpose,
       dividendWithHoldingTax,
+      nationalityCode,
     } = user.sourceOfFund
 
     const data = {
       investmentSource,
       investmentSourceOther,
-      investmentSourceCountry, // ยังไม่ได้แปลงเป็นตัวย่อ TH
+      investmentSourceCountry: nationalityCode,
       investmentPurpose,
       dividendWithHoldingTax: !(dividendWithHoldingTax === 'ไม่ใช่'),
     }

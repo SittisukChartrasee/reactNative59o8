@@ -135,8 +135,28 @@ export default class extends React.Component {
 
   onValidation = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
-    const Required = find(PreconditionRequired, (o) => o.field === field)
-    const Invalid = find(InvalidArgument, (o) => o.field === field)
+    const Required = find(PreconditionRequired, (o) => {
+      if (o.field === 'genderCode' && field === 'gender') {
+        return o
+      }
+      if ((o.field === 'yearOfBirth ' ||
+        o.field === 'monthOfBirth' ||
+        o.field === 'dayOfBirth') && field === 'birthDay') {
+        return o
+      }
+      return o.field === field
+    })
+    const Invalid = find(InvalidArgument, (o) => {
+      if (o.field === 'genderCode' && field === 'gender') {
+        return o
+      }
+      if ((o.field === 'yearOfBirth ' ||
+        o.field === 'monthOfBirth' ||
+        o.field === 'dayOfBirth') && field === 'birthDay') {
+        return o
+      }
+      return o.field === field
+    })
     if (Required) {
       return Required.description
     } else if (Invalid) {
@@ -187,7 +207,7 @@ export default class extends React.Component {
 
     this.props.saveIdentity({ variables: { input: data } })
       .then(res => {
-        console.log(data, res)
+        console.log(res)
         if (res.data.saveIdentity.success) {
           if (martialStatus === 'สมรส' && isChild === 'มี') {
             navigateAction({ ...this.props, page: 'marry', params: { redirec: 'child' } })
