@@ -140,7 +140,6 @@ export default class extends React.Component {
       quality: 100
     })
       .then(path => {
-        console.log('file://&&' + path)
         this.props.handleInput({ type: 'camera', uri: 'file://' + path })
       })
       .catch(err => console.log(err, 'err'))
