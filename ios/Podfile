@@ -22,6 +22,7 @@ target 'KbankOnboarding' do
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
   pod 'react-native-camera', path: '../node_modules/react-native-camera'
   pod 'RNImageMarker', :path => '../node_modules/react-native-image-marker'
+  pod 'react-native-image-resizer', :path => '../node_modules/react-native-image-resizer'
   
   target 'KbankOnboarding-tvOSTests' do
     inherit! :search_paths
