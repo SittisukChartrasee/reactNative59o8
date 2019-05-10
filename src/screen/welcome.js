@@ -4,11 +4,13 @@ import {
   Image,
   Dimensions,
   AsyncStorage,
+  Platform,
   ScrollView,
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { TBold } from '../component/texts'
 import Screen from '../component/screenComponent'
 import colors from '../config/colors'
@@ -127,7 +129,11 @@ export default class extends React.Component {
           <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
           <TBold fontSize={20} color={colors.white} mt="10" mb="40">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
         </View>
-        <ScrollView style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}>
+        <KeyboardAwareScrollView
+          extraScrollHeight={Platform.OS === 'ios' ? 0 : 50}
+          enableOnAndroid
+          style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}
+        >
 
           {
             fields.map((setField, key) => Input({
@@ -139,8 +145,8 @@ export default class extends React.Component {
               err: this.onValidation(setField.field)
             }, key))
           }
-
-        </ScrollView>
+        
+        </KeyboardAwareScrollView>
         <LongPositionButton label="ถัดไป" onPress={this.onNext} />
 
         {
