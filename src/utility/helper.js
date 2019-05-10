@@ -61,3 +61,11 @@ export const getStatusMartial_reverse = (data) => {
   else if(data === 'W') return 'หม้าย'
   else return '-'
 }
+
+export const getStatusChild = (data) => {
+  switch (data) {
+    case 'มี': return true
+    case 'ไม่มี': return false
+    default: return false
+  }
+}

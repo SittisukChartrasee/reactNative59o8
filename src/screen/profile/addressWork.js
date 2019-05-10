@@ -152,6 +152,7 @@ export default class extends React.Component {
 
   onNext = async () => {
     const { navigateAction, user } = this.props
+    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       countryCode,
       companyName,

@@ -170,8 +170,6 @@ export default class extends React.Component {
       zipCode,
     }
 
-    console.log(data)
-
     this.props.saveCurrentAddress({ variables: { input: data } })
       .then(res => {
         console.log(res)
@@ -192,7 +190,6 @@ export default class extends React.Component {
   }
 
   render() {
-    const { navigateAction } = this.props
     return (
       <Screen color="transparent">
         <NavBar

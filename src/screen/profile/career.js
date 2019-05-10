@@ -118,6 +118,7 @@ export default class extends React.Component {
 
   onNext = async () => {
     const { navigateAction, user } = this.props
+    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       isicCode,
       occupationCode,
@@ -188,7 +189,7 @@ export default class extends React.Component {
               value: user.career[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
-              err: this.onValidation(d.field)
+              err: this.onValidation(d.field),
             }, key))
           }
         </ScrollView>

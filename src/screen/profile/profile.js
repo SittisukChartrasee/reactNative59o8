@@ -16,7 +16,7 @@ import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
-import { convertDate, getOfBirth, getStatusGender, getStatusMartial } from '../../utility/helper'
+import { convertDate, getOfBirth, getStatusGender, getStatusMartial, getStatusChild } from '../../utility/helper'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -30,69 +30,82 @@ export default class extends React.Component {
   state = {
     modal: false,
     expireSatus: 'มีวันหมดอายุ',
-    flagChlid: 'ไม่มี',
-    ReconditionRequired: [],
+    PreconditionRequired: [],
     InvalidArgument: [],
     fields: [
       {
         label: 'เลขบัตรประชาชน',
         field: 'idCard',
+        required: false,
       }, {
         label: 'หมายเลขบัตรประชาชน ( ดย. JT9-9999999-99 )',
         type: 'Icustom',
         field: 'jcNumber',
+        required: true,
       }, {
         label: 'วันบัตรหมดอายุ',
         type: 'radio',
         init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
         field: 'expireDateFlag', // isNoDocExpDate
+        required: true,
       }, {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'docExpDate',
+        required: true,
       }, {
         label: 'เพศ',
         type: 'dropdown',
         init: [{ value: 'ชาย' }, { value: 'หญิง' }],
         field: 'gender', //genderCode
+        required: true,
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
         type: 'search',
         field: 'titleTH',
+        required: true,
       }, {
         label: 'ชื่อ (ภาษาไทย)',
         type: 'textInput',
         field: 'firstNameTH',
+        required: true,
       }, {
         label: 'นามสกุล (ภาษาไทย)',
         type: 'textInput',
-        field: 'lastNameTH'
+        field: 'lastNameTH',
+        required: true,
       }, {
         label: 'ชื่อ (ภาษาอังกฤษ)',
         type: 'textInput',
         field: 'firstNameEN',
+        required: true,
       }, {
         label: 'นามสกุล (ภาษาอังกฤษ)',
         type: 'textInput',
         field: 'lastNameEN',
+        required: true,
       }, {
         label: 'ปีเกิด,เดือนเกิด,วันเกิด',
         type: 'ymd',
         field: 'birthDay', //yearOfBirth, monthOfBirth, dayOfBirth
+        required: true,
       }, {
         label: 'สถานภาพสมรส',
         type: 'dropdown',
         init: [{ value: 'โสด' }, { value: 'สมรส' }, { value: 'หย่าร้าง' }],
         field: 'martialStatus', // martialStatusCode
+        required: true,
       }, {
         label: 'คุณมีบุตร หรือบุตรบุญธรรมหรือไม่ ',
         type: 'radio',
         init: [{ title: 'ไม่มี', active: true }, { title: 'มี' }],
-        field: 'flagChlid', // isNoDocExpDate
+        field: 'isChild',
+        required: false,
       }, {
         label: 'สัญชาติ',
         field: 'nationality', // nationalityCode
-        value: 'ไทย'
+        value: 'ไทย',
+        required: false,
       }
     ]
   }
@@ -103,7 +116,6 @@ export default class extends React.Component {
     updateUser('profile', { ...user.profile, [props.field]: props.value })
 
     if (props.type === 'modal') return this.setState({ modal: true })
-    else if (props.field === 'flagChlid') this.setState({ flagChlid: props.value })
     else if (props.field === 'expireDateFlag') {
       this.setState({
         expireSatus: props.value,
@@ -121,8 +133,8 @@ export default class extends React.Component {
   }
 
   onValidation = (field) => {
-    const { ReconditionRequired, InvalidArgument } = this.state
-    const Required = find(ReconditionRequired, (o) => o.field === field)
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => o.field === field)
     const Invalid = find(InvalidArgument, (o) => o.field === field)
     if (Required) {
       return Required.description
@@ -133,8 +145,9 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { expireSatus, flagChlid } = this.state
+    const { expireSatus } = this.state
     const { navigateAction, user } = this.props
+    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       idCard,
       jcNumber,
@@ -147,6 +160,7 @@ export default class extends React.Component {
       firstNameEN,
       lastNameEN,
       birthDay,
+      isChild,
       nationalityCode,
       martialStatus,
     } = user.profile
@@ -165,6 +179,7 @@ export default class extends React.Component {
       dayOfBirth: getOfBirth(birthDay, 'day'),
       monthOfBirth: `${getOfBirth(birthDay, 'month')}`,
       yearOfBirth: getOfBirth(birthDay, 'year'),
+      isChild: getStatusChild(isChild),
       nationalityCode,
       martialStatusCode: getStatusMartial(martialStatus),
     }
@@ -173,19 +188,19 @@ export default class extends React.Component {
       .then(res => {
         console.log(data, res)
         if (res.data.saveIdentity.success) {
-          if (martialStatus === 'สมรส' && flagChlid === 'มี') {
+          if (martialStatus === 'สมรส' && isChild === 'มี') {
             navigateAction({ ...this.props, page: 'marry', params: { redirec: 'child' } })
-          } 
+          }
           else if (martialStatus === 'สมรส') navigateAction({ ...this.props, page: 'marry' })
-          else if (flagChlid === 'ไม่มี') navigateAction({ ...this.props, page: 'career' })
-          else if (flagChlid === 'มี') navigateAction({ ...this.props, page: 'child' })
+          else if (isChild === 'ไม่มี') navigateAction({ ...this.props, page: 'career' })
+          else if (isChild === 'มี') navigateAction({ ...this.props, page: 'child' })
 
         } else if (!res.data.saveIdentity.success) {
           switch (res.data.saveIdentity.message) {
-            case 'ReconditionRequired':
-              this.setState({ ReconditionRequired: res.details })
+            case 'PreconditionRequired':
+              this.setState({ PreconditionRequired: res.data.saveIdentity.details })
             case 'InvalidArgument':
-              this.setState({ InvalidArgument: res.details })
+              this.setState({ InvalidArgument: res.data.saveIdentity.details })
             default: return null
           }
         }
@@ -222,6 +237,7 @@ export default class extends React.Component {
               field: d.field,
               label: d.label,
               type: d.type,
+              required: d.required,
               init: d.init,
               value: user.profile[d.field],
               inVisible: d.inVisible,
