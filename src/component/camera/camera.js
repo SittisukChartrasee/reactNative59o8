@@ -29,24 +29,16 @@ const PendingView = () => (
   </View>
 )
 
-const getSizeMarker = (switchCamera) => {
+const getSizeMarker = () => {
   if (Platform.OS === 'ios') {
     return {
-      X: 170,
+      X: 190,
       Y: 250,
       scale: 1,
-      markerScale: .3,
+      markerScale: .4,
     }
   }
 
-  if (switchCamera) { // selfie
-    return {
-      X: 50,
-      Y: 250,
-      scale: 1,
-      markerScale: .45,
-    }
-  }
   return {
     X: 100,
     Y: 400,
@@ -144,7 +136,7 @@ export default class extends React.Component {
     ImageMarker.markImage({
       src: resultImage,
       markerSrc: images.textTermAndCon,
-      ...getSizeMarker(this.props.switchCamera),
+      ...getSizeMarker(),
       quality: 100
     })
       .then(path => {
