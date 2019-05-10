@@ -58,7 +58,7 @@ const fields = [
     label: 'แขวง/ตำบล',
     type: 'search',
     field: 'subDistrict', //subDistrictCode
-    required: false,
+    required: true,
   }, {
     label: 'เขต/อำเภอ',
     field: 'districtNameTH', // districtCode

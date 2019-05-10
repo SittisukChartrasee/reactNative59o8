@@ -53,25 +53,25 @@ const fields = [
     label: 'ตรอก/ซอย/แยก',
     type: 'textInput',
     field: 'trokSoiYaek',
-    required: false,
+    required: true,
   }, {
     label: 'ถนน',
     type: 'textInput',
     field: 'thanon',
-    required: false,
+    required: true,
   }, {
     label: 'แขวง/ตำบล',
     type: 'search',
     field: 'subDistrict', // subDistrictCode
-    required: false,
+    required: true,
   }, {
     label: 'เขต/อำเภอ',
     field: 'districtNameTH', // districtCode
-    required: true,
+    required: false,
   }, {
     label: 'จังหวัด',
     field: 'provinceNameTH', // provinceCode
-    required: true,
+    required: false,
   }, {
     label: 'รหัสไปรษณีย์',
     field: 'zipCode',
@@ -123,10 +123,10 @@ export default class extends React.Component {
       if (o.field === 'countryCode' && field === 'country') {
         return o
       }
-      if (o.field === 'districtCode' && field === 'subDistrict') {
-        return o
-      }
-      if (o.field === 'provinceCode' && field === 'provinceNameTH') {
+      if ((o.field === 'subDistrictCode' ||
+        o.field === 'districtCode' ||
+        o.field === 'provinceCode' ||
+        o.field === 'zipCode') && field === 'subDistrict') {
         return o
       }
       return o.field === field
@@ -135,10 +135,10 @@ export default class extends React.Component {
       if (o.field === 'countryCode' && field === 'country') {
         return o
       }
-      if (o.field === 'districtCode' && field === 'districtNameTH') {
-        return o
-      }
-      if (o.field === 'provinceCode' && field === 'provinceNameTH') {
+      if ((o.field === 'subDistrictCode' ||
+        o.field === 'districtCode' ||
+        o.field === 'provinceCode' ||
+        o.field === 'zipCode') && field === 'subDistrict') {
         return o
       }
       return o.field === field
