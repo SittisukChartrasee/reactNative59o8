@@ -10,6 +10,7 @@ import {
   StatusBar,
 } from 'react-native';
 import ImageMarker from "react-native-image-marker"
+import ImageResizer from 'react-native-image-resizer'
 import { RNCamera } from 'react-native-camera'
 import colors from '../../config/colors'
 import images from '../../config/images'
@@ -47,10 +48,10 @@ const getSizeMarker = (switchCamera) => {
     }
   }
   return {
-    X: 150,
-    Y: 500,
+    X: 100,
+    Y: 400,
     scale: 1,
-    markerScale: .8,
+    markerScale: .6,
   }
 }
 
@@ -138,9 +139,10 @@ export default class extends React.Component {
       skipProcessing: true,
     }
     const data = await camera.takePictureAsync(options)
+    const resultImage = await ImageResizer.createResizedImage(data.uri, 1280, 720, 'JPEG', 80)
 
     ImageMarker.markImage({
-      src: data.uri,
+      src: resultImage,
       markerSrc: images.textTermAndCon,
       ...getSizeMarker(this.props.switchCamera),
       quality: 100
