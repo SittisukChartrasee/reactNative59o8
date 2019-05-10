@@ -9,11 +9,12 @@ import { navigateAction } from '../redux/actions'
 import colors from '../config/colors'
 import { TLight, TBold, TMed } from '../component/texts'
 import images from '../config/images'
-import { velidateOtp } from '../redux/actions/root-active'
+import { velidateOtp, requestOtp } from '../redux/actions/root-active'
 
-const mapToProps = ({ root }) => ({ root })
+const mapToProps = ({ root, user }) => ({ root, user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
+  requestOtp: bindActionCreators(requestOtp, dispatch),
   velidateOtp: bindActionCreators(velidateOtp, dispatch)
 })
 
@@ -23,6 +24,7 @@ export default class extends React.Component {
     dot: [false, false, false, false, false, false],
     number: '',
     currentDot: '',
+    restart: false,
   }
   
   setNumber = async (obj) => {
@@ -52,8 +54,20 @@ export default class extends React.Component {
     }, 500)
   }
 
-  onPress = () => {
-    this.props.navigation.goBack()
+  onPress = async () => {
+    const { user } = this.props    
+    const data = {
+      idCard: user.profile.idCard,
+      email: (user.contact.email).trim().toLowerCase(),
+      mobilePhone: user.contact.mobilePhone,
+    }
+    const res = await this.props.requestOtp(data)
+
+    if (res.success) {
+      this.setState({
+        restart: true,
+      })
+    }
   }
   
   render() {
@@ -63,7 +77,7 @@ export default class extends React.Component {
         {
           headerotp({
             ...this.state,
-            start: 180,
+            restart: this.state.restart,
             refNo: ref_no || null,
             onPress: this.onPress,
           })
