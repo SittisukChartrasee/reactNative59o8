@@ -30,18 +30,21 @@ const fields = [
     type: 'mask',
     label: 'หมายเลขบัตรประชาชน',
     field: 'idCard',
-    option: '999 999 999 9999'
+    option: '999 999 999 9999',
+    required: true,
   },
   {
     type: 'textInput',
     label: 'อีเมล',
-    field: 'email'
+    field: 'email',
+    required: true,
   },
   {
     type: 'mask',
     label: 'หมายเลขโทรศัพท์มือถือ',
     field: 'mobilePhone',
-    option: '099 999 9999'
+    option: '099 999 9999',
+    required: true,
   }
 ]
 
@@ -56,7 +59,7 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     modal: false,
-    ReconditionRequired: [],
+    PreconditionRequired: [],
     InvalidArgument: [],
   }
 
@@ -79,8 +82,8 @@ export default class extends React.Component {
   }
 
   onValidation = (field) => {
-    const { ReconditionRequired, InvalidArgument } = this.state
-    const Required = find(ReconditionRequired, (o) => o.field === field)
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => o.field === field)
     const Invalid = find(InvalidArgument, (o) => o.field === field)
     if (Required) {
       return Required.description
@@ -91,7 +94,9 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction, user } = this.props
+    const { navigateAction, user } = this.props    
+
+    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
     const data = {
       idCard: user.profile.idCard,
@@ -104,10 +109,12 @@ export default class extends React.Component {
       navigateAction({ ...this.props, page: 'otp' })
     } else if (!res.success) {
       switch (res.message) {
-        case 'ReconditionRequired':
-          this.setState({ ReconditionRequired: res.details })
+        case 'PreconditionRequired':
+          this.setState({ PreconditionRequired: res.details })
+          break
         case 'InvalidArgument':
           this.setState({ InvalidArgument: res.details })
+          break
         default: return null
       }
     }

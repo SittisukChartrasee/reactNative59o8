@@ -6,6 +6,7 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import find from 'lodash/find'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -28,11 +29,14 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     modal: false,
+    PreconditionRequired: [],
+    InvalidArgument: [],
     fields: [
       {
         label: 'คุณได้รับเงินทุนจากแหล่งใด',
         type: 'modal',
         field: 'investmentSource',
+        required: true,
         init: [
           {
             label: 'เงินเดือน',
@@ -65,12 +69,14 @@ export default class extends React.Component {
         label: 'แหล่งที่มาของเงินทุน',
         type: 'search',
         field: 'investmentSourceCountry',
+        required: true,
       }, {
         label: 'วัตถุประสงค์การลงทุน',
         type: 'modal',
         field: 'investmentPurpose',
+        required: true,
         init: [
-          { 
+          {
             label: "เพื่อการลงทุนระยะสั้น",
             type: 'select',
           }, {
@@ -96,41 +102,54 @@ export default class extends React.Component {
         type: 'radioColumn',
         init: [{ title: 'ต้องการ หักภาษี ณ ที่จ่าย', active: true }, { title: 'ไม่ใช่' }],
         field: 'dividendWithHoldingTax',
+        required: false,
       },
     ]
   }
 
   handleInput = (props) => {
     const { updateUser, user } = this.props
-
-    console.log(props)
     if (props.type === 'modal') this.setState({ modal: true })
     else if (props.field === 'investmentSource') {
       const arr = props.data.split(',')
-      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: arr, investmentSourceOther: props.otherField } )
+      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: arr, investmentSourceOther: props.otherField })
     } else if (props.field === 'investmentSourceCountry') {
-      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value, nationalityCode: props.code, nationalityRisk: props.risk } )
+      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value, nationalityCode: props.code, nationalityRisk: props.risk })
     } else if (props.field === 'investmentPurpose') {
-      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.data } )
+      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.data })
     } else {
-      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value } )
+      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value })
     }
+  }
+
+  onValidation = (field) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => o.field === field)
+    const Invalid = find(InvalidArgument, (o) => o.field === field)
+    if (Required) {
+      return Required.description
+    } else if (Invalid) {
+      return Invalid.description
+    }
+    return null
   }
 
   onNext = async () => {
     const { navigateAction, user } = this.props
+    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       investmentSource,
       investmentSourceOther,
       investmentSourceCountry,
       investmentPurpose,
       dividendWithHoldingTax,
+      nationalityCode,
     } = user.sourceOfFund
-    
+
     const data = {
       investmentSource,
       investmentSourceOther,
-      investmentSourceCountry,
+      investmentSourceCountry: nationalityCode,
       investmentPurpose,
       dividendWithHoldingTax: !(dividendWithHoldingTax === 'ไม่ใช่'),
     }
@@ -141,6 +160,14 @@ export default class extends React.Component {
           this.setState({ modal: true })
         } else if (res.data.saveSourceOfFund.success) {
           navigateAction({ ...this.props, page: 'addressHome' })
+        } else if (!res.data.saveSourceOfFund.success) {
+          switch (res.data.saveSourceOfFund.message) {
+            case 'PreconditionRequired':
+              this.setState({ PreconditionRequired: res.data.saveSourceOfFund.details })
+            case 'InvalidArgument':
+              this.setState({ InvalidArgument: res.data.saveSourceOfFund.details })
+            default: return null
+          }
         }
       })
   }
@@ -175,10 +202,12 @@ export default class extends React.Component {
               field: d.field,
               label: d.label,
               type: d.type,
+              required: d.required,
               init: d.init,
               value: user.sourceOfFund[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
+              err: this.onValidation(d.field),
             }, key))
           }
         </KeyboardAwareScrollView>
@@ -191,7 +220,7 @@ export default class extends React.Component {
           })
         }
 
-        <NextButton onPress={this.onNext}/>
+        <NextButton onPress={this.onNext} />
       </Screen>
     )
   }

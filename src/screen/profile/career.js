@@ -29,19 +29,19 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     modal: false,
-    ReconditionRequired: [],
-    InvalidArgument: [
-      { field: 'incomeRange', description: 'รูปแบบไม่ถูกต้อง' }
-    ],
+    PreconditionRequired: [],
+    InvalidArgument: [],
     fields: [
       {
         label: 'ประเภทธุรกิจ',
         type: 'search',
         field: 'busType', // isicCode
+        required: true,
       }, {
         label: 'อาชีพ',
         type: 'search',
         field: 'occupation', // occupationCode
+        required: true,
       }, {
         label: 'รายได้ต่อเดือน (บาท)',
         type: 'dropdown',
@@ -56,10 +56,12 @@ export default class extends React.Component {
           { value: 'ไม่มีรายได้' }
         ],
         field: 'incomeRange', //incomeRangeCode
+        required: true,
       }, {
         label: 'ประเทศของแหล่งที่มารายได้',
         type: 'search',
         field: 'countrySourceOfIncome',
+        required: true,
       }
     ]
   }
@@ -82,9 +84,31 @@ export default class extends React.Component {
   }
 
   onValidation = (field) => {
-    const { ReconditionRequired, InvalidArgument } = this.state
-    const Required = find(ReconditionRequired, (o) => o.field === field)
-    const Invalid = find(InvalidArgument, (o) => o.field === field)
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => {
+      if (o.field === 'isicCode' && field === 'busType') {
+        return o
+      }
+      if (o.field === 'occupationCode' && field === 'occupation') {
+        return o
+      }
+      if (o.field === 'incomeRangeCode' && field === 'incomeRange') {
+        return o
+      }
+      return o.field === field
+    })
+    const Invalid = find(InvalidArgument, (o) => {
+      if (o.field === 'isicCode' && field === 'busType') {
+        return o
+      }
+      if (o.field === 'occupationCode' && field === 'occupation') {
+        return o
+      }
+      if (o.field === 'incomeRangeCode' && field === 'incomeRange') {
+        return o
+      }
+      return o.field === field
+    })
     if (Required) {
       return Required.description
     } else if (Invalid) {
@@ -95,6 +119,7 @@ export default class extends React.Component {
 
   onNext = async () => {
     const { navigateAction, user } = this.props
+    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       isicCode,
       occupationCode,
@@ -119,10 +144,10 @@ export default class extends React.Component {
           navigateAction({ ...this.props, page: 'sourceOfFund' })
         } else if (!res.data.saveCareer.success) {
           switch (res.data.saveCareer.message) {
-            case 'ReconditionRequired':
-              this.setState({ ReconditionRequired: res.details })
+            case 'PreconditionRequired':
+              this.setState({ PreconditionRequired: res.data.saveCareer.details })
             case 'InvalidArgument':
-              this.setState({ InvalidArgument: res.details })
+              this.setState({ InvalidArgument: res.data.saveCareer.details })
             default: return null
           }
         }
@@ -162,11 +187,12 @@ export default class extends React.Component {
               field: d.field,
               label: d.label,
               type: d.type,
+              required: d.required,
               init: d.init,
               value: user.career[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
-              err: this.onValidation(d.field)
+              err: this.onValidation(d.field),
             }, key))
           }
         </KeyboardAwareScrollView>

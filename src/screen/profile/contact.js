@@ -24,17 +24,21 @@ const fields = [
     label: 'โทรศัพท์ที่ทำงาน',
     type: 'textInput',
     field: 'workPhone',
+    required: false,
   }, {
     label: 'โทรศัพท์บ้าน',
     type: 'textInput',
     field: 'homePhone',
+    required: false,
   }, {
     label: 'หมายเลขโทรศัพท์มือถืิอ',
     type: 'textInput',
     field: 'mobilePhone',
+    required: false,
   }, {
     label: 'อีเมล',
     field: 'email',
+    required: false,
   }
 ]
 
@@ -48,11 +52,8 @@ const dispatchToProps = dispatch => ({
 @setMutation
 export default class extends React.Component {
   state = {
-    ReconditionRequired: [],
-    InvalidArgument: [
-      { field: 'workPhone', description: 'รูปแบบไม่ถูกต้อง' },
-      { field: 'mobilePhone', description: 'รูปแบบไม่ถูกต้อง' }
-    ],
+    PreconditionRequired: [],
+    InvalidArgument: [],
   }
 
   handleInput = (props) => {
@@ -61,8 +62,8 @@ export default class extends React.Component {
   }
 
   onValidation = (field) => {
-    const { ReconditionRequired, InvalidArgument } = this.state
-    const Required = find(ReconditionRequired, (o) => o.field === field)
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => o.field === field)
     const Invalid = find(InvalidArgument, (o) => o.field === field)
     if (Required) {
       return Required.description
@@ -92,15 +93,14 @@ export default class extends React.Component {
     this.props.saveContact({ variables: { input: data } })
       .then(res => {
         if (res.data.saveContact.success) {
-          console.log('OK')
           navigateAction({ ...this.props, page: 'suittest' })
           // navigateAction({ ...this.props, page: 'tutorialBank' })
         } else if (!res.data.saveContact.success) {
           switch (res.data.saveContact.message) {
-            case 'ReconditionRequired':
-              this.setState({ ReconditionRequired: res.details })
+            case 'PreconditionRequired':
+              this.setState({ PreconditionRequired: res.data.saveContact.details })
             case 'InvalidArgument':
-              this.setState({ InvalidArgument: res.details })
+              this.setState({ InvalidArgument: res.data.saveContact.details })
             default: return null
           }
         }
@@ -140,6 +140,7 @@ export default class extends React.Component {
               field: d.field,
               label: d.label,
               type: d.type,
+              required: d.required,
               init: d.init,
               value: user.contact[d.field],
               inVisible: d.inVisible,

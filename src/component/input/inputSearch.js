@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   StatusBar,
   TextInput,
+  Text,
   ScrollView,
 } from 'react-native'
 import { connect } from 'react-redux'
@@ -131,7 +132,7 @@ export default class extends React.Component {
 
   render() {
     const { open, confirmText } = this.state
-    const { field, value } = this.props
+    const { field, value, err } = this.props
     StatusBar.setBarStyle(open ? "dark-content" : "light-content")
     return (
       <View>
@@ -143,7 +144,8 @@ export default class extends React.Component {
           }
             <Image source={images.iconNextPageBlack} />
           </View>
-          <View style={{ height: 1, backgroundColor: colors.smoky, marginTop: 5 }} />
+          <View style={{ height: err ? 2 : 1, backgroundColor: err ? 'rgb(213, 0, 0)' : colors.smoky, marginTop: 5 }} />
+          <Text style={{ fontSize: 12, color: err ? 'rgb(213, 0, 0)' : undefined, marginTop: 4 }}>{err}</Text>
         </TouchableOpacity>
 
         <Modal visible={open} animationType="slide">

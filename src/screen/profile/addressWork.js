@@ -23,47 +23,59 @@ const fields = [
     label: 'ประเทศ',
     type: 'search',
     field: 'country', // countryCode
+    required: true,
   }, {
     label: 'ชื่อสถานที่ทำงาน',
     type: 'textInput',
     field: 'companyName',
+    required: true,
   }, {
     label: 'เลขที่',
     type: 'textInput',
     field: 'addressNoTH',
+    required: true,
   }, {
     label: 'อาคาร/หมู่บ้าน',
     type: 'textInput',
     field: 'addressVillageTH',
+    required: false,
   }, {
     label: 'ชั้น',
     type: 'textInput',
     field: 'floorNo',
+    required: false,
   }, {
     label: 'หมู่ที่',
     type: 'textInput',
     field: 'moo',
+    required: false,
   }, {
     label: 'ตรอก/ซอย/แยก',
     type: 'textInput',
     field: 'trokSoiYaek',
+    required: false,
   }, {
     label: 'ถนน',
     type: 'textInput',
     field: 'thanon',
+    required: false,
   }, {
     label: 'แขวง/ตำบล',
     type: 'search',
     field: 'subDistrict', // subDistrictCode
+    required: false,
   }, {
     label: 'เขต/อำเภอ',
     field: 'districtNameTH', // districtCode
+    required: true,
   }, {
     label: 'จังหวัด',
     field: 'provinceNameTH', // provinceCode
+    required: true,
   }, {
     label: 'รหัสไปรษณีย์',
     field: 'zipCode',
+    required: false,
   }
 ]
 
@@ -78,11 +90,8 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     modal: false,
-    ReconditionRequired: [],
-    InvalidArgument: [
-      { field: 'floorNo', description: 'รูปแบบไม่ถูกต้อง' },
-      { field: 'thanon', description: 'รูปแบบไม่ถูกต้อง' }
-    ],
+    PreconditionRequired: [],
+    InvalidArgument: [],
   }
 
   handleInput = (props) => {
@@ -109,9 +118,31 @@ export default class extends React.Component {
   }
 
   onValidation = (field) => {
-    const { ReconditionRequired, InvalidArgument } = this.state
-    const Required = find(ReconditionRequired, (o) => o.field === field)
-    const Invalid = find(InvalidArgument, (o) => o.field === field)
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => {
+      if (o.field === 'countryCode' && field === 'country') {
+        return o
+      }
+      if (o.field === 'districtCode' && field === 'subDistrict') {
+        return o
+      }
+      if (o.field === 'provinceCode' && field === 'provinceNameTH') {
+        return o
+      }
+      return o.field === field
+    })
+    const Invalid = find(InvalidArgument, (o) => {
+      if (o.field === 'countryCode' && field === 'country') {
+        return o
+      }
+      if (o.field === 'districtCode' && field === 'districtNameTH') {
+        return o
+      }
+      if (o.field === 'provinceCode' && field === 'provinceNameTH') {
+        return o
+      }
+      return o.field === field
+    })
     if (Required) {
       return Required.description
     } else if (Invalid) {
@@ -122,6 +153,7 @@ export default class extends React.Component {
 
   onNext = async () => {
     const { navigateAction, user } = this.props
+    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       countryCode,
       companyName,
@@ -161,16 +193,24 @@ export default class extends React.Component {
 
     this.props.saveWorkplaceAddress({ variables: { input: data } })
       .then(res => {
+        console.log(res)
         if (user.addressWork.countryRisk) {
           return this.setState({ modal: true })
         } else if (res.data.saveWorkplaceAddress.success) {
           navigateAction({ ...this.props, page: 'chooseCurr' })
+        } else if (!res.data.saveWorkplaceAddress.success) {
+          switch (res.data.saveWorkplaceAddress.message) {
+            case 'PreconditionRequired':
+              this.setState({ PreconditionRequired: res.data.saveWorkplaceAddress.details })
+            case 'InvalidArgument':
+              this.setState({ InvalidArgument: res.data.saveWorkplaceAddress.details })
+            default: return null
+          }
         }
       })
   }
 
   render() {
-    const { navigateAction } = this.props
     return (
       <Screen color="transparent">
         <NavBar
@@ -198,6 +238,7 @@ export default class extends React.Component {
               field: d.field,
               label: d.label,
               type: d.type,
+              required: d.required,
               init: d.init,
               onHandleDistrict: this.onHandleDistrict,
               value: this.props.user.addressWork[d.field],

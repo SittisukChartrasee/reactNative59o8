@@ -36,6 +36,7 @@ const init = {
     monthOfBirth: '4',
     dayOfBirth: '4',
     martialStatus: '',
+    isChild: 'ไม่มี',
     nationality: 'ไทย',
     nationalityCode: 'TH',
   },
@@ -58,7 +59,7 @@ const init = {
   },
   addressHome: {
     country: '',
-    countryCode: 'TH',
+    countryCode: '',
     countryRisk: false,
     addressNoTH: '',
     moo: '',
@@ -76,7 +77,7 @@ const init = {
   },
   addressCurr: {
     country: '',
-    countryCode: 'TH',
+    countryCode: '',
     addressNoTH: '',
     moo: '',
     addressVillageTH: '',
@@ -92,7 +93,7 @@ const init = {
     zipCode: '',
   },
   addressWork: {
-    countryCode: 'TH',
+    countryCode: '',
     companyName: '',
     addressNoTH: '',
     addressVillageTH: '',
@@ -146,7 +147,7 @@ const init = {
     IDCardNo: '',
     marryPassport: '',
     marryCountry: '',
-    nationalityCode: '',
+    nationalityCode: 'TH',
     nationalityRisk: false,
     expireFlag: '',
     isIDCardExpDate: false,
