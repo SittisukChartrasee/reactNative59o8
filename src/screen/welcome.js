@@ -23,6 +23,7 @@ import { requestOtp } from '../redux/actions/root-active'
 import { updateUser } from '../redux/actions/commonAction'
 // import * as validate from '../utility/validation'
 
+//test
 const { width: widthScreen } = Dimensions.get('window')
 
 const fields = [
