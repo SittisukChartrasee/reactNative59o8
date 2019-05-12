@@ -7,6 +7,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import find from 'lodash/find'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
@@ -16,7 +17,7 @@ import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
 import { updateUser } from '../../redux/actions/commonAction'
-
+import { convertDate, getOfBirth, getStatusGender, getStatusMartial, getStatusChild } from '../../utility/helper'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -148,8 +149,107 @@ export default class extends React.Component {
     }
   }
 
+  onValidation = (field) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => {
+      if ((o.field === 'firstDayOfBirth ' ||
+        o.field === 'firstMonthOfBirth' ||
+        o.field === 'firstYearOfBirth') && field === 'firstBirthDay') {
+        return o
+      }
+      if ((o.field === 'secondDayOfBirth ' ||
+        o.field === 'secondMonthOfBirth' ||
+        o.field === 'secondYearOfBirth') && field === 'secondBirthDay') {
+        return o
+      }
+      return o.field === field
+    })
+    const Invalid = find(InvalidArgument, (o) => {
+      if ((o.field === 'firstDayOfBirth ' ||
+        o.field === 'firstMonthOfBirth' ||
+        o.field === 'firstYearOfBirth') && field === 'firstBirthDay') {
+        return o
+      }
+      if ((o.field === 'secondDayOfBirth ' ||
+        o.field === 'secondMonthOfBirth' ||
+        o.field === 'secondYearOfBirth') && field === 'secondBirthDay') {
+        return o
+      }
+      return o.field === field
+    })
+    if (Required) {
+      return Required.description
+    } else if (Invalid) {
+      return Invalid.description
+    }
+    return null
+  }
+
+  onNext = async () => {
+    const { navigateAction, user } = this.props
+    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+
+    const {
+      firstTitle,
+      firstFirstName,
+      firstLastName,
+      firstBirthDay,
+      firstDocNo,
+      firstExpireDateFlag,
+      firstDocExpDate,
+      secondTitle,
+      secondFirstName,
+      secondLastName,
+      secondBirthDay,
+      secondDocNo,
+      secondExpireDateFlag,
+      secondDocExpDate,
+    } = user.child
+
+
+    const data = {
+      firstTitle,
+      firstFirstName,
+      firstLastName,
+      firstDayOfBirth: getOfBirth(firstBirthDay, 'day'),
+      firstMonthOfBirth: `${getOfBirth(firstBirthDay, 'month')}`,
+      firstYearOfBirth: getOfBirth(firstBirthDay, 'year'),
+      firstDocNo,
+      firstIsNoExpDate: firstExpireDateFlag === 'มีวันหมดอายุ' ? true : false,
+      firstDocExpDate: convertDate(firstDocExpDate),
+      secondTitle,
+      secondFirstName,
+      secondLastName,
+      secondDayOfBirth: getOfBirth(secondBirthDay, 'day'),
+      secondMonthOfBirth: `${getOfBirth(secondBirthDay, 'month')}`,
+      secondYearOfBirth: getOfBirth(secondBirthDay, 'year'),
+      secondDocNo,
+      secondIsNoExpDate: secondExpireDateFlag === 'มีวันหมดอายุ' ? true : false,
+      secondDocExpDate: convertDate(secondDocExpDate),
+    }
+
+    console.log(data)
+
+    this.props.saveChild({ variables: { input: data } })
+      .then(res => {
+        if (res.data.saveChild.success) {
+          navigateAction({ ...this.props, page: 'career' })
+        } else if (!res.data.saveChild.success) {
+          switch (res.data.saveChild.message) {
+            case 'PreconditionRequired':
+              this.setState({ PreconditionRequired: res.data.saveChild.details })
+            case 'InvalidArgument':
+              this.setState({ InvalidArgument: res.data.saveChild.details })
+            default: return null
+          }
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
   render() {
-    const { navigateAction } = this.props
     return (
       <Screen color="transparent">
         <NavBar
@@ -181,6 +281,7 @@ export default class extends React.Component {
               init: d.init,
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
+              err: this.onValidation(d.field)
             }, key))
           }
         </KeyboardAwareScrollView>
@@ -194,7 +295,7 @@ export default class extends React.Component {
           })
         }
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'career' })} />
+        <NextButton onPress={this.onNext} />
       </Screen>
     )
   }
