@@ -10,6 +10,7 @@ import {
   StatusBar,
 } from 'react-native';
 import ImageMarker from "react-native-image-marker"
+import ImageResizer from 'react-native-image-resizer'
 import { RNCamera } from 'react-native-camera'
 import colors from '../../config/colors'
 import images from '../../config/images'
@@ -28,29 +29,21 @@ const PendingView = () => (
   </View>
 )
 
-const getSizeMarker = (switchCamera) => {
+const getSizeMarker = () => {
   if (Platform.OS === 'ios') {
     return {
-      X: 170,
+      X: 190,
       Y: 250,
       scale: 1,
-      markerScale: .3,
+      markerScale: .4,
     }
   }
 
-  if (switchCamera) { // selfie
-    return {
-      X: 50,
-      Y: 250,
-      scale: 1,
-      markerScale: .45,
-    }
-  }
   return {
-    X: 150,
-    Y: 500,
+    X: 100,
+    Y: 400,
     scale: 1,
-    markerScale: .8,
+    markerScale: .6,
   }
 }
 
@@ -138,15 +131,15 @@ export default class extends React.Component {
       skipProcessing: true,
     }
     const data = await camera.takePictureAsync(options)
+    const resultImage = await ImageResizer.createResizedImage(data.uri, 1280, 720, 'JPEG', 80)
 
     ImageMarker.markImage({
-      src: data.uri,
+      src: resultImage,
       markerSrc: images.textTermAndCon,
-      ...getSizeMarker(this.props.switchCamera),
+      ...getSizeMarker(),
       quality: 100
     })
       .then(path => {
-        console.log('file://&&' + path)
         this.props.handleInput({ type: 'camera', uri: 'file://' + path })
       })
       .catch(err => console.log(err, 'err'))
