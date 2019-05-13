@@ -22,6 +22,8 @@ PODS:
     - React
   - react-native-camera/RN (2.6.0):
     - React
+  - react-native-image-resizer (1.0.1):
+    - React
   - React/Core (0.58.6):
     - yoga (= 0.58.6.React)
   - React/CxxBridge (0.58.6):
@@ -40,8 +42,15 @@ PODS:
     - React/cxxreact
     - React/jsi
   - React/jsinspector (0.58.6)
+  - React/RCTImage (0.58.6):
+    - React/Core
+    - React/RCTNetwork
   - React/RCTLinkingIOS (0.58.6):
     - React/Core
+  - React/RCTNetwork (0.58.6):
+    - React/Core
+  - RNImageMarker (0.4.4):
+    - React
   - yoga (0.58.6.React)
 
 DEPENDENCIES:
@@ -51,9 +60,12 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Picker (from `../node_modules/react-native-picker`)
   - react-native-camera (from `../node_modules/react-native-camera`)
+  - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
   - React/Core (from `../node_modules/react-native`)
   - React/CxxBridge (from `../node_modules/react-native`)
+  - React/RCTImage (from `../node_modules/react-native`)
   - React/RCTLinkingIOS (from `../node_modules/react-native`)
+  - RNImageMarker (from `../node_modules/react-native-image-marker`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -75,20 +87,26 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
+  react-native-image-resizer:
+    :path: "../node_modules/react-native-image-resizer"
+  RNImageMarker:
+    :path: "../node_modules/react-native-image-marker"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  BVLinearGradient: 0d985ec461359c82bc254f26d11008bdae50d17a
+  BVLinearGradient: b0b70acf63ee888829b7c2ebbf6b50e227396e55
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
-  Picker: 37554355aef82a532ea95b71b6eeba66bc86182b
-  React: 130b87b2d5e2baac646954282cab87be986d98fc
-  react-native-camera: 60e1ec7b259a7779b508712f75671701f23a6b4d
-  yoga: 32d7ef1081951e9a35a4c72a7be797598b138a48
+  Picker: 67a2566d9ff6b141d505d88b9177f905aaa5f1a6
+  React: 16c4fb7ce3fc30c041bce809ceae33bf57e7c142
+  react-native-camera: 9c50d7def800895e7991ccda6203929553ceec9c
+  react-native-image-resizer: 04a3409e7d4ad646c4468671c69dec490def139c
+  RNImageMarker: 27846f9d089b804ca6ca35ab1e6d00df41e9bab1
+  yoga: 0885622311729a02c2bc02dca97167787a51488b
 
-PODFILE CHECKSUM: 07076b5cd96b83a148e24ff12c0b7f5696907652
+PODFILE CHECKSUM: 93ab874eaa5cabd0efa9033bda448169db90df35
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.5.3

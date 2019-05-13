@@ -28,6 +28,8 @@
     "react-native": "0.58.6",
     "react-native-camera": "^2.6.0",
     "react-native-gesture-handler": "^1.0.17",
+    "react-native-image-marker": "^0.4.4",
+    "react-native-image-resizer": "^1.0.1",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-linear-gradient": "^2.5.3",
     "react-native-masked-text": "^1.11.0",

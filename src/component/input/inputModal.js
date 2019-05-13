@@ -9,6 +9,7 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { NavBar } from '../../component/gradient'
 import {
   TBold,
@@ -119,7 +120,9 @@ export default class extends React.Component {
               }
             />
             <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
-              <ScrollView
+              <KeyboardAwareScrollView
+                extraScrollHeight={50}
+                enableOnAndroid
                 style={{ backgroundColor: colors.lightgrey }}
                 contentContainerStyle={{ paddingBottom: 100 }}
                 showsVerticalScrollIndicator={false}
@@ -135,7 +138,7 @@ export default class extends React.Component {
                     )
                   }
                 </View>
-              </ScrollView>
+              </KeyboardAwareScrollView>
             </SafeAreaView>
           </View>
         </Modal>

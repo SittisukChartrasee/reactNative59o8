@@ -8,20 +8,20 @@ import colors from '../../config/colors';
 import images from '../../config/images';
 import { TLight, TMed, TBold } from '../texts';
 
-const secToMinute = (sec) => `${Math.floor(sec / 60).toString().padStart(2, '0')}:${(sec % 60).toString().padEnd(2, '0')}`
+const secToMinute = (sec) => `${Math.floor(sec / 60).toString().padStart(2, '0')}:${(sec % 60).toString().padStart(2, '0')}`
 
 export default class extends React.Component {
   static defaultProps = {
     dot: [false, false, false, false, false, false],
     currentDot: '',
-    start: 0,
-    end: 0,
+    restart: false,
     refNo: null,
     onPress: () => {},
   }
+
   state = {
-    startState: this.props.start,
-    endState: this.props.end
+    startState: 180,
+    endState: 0
   }
 
   timer = () => {
@@ -35,6 +35,13 @@ export default class extends React.Component {
 
   componentDidMount = () => {
     this.timer()
+  }
+
+  componentWillReceiveProps = async (newProps) => {
+    if (newProps.restart) {
+      await this.setState({ startState: 180 })
+      this.timer()
+    }
   }
 
   render() {
@@ -98,11 +105,11 @@ export default class extends React.Component {
           </View>
         </View>
 
-        <View style={{ flex: 1, paddingHorizontal: 24, paddingTop: 16, backgroundColor: colors.white }}>
+        <View style={{ flex: 1, paddingHorizontal: 24, paddingTop: 5, backgroundColor: colors.white }}>
           <TLight color={colors.grey}>กรุณากรอกรหัสผ่านแบบใช้ครั้งเดียว ( SMS OTP) ที่ได้รับทาง SMS บนมือถือของท่าน (รหัส OTP มีอายุการใช้งาน 3 นาที)</TLight>
           <TBold color={colors.emerald} fontSize={16} mt={16}>รหัสอ้างอิง : {refNo}</TBold>
 
-            <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 16 }}>
+            <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 10 }}>
               {
                 dot.map((d, key) => {
                   return d ? (

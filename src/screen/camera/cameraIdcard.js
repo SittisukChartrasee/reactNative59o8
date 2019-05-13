@@ -29,6 +29,7 @@ export default class extends React.Component {
   onNext = async () => {
     const { navigateAction } = this.props
     const token = await AsyncStorage.getItem("access_token")
+
     const data = new FormData()
     data.append('file', {
       uri: this.state.photo,

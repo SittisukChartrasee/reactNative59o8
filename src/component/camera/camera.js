@@ -5,12 +5,15 @@ import {
   Image,
   TouchableOpacity,
   TouchableHighlight,
+  Platform,
   View,
   StatusBar,
 } from 'react-native';
-import { RNCamera } from 'react-native-camera';
-import colors from '../../config/colors';
-import images from '../../config/images';
+import ImageMarker from "react-native-image-marker"
+import ImageResizer from 'react-native-image-resizer'
+import { RNCamera } from 'react-native-camera'
+import colors from '../../config/colors'
+import images from '../../config/images'
 import { TBold } from '../texts';
 
 const PendingView = () => (
@@ -24,7 +27,25 @@ const PendingView = () => (
   >
     <TBold color={colors.white}>Waiting</TBold>
   </View>
-);
+)
+
+const getSizeMarker = () => {
+  if (Platform.OS === 'ios') {
+    return {
+      X: 190,
+      Y: 250,
+      scale: 1,
+      markerScale: .4,
+    }
+  }
+
+  return {
+    X: 100,
+    Y: 400,
+    scale: 1,
+    markerScale: .6,
+  }
+}
 
 export default class extends React.Component {
   static defaultProps = {
@@ -46,7 +67,7 @@ export default class extends React.Component {
       <View style={styles.container}>
         <RNCamera
           style={styles.preview}
-          type={this.props.switchCamera ? this.state.switch ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back : RNCamera.Constants.Type.back}
+          type={this.props.switchCamera ? (this.state.switch ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back) : RNCamera.Constants.Type.back}
           flashMode={RNCamera.Constants.FlashMode.off}
           androidCameraPermissionOptions={{
             title: 'Permission to use camera',
@@ -110,7 +131,19 @@ export default class extends React.Component {
       skipProcessing: true,
     }
     const data = await camera.takePictureAsync(options)
-    this.props.handleInput({ type: 'camera', uri: data.uri })
+    const resultImage = await ImageResizer.createResizedImage(data.uri, 1280, 720, 'JPEG', 80)
+
+    ImageMarker.markImage({
+      src: resultImage,
+      markerSrc: images.textTermAndCon,
+      ...getSizeMarker(),
+      quality: 100
+    })
+      .then(path => {
+        this.props.handleInput({ type: 'camera', uri: 'file://' + path })
+      })
+      .catch(err => console.log(err, 'err'))
+
   };
 }
 
