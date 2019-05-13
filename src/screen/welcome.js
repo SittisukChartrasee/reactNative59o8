@@ -30,7 +30,7 @@ const fields = [
     type: 'mask',
     label: 'หมายเลขบัตรประชาชน',
     field: 'idCard',
-    option: '999 999 999 9999',
+    option: '9 9999 99999 99 9',
     required: true,
   },
   {

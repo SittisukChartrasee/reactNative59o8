@@ -188,7 +188,7 @@ export default class extends React.Component {
 
     const data = {
       docNo: idCard,
-      jcNumber,
+      jcNumber: jcNumber.trim().toUpperCase(),
       isNoDocExpDate,
       docExpDate: expireSatus === 'มีวันหมดอายุ' ? convertDate(docExpDate) : new Date('9999-12-31'),
       genderCode: getStatusGender(gender),
