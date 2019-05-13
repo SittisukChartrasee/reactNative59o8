@@ -114,6 +114,19 @@ const saveIdentity = gql`
   }
 `
 
+const saveChild = gql`
+  mutation saveChild($input: NewChild!) {
+    saveChild(input: $input) {
+      success
+      message
+      details{
+        field
+        description
+      }
+    }
+  }
+`
+
 const saveFatca = gql`
   mutation saveFatca($input: NewFatca!) {
     saveFatca(input: $input) {
@@ -255,6 +268,7 @@ export default compose(
   graphql(saveMailingSameCurrent, { name: 'saveMailingSameCurrent' }),
   graphql(saveWorkSamePermanent, { name: 'saveWorkSamePermanent' }),
   graphql(saveIdentity, { name: 'saveIdentity' }),
+  graphql(saveChild, { name: 'saveChild' }),
   graphql(saveFatca, { name: 'saveFatca' }),
   graphql(saveFraud, { name: 'saveFraud' }),
   graphql(savePermanentAddress, { name: 'savePermanentAddress' }),

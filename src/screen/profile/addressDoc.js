@@ -58,7 +58,7 @@ const fields = [
     label: 'แขวง/ตำบล',
     type: 'search',
     field: 'subDistrict', // districtCode
-    required: false,
+    required: true,
   }, {
     label: 'เขต/อำเภอ',
     field: 'districtNameTH', //subDistrictCode
@@ -118,10 +118,22 @@ export default class extends React.Component {
       if (o.field === 'countryCode' && field === 'country') {
         return o
       }
+      if ((o.field === 'subDistrictCode' ||
+        o.field === 'districtCode' ||
+        o.field === 'provinceCode' ||
+        o.field === 'zipCode') && field === 'subDistrict') {
+        return o
+      }
       return o.field === field
     })
     const Invalid = find(InvalidArgument, (o) => {
       if (o.field === 'countryCode' && field === 'country') {
+        return o
+      }
+      if ((o.field === 'subDistrictCode' ||
+        o.field === 'districtCode' ||
+        o.field === 'provinceCode' ||
+        o.field === 'zipCode') && field === 'subDistrict') {
         return o
       }
       return o.field === field

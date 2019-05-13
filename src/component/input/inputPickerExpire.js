@@ -80,7 +80,7 @@ const renderFormatText = (date) => {
 
 export default class extends React.Component {
   static defaultProps = {
-    err: 'asdf',
+    err: '',
   }
   state = {
     date: [2562,'มกราคม',1]
