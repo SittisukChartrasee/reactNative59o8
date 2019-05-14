@@ -116,8 +116,8 @@ const init = {
     // email: "b@b.com"
     workPhone: '',
     homePhone: '',
-    mobilePhone: "",
-    email: ""
+    mobilePhone: '',
+    email: ''
   },
   career: {
     busType: '',

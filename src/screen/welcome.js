@@ -58,7 +58,9 @@ const dispatchToProps = dispatch => ({
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   state = {
-    modal: false,
+    modal: {
+      visible: false
+    },
     PreconditionRequired: [],
     InvalidArgument: [],
   }
@@ -94,7 +96,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction, user } = this.props    
+    const { navigateAction, user } = this.props
 
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
@@ -104,20 +106,33 @@ export default class extends React.Component {
       mobilePhone: user.contact.mobilePhone,
     }
 
-    const res = await this.props.requestOtp(data)
-    if (res.success) {
-      navigateAction({ ...this.props, page: 'otp' })
-    } else if (!res.success) {
-      switch (res.message) {
-        case 'PreconditionRequired':
-          this.setState({ PreconditionRequired: res.details })
-          break
-        case 'InvalidArgument':
-          this.setState({ InvalidArgument: res.details })
-          break
-        default: return null
-      }
-    }
+    this.props.requestOtp(data)
+      .then(res => {
+        console.log(res)
+        if (res.success) {
+          navigateAction({ ...this.props, page: 'otp' })
+        } else if (!res.success) {
+          switch (res.message) {
+            case 'PreconditionRequired':
+              this.setState({ PreconditionRequired: res.details })
+              break
+            case 'InvalidArgument':
+              this.setState({ InvalidArgument: res.details })
+              break
+            default:
+              const modal = {
+                dis: res.message,
+                visible: true,
+                onPress: () => this.setState({ modal: { visible: false } })
+              }
+              this.setState({ modal })
+              break
+          }
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   render() {
@@ -145,16 +160,12 @@ export default class extends React.Component {
               err: this.onValidation(setField.field)
             }, key))
           }
-        
+
         </KeyboardAwareScrollView>
         <LongPositionButton label="ถัดไป" onPress={this.onNext} />
 
         {
-          Modal({
-            visible: modal,
-            dis: `อีเมลหรือหมายเลขโทรศัพท์นี้ \nได้ทำการสมัครเปิดบัญชีแล้ว`,
-            onPress: () => this.setState({ modal: false })
-          })
+          Modal(modal)
         }
       </Screen>
     )

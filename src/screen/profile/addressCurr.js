@@ -203,6 +203,7 @@ export default class extends React.Component {
   }
 
   render() {
+    const { user } = this.props
     return (
       <Screen color="transparent">
         <NavBar
@@ -232,6 +233,7 @@ export default class extends React.Component {
               type: d.type,
               required: d.required,
               init: d.init,
+              value: user.addressCurr[d.field],
               onHandleDistrict: this.onHandleDistrict,
               value: this.props.user.addressCurr[d.field],
               handleInput: (props) => this.handleInput(props),

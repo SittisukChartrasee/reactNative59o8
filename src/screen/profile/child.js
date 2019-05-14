@@ -250,6 +250,7 @@ export default class extends React.Component {
   }
 
   render() {
+    const { user } = this.props
     return (
       <Screen color="transparent">
         <NavBar
@@ -279,6 +280,7 @@ export default class extends React.Component {
               type: d.type,
               required: d.required,
               init: d.init,
+              value: user.child[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
               err: this.onValidation(d.field)

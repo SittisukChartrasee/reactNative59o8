@@ -5,15 +5,17 @@ import { bindActionCreators } from 'redux'
 import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
 import { headerotp } from '../component/headSpace'
-import { navigateAction } from '../redux/actions'
+import { navigateAction, navigateReset } from '../redux/actions'
 import colors from '../config/colors'
 import { TLight, TBold, TMed } from '../component/texts'
 import images from '../config/images'
 import { velidateOtp, requestOtp } from '../redux/actions/root-active'
+import Modal from '../component/modal'
 
 const mapToProps = ({ root, user }) => ({ root, user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
+  navigateReset: bindActionCreators(navigateReset, dispatch),
   requestOtp: bindActionCreators(requestOtp, dispatch),
   velidateOtp: bindActionCreators(velidateOtp, dispatch)
 })
@@ -25,8 +27,10 @@ export default class extends React.Component {
     number: '',
     currentDot: '',
     restart: false,
+    modal: false,
+    dis: ''
   }
-  
+
   setNumber = async (obj) => {
     const { navigateAction, root } = this.props
     const data = {
@@ -40,10 +44,18 @@ export default class extends React.Component {
     obj.dot.map(d => d && this.delayDot(d))
 
     if (obj.number.length === 6) {
-      const res = await this.props.velidateOtp(data)
-      if (res.success) {
-        navigateAction({ ...this.props, page: 'passcode' })
-      }
+      this.props.velidateOtp(data)
+        .then(res => {
+          console.log(res)
+          if (res.success) {
+            navigateAction({ ...this.props, page: 'passcode' })
+          } else if (!res.success) {
+            this.setState({ dis: res.message, modal: true })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 
@@ -55,22 +67,32 @@ export default class extends React.Component {
   }
 
   onPress = async () => {
-    const { user } = this.props    
+    const { user } = this.props
     const data = {
       idCard: user.profile.idCard,
       email: (user.contact.email).trim().toLowerCase(),
       mobilePhone: user.contact.mobilePhone,
     }
-    const res = await this.props.requestOtp(data)
 
-    if (res.success) {
-      this.setState({
-        restart: true,
+    this.props.requestOtp(data)
+      .then(res => {
+        console.log(res)
+        if (res.success) {
+          this.setState({ restart: true, })
+        }
+        else if (!res.success) {
+          this.setState({ dis: res.message, modal: true })
+        }
       })
-    }
+      .catch(err => {
+        console.log(err)
+      })
   }
-  
+
+  onPrevPage = () => this.props.navigateReset({ ...this.props, page: 'welcome' })
+
   render() {
+    const { modal, dis } = this.state
     const { ref_no } = this.props.root
     return (
       <Screen>
@@ -80,9 +102,17 @@ export default class extends React.Component {
             restart: this.state.restart,
             refNo: ref_no || null,
             onPress: this.onPress,
+            onPrevPage: this.onPrevPage,
           })
         }
-        <Keyboard setNumber={this.setNumber}/>
+        <Keyboard setNumber={this.setNumber} />
+        {
+          Modal({
+            visible: modal,
+            dis,
+            onPress: () => this.setState({ dis: '', modal: false })
+          })
+        }
       </Screen>
     )
   }

@@ -32,7 +32,7 @@ const fields = [
     required: false,
   }, {
     label: 'หมายเลขโทรศัพท์มือถืิอ',
-    type: 'textInput',
+    // type: 'textInput',
     field: 'mobilePhone',
     required: false,
   }, {

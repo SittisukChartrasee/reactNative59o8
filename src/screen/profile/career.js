@@ -159,7 +159,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { navigateAction, user } = this.props
+    const { user } = this.props
     return (
       <Screen color="transparent">
         <NavBar

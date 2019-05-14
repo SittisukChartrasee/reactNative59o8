@@ -204,6 +204,7 @@ export default class extends React.Component {
   }
 
   render() {
+    const { user } = this.props
     return (
       <Screen color="transparent">
         <NavBar
@@ -234,7 +235,7 @@ export default class extends React.Component {
               required: d.required,
               init: d.init,
               onHandleDistrict: this.onHandleDistrict,
-              value: this.props.user.addressDoc[d.field],
+              value: user.addressDoc[d.field],
               handleInput: (props) => this.handleInput(props),
               err: this.onValidation(d.field)
             }, key))
