@@ -89,7 +89,8 @@ export default class extends React.Component {
       })
   }
 
-  onPrevPage = () => this.props.navigateReset({ ...this.props, page: 'welcome' })
+  // onPrevPage = () => this.props.navigateReset({ ...this.props, page: 'welcome' })
+  onPrevPage = () => this.props.navigation.goBack()
 
   render() {
     const { modal, dis } = this.state

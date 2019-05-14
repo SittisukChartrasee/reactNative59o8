@@ -4,13 +4,12 @@ import { connect } from 'react-redux'
 import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
 import { HeadSpace } from '../component/headSpace'
-import { navigateAction, navigateReset } from '../redux/actions'
+import { navigateAction } from '../redux/actions'
 import { updatePasscode } from '../redux/actions/commonAction'
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
-  navigateReset: bindActionCreators(navigateReset, dispatch),
   updatePasscode: bindActionCreators(updatePasscode, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
@@ -33,7 +32,7 @@ export default class extends React.Component {
     }
   }
 
-  onPrevPage = () => this.props.navigateReset({ ...this.props, page: 'otp' })
+  onPrevPage = () => this.props.navigation.goBack()
 
   render() {
     const { dot, number } = this.state

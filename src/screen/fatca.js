@@ -56,8 +56,9 @@ const dispatchToProps = dispatch => ({
 @setMutation
 export default class extends React.Component {
   state = {
-    modal: false,
-    dis: ''
+    modal: {
+      visible: false
+    },
   }
   onPress = (obj) => {
     this.props.updateFatca('fatca', obj.choice)
@@ -74,17 +75,24 @@ export default class extends React.Component {
     }
 
     if (!checkActiveData(fatca).IS_INCORRECT) {
-      this.setState({
+      const modal = {
         dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
-        modal: true
-      })
+        visible: true,
+        onPress: () => this.setState({ modal: { visible: false } })
+      }
+      return this.setState({ modal })
     } else {
       this.props.saveFatca({ variables: { input: data } })
         .then(res => {
           if (res.data.saveFatca.success) {
             navigateAction({ ...this.props, page: 'fraud' })
           } else if (!res.data.saveFatca.success) {
-            this.setState({ dis: res.data.saveFatca.message, modal: true })
+            const modal = {
+              dis: res.data.saveFatca.message,
+              visible: true,
+              onPress: () => this.setState({ modal: { visible: false } })
+            }
+            return this.setState({ modal })
           }
         })
         .catch(err => {
@@ -94,8 +102,8 @@ export default class extends React.Component {
   }
 
   render() {
-    const { navigation, navigateAction } = this.props
-    const { modal, dis } = this.state
+    const { navigation } = this.props
+    const { modal } = this.state
     const fatca = this.props.fatcaReducer.fatca
     return (
       <Screen color="transparent">
@@ -121,11 +129,7 @@ export default class extends React.Component {
         }
         <NextButton disabled={checkActiveData(fatca).IS_TRUE} onPress={this.onNext} />
         {
-          Modal({
-            visible: modal,
-            dis,
-            onPress: () => this.setState({ dis: '', modal: false })
-          })
+          Modal(modal)
         }
       </Screen>
     )

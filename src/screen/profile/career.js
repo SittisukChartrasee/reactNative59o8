@@ -13,7 +13,7 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import modal from '../../component/modal'
+import Modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
 import { updateUser } from '../../redux/actions/commonAction'
@@ -28,7 +28,9 @@ const dispatchToProps = dispatch => ({
 @setMutation
 export default class extends React.Component {
   state = {
-    modal: false,
+    modal: {
+      visible: false
+    },
     PreconditionRequired: [],
     InvalidArgument: [],
     fields: [
@@ -71,9 +73,9 @@ export default class extends React.Component {
     console.log(props)
     if (props.type === 'modal') this.setState({ modal: true })
     else if (props.field === 'busType') {
-      updateUser('career', { ...user.career, [props.field]: props.value, isicCode: props.code }) 
+      updateUser('career', { ...user.career, [props.field]: props.value, isicCode: props.code })
     } else if (props.field === 'busType') {
-      updateUser('career', { ...user.career, [props.field]: props.value, isicCode: props.code }) 
+      updateUser('career', { ...user.career, [props.field]: props.value, isicCode: props.code })
     } else if (props.field === 'occupation') {
       updateUser('career', { ...user.career, [props.field]: props.value, occupationCode: props.code })
     } else if (props.field === 'incomeRange') {
@@ -138,28 +140,41 @@ export default class extends React.Component {
 
     this.props.saveCareer({ variables: { input: data } })
       .then(res => {
+        console.log(res)
         if (user.career.countryRisk) {
-          return this.setState({ modal: true })
+          const modal = {
+            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
+            visible: true,
+            onPress: () => this.setState({ modal: { visible: false } })
+          }
+          return this.setState({ modal })
         } else if (res.data.saveCareer.success) {
           navigateAction({ ...this.props, page: 'sourceOfFund' })
         } else if (!res.data.saveCareer.success) {
           switch (res.data.saveCareer.message) {
             case 'PreconditionRequired':
-              this.setState({ PreconditionRequired: res.data.saveCareer.details })
+              return this.setState({ PreconditionRequired: res.data.saveCareer.details })
             case 'InvalidArgument':
-              this.setState({ InvalidArgument: res.data.saveCareer.details })
-            default: return null
+              return this.setState({ InvalidArgument: res.data.saveCareer.details })
+            default:
+              const modal = {
+                dis: res.data.saveCareer.message,
+                visible: true,
+                onPress: () => this.setState({ modal: { visible: false } })
+              }
+              return this.setState({ modal })
           }
         }
       })
       .catch(err => {
         console.log(err)
       })
-    
+
   }
 
   render() {
     const { user } = this.props
+    const { modal } = this.state
     return (
       <Screen color="transparent">
         <NavBar
@@ -198,14 +213,10 @@ export default class extends React.Component {
         </KeyboardAwareScrollView>
 
         {
-          modal({
-            visible: this.state.modal,
-            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
-            onPress: () => this.setState({ modal: false })
-          })
+          Modal(modal)
         }
 
-        <NextButton onPress={this.onNext}/>
+        <NextButton onPress={this.onNext} />
       </Screen>
     )
   }

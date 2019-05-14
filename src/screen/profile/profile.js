@@ -218,51 +218,45 @@ export default class extends React.Component {
       martialStatusCode: getStatusMartial(martialStatus),
     }
 
-    console.log(data)
-
-    if (nationalityCode === 'USA') {
-      const modal = {
-        dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
-        visible: true,
-        onPress: () => this.setState({ modal: { visible: false } })
-      }
-      return this.setState({ modal })
-    } 
-    
+    // if (nationalityCode === 'USA') {
+    //   const modal = {
+    //     dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
+    //     visible: true,
+    //     onPress: () => this.setState({ modal: { visible: false } })
+    //   }
+    //   return this.setState({ modal })
+    // } 
     // else {
-    //   this.props.saveIdentity({ variables: { input: data } })
-    //     .then(res => {
-    //       console.log(res)
-    //       if (res.data.saveIdentity.success) {
-    //         if (martialStatus === 'สมรส' && isChild === 'มี') {
-    //           navigateAction({ ...this.props, page: 'marry', params: { redirec: 'child' } })
-    //         }
-    //         else if (martialStatus === 'สมรส') navigateAction({ ...this.props, page: 'marry' })
-    //         else if (isChild === 'ไม่มี') navigateAction({ ...this.props, page: 'career' })
-    //         else if (isChild === 'มี') navigateAction({ ...this.props, page: 'child' })
+    this.props.saveIdentity({ variables: { input: data } })
+      .then(res => {
+        console.log(res)
+        if (res.data.saveIdentity.success) {
+          if (martialStatus === 'สมรส' && isChild === 'มี') {
+            navigateAction({ ...this.props, page: 'marry', params: { redirec: 'child' } })
+          }
+          else if (martialStatus === 'สมรส') navigateAction({ ...this.props, page: 'marry' })
+          else if (isChild === 'ไม่มี') navigateAction({ ...this.props, page: 'career' })
+          else if (isChild === 'มี') navigateAction({ ...this.props, page: 'child' })
 
-    //       } else if (!res.data.saveIdentity.success) {
-    //         switch (res.data.saveIdentity.message) {
-    //           case 'PreconditionRequired':
-    //             this.setState({ PreconditionRequired: res.data.saveIdentity.details })
-    //             break
-    //           case 'InvalidArgument':
-    //             this.setState({ InvalidArgument: res.data.saveIdentity.details })
-    //             break
-    //           default:
-    //             const modal = {
-    //               dis: res.data.saveIdentity.message,
-    //               visible: true,
-    //               onPress: () => this.setState({ modal: { visible: false } })
-    //             }
-    //             this.setState({ modal })
-    //             break
-    //         }
-    //       }
-    //     })
-    //     .catch(err => {
-    //       console.log(err.toString())
-    //     })
+        } else if (!res.data.saveIdentity.success) {
+          switch (res.data.saveIdentity.message) {
+            case 'PreconditionRequired':
+              return this.setState({ PreconditionRequired: res.data.saveIdentity.details })
+            case 'InvalidArgument':
+              return this.setState({ InvalidArgument: res.data.saveIdentity.details })
+            default:
+              const modal = {
+                dis: res.data.saveIdentity.message,
+                visible: true,
+                onPress: () => this.setState({ modal: { visible: false } })
+              }
+              return this.setState({ modal })
+          }
+        }
+      })
+      .catch(err => {
+        console.log(err.toString())
+      })
     // }
   }
 

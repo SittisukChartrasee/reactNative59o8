@@ -13,7 +13,7 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import modal from '../../component/modal'
+import Modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
 import { updateUser } from '../../redux/actions/commonAction'
@@ -29,7 +29,9 @@ const dispatchToProps = dispatch => ({
 @setMutation
 export default class extends React.Component {
   state = {
-    modal: false,
+    modal: {
+      visible: false
+    },
     PreconditionRequired: [],
     InvalidArgument: [],
     fields: [
@@ -228,19 +230,24 @@ export default class extends React.Component {
       secondDocExpDate: convertDate(secondDocExpDate),
     }
 
-    console.log(data)
-
     this.props.saveChild({ variables: { input: data } })
       .then(res => {
+        console.log(res)
         if (res.data.saveChild.success) {
           navigateAction({ ...this.props, page: 'career' })
         } else if (!res.data.saveChild.success) {
           switch (res.data.saveChild.message) {
             case 'PreconditionRequired':
-              this.setState({ PreconditionRequired: res.data.saveChild.details })
+              return this.setState({ PreconditionRequired: res.data.saveChild.details })
             case 'InvalidArgument':
-              this.setState({ InvalidArgument: res.data.saveChild.details })
-            default: return null
+              return this.setState({ InvalidArgument: res.data.saveChild.details })
+            default:
+              const modal = {
+                dis: res.data.saveChild.message,
+                visible: true,
+                onPress: () => this.setState({ modal: { visible: false } })
+              }
+              return this.setState({ modal })
           }
         }
       })
@@ -251,6 +258,7 @@ export default class extends React.Component {
 
   render() {
     const { user } = this.props
+    const { modal } = this.state
     return (
       <Screen color="transparent">
         <NavBar
@@ -289,12 +297,7 @@ export default class extends React.Component {
         </KeyboardAwareScrollView>
 
         {
-          modal({
-            visible: this.state.modal,
-            image: images.iconBackIdcard,
-            dis: `ด้านหลังบัตรประชาชน ประกอบด้วยอักษรภาษาอังกฤษ 2 ตัว และตัวเลข 10 ตัว \nตัวอย่างการกรอก : JC1234567890`,
-            onPress: () => this.setState({ modal: false })
-          })
+          Modal(modal)
         }
 
         <NextButton onPress={this.onNext} />

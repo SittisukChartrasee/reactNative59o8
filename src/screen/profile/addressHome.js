@@ -13,7 +13,7 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import modal from '../../component/modal'
+import Modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
@@ -84,7 +84,9 @@ const dispatchToProps = dispatch => ({
 @setMutation
 export default class extends React.Component {
   state = {
-    modal: false,
+    modal: {
+      visible: false
+    },
     PreconditionRequired: [],
     InvalidArgument: [],
   }
@@ -189,16 +191,27 @@ export default class extends React.Component {
       .then(res => {
         console.log(res)
         if (user.addressHome.countryRisk) {
-          return this.setState({ modal: true })
+          const modal = {
+            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
+            visible: true,
+            onPress: () => this.setState({ modal: { visible: false } })
+          }
+          return this.setState({ modal })
         } else if (res.data.savePermanentAddress.success) {
           navigateAction({ ...this.props, page: 'chooseWork' })
         } else if (!res.data.savePermanentAddress.success) {
           switch (res.data.savePermanentAddress.message) {
             case 'PreconditionRequired':
-              this.setState({ PreconditionRequired: res.data.savePermanentAddress.details })
+              return this.setState({ PreconditionRequired: res.data.savePermanentAddress.details })
             case 'InvalidArgument':
-              this.setState({ InvalidArgument: res.data.savePermanentAddress.details })
-            default: return null
+              return this.setState({ InvalidArgument: res.data.savePermanentAddress.details })
+            default:
+              const modal = {
+                dis: res.data.saveCurrentAddress.message,
+                visible: true,
+                onPress: () => this.setState({ modal: { visible: false } })
+              }
+              return this.setState({ modal })
           }
         }
       })
@@ -206,6 +219,7 @@ export default class extends React.Component {
 
   render() {
     const { user } = this.props
+    const { modal } = this.state
     return (
       <Screen color="transparent">
         <NavBar
@@ -244,11 +258,7 @@ export default class extends React.Component {
         </KeyboardAwareScrollView>
 
         {
-          modal({
-            visible: this.state.modal,
-            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
-            onPress: () => this.setState({ modal: false })
-          })
+          Modal(modal)
         }
 
         <NextButton onPress={this.onNext} />
