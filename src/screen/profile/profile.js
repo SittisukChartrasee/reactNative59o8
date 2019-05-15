@@ -218,15 +218,6 @@ export default class extends React.Component {
       martialStatusCode: getStatusMartial(martialStatus),
     }
 
-    // if (nationalityCode === 'USA') {
-    //   const modal = {
-    //     dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
-    //     visible: true,
-    //     onPress: () => this.setState({ modal: { visible: false } })
-    //   }
-    //   return this.setState({ modal })
-    // } 
-    // else {
     this.props.saveIdentity({ variables: { input: data } })
       .then(res => {
         console.log(res)
@@ -257,7 +248,6 @@ export default class extends React.Component {
       .catch(err => {
         console.log(err.toString())
       })
-    // }
   }
 
   render() {

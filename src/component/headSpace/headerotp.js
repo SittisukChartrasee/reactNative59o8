@@ -50,10 +50,11 @@ export default class extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 0.8, justifyContent: 'flex-end' }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', paddingBottom: 24 }}>
-            <TouchableOpacity onPress={onPrevPage} >
+          {/* <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', paddingBottom: 24 }}> */}
+          {/* <TouchableOpacity onPress={onPrevPage} >
               <Image source={images.iconback} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 24 }}>
             <TBold fontSize={28} color={colors.white}>ยืนยัน OTP</TBold>
             <View />
           </View>

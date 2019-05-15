@@ -22,9 +22,9 @@ export default ({
     <View style={{ flex: 1 }}>
       <View style={{ flex: 0.8, justifyContent: 'flex-end' }}>
         <View style={{ alignItems: 'flex-start', paddingTop: 60, marginLeft: 16 }}>
-          <TouchableOpacity onPress={onPrevPage} >
+          {/* <TouchableOpacity onPress={onPrevPage} >
             <Image source={images.iconback} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <View />
         </View>
         <View
