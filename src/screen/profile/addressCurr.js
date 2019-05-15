@@ -13,7 +13,7 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import modal from '../../component/modal'
+import Modal from '../../component/modal'
 import { navigateAction, } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
@@ -58,7 +58,7 @@ const fields = [
     label: 'แขวง/ตำบล',
     type: 'search',
     field: 'subDistrict', //subDistrictCode
-    required: false,
+    required: true,
   }, {
     label: 'เขต/อำเภอ',
     field: 'districtNameTH', // districtCode
@@ -84,7 +84,9 @@ const dispatchToProps = dispatch => ({
 @setMutation
 export default class extends React.Component {
   state = {
-    modal: false,
+    modal: {
+      visible: false
+    },
     PreconditionRequired: [],
     InvalidArgument: [],
   }
@@ -187,22 +189,35 @@ export default class extends React.Component {
       .then(res => {
         console.log(res)
         if (user.addressCurr.countryRisk) {
-          return this.setState({ modal: true })
+          const modal = {
+            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
+            visible: true,
+            onPress: () => this.setState({ modal: { visible: false } })
+          }
+          return this.setState({ modal })
         } else if (res.data.saveCurrentAddress.success) {
           navigateAction({ ...this.props, page: 'chooseDoc' })
         } else if (!res.data.saveCurrentAddress.success) {
           switch (res.data.saveCurrentAddress.message) {
             case 'PreconditionRequired':
-              this.setState({ PreconditionRequired: res.data.saveCurrentAddress.details })
+              return this.setState({ PreconditionRequired: res.data.saveCurrentAddress.details })
             case 'InvalidArgument':
-              this.setState({ InvalidArgument: res.data.saveCurrentAddress.details })
-            default: return null
+              return this.setState({ InvalidArgument: res.data.saveCurrentAddress.details })
+            default:
+              const modal = {
+                dis: res.data.saveCurrentAddress.message,
+                visible: true,
+                onPress: () => this.setState({ modal: { visible: false } })
+              }
+              return this.setState({ modal })
           }
         }
       })
   }
 
   render() {
+    const { user } = this.props
+    const { modal } = this.state
     return (
       <Screen color="transparent">
         <NavBar
@@ -232,6 +247,7 @@ export default class extends React.Component {
               type: d.type,
               required: d.required,
               init: d.init,
+              value: user.addressCurr[d.field],
               onHandleDistrict: this.onHandleDistrict,
               value: this.props.user.addressCurr[d.field],
               handleInput: (props) => this.handleInput(props),
@@ -241,11 +257,7 @@ export default class extends React.Component {
         </KeyboardAwareScrollView>
 
         {
-          modal({
-            visible: this.state.modal,
-            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
-            onPress: () => this.setState({ modal: false })
-          })
+          Modal(modal)
         }
 
         <NextButton onPress={this.onNext} />

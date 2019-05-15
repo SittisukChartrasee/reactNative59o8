@@ -116,8 +116,8 @@ const init = {
     // email: "b@b.com"
     workPhone: '',
     homePhone: '',
-    mobilePhone: "",
-    email: ""
+    mobilePhone: '',
+    email: ''
   },
   career: {
     busType: '',
@@ -157,6 +157,22 @@ const init = {
     fistName: '',
     lastName: '',
     pepFlag: false,
+  },
+  child: {
+    firstTitle: '',
+    firstFirstName: '',
+    firstLastName: '',
+    firstBirthDay: '4/4/2532',
+    firstDocNo: '',
+    firstExpireDateFlag: 'มีวันหมดอายุ',
+    firstDocExpDate: '1-มกราคม-2562',
+    secondTitle: '',
+    secondFirstName: '',
+    secondLastName: '',
+    secondBirthDay: '4/4/2532',
+    secondDocNo: '',
+    secondExpireDateFlag: 'มีวันหมดอายุ',
+    secondDocExpDate: '1-มกราคม-2562',
   },
   sourceOfFund: {
     // investmentSource: ['gf', 'dd'],

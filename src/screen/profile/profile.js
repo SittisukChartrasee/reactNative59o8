@@ -13,7 +13,7 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import modal from '../../component/modal'
+import Modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
@@ -29,7 +29,9 @@ const dispatchToProps = dispatch => ({
 @setMutation
 export default class extends React.Component {
   state = {
-    modal: false,
+    modal: {
+      visible: false
+    },
     expireSatus: 'มีวันหมดอายุ',
     PreconditionRequired: [],
     InvalidArgument: [],
@@ -93,7 +95,7 @@ export default class extends React.Component {
       }, {
         label: 'สถานภาพสมรส',
         type: 'dropdown',
-        init: [{ value: 'โสด' }, { value: 'สมรส' }, { value: 'หย่าร้าง' }],
+        init: [{ value: 'โสด' }, { value: 'สมรส' }, { value: 'หย่าร้าง' }, { value: 'หม้าย' }],
         field: 'martialStatus', // martialStatusCode
         required: true,
       }, {
@@ -114,9 +116,20 @@ export default class extends React.Component {
   handleInput = (props) => {
     const { updateUser, user } = this.props
 
-    updateUser('profile', { ...user.profile, [props.field]: props.value })
-
-    if (props.type === 'modal') return this.setState({ modal: true })
+    if (props.field === 'jcNumber' && props.value) {
+      updateUser('profile', { ...user.profile, [props.field]: (props.value).toUpperCase() })
+    } else {
+      updateUser('profile', { ...user.profile, [props.field]: props.value })
+    }
+    if (props.type === 'modal') {
+      const modal = {
+        image: images.iconBackIdcard,
+        dis: `ด้านหลังบัตรประชาชน ประกอบด้วยอักษรภาษาอังกฤษ 2 ตัว และตัวเลข 10 ตัว \nตัวอย่างการกรอก : JC1234567890`,
+        visible: true,
+        onPress: () => this.setState({ modal: { visible: false } })
+      }
+      return this.setState({ modal })
+    }
     else if (props.field === 'expireDateFlag') {
       this.setState({
         expireSatus: props.value,
@@ -188,7 +201,7 @@ export default class extends React.Component {
 
     const data = {
       docNo: idCard,
-      jcNumber,
+      jcNumber: jcNumber ? jcNumber.trim().toUpperCase() : '',
       isNoDocExpDate,
       docExpDate: expireSatus === 'มีวันหมดอายุ' ? convertDate(docExpDate) : new Date('9999-12-31'),
       genderCode: getStatusGender(gender),
@@ -219,10 +232,16 @@ export default class extends React.Component {
         } else if (!res.data.saveIdentity.success) {
           switch (res.data.saveIdentity.message) {
             case 'PreconditionRequired':
-              this.setState({ PreconditionRequired: res.data.saveIdentity.details })
+              return this.setState({ PreconditionRequired: res.data.saveIdentity.details })
             case 'InvalidArgument':
-              this.setState({ InvalidArgument: res.data.saveIdentity.details })
-            default: return null
+              return this.setState({ InvalidArgument: res.data.saveIdentity.details })
+            default:
+              const modal = {
+                dis: res.data.saveIdentity.message,
+                visible: true,
+                onPress: () => this.setState({ modal: { visible: false } })
+              }
+              return this.setState({ modal })
           }
         }
       })
@@ -232,6 +251,7 @@ export default class extends React.Component {
   }
 
   render() {
+    const { modal } = this.state
     const { user } = this.props
     return (
       <Screen color="transparent">
@@ -271,12 +291,7 @@ export default class extends React.Component {
         </KeyboardAwareScrollView>
 
         {
-          modal({
-            visible: this.state.modal,
-            image: images.iconBackIdcard,
-            dis: `ด้านหลังบัตรประชาชน ประกอบด้วยอักษรภาษาอังกฤษ 2 ตัว และตัวเลข 10 ตัว \nตัวอย่างการกรอก : JC1234567890`,
-            onPress: () => this.setState({ modal: false })
-          })
+          Modal(modal)
         }
 
         <NextButton onPress={this.onNext} />

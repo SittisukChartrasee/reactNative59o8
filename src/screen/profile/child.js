@@ -7,23 +7,33 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import find from 'lodash/find'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import modal from '../../component/modal'
+import Modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
+import setMutation from '../../containers/mutation'
+import { updateUser } from '../../redux/actions/commonAction'
+import { convertDate, getOfBirth, getStatusGender, getStatusMartial, getStatusChild } from '../../utility/helper'
 
-const mapToProps = () => ({})
+const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateUser: bindActionCreators(updateUser, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
   state = {
-    modal: false,
+    modal: {
+      visible: false
+    },
+    PreconditionRequired: [],
+    InvalidArgument: [],
     fields: [
       {
         label: 'ข้อมูลบุตรคนที่ 1',
@@ -32,32 +42,38 @@ export default class extends React.Component {
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
         type: 'search',
-        field: 'titleChild1',
+        field: 'firstTitle',
+        required: true,
       }, {
         label: 'ชื่อ (ภาษาไทย)',
         type: 'textInput',
-        field: 'nameTh',
+        field: 'firstFirstName',
+        required: true,
       }, {
         label: 'นามสกุล (ภาษาไทย)',
         type: 'textInput',
-        field: 'lastTh'
+        field: 'firstLastName',
+        required: true,
       }, {
         label: 'ปีเกิด,เดือนเกิด,วันเกิด',
         type: 'ymd',
-        field: 'birthDay',
+        field: 'firstBirthDay',
+        required: true,
       }, {
         label: 'เลขบัตรประชาชน',
         type: 'textInput',
-        field: 'lastTh'
+        field: 'firstDocNo',
+        required: true,
       }, {
         label: 'วันบัตรหมดอายุ',
         type: 'radio',
         init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
-        field: 'expireDateFlag',
+        field: 'firstExpireDateFlag',
       }, {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
-        field: 'expireDate',
+        field: 'firstDocExpDate',
+        required: true,
       },
       {
         label: 'ข้อมูลบุตรคนที่ 2',
@@ -66,46 +82,68 @@ export default class extends React.Component {
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
         type: 'search',
-        field: 'titleChild2',
+        field: 'secondTitle',
+        required: true,
       }, {
         label: 'ชื่อ (ภาษาไทย)',
         type: 'textInput',
-        field: 'nameTh',
+        field: 'secondFirstName',
+        required: true,
       }, {
         label: 'นามสกุล (ภาษาไทย)',
         type: 'textInput',
-        field: 'lastTh'
+        field: 'secondLastName',
+        required: true,
       }, {
         label: 'ปีเกิด,เดือนเกิด,วันเกิด',
         type: 'ymd',
-        field: 'birthDay',
+        field: 'secondBirthDay',
+        required: true,
       }, {
         label: 'เลขบัตรประชาชน',
         type: 'textInput',
-        field: 'lastTh'
+        field: 'secondDocNo',
+        required: true,
       }, {
         label: 'วันบัตรหมดอายุ',
         type: 'radio',
         init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
-        field: 'expireDateFlag',
+        field: 'secondExpireDateFlag',
       }, {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
-        field: 'expireDate',
+        field: 'secondDocExpDate',
+        required: true,
       }
     ]
   }
 
   handleInput = (props) => {
+    const { updateUser, user } = this.props
+    updateUser('child', { ...user.child, [props.field]: props.value })
     if (props.type === 'modal') return this.setState({ modal: true })
-    else if (props.field === 'expireDateFlag') {
+    else if (props.field === 'firstExpireDateFlag') {
+      updateUser('child', { ...user.child, [props.field]: props.value })
       this.setState({
         fields: this.state.fields.map((d) => {
           if (props.value === 'มีวันหมดอายุ') {
-            if (d.field === 'expireDate') return { ...d, inVisible: false }
+            if (d.field === 'firstDocExpDate') return { ...d, inVisible: false }
             else return d
           } else if (props.value === 'ไม่มีวันหมดอายุ') {
-            if (d.field === 'expireDate') return { ...d, inVisible: true }
+            if (d.field === 'firstDocExpDate') return { ...d, inVisible: true }
+            else return d
+          }
+        })
+      })
+    } else if (props.field === 'secondExpireDateFlag') {
+      updateUser('child', { ...user.child, [props.field]: props.value })
+      this.setState({
+        fields: this.state.fields.map((d) => {
+          if (props.value === 'มีวันหมดอายุ') {
+            if (d.field === 'secondDocExpDate') return { ...d, inVisible: false }
+            else return d
+          } else if (props.value === 'ไม่มีวันหมดอายุ') {
+            if (d.field === 'secondDocExpDate') return { ...d, inVisible: true }
             else return d
           }
         })
@@ -113,8 +151,114 @@ export default class extends React.Component {
     }
   }
 
+  onValidation = (field) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => {
+      if ((o.field === 'firstDayOfBirth ' ||
+        o.field === 'firstMonthOfBirth' ||
+        o.field === 'firstYearOfBirth') && field === 'firstBirthDay') {
+        return o
+      }
+      if ((o.field === 'secondDayOfBirth ' ||
+        o.field === 'secondMonthOfBirth' ||
+        o.field === 'secondYearOfBirth') && field === 'secondBirthDay') {
+        return o
+      }
+      return o.field === field
+    })
+    const Invalid = find(InvalidArgument, (o) => {
+      if ((o.field === 'firstDayOfBirth ' ||
+        o.field === 'firstMonthOfBirth' ||
+        o.field === 'firstYearOfBirth') && field === 'firstBirthDay') {
+        return o
+      }
+      if ((o.field === 'secondDayOfBirth ' ||
+        o.field === 'secondMonthOfBirth' ||
+        o.field === 'secondYearOfBirth') && field === 'secondBirthDay') {
+        return o
+      }
+      return o.field === field
+    })
+    if (Required) {
+      return Required.description
+    } else if (Invalid) {
+      return Invalid.description
+    }
+    return null
+  }
+
+  onNext = async () => {
+    const { navigateAction, user } = this.props
+    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+
+    const {
+      firstTitle,
+      firstFirstName,
+      firstLastName,
+      firstBirthDay,
+      firstDocNo,
+      firstExpireDateFlag,
+      firstDocExpDate,
+      secondTitle,
+      secondFirstName,
+      secondLastName,
+      secondBirthDay,
+      secondDocNo,
+      secondExpireDateFlag,
+      secondDocExpDate,
+    } = user.child
+
+
+    const data = {
+      firstTitle,
+      firstFirstName,
+      firstLastName,
+      firstDayOfBirth: getOfBirth(firstBirthDay, 'day'),
+      firstMonthOfBirth: `${getOfBirth(firstBirthDay, 'month')}`,
+      firstYearOfBirth: getOfBirth(firstBirthDay, 'year'),
+      firstDocNo,
+      firstIsNoExpDate: firstExpireDateFlag === 'มีวันหมดอายุ' ? true : false,
+      firstDocExpDate: convertDate(firstDocExpDate),
+      secondTitle,
+      secondFirstName,
+      secondLastName,
+      secondDayOfBirth: getOfBirth(secondBirthDay, 'day'),
+      secondMonthOfBirth: `${getOfBirth(secondBirthDay, 'month')}`,
+      secondYearOfBirth: getOfBirth(secondBirthDay, 'year'),
+      secondDocNo,
+      secondIsNoExpDate: secondExpireDateFlag === 'มีวันหมดอายุ' ? true : false,
+      secondDocExpDate: convertDate(secondDocExpDate),
+    }
+
+    this.props.saveChild({ variables: { input: data } })
+      .then(res => {
+        console.log(res)
+        if (res.data.saveChild.success) {
+          navigateAction({ ...this.props, page: 'career' })
+        } else if (!res.data.saveChild.success) {
+          switch (res.data.saveChild.message) {
+            case 'PreconditionRequired':
+              return this.setState({ PreconditionRequired: res.data.saveChild.details })
+            case 'InvalidArgument':
+              return this.setState({ InvalidArgument: res.data.saveChild.details })
+            default:
+              const modal = {
+                dis: res.data.saveChild.message,
+                visible: true,
+                onPress: () => this.setState({ modal: { visible: false } })
+              }
+              return this.setState({ modal })
+          }
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
   render() {
-    const { navigateAction } = this.props
+    const { user } = this.props
+    const { modal } = this.state
     return (
       <Screen color="transparent">
         <NavBar
@@ -142,23 +286,21 @@ export default class extends React.Component {
               field: d.field,
               label: d.label,
               type: d.type,
+              required: d.required,
               init: d.init,
+              value: user.child[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
+              err: this.onValidation(d.field)
             }, key))
           }
         </KeyboardAwareScrollView>
 
         {
-          modal({
-            visible: this.state.modal,
-            image: images.iconBackIdcard,
-            dis: `ด้านหลังบัตรประชาชน ประกอบด้วยอักษรภาษาอังกฤษ 2 ตัว และตัวเลข 10 ตัว \nตัวอย่างการกรอก : JC1234567890`,
-            onPress: () => this.setState({ modal: false })
-          })
+          Modal(modal)
         }
 
-        <NextButton onPress={() => navigateAction({ ...this.props, page: 'career' })}/>
+        <NextButton onPress={this.onNext} />
       </Screen>
     )
   }

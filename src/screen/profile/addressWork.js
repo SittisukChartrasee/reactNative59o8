@@ -13,7 +13,7 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import modal from '../../component/modal'
+import Modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import { updateUser } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
@@ -53,25 +53,25 @@ const fields = [
     label: 'ตรอก/ซอย/แยก',
     type: 'textInput',
     field: 'trokSoiYaek',
-    required: false,
+    required: true,
   }, {
     label: 'ถนน',
     type: 'textInput',
     field: 'thanon',
-    required: false,
+    required: true,
   }, {
     label: 'แขวง/ตำบล',
     type: 'search',
     field: 'subDistrict', // subDistrictCode
-    required: false,
+    required: true,
   }, {
     label: 'เขต/อำเภอ',
     field: 'districtNameTH', // districtCode
-    required: true,
+    required: false,
   }, {
     label: 'จังหวัด',
     field: 'provinceNameTH', // provinceCode
-    required: true,
+    required: false,
   }, {
     label: 'รหัสไปรษณีย์',
     field: 'zipCode',
@@ -89,7 +89,9 @@ const dispatchToProps = dispatch => ({
 @setMutation
 export default class extends React.Component {
   state = {
-    modal: false,
+    modal: {
+      visible: false
+    },
     PreconditionRequired: [],
     InvalidArgument: [],
   }
@@ -123,10 +125,10 @@ export default class extends React.Component {
       if (o.field === 'countryCode' && field === 'country') {
         return o
       }
-      if (o.field === 'districtCode' && field === 'subDistrict') {
-        return o
-      }
-      if (o.field === 'provinceCode' && field === 'provinceNameTH') {
+      if ((o.field === 'subDistrictCode' ||
+        o.field === 'districtCode' ||
+        o.field === 'provinceCode' ||
+        o.field === 'zipCode') && field === 'subDistrict') {
         return o
       }
       return o.field === field
@@ -135,10 +137,10 @@ export default class extends React.Component {
       if (o.field === 'countryCode' && field === 'country') {
         return o
       }
-      if (o.field === 'districtCode' && field === 'districtNameTH') {
-        return o
-      }
-      if (o.field === 'provinceCode' && field === 'provinceNameTH') {
+      if ((o.field === 'subDistrictCode' ||
+        o.field === 'districtCode' ||
+        o.field === 'provinceCode' ||
+        o.field === 'zipCode') && field === 'subDistrict') {
         return o
       }
       return o.field === field
@@ -195,22 +197,35 @@ export default class extends React.Component {
       .then(res => {
         console.log(res)
         if (user.addressWork.countryRisk) {
-          return this.setState({ modal: true })
+          const modal = {
+            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
+            visible: true,
+            onPress: () => this.setState({ modal: { visible: false } })
+          }
+          return this.setState({ modal })
         } else if (res.data.saveWorkplaceAddress.success) {
           navigateAction({ ...this.props, page: 'chooseCurr' })
         } else if (!res.data.saveWorkplaceAddress.success) {
           switch (res.data.saveWorkplaceAddress.message) {
             case 'PreconditionRequired':
-              this.setState({ PreconditionRequired: res.data.saveWorkplaceAddress.details })
+              return this.setState({ PreconditionRequired: res.data.saveWorkplaceAddress.details })
             case 'InvalidArgument':
-              this.setState({ InvalidArgument: res.data.saveWorkplaceAddress.details })
-            default: return null
+              return this.setState({ InvalidArgument: res.data.saveWorkplaceAddress.details })
+            default:
+              const modal = {
+                dis: res.data.saveCurrentAddress.message,
+                visible: true,
+                onPress: () => this.setState({ modal: { visible: false } })
+              }
+              return this.setState({ modal })
           }
         }
       })
   }
 
   render() {
+    const { user } = this.props
+    const { modal } = this.state
     return (
       <Screen color="transparent">
         <NavBar
@@ -241,7 +256,7 @@ export default class extends React.Component {
               required: d.required,
               init: d.init,
               onHandleDistrict: this.onHandleDistrict,
-              value: this.props.user.addressWork[d.field],
+              value: user.addressWork[d.field],
               handleInput: (props) => this.handleInput(props),
               err: this.onValidation(d.field)
             }, key))
@@ -249,11 +264,7 @@ export default class extends React.Component {
         </KeyboardAwareScrollView>
 
         {
-          modal({
-            visible: this.state.modal,
-            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
-            onPress: () => this.setState({ modal: false })
-          })
+          Modal(modal)
         }
 
         <NextButton onPress={this.onNext} />

@@ -5,10 +5,12 @@ import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
 import { HeadSpace } from '../component/headSpace'
 import { navigateAction } from '../redux/actions'
+import { updatePasscode } from '../redux/actions/commonAction'
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updatePasscode: bindActionCreators(updatePasscode, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
@@ -18,21 +20,28 @@ export default class extends React.Component {
   }
 
   setNumber = (obj) => {
-    const { navigateAction } = this.props
+    const { navigateAction, updatePasscode } = this.props
     this.setState({ ...obj })
 
     if (obj.number.length === 6) {
-      navigateAction({ ...this.props, page: 'confirmPasscode' })
+      updatePasscode('passcode', obj.number)
+      navigateAction({
+        ...this.props,
+        page: 'confirmPasscode'
+      })
     }
   }
-  
+
+  onPrevPage = () => this.props.navigation.goBack()
+
   render() {
     const { dot, number } = this.state
-
     return (
       <Screen>
-        <HeadSpace {...{ dot, title: 'ตั้งรหัส Passcode', dis: 'เพื่อเข้าใช้งานในครั้งถัดไป' }} />
-        <Keyboard setNumber={this.setNumber}/>
+        <HeadSpace
+          {...{ dot, title: 'ตั้งรหัสผ่าน', dis: 'เพื่อเข้าใช้งานในครั้งถัดไป', onPrevPage: this.onPrevPage }}
+        />
+        <Keyboard setNumber={this.setNumber} />
       </Screen>
     )
   }

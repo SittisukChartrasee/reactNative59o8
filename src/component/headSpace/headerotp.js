@@ -16,7 +16,7 @@ export default class extends React.Component {
     currentDot: '',
     restart: false,
     refNo: null,
-    onPress: () => {},
+    onPress: () => { },
   }
 
   state = {
@@ -27,7 +27,7 @@ export default class extends React.Component {
   timer = () => {
     if (this.state.startState > this.state.endState) {
       setTimeout(() => {
-        this.setState({ startState: this.state.startState -1 })
+        this.setState({ startState: this.state.startState - 1 })
         this.timer()
       }, 1000)
     }
@@ -46,19 +46,20 @@ export default class extends React.Component {
 
   render() {
     const { startState } = this.state
-    const { dot, onPress, refNo } = this.props
+    const { dot, onPress, refNo, onPrevPage } = this.props
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 0.8, justifyContent: 'flex-end' }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', paddingBottom: 24 }}>
-            <TouchableOpacity>
+          {/* <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', paddingBottom: 24 }}> */}
+          {/* <TouchableOpacity onPress={onPrevPage} >
               <Image source={images.iconback} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 24 }}>
             <TBold fontSize={28} color={colors.white}>ยืนยัน OTP</TBold>
             <View />
           </View>
           <View style={{ backgroundColor: 'transparent', alignItems: 'center' }}>
-            <View style={{ backgroundColor: colors.white, height: 60/2, width: '100%', position: 'absolute', bottom: 0 }}/>
+            <View style={{ backgroundColor: colors.white, height: 60 / 2, width: '100%', position: 'absolute', bottom: 0 }} />
             {
               startState !== 0
                 ? (
@@ -66,7 +67,7 @@ export default class extends React.Component {
                     style={{
                       width: 160,
                       height: 40,
-                      borderRadius: 40/2,
+                      borderRadius: 40 / 2,
                       backgroundColor: colors.white,
                       shadowColor: colors.black,
                       shadowOpacity: 0.5,
@@ -88,11 +89,11 @@ export default class extends React.Component {
                         await this.setState({ start: 180 })
                         await this.timer()
                         await onPress()
-                    }}
+                      }}
                     style={{
                       width: 160,
                       height: 40,
-                      borderRadius: 40/2,
+                      borderRadius: 40 / 2,
                       backgroundColor: colors.emerald,
                       marginBottom: 10,
                       justifyContent: 'center',
@@ -109,27 +110,27 @@ export default class extends React.Component {
           <TLight color={colors.grey}>กรุณากรอกรหัสผ่านแบบใช้ครั้งเดียว ( SMS OTP) ที่ได้รับทาง SMS บนมือถือของท่าน (รหัส OTP มีอายุการใช้งาน 3 นาที)</TLight>
           <TBold color={colors.emerald} fontSize={16} mt={16}>รหัสอ้างอิง : {refNo}</TBold>
 
-            <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 10 }}>
-              {
-                dot.map((d, key) => {
-                  return d ? (
-                    <View
-                      key={key}
-                      style={{
-                        width: 40,
-                        borderColor: colors.emerald,
-                        borderWidth: 2,
-                        borderRadius: 4,
-                        marginLeft: key === 0 ? 0 : 8
-                      }}
-                    >
-                      {
-                        key + 1 < (dot.indexOf(false) < 0 ? 6 : dot.indexOf(false))
-                          ? <TMed fontSize={28} color={colors.emerald}>•</TMed>
-                          : <TMed fontSize={28}>{this.props.currentDot}</TMed>
-                      }
-                    </View>
-                  ) : (
+          <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 10 }}>
+            {
+              dot.map((d, key) => {
+                return d ? (
+                  <View
+                    key={key}
+                    style={{
+                      width: 40,
+                      borderColor: colors.emerald,
+                      borderWidth: 2,
+                      borderRadius: 4,
+                      marginLeft: key === 0 ? 0 : 8
+                    }}
+                  >
+                    {
+                      key + 1 < (dot.indexOf(false) < 0 ? 6 : dot.indexOf(false))
+                        ? <TMed fontSize={28} color={colors.emerald}>•</TMed>
+                        : <TMed fontSize={28}>{this.props.currentDot}</TMed>
+                    }
+                  </View>
+                ) : (
                     <View
                       key={key}
                       style={{
@@ -143,10 +144,10 @@ export default class extends React.Component {
                       <TMed fontSize={28}>{` `}</TMed>
                     </View>
                   )
-                })
-              }
-            </View>
-          
+              })
+            }
+          </View>
+
         </View>
       </View>
     )

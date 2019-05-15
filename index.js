@@ -14,5 +14,5 @@ global.XMLHttpRequest = global.originalXMLHttpRequest
 global.FormData = global.originalFormData
   ? global.originalFormData : global.FormData
 
-// export default StoryBook
+export default StoryBook
 AppRegistry.registerComponent(appName, () => App);
