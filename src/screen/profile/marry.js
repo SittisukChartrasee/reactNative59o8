@@ -35,6 +35,7 @@ export default class extends React.Component {
     },
     expireSatus: 'มีวันหมดอายุ',
     nationSatus: 'ไทย',
+    code: 'TH',
     PreconditionRequired: [],
     InvalidArgument: [],
     fields: [
@@ -103,8 +104,10 @@ export default class extends React.Component {
     ]
   }
   handleInput = (props) => {
-    const { fields } = this.state
+    const { fields, code } = this.state
     const { updateUser, user } = this.props
+
+    console.log(props)
 
     if (props.field === 'nationFlag') {
       updateUser('spouse', { ...user.spouse, [props.field]: props.value })
@@ -112,10 +115,12 @@ export default class extends React.Component {
         nationSatus: props.value,
         fields: fields.map((d) => {
           if (props.value === 'ไทย') {
+            updateUser('spouse', { ...user.spouse, nationalityCode: 'TH' })
             if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'cardExpiredDate') return { ...d, inVisible: true }
             else if (d.field === 'IDCardNo' || d.field === 'marryExpireDate' || d.field === 'expireFlag') return { ...d, inVisible: false }
             else return d
           } else if (props.value === 'ชาวต่างชาติ') {
+            updateUser('spouse', { ...user.spouse, nationalityCode: code })
             if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'cardExpiredDate') return { ...d, inVisible: false }
             else if (d.field === 'IDCardNo' || d.field === 'marryExpireDate' || d.field === 'expireFlag') return { ...d, inVisible: true }
             else return d
@@ -137,6 +142,7 @@ export default class extends React.Component {
         })
       })
     } else if (props.field === 'marryCountry') {
+      this.setState({ code: props.code })
       updateUser('spouse', { ...user.spouse, nationalityCode: props.code, nationalityRisk: props.risk })
     } else {
       updateUser('spouse', { ...user.spouse, [props.field]: props.value })
