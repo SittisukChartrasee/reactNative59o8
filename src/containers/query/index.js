@@ -58,3 +58,24 @@ export const getOccupation = gql`
     }
   }
 `
+
+export const getInvestment = gql`
+  query getInvestment($point: String!) {
+    getInvestment(point: $point) {
+      crrLevel
+      nameTH
+      nameEN
+      returnText
+      descTH
+      descEN
+      fundCodeKAsset
+      assetClass{
+        nameTH
+        nameEN
+        color
+        sortOrder
+        weight
+      }
+    }
+  }
+`
