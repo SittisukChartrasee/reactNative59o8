@@ -7,6 +7,8 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import debounce from 'lodash/debounce'
+import { withApollo } from 'react-apollo'
 import { PieChart } from '../../component/chart'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -17,28 +19,59 @@ import images from '../../config/images'
 import { RiskList } from '../../component/lists'
 import { navigateAction } from '../../redux/actions'
 import { data } from './data'
+import {
+  getInvestment
+} from '../../containers/query'
+
+const query = debounce((client, obj, setState) => {
+  client.query({ ...obj })
+    .then((val) => setState(val))
+    .catch(err => console.error(err))
+}, 300)
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
+
 @connect(mapToProps, dispatchToProps)
+@withApollo
 export default class extends React.Component {
   state = {
-    risk: 0
+    risk: 0,
   }
 
   componentDidMount = () => {
     const sumSuittest = this.props.navigation.getParam('sumSuittest', 0)
-    if (sumSuittest <= 15) this.setState({ risk: 0 })
-    else if (sumSuittest <= 21) this.setState({ risk: 1 })
-    else if (sumSuittest <= 29) this.setState({ risk: 2 })
-    else if (sumSuittest > 30) this.setState({ risk: 3 })
+    let point = 1
+    if (sumSuittest <= 15) {
+      this.setState({ risk: 0 })
+      point = 1
+    }
+    else if (sumSuittest <= 21) {
+      this.setState({ risk: 1 })
+      point = 2
+    }
+    else if (sumSuittest <= 29) {
+      this.setState({ risk: 2 })
+      point = 3
+    }
+    else if (sumSuittest > 30) {
+      this.setState({ risk: 3 })
+      point = 4
+    }
+
+    query(this.props.client, {
+      query: getInvestment,
+      variables: { point: `${point}` }
+    }, val => this.setState({ ...val.data.getInvestment })
+    )
   }
 
   render() {
     const { navigateAction } = this.props
-    const { risk } = this.state
+    const { risk, descTH, assetClass, fundCodeKAsset, returnText } = this.state
+    console.log(this.state)
     return (
       <Screen>
         <NavBar
@@ -59,15 +92,15 @@ export default class extends React.Component {
         <ScrollView contentContainerStyle={{ paddingTop: 40, paddingHorizontal: 24 }}>
           <View style={{ flex: 1, alignItems: 'center' }}>
             <View style={{ marginBottom: 19 }}>
-              <Image source={data[risk].image}/>
+              <Image source={data[risk].image} />
             </View>
 
             <View style={{ marginBottom: 10 }}>
               <TBold fontSize={28} color={colors.white}>{data[risk].title}</TBold>
-              <TBold fontSize={16} color={colors.white}>{data[risk].disTitle}</TBold>
+              <TBold fontSize={16} color={colors.white}>{`ผลตอบแทนที่คาดหวังโดยเฉลี่ย ${returnText} ต่อปี`}</TBold>
             </View>
 
-            <TLight color={colors.white} mb={40}>{data[risk].discription}</TLight>
+            <TLight color={colors.white} mb={40}>{descTH}</TLight>
 
             <View style={{ backgroundColor: colors.white, width: '100%', minHeight: 352, paddingVertical: 16, borderRadius: 16, overflow: 'hidden' }}>
               <View style={{ height: 80, flexDirection: 'row' }}>
@@ -76,19 +109,19 @@ export default class extends React.Component {
                     <Image source={images.bookmark} style={{ marginRight: 8 }} />
                     <TLight fontSize={14} textAlign="left">กองทุนที่แนะนำ</TLight>
                   </View>
-                  <TBold fontSize={28} textAlign="left">{data[risk].risk.title}</TBold>
+                  <TBold fontSize={28} textAlign="left">{fundCodeKAsset}</TBold>
                 </View>
                 <View style={{ width: 75, justifyContent: 'flex-start', alignItems: 'center' }}>
-                  <PieChart data={data[0].risk.data}/>
+                  <PieChart data={data[0].risk.data} />
                 </View>
               </View>
-              
+
               <View style={{ flex: 1, paddingHorizontal: 16 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <TBold fontSize={14}>ตัวอย่างสัดส่วน</TBold>
                   <TLight fontSize={12} color={colors.grey}>{data[risk].risk.time}</TLight>
                 </View>
-                { data[risk].risk.data.map(RiskList) }
+                {assetClass ? assetClass.map(RiskList) : null}
               </View>
 
             </View>
