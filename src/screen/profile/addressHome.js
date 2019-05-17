@@ -94,8 +94,17 @@ export default class extends React.Component {
 
   handleInput = (props) => {
     const { updateUser, user } = this.props
+
+    // ตรวจสอบความเสี่ยงของประเทศ
+
+    // if (props.field === 'country') {
+    //   updateUser('addressHome', { ...user.addressHome, [props.field]: props.value, countryCode: props.code, countryRisk: props.risk })
+    // } else {
+    //   updateUser('addressHome', { ...user.addressHome, [props.field]: props.value })
+    // }
+
     if (props.field === 'country') {
-      updateUser('addressHome', { ...user.addressHome, [props.field]: props.value, countryCode: props.code, countryRisk: props.risk })
+      updateUser('addressHome', { ...user.addressHome, [props.field]: props.value, countryCode: props.code })
     } else {
       updateUser('addressHome', { ...user.addressHome, [props.field]: props.value })
     }
@@ -190,14 +199,19 @@ export default class extends React.Component {
     this.props.savePermanentAddress({ variables: { input: data } })
       .then(res => {
         console.log(res)
-        if (user.addressHome.countryRisk) {
-          const modal = {
-            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
-            visible: true,
-            onPress: () => this.setState({ modal: { visible: false } })
-          }
-          return this.setState({ modal })
-        } else if (res.data.savePermanentAddress.success) {
+
+        // ตรวจสอบความเสี่ยงของประเทศ
+
+        // if (user.addressHome.countryRisk) {
+        //   const modal = {
+        //     dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
+        //     visible: true,
+        //     onPress: () => this.setState({ modal: { visible: false } })
+        //   }
+        //   return this.setState({ modal })
+        // } else if (res.data.savePermanentAddress.success) {
+
+        if (res.data.savePermanentAddress.success) {
           navigateAction({ ...this.props, page: 'chooseWork' })
         } else if (!res.data.savePermanentAddress.success) {
           switch (res.data.savePermanentAddress.message) {

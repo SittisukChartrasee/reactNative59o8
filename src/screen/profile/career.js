@@ -71,8 +71,8 @@ export default class extends React.Component {
   handleInput = (props) => {
     const { updateUser, user } = this.props
     console.log(props)
-    if (props.type === 'modal') this.setState({ modal: true })
-    else if (props.field === 'busType') {
+    // if (props.type === 'modal') this.setState({ modal: true }) // ใช้ทำอะไรไม่รู้
+    if (props.field === 'busType') {
       updateUser('career', { ...user.career, [props.field]: props.value, isicCode: props.code })
     } else if (props.field === 'busType') {
       updateUser('career', { ...user.career, [props.field]: props.value, isicCode: props.code })
@@ -80,9 +80,18 @@ export default class extends React.Component {
       updateUser('career', { ...user.career, [props.field]: props.value, occupationCode: props.code })
     } else if (props.field === 'incomeRange') {
       updateUser('career', { ...user.career, [props.field]: props.value })
-    } if (props.field === 'countrySourceOfIncome') {
-      updateUser('career', { ...user.career, [props.field]: props.value, countyCode: props.code, countryRisk: props.risk })
     }
+
+    // ตรวจสอบความเสี่ยงแหล่งที่มาของเงิน
+
+    // if (props.field === 'countrySourceOfIncome') {
+    //   updateUser('career', { ...user.career, [props.field]: props.value, countyCode: props.code, countryRisk: props.risk })
+    // }
+
+    if (props.field === 'countrySourceOfIncome') {
+      updateUser('career', { ...user.career, [props.field]: props.value, countyCode: props.code })
+    }
+
   }
 
   onValidation = (field) => {
@@ -128,6 +137,7 @@ export default class extends React.Component {
       incomeRange,
       incomeRangeCode,
       countrySourceOfIncome,
+      countyCode
     } = user.career
 
 
@@ -138,38 +148,53 @@ export default class extends React.Component {
       countrySourceOfIncome
     }
 
-    this.props.saveCareer({ variables: { input: data } })
-      .then(res => {
-        console.log(res)
-        if (user.career.countryRisk) {
-          const modal = {
-            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
-            visible: true,
-            onPress: () => this.setState({ modal: { visible: false } })
-          }
-          return this.setState({ modal })
-        } else if (res.data.saveCareer.success) {
-          navigateAction({ ...this.props, page: 'sourceOfFund' })
-        } else if (!res.data.saveCareer.success) {
-          switch (res.data.saveCareer.message) {
-            case 'PreconditionRequired':
-              return this.setState({ PreconditionRequired: res.data.saveCareer.details })
-            case 'InvalidArgument':
-              return this.setState({ InvalidArgument: res.data.saveCareer.details })
-            default:
-              const modal = {
-                dis: res.data.saveCareer.message,
-                visible: true,
-                onPress: () => this.setState({ modal: { visible: false } })
-              }
-              return this.setState({ modal })
-          }
-        }
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    console.log(data)
 
+    if (countyCode === 'US') {
+      const modal = {
+        dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
+        visible: true,
+        onPress: () => this.setState({ modal: { visible: false } })
+      }
+      return this.setState({ modal })
+    } else {
+      this.props.saveCareer({ variables: { input: data } })
+        .then(res => {
+          console.log(res)
+
+          // ตรวจสอบความเสี่ยงของประเทศ
+
+          // if (user.career.countryRisk) {
+          //   const modal = {
+          //     dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
+          //     visible: true,
+          //     onPress: () => this.setState({ modal: { visible: false } })
+          //   }
+          //   return this.setState({ modal })
+          // } else if (res.data.saveCareer.success) {
+
+          if (res.data.saveCareer.success) {
+            navigateAction({ ...this.props, page: 'sourceOfFund' })
+          } else if (!res.data.saveCareer.success) {
+            switch (res.data.saveCareer.message) {
+              case 'PreconditionRequired':
+                return this.setState({ PreconditionRequired: res.data.saveCareer.details })
+              case 'InvalidArgument':
+                return this.setState({ InvalidArgument: res.data.saveCareer.details })
+              default:
+                const modal = {
+                  dis: res.data.saveCareer.message,
+                  visible: true,
+                  onPress: () => this.setState({ modal: { visible: false } })
+                }
+                return this.setState({ modal })
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   }
 
   render() {
