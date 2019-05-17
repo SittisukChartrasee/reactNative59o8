@@ -10,6 +10,7 @@ import lockUser from '../screen/lock/lockUser'
 import fatca from '../screen/fatca'
 import fraud from '../screen/fraud'
 import forgetPasscode from '../screen/forgetPasscode'
+import firstTerm from '../screen/firstTerm'
 
 import branchBank from '../screen/bank'
 
@@ -28,6 +29,7 @@ import branchComplete from '../screen/complete'
 import branchsignature from '../screen/signature'
 
 const MainNavigator = createStackNavigator({
+  firstTerm,
   welcome,
   login,
   checkpoint,
