@@ -1,33 +1,34 @@
-import React from 'react'
-import { createStore, applyMiddleware } from 'redux'
-import { Provider } from 'react-redux'
-import { ApolloProvider } from 'react-apollo'
-import thunk from 'redux-thunk'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import noneStatis from 'hoist-non-react-statics'
+import thunk from 'redux-thunk'
+import { createStackNavigator, createAppContainer } from 'react-navigation'
+import {
+  createReduxContainer,
+  createReactNavigationReduxMiddleware,
+  createNavigationReducer
+} from "react-navigation-redux-helpers"
 import reducer from './reducers'
-import client from '../config/initApollo'
 
-const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)))
+import fatca from '../screen/fatca'
+import fraud from '../screen/fraud'
 
-export const storyBookStore = WrapComponents => {
-  const Enhance = (props) => (
-    <Provider store={store}>
-      <WrapComponents {...props} />
-    </Provider>
-  )
-  noneStatis(Enhance, WrapComponents)
-  return <Enhance />
-}
+const AppNavigator = createStackNavigator({
+  fatca,
+  fraud
+}, {
+  initialRouteName: "fatca",
+  headerMode: 'none'
+})
 
-export default (WrapComponents) => props => {
-  const Enhance = () => (
-    <Provider store={store}>
-      <ApolloProvider client={client(store)}>
-        <WrapComponents {...props} />
-      </ApolloProvider>
-    </Provider>
-  )
-  noneStatis(Enhance, WrapComponents)
-  return <Enhance />
-}
+const appReducer = combineReducers({
+  nav: createNavigationReducer(AppNavigator),
+  ...reducer,
+})
+
+const middlewareRouter = createReactNavigationReduxMiddleware(
+  state => state.nav
+)
+
+export const App = createAppContainer(AppNavigator)
+
+export const store = createStore(appReducer, composeWithDevTools(applyMiddleware(thunk, middlewareRouter)))

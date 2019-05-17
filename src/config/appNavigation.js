@@ -27,7 +27,7 @@ import branchComplete from '../screen/complete'
 
 import branchsignature from '../screen/signature'
 
-const MainNavigator = createStackNavigator({
+export default {
   welcome,
   login,
   checkpoint,
@@ -47,8 +47,4 @@ const MainNavigator = createStackNavigator({
   ...branchCamera,
   ...branchComplete,
   ...branchsignature,
-}, {
-  headerMode: 'none',
-});
-
-export default createAppContainer(MainNavigator);
+}

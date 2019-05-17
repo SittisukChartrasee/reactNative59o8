@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
 } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Screen from '../component/screenComponent'
@@ -105,6 +106,8 @@ export default class extends React.Component {
     const { navigation } = this.props
     const { modal } = this.state
     const fatca = this.props.fatcaReducer.fatca
+
+
     return (
       <Screen color="transparent">
         <NavBar
@@ -127,7 +130,12 @@ export default class extends React.Component {
             paddingBottom: 100
           })
         }
-        <NextButton disabled={checkActiveData(fatca).IS_TRUE} onPress={this.onNext} />
+        <NextButton
+          // disabled={checkActiveData(fatca).IS_TRUE}
+          disabled={false}
+          // onPress={this.onNext}
+          onPress={() => this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'fraud' }))}
+        />
         {
           Modal(modal)
         }

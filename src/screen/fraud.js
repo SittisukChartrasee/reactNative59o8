@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
 } from 'react-native'
+import { NavigationActions, StackActions } from 'react-navigation'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Screen from '../component/screenComponent'
@@ -43,7 +44,8 @@ const checkActiveData = (data) => {
 
 const mapToProps = () => ({ })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  nav: bindActionCreators(() => dispatch(StackActions.popToTop()), dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -103,7 +105,10 @@ export default class extends React.Component {
         <NavBar
           title="สถานะที่ถูกกำหนด"
           navLeft={
-            <TouchableOpacity  onPress={() => navigation.goBack()}>
+            <TouchableOpacity
+              // onPress={() => navigation.goBack()}
+              onPress={() => this.props.nav() }
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
