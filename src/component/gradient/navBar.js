@@ -5,15 +5,19 @@ import {
   StatusBar,
   SafeAreaView,
   Platform,
+  Dimensions,
   TouchableOpacity,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { TText, TBold, TSemiBold } from '../texts';
 import colors from '../../config/colors';
 import images from '../../config/images';
+const { width: widthView } = Dimensions.get('window')
 
 const subString = (string) => {
-  return string && string.length >= 25 ? `${string.slice(0, 25)}...` : string
+  if (string && string >= 31) return `${string.slice(0, 30)}...`
+  else if (widthView <= 320) return `${string.slice(0, 26)}...`
+  return string
 }
 
 

@@ -88,10 +88,12 @@ export default class extends React.Component {
         <SafeAreaView style={{ marginHorizontal: 16 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
             <TouchableOpacity style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-              <Image source={images.cancel} style={{ marginRight: 8 }} />
+              <Image source={images.cancelFirst} style={{ marginRight: 8 }} />
               <TBold color={colors.white}>ยกเลิก</TBold>
             </TouchableOpacity>
-            <TouchableOpacity style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+            <TouchableOpacity
+              onPress={() => navigateAction({ ...this.props, page: 'otp' })}
+              style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
               <TBold color={colors.white} style={{ marginRight: 8 }}>ต่อไป</TBold>
               <Image source={images.next} />
             </TouchableOpacity>
