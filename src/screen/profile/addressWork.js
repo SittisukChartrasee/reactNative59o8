@@ -98,8 +98,17 @@ export default class extends React.Component {
 
   handleInput = (props) => {
     const { updateUser, user } = this.props
+
+    // ตรวจสอบความเสี่ยงของประเทศ
+
+    // if (props.field === 'country') {
+    //   updateUser('addressWork', { ...user.addressWork, [props.field]: props.value, countryCode: props.code, countryRisk: props.risk })
+    // } else {
+    //   updateUser('addressWork', { ...user.addressWork, [props.field]: props.value })
+    // }
+
     if (props.field === 'country') {
-      updateUser('addressWork', { ...user.addressWork, [props.field]: props.value, countryCode: props.code, countryRisk: props.risk })
+      updateUser('addressWork', { ...user.addressWork, [props.field]: props.value, countryCode: props.code })
     } else {
       updateUser('addressWork', { ...user.addressWork, [props.field]: props.value })
     }
@@ -196,14 +205,19 @@ export default class extends React.Component {
     this.props.saveWorkplaceAddress({ variables: { input: data } })
       .then(res => {
         console.log(res)
-        if (user.addressWork.countryRisk) {
-          const modal = {
-            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
-            visible: true,
-            onPress: () => this.setState({ modal: { visible: false } })
-          }
-          return this.setState({ modal })
-        } else if (res.data.saveWorkplaceAddress.success) {
+
+        // ตรวจสอบความเสี่ยงของประเทศ
+
+        // if (user.addressWork.countryRisk) {
+        //   const modal = {
+        //     dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
+        //     visible: true,
+        //     onPress: () => this.setState({ modal: { visible: false } })
+        //   }
+        //   return this.setState({ modal })
+        // } else if (res.data.saveWorkplaceAddress.success) {
+
+        if (res.data.saveWorkplaceAddress.success) {
           navigateAction({ ...this.props, page: 'chooseCurr' })
         } else if (!res.data.saveWorkplaceAddress.success) {
           switch (res.data.saveWorkplaceAddress.message) {

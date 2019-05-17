@@ -92,8 +92,17 @@ export default class extends React.Component {
   }
   handleInput = (props) => {
     const { updateUser, user } = this.props
+
+    // ตรวจสอบความเสี่ยงของประเทศ
+
+    // if (props.field === 'country') {
+    //   updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value, countryCode: props.code, countryRisk: props.risk }) 
+    // } else {
+    //   updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value })
+    // }
+
     if (props.field === 'country') {
-      updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value, countryCode: props.code, countryRisk: props.risk })
+      updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value, countryCode: props.code })
     } else {
       updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value })
     }
@@ -188,14 +197,19 @@ export default class extends React.Component {
     this.props.saveCurrentAddress({ variables: { input: data } })
       .then(res => {
         console.log(res)
-        if (user.addressCurr.countryRisk) {
-          const modal = {
-            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
-            visible: true,
-            onPress: () => this.setState({ modal: { visible: false } })
-          }
-          return this.setState({ modal })
-        } else if (res.data.saveCurrentAddress.success) {
+
+        // ตรวจสอบความเสี่ยงของประเทศ
+
+        // if (user.addressCurr.countryRisk) {
+        //   const modal = {
+        //     dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
+        //     visible: true,
+        //     onPress: () => this.setState({ modal: { visible: false } })
+        //   }
+        //   return this.setState({ modal })
+        // } else if (res.data.saveCurrentAddress.success) {
+
+        if (res.data.saveCurrentAddress.success) {
           navigateAction({ ...this.props, page: 'chooseDoc' })
         } else if (!res.data.saveCurrentAddress.success) {
           switch (res.data.saveCurrentAddress.message) {

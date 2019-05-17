@@ -12,7 +12,7 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import _ from 'lodash'
+import debounce from 'lodash/debounce'
 import { withApollo } from 'react-apollo'
 import {
   TBold,
@@ -36,7 +36,7 @@ import {
 } from '../../containers/query'
 import { updateUser } from '../../redux/actions/commonAction'
 
-const checkTitle = (field='') => {
+const checkTitle = (field = '') => {
   if (field.toLowerCase().search('title') > -1) return 'ค้นหาคำนำหน้า (ตัวย่อ)'
   if (field.toLowerCase().search('country') > -1) return 'ค้นหาประเทศ'
   if (field.toLowerCase().search('bustype') > -1) return 'ค้นหาประเภทธุรกิจ'
@@ -44,7 +44,7 @@ const checkTitle = (field='') => {
   return 'ค้นหาตำบลของคุณ'
 }
 
-const query = _.debounce((client, obj, setState) => {
+const query = debounce((client, obj, setState) => {
   client.query({ ...obj })
     .then((val) => setState(val))
     .catch(err => console.error(err))
@@ -71,45 +71,43 @@ export default class extends React.Component {
     result: [],
   }
 
-  onHandleSetText = ({ text, field }) => {
+  onHandleSetText = ({ text = '', field }) => {
     this.setState({ text })
-
-
     if (field.toLowerCase().search('title') > -1) {
       query(this.props.client, {
-          query: getUserTitle,
-          variables: { text: text.trim() }
-        }, val => this.setState({ result: val.data.getUserTitle })
+        query: getUserTitle,
+        variables: { text: text.trim() }
+      }, val => this.setState({ result: val.data.getUserTitle })
       )
     } else if (field.toLowerCase().search('country') > -1) {
       query(this.props.client, {
-          query: getCountry,
-          variables: { text: text.trim() }
-        }, val => this.setState({ result: val.data.getCountry })
+        query: getCountry,
+        variables: { text: text.trim() }
+      }, val => this.setState({ result: val.data.getCountry })
       )
     } else if (field.toLowerCase().search('district') > -1) {
       query(this.props.client, {
-          query: getSubDistrict,
-          variables: { text: text.trim() }
-        }, val => {
-          this.setState({ result: val.data.getSubDistrict })
-        }
+        query: getSubDistrict,
+        variables: { text: text.trim() }
+      }, val => {
+        this.setState({ result: val.data.getSubDistrict })
+      }
       )
     } else if (field.toLowerCase().search('bustype') > -1) {
       query(this.props.client, {
-          query: getBusinessType,
-          variables: { text: text.trim() }
-        }, val => {
-          this.setState({ result: val.data.getBusinessType })
-        }
+        query: getBusinessType,
+        variables: { text: text.trim() }
+      }, val => {
+        this.setState({ result: val.data.getBusinessType })
+      }
       )
     } else if (field.toLowerCase().search('occupation') > -1) {
       query(this.props.client, {
-          query: getOccupation,
-          variables: { text: text.trim() }
-        }, val => {
-          this.setState({ result: val.data.getOccupation })
-        }
+        query: getOccupation,
+        variables: { text: text.trim() }
+      }, val => {
+        this.setState({ result: val.data.getOccupation })
+      }
       )
     }
   }
@@ -121,11 +119,11 @@ export default class extends React.Component {
 
     if (data.displayName) {
       query(this.props.client, {
-          query: getAddressCode,
-          variables: { code: data.code }
-        }, val => {
-          onHandleDistrict({ data, val })
-        }
+        query: getAddressCode,
+        variables: { code: data.code }
+      }, val => {
+        onHandleDistrict({ data, val })
+      }
       )
     }
   }
@@ -136,12 +134,15 @@ export default class extends React.Component {
     StatusBar.setBarStyle(open ? "dark-content" : "light-content")
     return (
       <View>
-        <TouchableOpacity onPress={() => this.setState({ open: true })}>
+        <TouchableOpacity onPress={() => {
+          this.onHandleSetText({ field })
+          this.setState({ open: true })
+        }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          { confirmText || value
+            {confirmText || value
               ? <TBold textAlign="left" color={colors.midnight}>{value || confirmText}</TBold>
               : <TBold textAlign="left" color={colors.smoky}>กรุณาเลือกข้อมูล</TBold>
-          }
+            }
             <Image source={images.iconNextPageBlack} />
           </View>
           <View style={{ height: err ? 2 : 1, backgroundColor: err ? 'rgb(213, 0, 0)' : colors.smoky, marginTop: 5 }} />
@@ -184,7 +185,7 @@ export default class extends React.Component {
               </View>
             </View>
 
-            <ScrollView style={{ flex: 1, backgroundColor: colors.lightgrey }} contentContainerStyle={{ paddingBottom: 30  }}>
+            <ScrollView style={{ flex: 1, backgroundColor: colors.lightgrey }} contentContainerStyle={{ paddingBottom: 30 }}>
               {
                 this.state.result.map((d, key) => (
                   <TouchableOpacity key={key} onPress={() => this.onHandleOnPress(d)}>

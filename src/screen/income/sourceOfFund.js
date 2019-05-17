@@ -13,7 +13,7 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import modal from '../../component/modal'
+import Modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
 import { updateUser } from '../../redux/actions/commonAction'
@@ -28,7 +28,9 @@ const dispatchToProps = dispatch => ({
 @setMutation
 export default class extends React.Component {
   state = {
-    modal: false,
+    modal: {
+      visible: false
+    },
     PreconditionRequired: [],
     InvalidArgument: [],
     fields: [
@@ -109,13 +111,19 @@ export default class extends React.Component {
 
   handleInput = (props) => {
     const { updateUser, user } = this.props
-    if (props.type === 'modal') this.setState({ modal: true })
-    else if (props.field === 'investmentSource') {
+    // if (props.type === 'modal') this.setState({ modal: true })
+    if (props.field === 'investmentSource') {
       const arr = props.data.split(',')
       updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: arr, investmentSourceOther: props.otherField })
     } else if (props.field === 'investmentSourceCountry') {
-      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value, nationalityCode: props.code, nationalityRisk: props.risk })
-    } else if (props.field === 'investmentPurpose') {
+      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value, nationalityCode: props.code })
+    }
+    // ตรวจสอบความเสี่ยงของประเทศ
+
+    // else if (props.field === 'investmentSourceCountry') {
+    //   updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value, nationalityCode: props.code, nationalityRisk: props.risk })
+    // } 
+    else if (props.field === 'investmentPurpose') {
       updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.data })
     } else {
       updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value })
@@ -154,27 +162,36 @@ export default class extends React.Component {
       dividendWithHoldingTax: !(dividendWithHoldingTax === 'ไม่ใช่'),
     }
 
-    this.props.saveSourceOfFund({ variables: { input: data } })
-      .then(res => {
-        if (user.sourceOfFund.nationalityRisk) {
-          this.setState({ modal: true })
-        } else if (res.data.saveSourceOfFund.success) {
-          navigateAction({ ...this.props, page: 'addressHome' })
-        } else if (!res.data.saveSourceOfFund.success) {
-          switch (res.data.saveSourceOfFund.message) {
-            case 'PreconditionRequired':
-              this.setState({ PreconditionRequired: res.data.saveSourceOfFund.details })
-            case 'InvalidArgument':
-              this.setState({ InvalidArgument: res.data.saveSourceOfFund.details })
-            default: return null
+    console.log(data)
+
+    if (data.investmentSourceCountry === 'US') {
+      const modal = {
+        dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
+        visible: true,
+        onPress: () => this.setState({ modal: { visible: false } })
+      }
+      return this.setState({ modal })
+    } else {
+      this.props.saveSourceOfFund({ variables: { input: data } })
+        .then(res => {
+          if (res.data.saveSourceOfFund.success) {
+            navigateAction({ ...this.props, page: 'addressHome' })
+          } else if (!res.data.saveSourceOfFund.success) {
+            switch (res.data.saveSourceOfFund.message) {
+              case 'PreconditionRequired':
+                this.setState({ PreconditionRequired: res.data.saveSourceOfFund.details })
+              case 'InvalidArgument':
+                this.setState({ InvalidArgument: res.data.saveSourceOfFund.details })
+              default: return null
+            }
           }
-        }
-      })
+        })
+    }
   }
 
   render() {
     const { user } = this.props
-
+    const { modal } = this.state
     return (
       <Screen color="transparent">
         <NavBar
@@ -213,11 +230,7 @@ export default class extends React.Component {
         </KeyboardAwareScrollView>
 
         {
-          modal({
-            visible: this.state.modal,
-            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
-            onPress: () => this.setState({ modal: false })
-          })
+          Modal(modal)
         }
 
         <NextButton onPress={this.onNext} />

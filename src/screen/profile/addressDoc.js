@@ -93,8 +93,17 @@ export default class extends React.Component {
 
   handleInput = (props) => {
     const { updateUser, user } = this.props
+
+    // ตรวจสอบความเสี่ยงของประเทศ
+
+    // if (props.field === 'country') {
+    //   updateUser('addressDoc', { ...user.addressDoc, [props.field]: props.value, countryCode: props.code, countryRisk: props.risk })
+    // } else {
+    //   updateUser('addressDoc', { ...user.addressDoc, [props.field]: props.value })
+    // }
+
     if (props.field === 'country') {
-      updateUser('addressDoc', { ...user.addressDoc, [props.field]: props.value, countryCode: props.code, countryRisk: props.risk })
+      updateUser('addressDoc', { ...user.addressDoc, [props.field]: props.value, countryCode: props.code })
     } else {
       updateUser('addressDoc', { ...user.addressDoc, [props.field]: props.value })
     }
@@ -189,14 +198,19 @@ export default class extends React.Component {
     this.props.saveMailingAddress({ variables: { input: data } })
       .then(res => {
         console.log(res)
-        if (user.addressDoc.countryRisk) {
-          const modal = {
-            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
-            visible: true,
-            onPress: () => this.setState({ modal: { visible: false } })
-          }
-          return this.setState({ modal })
-        } else if (res.data.saveMailingAddress.success) {
+
+        // ตรวจสอบความเสี่ยงของประเทศ
+
+        // if (user.addressDoc.countryRisk) {
+        //   const modal = {
+        //     dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
+        //     visible: true,
+        //     onPress: () => this.setState({ modal: { visible: false } })
+        //   }
+        //   return this.setState({ modal })
+        // } else if (res.data.saveMailingAddress.success) {
+
+        if (res.data.saveMailingAddress.success) {
           navigateAction({ ...this.props, page: 'contact' })
         } else if (!res.data.saveMailingAddress.success) {
           switch (res.data.saveMailingAddress.message) {
