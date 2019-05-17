@@ -92,7 +92,7 @@ export default class extends React.Component {
               <TBold color={colors.white}>ยกเลิก</TBold>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigateAction({ ...this.props, page: 'otp' })}
+              onPress={() => navigateAction({ ...this.props, page: 'welcome' })}
               style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
               <TBold color={colors.white} style={{ marginRight: 8 }}>ต่อไป</TBold>
               <Image source={images.next} />
