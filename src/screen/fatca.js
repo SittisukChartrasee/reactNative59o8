@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
 } from 'react-native'
+import { NavigationActions, StackActions } from 'react-navigation'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Screen from '../component/screenComponent'
@@ -20,6 +21,7 @@ import { fatca } from '../redux/actions/commonAction'
 import { navigateAction } from '../redux/actions'
 import setMutation from '../containers/mutation'
 import Modal from '../component/modal'
+import { testStore } from '../App'
 
 const checkActiveData = (data) => {
   return data.reduce((pre, curr, inx, arr) => {
@@ -120,12 +122,15 @@ export default class extends React.Component {
     const { navigation } = this.props
     const { modal } = this.state
     const fatca = this.props.fatcaReducer.fatca
+
+
     return (
       <Screen color="transparent">
         <NavBar
           title="สถานะพลเมืองสหรัฐ"
           navLeft={
             <TouchableOpacity
+              // onPress={() => testStore.dispatch(StackActions.popToTop())}
               onPress={() => this.onNavButton()}
               style={{ paddingRight: 30 }}
             >
