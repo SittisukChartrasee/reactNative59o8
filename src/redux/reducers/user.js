@@ -127,6 +127,7 @@ const init = {
     incomeRange: '',
     incomeRangeCode: '',
     countrySourceOfIncome: '',
+    countyCode: '',
   },
   spouse: {
     // nationFlag: '',
