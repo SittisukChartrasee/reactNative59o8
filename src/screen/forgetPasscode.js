@@ -44,11 +44,6 @@ export default class extends React.Component {
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
-          navRight={
-            <TouchableOpacity>
-              <Image source={images.iconlogoOff} />
-            </TouchableOpacity>
-          }
         />
 
         
