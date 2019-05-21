@@ -2,13 +2,12 @@ import React from 'react'
 import noneStatis from 'hoist-non-react-statics'
 import { ApolloProvider } from 'react-apollo'
 import { Provider } from 'react-redux'
-import { store } from '../redux/store'
+import { onStore } from '../redux/store'
 import client from '../config/initApollo'
-import Navigator from './navigator'
 
 export const storyBookStore = WrapComponents => {
   const Enhance = (props) => (
-    <Provider store={store}>
+    <Provider store={onStore}>
       <WrapComponents {...props} />
     </Provider>
   )
@@ -18,8 +17,8 @@ export const storyBookStore = WrapComponents => {
 
 export default (WrapComponents) => props => {
   const Enhance = () => (
-    <Provider store={store}>
-      <ApolloProvider client={client(store)}>
+    <Provider store={onStore}>
+      <ApolloProvider client={client(onStore)}>
         <WrapComponents {...props} />
       </ApolloProvider>
     </Provider>

@@ -97,44 +97,44 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'fatca' }))
-    // const { navigateAction, user } = this.props
+    // this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'fatca' }))
+    const { navigateAction, user } = this.props
 
-    // await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
-    // const data = {
-    //   idCard: user.profile.idCard,
-    //   email: (user.contact.email).trim().toLowerCase(),
-    //   mobilePhone: user.contact.mobilePhone,
-    // }
+    const data = {
+      idCard: user.profile.idCard,
+      email: (user.contact.email).trim().toLowerCase(),
+      mobilePhone: user.contact.mobilePhone,
+    }
 
-    // this.props.requestOtp(data)
-    //   .then(res => {
-    //     console.log(res)
-    //     if (res.success) {
-    //       navigateAction({ ...this.props, page: 'otp' })
-    //     } else if (!res.success) {
-    //       switch (res.message) {
-    //         case 'PreconditionRequired':
-    //           this.setState({ PreconditionRequired: res.details })
-    //           break
-    //         case 'InvalidArgument':
-    //           this.setState({ InvalidArgument: res.details })
-    //           break
-    //         default:
-    //           const modal = {
-    //             dis: res.message,
-    //             visible: true,
-    //             onPress: () => this.setState({ modal: { visible: false } })
-    //           }
-    //           this.setState({ modal })
-    //           break
-    //       }
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //   })
+    this.props.requestOtp(data)
+      .then(res => {
+        console.log(res)
+        if (res.success) {
+          navigateAction({ ...this.props, page: 'otp' })
+        } else if (!res.success) {
+          switch (res.message) {
+            case 'PreconditionRequired':
+              this.setState({ PreconditionRequired: res.details })
+              break
+            case 'InvalidArgument':
+              this.setState({ InvalidArgument: res.details })
+              break
+            default:
+              const modal = {
+                dis: res.message,
+                visible: true,
+                onPress: () => this.setState({ modal: { visible: false } })
+              }
+              this.setState({ modal })
+              break
+          }
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   render() {
