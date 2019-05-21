@@ -20,7 +20,7 @@ export default class extends React.Component {
         const split = numberDecrease.split('')
         const decrease = dot.map((d, inx) => split[inx] ? split[inx] : false)
 
-        setNumber({ number: numberDecrease, dot: decrease })
+        setNumber({ number: numberDecrease, dot: decrease, key: d })
         return {
           number: numberDecrease < 1 ? '' : numberDecrease,
           dot: decrease,
@@ -35,7 +35,7 @@ export default class extends React.Component {
         const split = numbers.number.split('')
         const increase = dot.map((d, inx) => split[inx] ? split[inx] : false)
 
-        setNumber({ number: numbers.number, dot: increase })
+        setNumber({ number: numbers.number, dot: increase, key: d })
         return {
           ...numbers,
           dot: increase,

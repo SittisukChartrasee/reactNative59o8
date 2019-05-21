@@ -41,7 +41,9 @@ export default class extends React.Component {
     }
 
     this.setState({ ...obj })
-    obj.dot.map(d => d && this.delayDot(d))
+
+    if (obj.key === 'del') this.setState({ currentDot: '•' })
+    else obj.dot.map(d => d && this.delayDot(d))
 
     if (obj.number.length === 6) {
       this.props.velidateOtp(data)
@@ -63,7 +65,7 @@ export default class extends React.Component {
     this.setState({ currentDot: number })
     setTimeout(() => {
       this.setState({ currentDot: '•' })
-    }, 500)
+    }, 200)
   }
 
   onPress = async () => {
