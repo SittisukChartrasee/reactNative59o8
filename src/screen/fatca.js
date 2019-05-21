@@ -21,7 +21,7 @@ import { fatca } from '../redux/actions/commonAction'
 import { navigateAction } from '../redux/actions'
 import setMutation from '../containers/mutation'
 import Modal from '../component/modal'
-import { testStore } from '../App'
+import { store } from '../App'
 
 const checkActiveData = (data) => {
   return data.reduce((pre, curr, inx, arr) => {
@@ -114,7 +114,7 @@ export default class extends React.Component {
         <NavBar
           title="สถานะพลเมืองสหรัฐ"
           navLeft={
-            <TouchableOpacity onPress={() => testStore.dispatch(StackActions.popToTop())}>
+            <TouchableOpacity onPress={() => store.dispatch(StackActions.popToTop())}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }

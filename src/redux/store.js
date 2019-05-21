@@ -7,28 +7,22 @@ import {
   createReactNavigationReduxMiddleware,
   createNavigationReducer
 } from "react-navigation-redux-helpers"
-import reducer from './reducers'
+import reducers from './reducers'
+import AppRouteConfigs from '../config/appNavigation'
 
-import fatca from '../screen/fatca'
-import fraud from '../screen/fraud'
+export const AppNavigator = createStackNavigator(AppRouteConfigs, { headerMode: 'none' })
 
-const AppNavigator = createStackNavigator({
-  fatca,
-  fraud
-}, {
-  initialRouteName: "fatca",
-  headerMode: 'none'
-})
-
-const appReducer = combineReducers({
-  nav: createNavigationReducer(AppNavigator),
-  ...reducer,
-})
-
-const middlewareRouter = createReactNavigationReduxMiddleware(
-  state => state.nav
+const store = createStore(
+  combineReducers({
+    nav: createNavigationReducer(AppNavigator),
+    ...reducers,
+  }),
+  composeWithDevTools(
+    applyMiddleware(
+      createReactNavigationReduxMiddleware(state => state.nav),
+      thunk
+    )
+  ),
 )
-
-export const App = createAppContainer(AppNavigator)
-
-export const store = createStore(appReducer, composeWithDevTools(applyMiddleware(thunk, middlewareRouter)))
+ 
+export const onStore = store
