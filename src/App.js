@@ -1,11 +1,6 @@
 import React from 'react'
-import thunk from 'redux-thunk'
-import { ApolloProvider } from 'react-apollo'
-import { Provider, connect } from 'react-redux'
-import {
-  createReduxContainer,
-} from 'react-navigation-redux-helpers'
-import client from './config/initApollo'
+import { connect } from 'react-redux'
+import { createReduxContainer } from 'react-navigation-redux-helpers'
 import { onStore, AppNavigator } from './redux/store'
 import pro from './config/provider'
 

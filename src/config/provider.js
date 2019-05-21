@@ -19,7 +19,7 @@ export default (WrapComponents) => props => {
   const Enhance = () => (
     <Provider store={onStore}>
       <ApolloProvider client={client(onStore)}>
-        <WrapComponents {...props} />
+        <WrapComponents />
       </ApolloProvider>
     </Provider>
   )
