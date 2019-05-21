@@ -60,6 +60,21 @@ export default class extends React.Component {
       visible: false
     },
   }
+
+  onNavButton = key => {
+    if (key === 'LOGOUT') {
+      return this.setState({
+        modal: {
+          type: 'LOGOUT',
+          dis: 'คุณต้องการออกจากหน้าเชื่อมบัญชี\nใช่หรือไม่ ?',
+          visible: true,
+          onPress: () => this.setState({ modal: { visible: false } })
+        }
+      })
+    }
+    return alert('back')
+  }
+
   onPress = (obj) => {
     this.props.updateFatca('fatca', obj.choice)
     this.props.updateFatca('sumFatca', checkActiveData(obj.choice).IS_SUM)
@@ -110,12 +125,18 @@ export default class extends React.Component {
         <NavBar
           title="สถานะพลเมืองสหรัฐ"
           navLeft={
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => this.onNavButton()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
           navRight={
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.onNavButton('LOGOUT')}
+              style={{ paddingLeft: 30 }}
+            >
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }
@@ -128,9 +149,7 @@ export default class extends React.Component {
           })
         }
         <NextButton disabled={checkActiveData(fatca).IS_TRUE} onPress={this.onNext} />
-        {
-          Modal(modal)
-        }
+        { Modal(modal)}
       </Screen>
     )
   }

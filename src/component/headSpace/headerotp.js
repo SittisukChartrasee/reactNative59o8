@@ -64,6 +64,7 @@ export default class extends React.Component {
               startState !== 0
                 ? (
                   <TouchableOpacity
+                    disabled
                     style={{
                       width: 160,
                       height: 40,
