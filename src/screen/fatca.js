@@ -132,10 +132,9 @@ export default class extends React.Component {
           })
         }
         <NextButton
-          // disabled={checkActiveData(fatca).IS_TRUE}
+          disabled={checkActiveData(fatca).IS_TRUE}
           disabled={false}
-          // onPress={this.onNext}
-          onPress={() => this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'fraud' }))}
+          onPress={this.onNext}
         />
         {
           Modal(modal)
