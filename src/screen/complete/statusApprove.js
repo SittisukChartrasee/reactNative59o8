@@ -56,7 +56,8 @@ export default class extends React.Component {
     status: 'SUCCESS', // SUCCESS, REJECT, nothing
   }
   render() {
-    const { navigateAction, status } = this.props
+    const { navigateAction, navigation } = this.props
+    const status = navigation.getParam('status', 'SUCCESS')
     return (
       <Screen>
         <NavBar

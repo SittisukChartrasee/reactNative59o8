@@ -50,7 +50,7 @@ export default class extends React.Component {
             label="รีเฟรช"
             bgTransparent
             style={{ marginHorizontal: 24 }}
-            onPress={() => navigateAction({ ...this.props, page: 'statusApprove' })}
+            onPress={() => navigateAction({ ...this.props, page: 'statusApprove', params: { status: 'REJECT' } })}
           />
         </View>
       </Screen>

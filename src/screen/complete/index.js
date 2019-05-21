@@ -6,10 +6,10 @@ import softReject from './softReject'
 import confirmAccount from './confirmAccount'
 
 export default {
+  waiting,
   confirmAccount,
   softReject,
   statusApprove,
-  waiting,
   verifyEmail,
   complete
 }
