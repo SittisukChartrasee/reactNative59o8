@@ -20,6 +20,7 @@ import { Choice } from '../component/cardSelect'
 import { fatca, root } from '../redux/actions/commonAction'
 import { navigateAction } from '../redux/actions'
 import setMutation from '../containers/mutation'
+import lockout from '../containers/hoc/lockout'
 
 const checkActiveData = (data) => {
   return data.reduce((pre, curr, inx, arr) => {
@@ -55,21 +56,8 @@ const dispatchToProps = dispatch => ({
 
 @connect(mapToProps, dispatchToProps)
 @setMutation
+@lockout
 export default class extends React.Component {
-
-  onNavButton = key => {
-    if (key === 'LOGOUT') {
-      const modal = {
-        type: 'LOGOUT',
-        dis: 'คุณต้องการออกจากหน้าเชื่อมบัญชี\nใช่หรือไม่ ?',
-        visible: true,
-        onPress: () => this.props.updateRoot('modal', { visible: false })
-      }
-      return this.props.updateRoot('modal', modal)
-    }
-    return alert('back')
-  }
-
   onPress = (obj) => {
     this.props.updateFatca('fatca', obj.choice)
     this.props.updateFatca('sumFatca', checkActiveData(obj.choice).IS_SUM)
@@ -122,7 +110,7 @@ export default class extends React.Component {
           navLeft={
             <TouchableOpacity
               // onPress={() => store.dispatch(StackActions.popToTop())}
-              onPress={() => this.onNavButton()}
+              onPress={() => this.props.navigation.goBack()}
               style={{ paddingRight: 30 }}
             >
               <Image source={images.iconback} />
@@ -130,7 +118,7 @@ export default class extends React.Component {
           }
           navRight={
             <TouchableOpacity
-              onPress={() => this.onNavButton('LOGOUT')}
+              onPress={() => this.props.lockout()}
               style={{ paddingLeft: 30 }}
             >
               <Image source={images.iconlogoOff} />
