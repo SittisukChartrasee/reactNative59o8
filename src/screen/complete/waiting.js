@@ -22,6 +22,12 @@ const dispatchToProps = dispatch => ({
 })
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
+
+  onNext = async () => {
+    const { navigateAction } = this.props
+    navigateAction({ ...this.props, page: 'statusApprove', params: { status: 'REJECT' } })
+  }
+
   render() {
     const { navigateAction } = this.props
     return (
@@ -50,7 +56,7 @@ export default class extends React.Component {
             label="รีเฟรช"
             bgTransparent
             style={{ marginHorizontal: 24 }}
-            onPress={() => navigateAction({ ...this.props, page: 'statusApprove', params: { status: 'REJECT' } })}
+            onPress={this.onNext}
           />
         </View>
       </Screen>

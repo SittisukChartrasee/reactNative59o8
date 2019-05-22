@@ -102,7 +102,7 @@ export default class extends React.Component {
       }, {
         label: 'คุณต้องการหักภาษี ณ ที่จ่ายสำหรับเงินปันผลและค่าขายคืน หรือไม่ ?',
         type: 'radioColumn',
-        init: [{ title: 'ต้องการ หักภาษี ณ ที่จ่าย', active: true }, { title: 'ไม่ใช่' }],
+        init: [{ title: 'ต้องการ หักภาษี ณ ที่จ่าย', active: true }, { title: 'ไม่ต้องการ' }],
         field: 'dividendWithHoldingTax',
         required: false,
       },
@@ -159,7 +159,7 @@ export default class extends React.Component {
       investmentSourceOther,
       investmentSourceCountry: nationalityCode,
       investmentPurpose,
-      dividendWithHoldingTax: !(dividendWithHoldingTax === 'ไม่ใช่'),
+      dividendWithHoldingTax: !(dividendWithHoldingTax === 'ไม่ต้องการ'),
     }
 
     console.log(data)

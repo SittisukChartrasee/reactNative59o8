@@ -107,8 +107,6 @@ export default class extends React.Component {
     const { fields, code } = this.state
     const { updateUser, user } = this.props
 
-    console.log(props)
-
     if (props.field === 'nationFlag') {
       updateUser('spouse', { ...user.spouse, [props.field]: props.value })
       this.setState({

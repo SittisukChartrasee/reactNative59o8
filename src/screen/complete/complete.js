@@ -22,8 +22,38 @@ const dispatchToProps = dispatch => ({
 })
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
-  render() {
+
+  onNext = async () => {
     const { navigateAction } = this.props
+    const verifyStatus = false
+
+    // รอ backEnd ทำ API
+
+    // this.props.verify({ variables: { input: data } })
+    // .then(res => {
+    //   if (res.data.saveFatca.success) {
+    //     navigateAction({ ...this.props, page: 'fraud' })
+    //   } else if (!res.data.saveFatca.success) {
+    //     const modal = {
+    //       dis: res.data.saveFatca.message,
+    //       visible: true,
+    //       onPress: () => this.setState({ modal: { visible: false } })
+    //     }
+    //     return this.setState({ modal })
+    //   }
+    // })
+    // .catch(err => {
+    //   console.log(err)
+    // })
+
+    if (verifyStatus) {
+      navigateAction({ ...this.props, page: 'waiting' })
+    } else {
+      navigateAction({ ...this.props, page: 'verifyEmail' })
+    }
+  }
+
+  render() {
     return (
       <Screen>
         <NavBar
@@ -51,7 +81,7 @@ export default class extends React.Component {
           <LongButton
             label="ส่งอีเมลยืนยันอีกครั้ง"
             style={{ marginHorizontal: 24 }}
-            onPress={() => navigateAction({ ...this.props, page: 'verifyEmail' })}
+            onPress={this.onNext}
           />
         </View>
       </Screen>

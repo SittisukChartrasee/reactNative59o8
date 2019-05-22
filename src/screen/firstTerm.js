@@ -20,15 +20,15 @@ const { width: widthView } = Dimensions.get('window')
 
 const item1 = [
   'บัตรประจำตัวประชาชนของคุณและคู่สมรส',
-  'หนังสือเดินทางของคู่สมรสในกรณีชาวต่างชาติ',
+  'หนังสือเดินทางของคู่สมรสในกรณี\nชาวต่างชาติ',
   'สมุดบัญชี ธ.กสิกรไทย หรือ ธ.ไทยพาณิชย์ อย่างใดอย่างหนึ่ง',
   'แอปพลิเคชั่น K-Plus / SCB Easy ขึ้นอยู่กับธนาคารที่คุณใช้สมัคร',
 ]
 
 const item2 = [
-  'เป็นบุคคลธรรมดา มีสัญชาติไทยอายุ 20 ปีบริบูรณ์',
-  'ไม่เป็นผู้ทีี่มีถิ่นฐานอยู่ในสหรัฐอเมริกา หรือเป็นพลเมืองสหรัฐอเมริกา',
-  'สำหรับผู้ลงทุนที่ไม่เคยเปิดบัญชีกองทุนกับ บลจ. กสิกรไทยมาก่อน',
+  'เป็นบุคคลธรรมดา มีสัญชาติไทย\nอายุ 20 ปีบริบูรณ์',
+  'ไม่เป็นผู้ทีี่มีถิ่นฐานอยู่ในสหรัฐอเมริกา หรือเป็น\nพลเมืองสหรัฐอเมริกา',
+  'สำหรับผู้ลงทุนที่ไม่เคยเปิดบัญชีกองทุนกับ\nบลจ. กสิกรไทยมาก่อน',
 ]
 
 const mapToProps = () => ({})
@@ -52,14 +52,14 @@ export default class extends React.Component {
         />
 
         <ScrollView contentContainerStyle={{ marginHorizontal: 24 }}>
-          <View style={{ alignItems: 'center' }}>
+          <View style={{ alignItems: 'center', marginBottom: 32 }}>
             <TLight fontSize={16} mb="7%" color={colors.white}>{`เตรียมก่อนปลอดภัยเปิดบัญชีกองทุนง๊ายง่าย`}</TLight>
             <Image source={images.tutorialBankaccount} style={{ width: widthView * .6 }} resizeMode="contain"  />
           </View>
           
           {
             item1.map((d, key) => (
-              <View key={key} style={{ flexDirection: 'row' }}>
+              <View key={key} style={{ flexDirection: 'row', marginTop: 8 }}>
                 <Image source={images.stroke1} style={{ marginTop: '3%' }} />
                 <View style={{ paddingHorizontal: 16 }}>
                   <TLight fontSize={16} color={colors.smoky} textAlign="left">{d}</TLight>
@@ -68,13 +68,13 @@ export default class extends React.Component {
             ))
           }
 
-          <View style={{ alignItems: 'center', marginHorizontal: 38, marginTop: 40, marginBottom: 16 }}>
+          <View style={{ alignItems: 'center', marginHorizontal: 38, marginTop: 40, marginBottom: 8 }}>
             <TBold color={colors.white}>ตรวจสอบคุณสมบัติของผู้เปิดบัญชีกองทุนกัน</TBold>
           </View>
 
           {
-            item1.map((d, key) => (
-              <View key={key} style={{ flexDirection: 'row' }}>
+            item2.map((d, key) => (
+              <View key={key} style={{ flexDirection: 'row', marginTop: 8 }}>
                 <Image source={images.stroke1} style={{ marginTop: '3%' }} />
                 <View style={{ paddingHorizontal: 16 }}>
                   <TLight fontSize={16} color={colors.smoky} textAlign="left">{d}</TLight>
