@@ -16,6 +16,7 @@ import { NavBar } from '../component/gradient'
 import { navigateAction } from '../redux/actions'
 import setMutation from '../containers/mutation'
 import { LongButton } from '../component/button'
+import lockout from '../containers/hoc/lockout'
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
@@ -23,6 +24,7 @@ const dispatchToProps = dispatch => ({
 })
 @connect(mapToProps, dispatchToProps)
 @setMutation
+@lockout
 export default class extends React.Component {
   state = {
     agree: false,
@@ -44,7 +46,7 @@ export default class extends React.Component {
         <NavBar
           title="เงื่อนไขการเปิดบัญชี"
           navRight={
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => this.props.lockout()}>
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }

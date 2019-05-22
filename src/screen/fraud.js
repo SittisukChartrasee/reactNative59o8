@@ -16,10 +16,10 @@ import { LongButton, NextButton } from "../component/button";
 import images from "../config/images";
 import Input from "../component/input";
 import { Choice } from "../component/cardSelect";
-import { fatca } from "../redux/actions/commonAction";
+import { root } from "../redux/actions/commonAction";
 import { navigateAction } from "../redux/actions";
 import setMutation from "../containers/mutation";
-import Modal from "../component/modal";
+import lockout from '../containers/hoc/lockout'
 
 const checkActiveData = data => {
   return data.reduce(
@@ -51,7 +51,8 @@ const checkActiveData = data => {
 
 const mapToProps = () => ({});
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateRoot: bindActionCreators(root, dispatch)
 });
 
 @connect(
@@ -59,6 +60,7 @@ const dispatchToProps = dispatch => ({
   dispatchToProps
 )
 @setMutation
+@lockout
 export default class extends React.Component {
   state = {
     choice: [
@@ -72,10 +74,7 @@ export default class extends React.Component {
       }
     ],
     sumChoice: 0,
-    modal: {
-      visible: false
-    }
-  };
+  }
 
   onPress = obj => {
     this.setState({
@@ -96,9 +95,9 @@ export default class extends React.Component {
       const modal = {
         dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
         visible: true,
-        onPress: () => this.setState({ modal: { visible: false } })
-      };
-      return this.setState({ modal });
+        onPress: () => this.props.updateRoot('modal', { visible: false })
+      }
+      return this.props.updateRoot('modal', modal)
     } else {
       this.props
         .saveFraud({ variables: { input: data } })
@@ -116,7 +115,6 @@ export default class extends React.Component {
 
   render() {
     const { navigation, navigateAction } = this.props;
-    const { modal } = this.state;
     return (
       <Screen color="transparent">
         <NavBar
@@ -127,7 +125,7 @@ export default class extends React.Component {
             </TouchableOpacity>
           }
           navRight={
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => this.props.lockout()}>
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }
@@ -141,7 +139,6 @@ export default class extends React.Component {
           disabled={checkActiveData(this.state.choice).IS_TRUE}
           onPress={this.onNext}
         />
-        {Modal(modal)}
       </Screen>
     );
   }
