@@ -1,7 +1,10 @@
 import { CHANGE_ROOT } from '../types'
 
 const init = {
-  root: 'TEST'
+  root: 'TEST',
+  modal: {
+    visible: false
+  }
 }
 
 export default (state = init, action) => {

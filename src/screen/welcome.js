@@ -140,6 +140,8 @@ export default class extends React.Component {
   render() {
     const { modal } = this.state
     const sizing = widthScreen <= 320 ? { width: 160, height: 110 } : {}
+
+    console.log(this.props)
     return (
       <Screen>
         <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>

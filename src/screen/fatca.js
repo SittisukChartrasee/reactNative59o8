@@ -17,11 +17,9 @@ import { LongButton, NextButton } from '../component/button'
 import images from '../config/images'
 import Input from '../component/input'
 import { Choice } from '../component/cardSelect'
-import { fatca } from '../redux/actions/commonAction'
+import { fatca, root } from '../redux/actions/commonAction'
 import { navigateAction } from '../redux/actions'
 import setMutation from '../containers/mutation'
-import Modal from '../component/modal'
-import { store } from '../App'
 
 const checkActiveData = (data) => {
   return data.reduce((pre, curr, inx, arr) => {
@@ -51,28 +49,23 @@ const checkActiveData = (data) => {
 const mapToProps = ({ fatcaReducer }) => ({ fatcaReducer })
 const dispatchToProps = dispatch => ({
   updateFatca: bindActionCreators(fatca, dispatch),
+  updateRoot: bindActionCreators(root, dispatch),
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
 @setMutation
 export default class extends React.Component {
-  state = {
-    modal: {
-      visible: false
-    },
-  }
 
   onNavButton = key => {
     if (key === 'LOGOUT') {
-      return this.setState({
-        modal: {
-          type: 'LOGOUT',
-          dis: 'คุณต้องการออกจากหน้าเชื่อมบัญชี\nใช่หรือไม่ ?',
-          visible: true,
-          onPress: () => this.setState({ modal: { visible: false } })
-        }
-      })
+      const modal = {
+        type: 'LOGOUT',
+        dis: 'คุณต้องการออกจากหน้าเชื่อมบัญชี\nใช่หรือไม่ ?',
+        visible: true,
+        onPress: () => this.props.updateRoot('modal', { visible: false })
+      }
+      return this.props.updateRoot('modal', modal)
     }
     return alert('back')
   }
@@ -83,6 +76,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
+               
     const { navigateAction, fatcaReducer } = this.props
     const fatca = fatcaReducer.fatca
 
@@ -95,9 +89,9 @@ export default class extends React.Component {
       const modal = {
         dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
         visible: true,
-        onPress: () => this.setState({ modal: { visible: false } })
+        onPress: () => this.props.updateRoot('modal', { visible: false })
       }
-      return this.setState({ modal })
+      return this.props.updateRoot('modal', modal)
     } else {
       this.props.saveFatca({ variables: { input: data } })
         .then(res => {
@@ -107,9 +101,9 @@ export default class extends React.Component {
             const modal = {
               dis: res.data.saveFatca.message,
               visible: true,
-              onPress: () => this.setState({ modal: { visible: false } })
+              onPress: () => this.props.updateRoot('modal', { visible: false })
             }
-            return this.setState({ modal })
+            return this.props.updateRoot('modal', modal)
           }
         })
         .catch(err => {
@@ -120,10 +114,9 @@ export default class extends React.Component {
 
   render() {
     const { navigation } = this.props
-    const { modal } = this.state
     const fatca = this.props.fatcaReducer.fatca
 
-
+    console.log(this.props)
     return (
       <Screen color="transparent">
         <NavBar
@@ -154,7 +147,6 @@ export default class extends React.Component {
           })
         }
         <NextButton disabled={checkActiveData(fatca).IS_TRUE} onPress={this.onNext} />
-        { Modal(modal)}
       </Screen>
     )
   }
