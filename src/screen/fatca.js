@@ -115,8 +115,6 @@ export default class extends React.Component {
   render() {
     const { navigation } = this.props
     const fatca = this.props.fatcaReducer.fatca
-
-    console.log(this.props)
     return (
       <Screen color="transparent">
         <NavBar

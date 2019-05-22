@@ -20,7 +20,7 @@ import { LongPositionButton } from '../component/button'
 import Modal from '../component/modal'
 import { navigateAction } from '../redux/actions'
 import { requestOtp } from '../redux/actions/root-active'
-import { updateUser } from '../redux/actions/commonAction'
+import { updateUser, root } from '../redux/actions/commonAction'
 import { NavigationActions } from 'react-navigation'
 // import * as validate from '../utility/validation'
 
@@ -53,15 +53,13 @@ const mapToProps = ({ root, user }) => ({ root, user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   requestOtp: bindActionCreators(requestOtp, dispatch),
-  updateUser: bindActionCreators(updateUser, dispatch)
+  updateUser: bindActionCreators(updateUser, dispatch),
+  updateRoot: bindActionCreators(root, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   state = {
-    modal: {
-      visible: false
-    },
     PreconditionRequired: [],
     InvalidArgument: [],
   }
@@ -125,9 +123,9 @@ export default class extends React.Component {
               const modal = {
                 dis: res.message,
                 visible: true,
-                onPress: () => this.setState({ modal: { visible: false } })
+                onPress: () => this.props.updateRoot('modal', { visible: false })
               }
-              this.setState({ modal })
+              this.props.updateRoot('modal', modal)
               break
           }
         }
@@ -140,8 +138,6 @@ export default class extends React.Component {
   render() {
     const { modal } = this.state
     const sizing = widthScreen <= 320 ? { width: 160, height: 110 } : {}
-
-    console.log(this.props)
     return (
       <Screen>
         <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -167,10 +163,6 @@ export default class extends React.Component {
 
         </KeyboardAwareScrollView>
         <LongPositionButton label="ถัดไป" onPress={this.onNext} />
-
-        {
-          Modal(modal)
-        }
       </Screen>
     )
   }
