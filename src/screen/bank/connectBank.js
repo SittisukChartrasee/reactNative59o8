@@ -11,7 +11,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
-import { LongPositionButton } from '../../component/button'
+import { LongPositionButton, FlexButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
 import { navigateAction } from '../../redux/actions'
@@ -25,6 +25,10 @@ const dispatchToProps = dispatch => ({
 
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
+  state = {
+    status: false,
+  }
+
   render() {
     const { navigateAction } = this.props
 
@@ -48,6 +52,23 @@ export default class extends React.Component {
           <View style={{ height: 56, backgroundColor: colors.lightgrey, justifyContent: 'center' }}>
             <TMed fontSize={14} color={colors.grey}>คุณได้ออกจาก Kmyfunds และเข้าสู่เว็บไซต์ SCB แล้ว</TMed>
           </View>
+          {
+            this.state.status
+              && (
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: colors.emerald,
+                    marginVertical: 24,
+                    marginHorizontal: 24,
+                    padding: 10,
+                    borderRadius: 100,
+                  }}
+                >
+                  <TBold color={colors.white}>กลับ</TBold>
+                </TouchableOpacity>
+              )
+          }
+          
         </SafeAreaView>
       </Screen>
     )

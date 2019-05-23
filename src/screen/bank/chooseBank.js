@@ -33,19 +33,21 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     card: [
+      // {
+      //   label: 'ธนาคารกรุงเทพ',
+      //   image: images.iconBbl,
+      //   type: 'selectCard',
+      // },
       {
-        label: 'ธนาคารกรุงเทพ',
-        image: images.iconBbl,
-        type: 'selectCard',
-      }, {
         label: 'ธนาคารกสิกรไทย',
         image: images.iconkbank,
         type: 'selectCard',
-      }, {
-        label: 'ธนาคารไทยพาณิชย์',
-        image: images.iconscb,
-        type: 'selectCard',
-      }
+      },
+      // {
+      //   label: 'ธนาคารไทยพาณิชย์',
+      //   image: images.iconscb,
+      //   type: 'selectCard',
+      // }
     ],
     fields: [
       {
@@ -132,7 +134,7 @@ export default class extends React.Component {
             }
           </View>
 
-          {
+          {/* {
             handleDisabled(this.state.card).active && (
               <View style={{ backgroundColor: colors.white, paddingBottom: 24, marginTop: 8 }}>
                 {
@@ -145,7 +147,7 @@ export default class extends React.Component {
                 }
               </View>
             )
-          }
+          } */}
         </KeyboardAwareScrollView>
 
         <LongPositionButton onPress={this.onNext} disabled={!handleDisabled(this.state.card).active} bg={colors.lightgrey} label="ยืนยัน"/>

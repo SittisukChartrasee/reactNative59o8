@@ -149,14 +149,14 @@ export default class extends React.Component {
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
-          navRight={
-            <TouchableOpacity
-              onPress={() => this.props.lockout()}
-              style={{ paddingLeft: 30 }}
-            >
-              <Image source={images.iconlogoOff} />
-            </TouchableOpacity>
-          }
+          // navRight={
+          //   <TouchableOpacity
+          //     onPress={() => this.props.lockout()}
+          //     style={{ paddingLeft: 30 }}
+          //   >
+          //     <Image source={images.iconlogoOff} />
+          //   </TouchableOpacity>
+          // }
         />
         <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
           <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
