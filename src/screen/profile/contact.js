@@ -95,7 +95,7 @@ export default class extends React.Component {
     this.props.saveContact({ variables: { input: data } })
       .then(res => {
         if (res.data.saveContact.success) {
-          navigateAction({ ...this.props, page: 'suittest' })
+          navigateAction({ ...this.props, page: 'tutorialBank' })
         } else if (!res.data.saveContact.success) {
           switch (res.data.saveContact.message) {
             case 'PreconditionRequired':

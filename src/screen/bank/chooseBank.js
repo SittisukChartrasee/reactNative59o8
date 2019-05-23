@@ -15,15 +15,21 @@ import images from '../../config/images'
 import Input from '../../component/input'
 import { navigateAction } from '../../redux/actions'
 import colors from '../../config/colors';
+import lockout from '../../containers/hoc/lockout'
+import setMutation from '../../containers/mutation'
+import { root } from '../../redux/actions/commonAction'
 
 const handleDisabled = arr => arr && arr.find(d => d.active) !== undefined && arr.find(d => d.active)
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateRoot: bindActionCreators(root, dispatch),
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
+@lockout
 export default class extends React.Component {
   state = {
     card: [
@@ -53,14 +59,33 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
+    console.log(props)
     if (props.type === 'selectCard') {
       this.setState({ card: this.state.card.map((d) => d.label === props.value ? { ...d, active: true } : { ...d, active: false }) })
     }
   }
 
   onNext = () => {
-    const { navigateAction } = this.props
-    navigateAction({ ...this.props, page: 'connectBank' })
+    const { navigateAction, updateRoot } = this.props
+    const data = { bank: 'KA'} 
+
+    this.props.registerBank({ variables: { input: data } })
+      .then(res => {
+        console.log(res)
+        if (res.data.registerBank.Success) {
+          navigateAction({ ...this.props, page: "connectBank" });
+        } else if (!res.data.saveContact.Success) {
+          const modal = {
+            dis: res.data.registerBank.Message,
+            visible: true,
+            onPress: () => updateRoot("modal", { visible: false })
+          };
+          return updateRoot("modal", modal);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   render() {
@@ -69,12 +94,18 @@ export default class extends React.Component {
         <NavBar
           title="เลือกธนาคาร"
           navLeft={
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
           navRight={
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }
