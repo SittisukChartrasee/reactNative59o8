@@ -13,25 +13,24 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import Modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
-import { updateUser } from '../../redux/actions/commonAction'
+import { updateUser, root } from '../../redux/actions/commonAction'
+import lockout from '../../containers/hoc/lockout'
 import { convertDate, getOfBirth, getStatusGender, getStatusMartial, getStatusChild } from '../../utility/helper'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
-  updateUser: bindActionCreators(updateUser, dispatch)
+  updateUser: bindActionCreators(updateUser, dispatch),
+  updateRoot: bindActionCreators(root, dispatch),
 })
 
 @connect(mapToProps, dispatchToProps)
 @setMutation
+@lockout
 export default class extends React.Component {
   state = {
-    modal: {
-      visible: false
-    },
     PreconditionRequired: [],
     InvalidArgument: [],
     fields: [
@@ -121,8 +120,7 @@ export default class extends React.Component {
   handleInput = (props) => {
     const { updateUser, user } = this.props
     updateUser('child', { ...user.child, [props.field]: props.value })
-    if (props.type === 'modal') return this.setState({ modal: true })
-    else if (props.field === 'firstExpireDateFlag') {
+    if (props.field === 'firstExpireDateFlag') {
       updateUser('child', { ...user.child, [props.field]: props.value })
       this.setState({
         fields: this.state.fields.map((d) => {
@@ -188,7 +186,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction, user } = this.props
+    const { navigateAction, user, updateRoot } = this.props
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
     const {
@@ -245,9 +243,9 @@ export default class extends React.Component {
               const modal = {
                 dis: res.data.saveChild.message,
                 visible: true,
-                onPress: () => this.setState({ modal: { visible: false } })
+                onPress: () => updateRoot('modal', { visible: false })
               }
-              return this.setState({ modal })
+              return updateRoot('modal', modal)
           }
         }
       })
@@ -258,18 +256,23 @@ export default class extends React.Component {
 
   render() {
     const { user } = this.props
-    const { modal } = this.state
     return (
       <Screen color="transparent">
         <NavBar
           title="ข้อมูลบุตร"
           navLeft={
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
           navRight={
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }
@@ -295,11 +298,6 @@ export default class extends React.Component {
             }, key))
           }
         </KeyboardAwareScrollView>
-
-        {
-          Modal(modal)
-        }
-
         <NextButton onPress={this.onNext} />
       </Screen>
     )

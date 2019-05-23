@@ -13,10 +13,10 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import Modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
-import { updateUser } from '../../redux/actions/commonAction'
+import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
+import lockout from '../../containers/hoc/lockout'
 
 const fields = [
   {
@@ -82,16 +82,15 @@ const fields = [
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
-  updateUser: bindActionCreators(updateUser, dispatch)
+  updateUser: bindActionCreators(updateUser, dispatch),
+  updateRoot: bindActionCreators(root, dispatch),
 })
 
 @connect(mapToProps, dispatchToProps)
 @setMutation
+@lockout
 export default class extends React.Component {
   state = {
-    modal: {
-      visible: false
-    },
     PreconditionRequired: [],
     InvalidArgument: [],
   }
@@ -163,7 +162,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction, user } = this.props
+    const { navigateAction, user, updateRoot } = this.props
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       countryCode,
@@ -209,12 +208,7 @@ export default class extends React.Component {
         // ตรวจสอบความเสี่ยงของประเทศ
 
         // if (user.addressWork.countryRisk) {
-        //   const modal = {
-        //     dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
-        //     visible: true,
-        //     onPress: () => this.setState({ modal: { visible: false } })
-        //   }
-        //   return this.setState({ modal })
+
         // } else if (res.data.saveWorkplaceAddress.success) {
 
         if (res.data.saveWorkplaceAddress.success) {
@@ -227,11 +221,11 @@ export default class extends React.Component {
               return this.setState({ InvalidArgument: res.data.saveWorkplaceAddress.details })
             default:
               const modal = {
-                dis: res.data.saveCurrentAddress.message,
+                dis: res.data.saveWorkplaceAddress.message,
                 visible: true,
-                onPress: () => this.setState({ modal: { visible: false } })
+                onPress: () => updateRoot('modal', { visible: false })
               }
-              return this.setState({ modal })
+              return updateRoot('modal', modal)
           }
         }
       })
@@ -239,18 +233,23 @@ export default class extends React.Component {
 
   render() {
     const { user } = this.props
-    const { modal } = this.state
     return (
       <Screen color="transparent">
         <NavBar
           title="ที่อยู่ที่ทำงาน"
           navLeft={
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
           navRight={
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }
@@ -276,11 +275,6 @@ export default class extends React.Component {
             }, key))
           }
         </KeyboardAwareScrollView>
-
-        {
-          Modal(modal)
-        }
-
         <NextButton onPress={this.onNext} />
       </Screen>
     )

@@ -13,25 +13,24 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import Modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
-import { updateUser } from '../../redux/actions/commonAction'
+import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
+import lockout from '../../containers/hoc/lockout'
 import { convertDate, getOfBirth, getStatusGender, getStatusMartial, getStatusChild } from '../../utility/helper'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
-  updateUser: bindActionCreators(updateUser, dispatch)
+  updateUser: bindActionCreators(updateUser, dispatch),
+  updateRoot: bindActionCreators(root, dispatch),
 })
 
 @connect(mapToProps, dispatchToProps)
 @setMutation
+@lockout
 export default class extends React.Component {
   state = {
-    modal: {
-      visible: false
-    },
     expireSatus: 'มีวันหมดอายุ',
     PreconditionRequired: [],
     InvalidArgument: [],
@@ -114,7 +113,7 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
-    const { updateUser, user } = this.props
+    const { updateUser, user, updateRoot } = this.props
 
     if (props.field === 'jcNumber' && props.value) {
       updateUser('profile', { ...user.profile, [props.field]: (props.value).toUpperCase() })
@@ -126,9 +125,9 @@ export default class extends React.Component {
         image: images.iconBackIdcard,
         dis: `ด้านหลังบัตรประชาชน ประกอบด้วยอักษรภาษาอังกฤษ 2 ตัว และตัวเลข 10 ตัว \nตัวอย่างการกรอก : JC1234567890`,
         visible: true,
-        onPress: () => this.setState({ modal: { visible: false } })
+        onPress: () => updateRoot('modal', { visible: false })
       }
-      return this.setState({ modal })
+      return updateRoot('modal', modal)
     }
     else if (props.field === 'expireDateFlag') {
       this.setState({
@@ -152,6 +151,9 @@ export default class extends React.Component {
       if (o.field === 'genderCode' && field === 'gender') {
         return o
       }
+      if (o.field === 'martialStatusCode' && field === 'martialStatus') {
+        return o
+      }
       if ((o.field === 'yearOfBirth ' ||
         o.field === 'monthOfBirth' ||
         o.field === 'dayOfBirth') && field === 'birthDay') {
@@ -161,6 +163,9 @@ export default class extends React.Component {
     })
     const Invalid = find(InvalidArgument, (o) => {
       if (o.field === 'genderCode' && field === 'gender') {
+        return o
+      }
+      if (o.field === 'martialStatusCode' && field === 'martialStatus') {
         return o
       }
       if ((o.field === 'yearOfBirth ' ||
@@ -180,7 +185,7 @@ export default class extends React.Component {
 
   onNext = async () => {
     const { expireSatus } = this.state
-    const { navigateAction, user } = this.props
+    const { navigateAction, user, updateRoot } = this.props
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       idCard,
@@ -218,6 +223,8 @@ export default class extends React.Component {
       martialStatusCode: getStatusMartial(martialStatus),
     }
 
+    console.log(data)
+
     this.props.saveIdentity({ variables: { input: data } })
       .then(res => {
         console.log(res)
@@ -239,9 +246,9 @@ export default class extends React.Component {
               const modal = {
                 dis: res.data.saveIdentity.message,
                 visible: true,
-                onPress: () => this.setState({ modal: { visible: false } })
+                onPress: () => updateRoot('modal', { visible: false })
               }
-              return this.setState({ modal })
+              return updateRoot('modal', modal)
           }
         }
       })
@@ -251,19 +258,24 @@ export default class extends React.Component {
   }
 
   render() {
-    const { modal } = this.state
     const { user } = this.props
     return (
       <Screen color="transparent">
         <NavBar
           title="ข้อมูลส่วนตัว"
           navLeft={
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
           navRight={
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }
@@ -289,11 +301,6 @@ export default class extends React.Component {
             }, key))
           }
         </KeyboardAwareScrollView>
-
-        {
-          Modal(modal)
-        }
-
         <NextButton onPress={this.onNext} />
       </Screen>
     )

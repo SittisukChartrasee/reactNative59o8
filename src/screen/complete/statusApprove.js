@@ -14,6 +14,8 @@ import colors from '../../config/colors'
 import { LongButton } from '../../component/button'
 import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
+import lockout from '../../containers/hoc/lockout'
+
 const { width: widthView } = Dimensions.get('window')
 
 const renderText = (caseStatus) => {
@@ -51,6 +53,7 @@ const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
+@lockout
 export default class extends React.Component {
   static defaultProps = {
     status: 'SUCCESS', // SUCCESS, REJECT, nothing
@@ -63,6 +66,16 @@ export default class extends React.Component {
         <NavBar
           color="transparent"
           title={renderText(status).header || null}
+          navRight={
+            renderText(status).btnStatus ? (
+              <TouchableOpacity
+                onPress={() => this.props.lockout()}
+                style={{ paddingLeft: 30 }}
+              >
+                <Image source={images.iconlogoOff} />
+              </TouchableOpacity>
+            ) : null
+          }
         />
 
         <View style={{ flex: 1, alignItems: 'center', paddingTop: 40, paddingHorizontal: 24 }}>

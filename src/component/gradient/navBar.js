@@ -24,8 +24,9 @@ const subString = (string) => {
 export default ({
   navRight,
   navLeft,
-  title="navBar title",
+  title,
   color,
+  img,
 }) => (
   <LinearGradient
     colors={color ? [color, color] : [colors.deepTeal, colors.hunterGreen]} 
@@ -51,6 +52,7 @@ export default ({
           </View>
           <View style={{ flex: 5, alignItems: 'center' }}>
             { title && <TBold color={colors.white}>{subString(title)}</TBold> }
+            { img && <Image source={img} /> }
           </View>
           <View style={{ flex: 1, alignItems: 'flex-end' }}>
             {  navRight && navRight }

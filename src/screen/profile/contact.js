@@ -14,9 +14,9 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
-import { updateUser } from '../../redux/actions/commonAction'
+import { updateUser, root } from '../../redux/actions/commonAction'
+import lockout from '../../containers/hoc/lockout'
 import setMutation from '../../containers/mutation'
 
 const fields = [
@@ -45,11 +45,13 @@ const fields = [
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
-  updateUser: bindActionCreators(updateUser, dispatch)
+  updateUser: bindActionCreators(updateUser, dispatch),
+  updateRoot: bindActionCreators(root, dispatch),
 })
 
 @connect(mapToProps, dispatchToProps)
 @setMutation
+@lockout
 export default class extends React.Component {
   state = {
     PreconditionRequired: [],
@@ -74,7 +76,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction, user } = this.props
+    const { navigateAction, user, updateRoot } = this.props
 
     const {
       workPhone,
@@ -94,14 +96,19 @@ export default class extends React.Component {
       .then(res => {
         if (res.data.saveContact.success) {
           navigateAction({ ...this.props, page: 'suittest' })
-          // navigateAction({ ...this.props, page: 'tutorialBank' })
         } else if (!res.data.saveContact.success) {
           switch (res.data.saveContact.message) {
             case 'PreconditionRequired':
-              this.setState({ PreconditionRequired: res.data.saveContact.details })
+              return this.setState({ PreconditionRequired: res.data.saveContact.details })
             case 'InvalidArgument':
-              this.setState({ InvalidArgument: res.data.saveContact.details })
-            default: return null
+              return this.setState({ InvalidArgument: res.data.saveContact.details })
+            default:
+              const modal = {
+                dis: res.data.saveContact.message,
+                visible: true,
+                onPress: () => updateRoot('modal', { visible: false })
+              }
+              return updateRoot('modal', modal)
           }
         }
       })
@@ -118,12 +125,18 @@ export default class extends React.Component {
         <NavBar
           title="ข้อมูลการติดต่อ"
           navLeft={
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
           navRight={
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }
@@ -149,7 +162,6 @@ export default class extends React.Component {
             }, key))
           }
         </KeyboardAwareScrollView>
-
         <NextButton onPress={this.onNext} />
       </Screen>
     )

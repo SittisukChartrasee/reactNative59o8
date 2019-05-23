@@ -13,7 +13,6 @@ import { NavBar } from '../../component/gradient'
 import { LongPositionButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import colors from '../../config/colors';
 

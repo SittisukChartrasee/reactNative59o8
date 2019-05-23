@@ -13,24 +13,23 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import Modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
-import { updateUser } from '../../redux/actions/commonAction'
+import { updateUser, root } from '../../redux/actions/commonAction'
+import lockout from '../../containers/hoc/lockout'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
-  updateUser: bindActionCreators(updateUser, dispatch)
+  updateUser: bindActionCreators(updateUser, dispatch),
+  updateRoot: bindActionCreators(root, dispatch),
 })
 
 @connect(mapToProps, dispatchToProps)
 @setMutation
+@lockout
 export default class extends React.Component {
   state = {
-    modal: {
-      visible: false
-    },
     PreconditionRequired: [],
     InvalidArgument: [],
     fields: [
@@ -111,7 +110,6 @@ export default class extends React.Component {
 
   handleInput = (props) => {
     const { updateUser, user } = this.props
-    // if (props.type === 'modal') this.setState({ modal: true })
     if (props.field === 'investmentSource') {
       const arr = props.data.split(',')
       updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: arr, investmentSourceOther: props.otherField })
@@ -143,7 +141,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction, user } = this.props
+    const { navigateAction, user, updateRoot } = this.props
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       investmentSource,
@@ -168,9 +166,9 @@ export default class extends React.Component {
       const modal = {
         dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
         visible: true,
-        onPress: () => this.setState({ modal: { visible: false } })
+        onPress: () => updateRoot('modal', { visible: false })
       }
-      return this.setState({ modal })
+      return updateRoot('modal', modal)
     } else {
       this.props.saveSourceOfFund({ variables: { input: data } })
         .then(res => {
@@ -179,10 +177,16 @@ export default class extends React.Component {
           } else if (!res.data.saveSourceOfFund.success) {
             switch (res.data.saveSourceOfFund.message) {
               case 'PreconditionRequired':
-                this.setState({ PreconditionRequired: res.data.saveSourceOfFund.details })
+                return this.setState({ PreconditionRequired: res.data.saveSourceOfFund.details })
               case 'InvalidArgument':
-                this.setState({ InvalidArgument: res.data.saveSourceOfFund.details })
-              default: return null
+                return this.setState({ InvalidArgument: res.data.saveSourceOfFund.details })
+              default:
+                const modal = {
+                  dis: res.data.saveSourceOfFund.message,
+                  visible: true,
+                  onPress: () => updateRoot('modal', { visible: false })
+                }
+                return updateRoot('modal', modal)
             }
           }
         })
@@ -191,18 +195,23 @@ export default class extends React.Component {
 
   render() {
     const { user } = this.props
-    const { modal } = this.state
     return (
       <Screen color="transparent">
         <NavBar
           title="เงินลงทุน"
           navLeft={
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
           navRight={
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }
@@ -228,11 +237,6 @@ export default class extends React.Component {
             }, key))
           }
         </KeyboardAwareScrollView>
-
-        {
-          Modal(modal)
-        }
-
         <NextButton onPress={this.onNext} />
       </Screen>
     )

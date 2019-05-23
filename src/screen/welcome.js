@@ -5,7 +5,7 @@ import {
   Dimensions,
   AsyncStorage,
   Platform,
-  ScrollView,
+  TouchableOpacity
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -17,10 +17,11 @@ import colors from '../config/colors'
 import images from '../config/images'
 import Input from '../component/input'
 import { LongPositionButton } from '../component/button'
-import Modal from '../component/modal'
 import { navigateAction } from '../redux/actions'
 import { requestOtp } from '../redux/actions/root-active'
 import { updateUser, root } from '../redux/actions/commonAction'
+import lockout from '../containers/hoc/lockout'
+import { NavBar } from '../component/gradient'
 import { NavigationActions } from 'react-navigation'
 // import * as validate from '../utility/validation'
 
@@ -58,6 +59,7 @@ const dispatchToProps = dispatch => ({
 })
 
 @connect(mapToProps, dispatchToProps)
+@lockout
 export default class extends React.Component {
   state = {
     PreconditionRequired: [],
@@ -114,19 +116,16 @@ export default class extends React.Component {
         } else if (!res.success) {
           switch (res.message) {
             case 'PreconditionRequired':
-              this.setState({ PreconditionRequired: res.details })
-              break
+              return this.setState({ PreconditionRequired: res.details })
             case 'InvalidArgument':
-              this.setState({ InvalidArgument: res.details })
-              break
+              return this.setState({ InvalidArgument: res.details })
             default:
               const modal = {
                 dis: res.message,
                 visible: true,
                 onPress: () => this.props.updateRoot('modal', { visible: false })
               }
-              this.props.updateRoot('modal', modal)
-              break
+              return this.props.updateRoot('modal', modal)
           }
         }
       })
@@ -136,13 +135,32 @@ export default class extends React.Component {
   }
 
   render() {
-    const { modal } = this.state
-    const sizing = widthScreen <= 320 ? { width: 160, height: 110 } : {}
+    const sizing = widthScreen <= 320 ? { width: 194, height: 96 } : {}
     return (
       <Screen>
+        <NavBar
+          img={images.logoKasset}
+          color="transparent"
+          navLeft={
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
+              <Image source={images.iconback} />
+            </TouchableOpacity>
+          }
+          navRight={
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
+              <Image source={images.iconlogoOff} />
+            </TouchableOpacity>
+          }
+        />
         <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
           <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
-          <TBold fontSize={20} color={colors.white} mt="10" mb="40">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
+          <TBold fontSize={20} color={colors.white} mt="24" mb="40">{`กรุณากรอกข้อมูล\nเพื่อเปิดบัญชีกองทุน`}</TBold>
         </View>
         <KeyboardAwareScrollView
           extraScrollHeight={Platform.OS === 'ios' ? 0 : 50}

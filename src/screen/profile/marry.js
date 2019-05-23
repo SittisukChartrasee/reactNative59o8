@@ -14,25 +14,24 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import Modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
-import { updateUser } from '../../redux/actions/commonAction'
+import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
+import lockout from '../../containers/hoc/lockout'
 import { convertDate, getOfBirth, getStatusGender, getStatusMartial } from '../../utility/helper'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
-  updateUser: bindActionCreators(updateUser, dispatch)
+  updateUser: bindActionCreators(updateUser, dispatch),
+  updateRoot: bindActionCreators(root, dispatch),
 })
 
 @connect(mapToProps, dispatchToProps)
 @setMutation
+@lockout
 export default class extends React.Component {
   state = {
-    modal: {
-      visible: false
-    },
     expireSatus: 'มีวันหมดอายุ',
     nationSatus: 'ไทย',
     code: 'TH',
@@ -183,7 +182,7 @@ export default class extends React.Component {
 
   onNext = async () => {
     const { expireSatus, nationSatus } = this.state
-    const { navigateAction, user } = this.props
+    const { navigateAction, user, updateRoot } = this.props
     const redirec = this.props.navigation.getParam('redirec', '')
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
@@ -220,14 +219,14 @@ export default class extends React.Component {
 
     this.props.saveSpouse({ variables: { input: data } })
       .then(res => {
-        if (user.spouse.nationalityRisk) {
-          const modal = {
-            dis: `ประเทศของท่าน\nมีความเสี่ยงไม่สามารถสมัครต่อได้`,
-            visible: true,
-            onPress: () => this.setState({ modal: { visible: false } })
-          }
-          return this.setState({ modal })
-        } else if (res.data.saveSpouse.success) {
+
+        // ตรวจประเทศเสี่ยงยังไม่มีใน Flow
+
+        // if (user.spouse.nationalityRisk) {
+          
+        // }
+
+        if (res.data.saveSpouse.success) {
           if (redirec) return navigateAction({ ...this.props, page: redirec })
           navigateAction({ ...this.props, page: 'career' })
         } else if (!res.data.saveSpouse.success) {
@@ -240,9 +239,9 @@ export default class extends React.Component {
               const modal = {
                 dis: res.data.saveSpouse.message,
                 visible: true,
-                onPress: () => this.setState({ modal: { visible: false } })
+                onPress: () => updateRoot('modal', { visible: false })
               }
-              return this.setState({ modal })
+              return updateRoot('modal', modal)
           }
         }
       })
@@ -253,18 +252,24 @@ export default class extends React.Component {
 
   render() {
     const { user } = this.props
-    const { fields, modal } = this.state
+    const { fields } = this.state
     return (
       <Screen color="transparent">
         <NavBar
           title="ข้อมูลคู่สมรส"
           navLeft={
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
           navRight={
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }
@@ -290,11 +295,6 @@ export default class extends React.Component {
             }, key))
           }
         </KeyboardAwareScrollView>
-
-        {
-          Modal(modal)
-        }
-
         <NextButton onPress={this.onNext} />
       </Screen>
     )
