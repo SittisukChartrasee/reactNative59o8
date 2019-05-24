@@ -7,6 +7,7 @@ import {
   TouchableHighlight,
   Platform,
   View,
+  Dimensions,
   StatusBar,
 } from 'react-native';
 import ImageMarker from "react-native-image-marker"
@@ -15,6 +16,7 @@ import { RNCamera } from 'react-native-camera'
 import colors from '../../config/colors'
 import images from '../../config/images'
 import { TBold } from '../texts';
+const { width: widthPage, height: heightPage } = Dimensions.get('window')
 
 const PendingView = () => (
   <View
@@ -28,24 +30,6 @@ const PendingView = () => (
     <TBold color={colors.white}>Waiting</TBold>
   </View>
 )
-
-const getSizeMarker = () => {
-  if (Platform.OS === 'ios') {
-    return {
-      X: 190,
-      Y: 250,
-      scale: 1,
-      markerScale: .4,
-    }
-  }
-
-  return {
-    X: 100,
-    Y: 400,
-    scale: 1,
-    markerScale: .6,
-  }
-}
 
 export default class extends React.Component {
   static defaultProps = {
@@ -136,7 +120,9 @@ export default class extends React.Component {
     ImageMarker.markImage({
       src: resultImage,
       markerSrc: images.textTermAndCon,
-      ...getSizeMarker(),
+      position: 'center',
+      scale: 1,
+      markerScale: Platform.OS === 'android' ? heightPage >= 700 ? .4 : .6 : .4,
       quality: 100
     })
       .then(path => {
