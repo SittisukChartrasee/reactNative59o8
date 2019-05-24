@@ -135,7 +135,7 @@ export default class extends React.Component {
     return (
       <View>
         <TouchableOpacity onPress={() => {
-          this.onHandleSetText({ field })
+          this.onHandleSetText({ text: this.state.text, field })
           this.setState({ open: true })
         }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
