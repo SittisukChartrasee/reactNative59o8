@@ -1,4 +1,5 @@
 import { AsyncStorage } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 import { ApolloClient } from 'apollo-client'
 import { ApolloLink } from 'apollo-link'
 import { onError } from 'apollo-link-error'
@@ -9,7 +10,7 @@ import { createUploadLink } from 'apollo-upload-client'
 // import { beforLogin } from './router'
 // import env from './env'
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
+const errorLink = store => onError(({ graphQLErrors, networkError }) => {
   try {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ message, locations, path }) => {
@@ -19,8 +20,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     }
 
     if (networkError) {
-      if (networkError.statusCode === 401 && networkError.result.message === 'jwt expired') {
-        beforLogin('token-expired')
+      if (networkError.statusCode === 401 && networkError.bodyText.trim() === 'jwt expired') {
+        store.dispatch(NavigationActions.navigate({ routeName: 'welcome' }))
       }
     }
   } catch (error) {
@@ -44,7 +45,7 @@ const authLink = store => setContext(async (_, { headers }) => {
 })
 
 const getAuthLink = (link, store) => new ApolloClient({
-  link: ApolloLink.from([errorLink, authLink(store).concat(createUploadLink({ uri: link }))]),
+  link: ApolloLink.from([errorLink(store), authLink(store).concat(createUploadLink({ uri: link }))]),
   cache: new InMemoryCache(),
 })
 

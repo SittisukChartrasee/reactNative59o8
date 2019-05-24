@@ -14,6 +14,8 @@ import colors from '../../config/colors'
 import { LongButton } from '../../component/button'
 import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
+import lockout from '../../containers/hoc/lockout'
+
 const { width: widthView, height: heightView } = Dimensions.get('window')
 
 const mapToProps = () => ({})
@@ -21,6 +23,7 @@ const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
+@lockout
 export default class extends React.Component {
   render() {
     const { navigateAction } = this.props
@@ -30,8 +33,19 @@ export default class extends React.Component {
           color="transparent"
           title="เชื่อมบัญชีธนาคาร"
           navLeft={
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
+            </TouchableOpacity>
+          }
+          navRight={
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
+              <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }
         />

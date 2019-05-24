@@ -187,6 +187,10 @@ const init = {
     investmentPurpose: '',
     dividendWithHoldingTax: false,
     nationalityCode: ''
+  },
+  bank: {
+    bankName: '',
+    urlbank: '',
   }
 }
 

@@ -14,29 +14,35 @@ import colors from '../../config/colors'
 import { LongButton } from '../../component/button'
 import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
+import queryStatus from '../../containers/query'
 const { width: widthView } = Dimensions.get('window')
 
 const renderText = (caseStatus) => {
   switch (caseStatus) {
     case 'FAIL':
       return {
-        title: `กรุณาตรวจสอบกับธนาคารที่ท่านเลือก\n1. แอปพลิเคชันธนาคารเป็นเวอร์ชันล่าสุดหรือไม่\n2. ข้อมูลบัญชีธนาคาร หรือข้อมูลที่ให้ไว้\nกับธนาคารไม่ถูกต้อง`,
+        title: 'เชื่อมบัญชีธนาคารไม่สำเร็จ',
+        des: `กรุณาตรวจสอบกับธนาคารที่ท่านเลือก\n1. แอปพลิเคชันธนาคารเป็นเวอร์ชันล่าสุดหรือไม่\n2. ข้อมูลบัญชีธนาคาร หรือข้อมูลที่ให้ไว้\nกับธนาคารไม่ถูกต้อง`,
         image: images.iconFailBank,
-        titleBtn: 'ลองอีกครั้ง'
+        titleBtn: 'ลองอีกครั้ง',
+        page: 'chooseBank',
       }
 
-    case 'WAITTING':
+    case 'SUCCESS':
       return {
-        header: 'เชื่อมบัญชีธนาคาร',
-        title: `เมื่อทำรายการสำเร็จ ให้กลับเข้าแอป KmyFunds อีกครั้ง เพื่ออัพเดทสถานะการเชื่อมบัญชีธนาคาร`,
-        image: images.iconWaitBank,
+        title: 'เชื่อมบัญชีธนาคารสำเร็จ',
+        des: 'ท่านได้ดำเนินการเชื่อมบัญชีสำเร็จแล้ว',
+        image: images.iconPassBank,
+        titleBtn: 'ถัดไป',
+        page: 'suittest',
       }
   
     default:
       return {
-        title: 'ท่านได้ดำเนินการเชื่อมบัญชีสำเร็จแล้ว',
-        image: images.iconPassBank,
-        titleBtn: 'ถัดไป'
+        title: 'กรุณาดำเนินการต่อที่แอป K PLUS',
+        header: 'เชื่อมบัญชีธนาคาร',
+        des: `เมื่อทำรายการสำเร็จ ให้กลับเข้าแอป KmyFunds อีกครั้ง เพื่ออัพเดทสถานะการเชื่อมบัญชีธนาคาร`,
+        image: images.iconWaitBank,
       }
   }
 }
@@ -46,12 +52,17 @@ const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
+@queryStatus
 export default class extends React.Component {
-  static defaultProps = {
-    status: 'WAITTING', // DONE, WAITTING, FAIL
+  state = {
+    status: 'SENT', // SUCCESS, SENT, FAIL
   }
+
   render() {
-    const { navigateAction, status } = this.props
+    const { navigateAction } = this.props
+    const { status } = this.state
+
+    this.props.getRegisterBankStatus && this.props.getRegisterBankStatus.status === 'Fail' && this.setState({ status: 'Fail' })
     return (
       <Screen>
         <NavBar
@@ -61,8 +72,8 @@ export default class extends React.Component {
 
         <View style={{ flex: 1, alignItems: 'center', paddingTop: 40, paddingHorizontal: 24 }}>
           <Image source={renderText(status).image} style={{ width: widthView * .6, marginBottom: 53 }} resizeMode="contain"  />
-          <TBold color={colors.white} mb={24}>เชื่อมบัญชีธนาคารสำเร็จ</TBold>
-          <TLight color={colors.smoky}>{renderText(status).title}</TLight>
+          <TBold color={colors.white} mb={24}>{renderText(status).title}</TBold>
+          <TLight color={colors.smoky}>{renderText(status).des}</TLight>
         </View>
 
         <View style={{ flex: 1, width: widthView, justifyContent: 'flex-end', paddingBottom: 44 }}>
@@ -71,7 +82,7 @@ export default class extends React.Component {
             <LongButton
               label={renderText(status).titleBtn}
               style={{ marginHorizontal: 24 }}
-              onPress={() => navigateAction({ ...this.props, page: 'tutorialBackCamera' })}
+              onPress={() => navigateAction({ ...this.props, page: renderText(status).page })}
             />
           }
         </View>

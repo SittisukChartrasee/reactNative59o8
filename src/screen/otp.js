@@ -101,7 +101,8 @@ export default class extends React.Component {
       <Screen>
         {
           headerotp({
-            ...this.state,
+            dot: this.state.dot,
+            currentDot: this.state.currentDot,
             restart: this.state.restart,
             refNo: ref_no || null,
             onPress: this.onPress,

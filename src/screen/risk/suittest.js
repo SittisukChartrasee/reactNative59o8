@@ -17,6 +17,7 @@ import { Choice } from '../../component/cardSelect'
 import { suittest } from '../../redux/actions/commonAction'
 import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
+import lockout from '../../containers/hoc/lockout'
 
 const checkActiveData = (data) => {
   return data.reduce((pre, curr, inx, arr) => {
@@ -48,6 +49,7 @@ const dispatchToProps = dispatch => ({
 
 @connect(mapToProps, dispatchToProps)
 @setMutation
+@lockout
 export default class extends React.Component {
 
   onPress = (obj) => {
@@ -95,12 +97,18 @@ export default class extends React.Component {
         <NavBar
           title="แบบประเมินความเสี่ยง"
           navLeft={
-            <TouchableOpacity  onPress={() => navigation.goBack()}>
+            <TouchableOpacity 
+              onPress={() => navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
           navRight={
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }

@@ -243,6 +243,7 @@ const saveSuittest = gql`
     }
   }
 `
+
 const acceptTerm = gql`
   mutation acceptTerm {
     acceptTerm {
@@ -252,6 +253,16 @@ const acceptTerm = gql`
         field
         description
       }
+    }
+  }
+`
+
+const registerBank = gql`
+  mutation registerBank($input: NewRegisterBank!) {
+    registerBank(input: $input) {
+      success
+      url
+      message
     }
   }
 `
@@ -276,5 +287,6 @@ export default compose(
   graphql(saveCurrentAddress, { name: 'saveCurrentAddress' }),
   graphql(saveMailingAddress, { name: 'saveMailingAddress' }),
   graphql(saveSuittest, { name: 'saveSuittest' }),
-  graphql(acceptTerm, { name: 'acceptTerm' })
+  graphql(acceptTerm, { name: 'acceptTerm' }),
+  graphql(registerBank, { name: 'registerBank' }),
 )
