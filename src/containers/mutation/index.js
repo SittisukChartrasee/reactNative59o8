@@ -260,9 +260,9 @@ const acceptTerm = gql`
 const registerBank = gql`
   mutation registerBank($input: NewRegisterBank!) {
     registerBank(input: $input) {
-      Success
-      URL
-      Message
+      success
+      url
+      message
     }
   }
 `

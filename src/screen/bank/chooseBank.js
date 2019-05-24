@@ -76,22 +76,22 @@ export default class extends React.Component {
     this.props.registerBank({ variables: { input: data } })
       .then(res => {
         console.log(res)
-        if (res.data.registerBank.Success) {
+        if (res.data.registerBank.success) {
           const bankData = {
             ...this.props.user.bank,
-            urlbank: res.data.registerBank.URL,
+            urlbank: res.data.registerBank.url,
           }
           this.props.updateUser('bank', bankData)
-          
-          navigateAction({ ...this.props, page: "connectBank" })
-        } else if (!res.data.saveContact.Success) {
-          const modal = {
-            dis: res.data.registerBank.Message,
-            visible: true,
-            onPress: () => updateRoot("modal", { visible: false })
-          };
-          return updateRoot("modal", modal);
-        }
+
+          return navigateAction({ ...this.props, page: "connectBank" })
+        } 
+
+        const modal = {
+          dis: res.data.registerBank.message,
+          visible: true,
+          onPress: () => updateRoot("modal", { visible: false })
+        };
+        return updateRoot("modal", modal);
       })
       .catch(err => {
         console.log(err)

@@ -38,15 +38,21 @@ export default class extends React.Component {
     status: false,
   }
 
-  render() {
-    const { navigateAction } = this.props
+  onHandleWebView = navEvent => {
+    this.setState({ status: navEvent.title === 'การสมัครไม่สำเร็จ' })
+    if (!navEvent.loading && navEvent.title !== 'การสมัครไม่สำเร็จ') this.props.navigation.navigate('statusBank')
+  }
 
+  render() {
     return (
       <Screen color="transparent">
         <NavBar
           title="เชื่อมบัญชีธนาคาร"
           navLeft={
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
@@ -56,7 +62,8 @@ export default class extends React.Component {
           <View style={{ flex: 1 }}>
             <WebView
               source={{ uri: this.props.user.bank.urlbank }}
-              onMessage={val => console.log('val'+ val)}
+              injectedJavaScript={'(function(){ return "test element" }());'}
+              onNavigationStateChange={this.onHandleWebView}
             />
           </View>
           <View style={{ height: 56, backgroundColor: colors.lightgrey, justifyContent: 'center' }}>
@@ -66,6 +73,7 @@ export default class extends React.Component {
             this.state.status
               && (
                 <TouchableOpacity
+                  onPress={() => this.props.navigation.goBack()}
                   style={{
                     backgroundColor: colors.emerald,
                     marginVertical: 24,

@@ -32,7 +32,6 @@ export default class extends React.Component {
   }
 
   setNumber = async (obj) => {
-    console.log(obj)
     const { navigateAction, root } = this.props
     const data = {
       trans_id: root.trans_id,
