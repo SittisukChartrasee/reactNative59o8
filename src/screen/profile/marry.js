@@ -45,9 +45,10 @@ export default class extends React.Component {
         field: 'nationFlag',
         required: true,
       }, {
+        type: 'mask',
         label: 'หมายเลขบัตรประชาชน',
-        type: 'textInput',
         field: 'IDCardNo',
+        option: '9 9999 99999 99 9',
         required: true,
       }, {
         label: 'ประเทศ',
@@ -105,6 +106,10 @@ export default class extends React.Component {
   handleInput = (props) => {
     const { fields, code } = this.state
     const { updateUser, user } = this.props
+
+    if (props.field === 'IDCardNo') {
+      this.props.updateUser('spouse', { ...user.spouse, [props.field]: props.value.split(' ').join('') })
+    }
 
     if (props.field === 'nationFlag') {
       updateUser('spouse', { ...user.spouse, [props.field]: props.value })
@@ -288,6 +293,7 @@ export default class extends React.Component {
               type: d.type,
               required: d.required,
               init: d.init,
+              option: d.option,
               value: user.spouse[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),

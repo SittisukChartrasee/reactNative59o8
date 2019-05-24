@@ -117,7 +117,7 @@ export default class extends React.Component {
 
     if (props.field === 'jcNumber' && props.value) {
       updateUser('profile', { ...user.profile, [props.field]: (props.value).toUpperCase() })
-    } else {
+    } else if (props.field !== 'jcNumber') {
       updateUser('profile', { ...user.profile, [props.field]: props.value })
     }
     if (props.type === 'modal') {

@@ -77,6 +77,7 @@ export default class extends React.Component {
       const modal = {
         dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
         visible: true,
+        labelBtn: 'ติดต่อ 02 673 3888',
         onPress: () => this.props.updateRoot('modal', { visible: false })
       }
       return this.props.updateRoot('modal', modal)

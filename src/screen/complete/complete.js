@@ -88,7 +88,7 @@ export default class extends React.Component {
 
         <View style={{ paddingBottom: 44 }}>
           <LongButton
-            label="ส่งอีเมลยืนยันอีกครั้ง"
+            label="ยืนยันเปิดบัญชีลงทุน"
             style={{ marginHorizontal: 24 }}
             onPress={this.onNext}
           />

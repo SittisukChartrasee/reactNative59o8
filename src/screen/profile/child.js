@@ -39,6 +39,12 @@ export default class extends React.Component {
         field: 'idcard',
         type: 'titleHead'
       }, {
+        type: 'mask',
+        label: 'หมายเลขบัตรประชาชน',
+        field: 'idcard',
+        option: '9 9999 99999 99 9',
+        required: true,
+      }, {
         label: 'คำนำหน้า (ตัวย่อ)',
         type: 'search',
         field: 'firstTitle',
@@ -59,9 +65,10 @@ export default class extends React.Component {
         field: 'firstBirthDay',
         required: true,
       }, {
+        type: 'mask',
         label: 'เลขบัตรประชาชน',
-        type: 'textInput',
         field: 'firstDocNo',
+        option: '9 9999 99999 99 9',
         required: true,
       }, {
         label: 'วันบัตรหมดอายุ',
@@ -99,9 +106,10 @@ export default class extends React.Component {
         field: 'secondBirthDay',
         required: true,
       }, {
+        type: 'mask',
         label: 'เลขบัตรประชาชน',
-        type: 'textInput',
         field: 'secondDocNo',
+        option: '9 9999 99999 99 9',
         required: true,
       }, {
         label: 'วันบัตรหมดอายุ',
@@ -121,7 +129,11 @@ export default class extends React.Component {
     const { updateUser, user } = this.props
     updateUser('child', { ...user.child, [props.field]: props.value })
     if (props.field === 'firstExpireDateFlag') {
-      updateUser('child', { ...user.child, [props.field]: props.value })
+      if (props.field === 'firstDocNo') {
+        updateUser('child', { ...user.child, [props.field]: props.value.split(' ').join('') })
+      } else {
+        updateUser('child', { ...user.child, [props.field]: props.value })
+      }
       this.setState({
         fields: this.state.fields.map((d) => {
           if (props.value === 'มีวันหมดอายุ') {
@@ -134,7 +146,11 @@ export default class extends React.Component {
         })
       })
     } else if (props.field === 'secondExpireDateFlag') {
-      updateUser('child', { ...user.child, [props.field]: props.value })
+      if (props.field === 'secondDocNo') {
+        updateUser('child', { ...user.child, [props.field]: props.value.split(' ').join('') })
+      } else {
+        updateUser('child', { ...user.child, [props.field]: props.value })
+      }
       this.setState({
         fields: this.state.fields.map((d) => {
           if (props.value === 'มีวันหมดอายุ') {
@@ -291,6 +307,7 @@ export default class extends React.Component {
               type: d.type,
               required: d.required,
               init: d.init,
+              option: d.option,
               value: user.child[d.field],
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
