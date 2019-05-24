@@ -1,4 +1,3 @@
-// import { createStackNavigator, createAppContainer } from 'react-navigation';
 import welcome from '../screen/welcome'
 import checkpoint from '../screen/checkpoint'
 import passcode from '../screen/passcode'
