@@ -40,6 +40,7 @@
     "react-native-picker": "^4.3.7",
     "react-native-pie-chart": "^1.0.13",
     "react-native-signature-capture": "^0.4.9",
+    "react-native-webview": "^5.10.0",
     "react-navigation": "3.3.2",
     "react-navigation-redux-helpers": "^3.0.2",
     "react-redux": "^6.0.1",

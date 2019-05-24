@@ -4,9 +4,9 @@ import {
   ScrollView,
   Image,
   View,
-  WebView,
   SafeAreaView,
 } from 'react-native'
+import { WebView } from 'react-native-webview'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Screen from '../../component/screenComponent'
@@ -18,13 +18,22 @@ import { navigateAction } from '../../redux/actions'
 import colors from '../../config/colors';
 import { TBold, TMed } from '../../component/texts';
 
-const mapToProps = () => ({})
+const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
+  static defaultProps = {
+    user: {
+      bank: {
+        bankName: '',
+        urlbank: 'https://online.kasikornbankgroup.com/K-Online/'
+      }
+    }
+  }
+
   state = {
     status: false,
   }
@@ -46,7 +55,8 @@ export default class extends React.Component {
         <SafeAreaView style={{ flex: 1 }}>
           <View style={{ flex: 1 }}>
             <WebView
-              source={{uri: 'https://github.com/facebook/react-native'}}
+              source={{ uri: this.props.user.bank.urlbank }}
+              onMessage={val => console.log('val'+ val)}
             />
           </View>
           <View style={{ height: 56, backgroundColor: colors.lightgrey, justifyContent: 'center' }}>

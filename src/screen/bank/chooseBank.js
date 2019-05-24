@@ -17,14 +17,15 @@ import { navigateAction } from '../../redux/actions'
 import colors from '../../config/colors';
 import lockout from '../../containers/hoc/lockout'
 import setMutation from '../../containers/mutation'
-import { root } from '../../redux/actions/commonAction'
+import { root, updateUser } from '../../redux/actions/commonAction'
 
 const handleDisabled = arr => arr && arr.find(d => d.active) !== undefined && arr.find(d => d.active)
 
-const mapToProps = () => ({})
+const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   updateRoot: bindActionCreators(root, dispatch),
+  updateUser: bindActionCreators(updateUser, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -64,18 +65,25 @@ export default class extends React.Component {
     console.log(props)
     if (props.type === 'selectCard') {
       this.setState({ card: this.state.card.map((d) => d.label === props.value ? { ...d, active: true } : { ...d, active: false }) })
+      this.props.updateUser('bank', { bankName: props.value })
     }
   }
 
   onNext = () => {
     const { navigateAction, updateRoot } = this.props
-    const data = { bank: 'KA'} 
+    const data = { bank: 'KASIKORN'} 
 
     this.props.registerBank({ variables: { input: data } })
       .then(res => {
         console.log(res)
         if (res.data.registerBank.Success) {
-          navigateAction({ ...this.props, page: "connectBank" });
+          const bankData = {
+            ...this.props.user.bank,
+            urlbank: res.data.registerBank.URL,
+          }
+          this.props.updateUser('bank', bankData)
+          
+          navigateAction({ ...this.props, page: "connectBank" })
         } else if (!res.data.saveContact.Success) {
           const modal = {
             dis: res.data.registerBank.Message,

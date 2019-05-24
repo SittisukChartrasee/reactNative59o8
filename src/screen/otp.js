@@ -32,6 +32,7 @@ export default class extends React.Component {
   }
 
   setNumber = async (obj) => {
+    console.log(obj)
     const { navigateAction, root } = this.props
     const data = {
       trans_id: root.trans_id,
@@ -101,7 +102,8 @@ export default class extends React.Component {
       <Screen>
         {
           headerotp({
-            ...this.state,
+            dot: this.state.dot,
+            currentDot: this.state.currentDot,
             restart: this.state.restart,
             refNo: ref_no || null,
             onPress: this.onPress,

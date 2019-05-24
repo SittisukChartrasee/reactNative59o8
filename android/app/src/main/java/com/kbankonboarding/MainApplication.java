@@ -14,6 +14,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.jimmydaddy.imagemarker.ImageMarkerPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +37,8 @@ public class MainApplication extends Application implements ReactApplication {
           new RSSignatureCapturePackage(),
           new RNCameraPackage(),
           new ImageMarkerPackage(),
-          new ImageResizerPackage()
+          new ImageResizerPackage(),
+          new RNCWebViewPackage()
       );
     }
 
