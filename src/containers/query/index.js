@@ -79,3 +79,19 @@ export const getInvestment = gql`
     }
   }
 `
+
+export const getRegisterBankStatus = gql`
+  query getRegisterBankStatus {
+    getRegisterBankStatus {
+      status
+      message
+    }
+  }
+`
+
+export default graphql(getRegisterBankStatus, {
+  name: 'getRegisterBankStatus',
+  options: {
+    pollInterval: 5000,
+  }
+})

@@ -14,6 +14,7 @@ import colors from '../../config/colors'
 import { LongButton } from '../../component/button'
 import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
+import queryStatus from '../../containers/query'
 const { width: widthView } = Dimensions.get('window')
 
 const renderText = (caseStatus) => {
@@ -26,7 +27,7 @@ const renderText = (caseStatus) => {
         titleBtn: 'ลองอีกครั้ง'
       }
 
-    case 'DONE':
+    case 'SUCCESS':
       return {
         title: 'เชื่อมบัญชีธนาคารสำเร็จ',
         des: 'ท่านได้ดำเนินการเชื่อมบัญชีสำเร็จแล้ว',
@@ -49,12 +50,17 @@ const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
+@queryStatus
 export default class extends React.Component {
-  static defaultProps = {
-    status: 'WAITTING', // DONE, WAITTING, FAIL
+  state = {
+    status: 'SENT', // SUCCESS, SENT, FAIL
   }
+
   render() {
-    const { navigateAction, status } = this.props
+    const { navigateAction } = this.props
+    const { status } = this.state
+
+    this.props.getRegisterBankStatus && this.props.getRegisterBankStatus.status === 'Fail' && this.setState({ status: 'Fail' })
     return (
       <Screen>
         <NavBar
