@@ -14,6 +14,7 @@ import Input from '../../component/input'
 import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
+import lockout from '../../containers/hoc/lockout'
 
 const fields = [
   {
@@ -38,6 +39,7 @@ const dispatchToProps = dispatch => ({
 
 @connect(mapToProps, dispatchToProps)
 @setMutation
+@lockout
 export default class extends React.Component {
   handleInput = async (props) => {
     const { navigateAction } = this.props
@@ -62,12 +64,18 @@ export default class extends React.Component {
         <NavBar
           title="ที่อยู่จัดส่งเอกสาร"
           navLeft={
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
           navRight={
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }

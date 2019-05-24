@@ -11,9 +11,9 @@ import { NavBar } from '../../component/gradient'
 import { NextButton } from '../../component/button'
 import images from '../../config/images'
 import Input from '../../component/input'
-import modal from '../../component/modal'
 import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
+import lockout from '../../containers/hoc/lockout'
 
 const fields = [
   {
@@ -30,11 +30,12 @@ const fields = [
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
 })
 
 @connect(mapToProps, dispatchToProps)
 @setMutation
+@lockout
 export default class extends React.Component {
   handleInput = async props => {
     const { navigateAction } = this.props
@@ -56,12 +57,18 @@ export default class extends React.Component {
         <NavBar
           title="ที่อยู่ปัจจุบัน"
           navLeft={
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
           navRight={
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }
