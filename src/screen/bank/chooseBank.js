@@ -63,7 +63,6 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
-    console.log(props)
     if (props.type === 'selectCard') {
       this.setState({ selected: props.value })
       this.setState({ card: this.state.card.map((d) => d.label === props.value ? { ...d, active: true } : { ...d, active: false }) })
@@ -75,18 +74,14 @@ export default class extends React.Component {
     const { navigateAction, updateRoot } = this.props
     const data = { bank: 'KASIKORN'} 
 
-    console.log(this.state.selected)
 
     this.props.registerBank({ variables: { input: data } })
       .then(res => {
-        console.log(res)
         if (res.data.registerBank.success) {
-          const bankData = {
+          this.props.updateUser('bank', {
             ...this.props.user.bank,
             urlbank: res.data.registerBank.url,
-          }
-          this.props.updateUser('bank', bankData)
-
+          })
           if (this.state.selected === 'ธนาคารไทยพาณิชย์') return navigateAction({ ...this.props, page: "suittest" })
           return navigateAction({ ...this.props, page: "connectBank" })
         } 
