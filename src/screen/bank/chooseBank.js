@@ -33,6 +33,7 @@ const dispatchToProps = dispatch => ({
 @lockout
 export default class extends React.Component {
   state = {
+    selected: '',
     card: [
       // {
       //   label: 'ธนาคารกรุงเทพ',
@@ -44,11 +45,11 @@ export default class extends React.Component {
         image: images.iconkbank,
         type: 'selectCard',
       },
-      // {
-      //   label: 'ธนาคารไทยพาณิชย์',
-      //   image: images.iconscb,
-      //   type: 'selectCard',
-      // }
+      {
+        label: 'ธนาคารไทยพาณิชย์',
+        image: images.iconscb,
+        type: 'selectCard',
+      }
     ],
     fields: [
       {
@@ -64,6 +65,7 @@ export default class extends React.Component {
   handleInput = (props) => {
     console.log(props)
     if (props.type === 'selectCard') {
+      this.setState({ selected: props.value })
       this.setState({ card: this.state.card.map((d) => d.label === props.value ? { ...d, active: true } : { ...d, active: false }) })
       this.props.updateUser('bank', { bankName: props.value })
     }
@@ -72,6 +74,8 @@ export default class extends React.Component {
   onNext = () => {
     const { navigateAction, updateRoot } = this.props
     const data = { bank: 'KASIKORN'} 
+
+    console.log(this.state.selected)
 
     this.props.registerBank({ variables: { input: data } })
       .then(res => {
@@ -83,6 +87,7 @@ export default class extends React.Component {
           }
           this.props.updateUser('bank', bankData)
 
+          if (this.state.selected === 'ธนาคารไทยพาณิชย์') return navigateAction({ ...this.props, page: "suittest" })
           return navigateAction({ ...this.props, page: "connectBank" })
         } 
 

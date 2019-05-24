@@ -24,7 +24,8 @@ const renderText = (caseStatus) => {
         title: 'เชื่อมบัญชีธนาคารไม่สำเร็จ',
         des: `กรุณาตรวจสอบกับธนาคารที่ท่านเลือก\n1. แอปพลิเคชันธนาคารเป็นเวอร์ชันล่าสุดหรือไม่\n2. ข้อมูลบัญชีธนาคาร หรือข้อมูลที่ให้ไว้\nกับธนาคารไม่ถูกต้อง`,
         image: images.iconFailBank,
-        titleBtn: 'ลองอีกครั้ง'
+        titleBtn: 'ลองอีกครั้ง',
+        page: 'chooseBank',
       }
 
     case 'SUCCESS':
@@ -32,7 +33,8 @@ const renderText = (caseStatus) => {
         title: 'เชื่อมบัญชีธนาคารสำเร็จ',
         des: 'ท่านได้ดำเนินการเชื่อมบัญชีสำเร็จแล้ว',
         image: images.iconPassBank,
-        titleBtn: 'ถัดไป'
+        titleBtn: 'ถัดไป',
+        page: 'suittest',
       }
   
     default:
@@ -80,7 +82,7 @@ export default class extends React.Component {
             <LongButton
               label={renderText(status).titleBtn}
               style={{ marginHorizontal: 24 }}
-              onPress={() => navigateAction({ ...this.props, page: 'tutorialBackCamera' })}
+              onPress={() => navigateAction({ ...this.props, page: renderText(status).page })}
             />
           }
         </View>
