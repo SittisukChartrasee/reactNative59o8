@@ -26,6 +26,7 @@ import { NavigationActions } from 'react-navigation'
 // import * as validate from '../utility/validation'
 
 const { width: widthScreen } = Dimensions.get('window')
+const { height: heightScreen } = Dimensions.get('window')
 
 const fields = [
   {
@@ -135,7 +136,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const sizing = widthScreen <= 320 ? { width: 194, height: 96 } : {}
+    const sizing = widthScreen <= 320 || heightScreen <= 690 ? { width: 176, height: 128, } : {}
     return (
       <Screen>
         <NavBar
@@ -158,28 +159,27 @@ export default class extends React.Component {
           //   </TouchableOpacity>
           // }
         />
-        <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-          <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
-          <TBold fontSize={20} color={colors.white} mt="24" mb="40">{`กรุณากรอกข้อมูล\nเพื่อเปิดบัญชีกองทุน`}</TBold>
-        </View>
-        <KeyboardAwareScrollView
-          extraScrollHeight={Platform.OS === 'ios' ? 0 : 50}
-          enableOnAndroid
-          style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}
-        >
+          <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
+            <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
+            <TBold fontSize={20} color={colors.white} mt="24" mb="40">{`กรุณากรอกข้อมูล\nเพื่อเปิดบัญชีกองทุน`}</TBold>
+          </View>
+          <KeyboardAwareScrollView
+            extraScrollHeight={Platform.OS === 'ios' ? 0 : 50}
+            enableOnAndroid
+            style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}
+          >
+            {
+              fields.map((setField, key) => Input({
+                ...setField,
+                value: (setField.field === 'idCard')
+                  ? this.props.user.profile.idCard
+                  : this.props.user.contact[setField.field],
+                handleInput: value => this.handleInput(value),
+                err: this.onValidation(setField.field)
+              }, key))
+            }
 
-          {
-            fields.map((setField, key) => Input({
-              ...setField,
-              value: (setField.field === 'idCard')
-                ? this.props.user.profile.idCard
-                : this.props.user.contact[setField.field],
-              handleInput: value => this.handleInput(value),
-              err: this.onValidation(setField.field)
-            }, key))
-          }
-
-        </KeyboardAwareScrollView>
+          </KeyboardAwareScrollView>
         <LongPositionButton label="ถัดไป" onPress={this.onNext} />
       </Screen>
     )

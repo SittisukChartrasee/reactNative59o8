@@ -40,7 +40,7 @@ export default class extends React.Component {
         field: 'idCard',
         required: false,
       }, {
-        label: 'หมายเลขบัตรประชาชน ( ดย. JT9-9999999-99 )',
+        label: 'หมายเลขหลังบัตรประชาชน (Laser Code)',
         type: 'Icustom',
         field: 'jcNumber',
         required: true,
@@ -224,6 +224,8 @@ export default class extends React.Component {
     }
 
     console.log(data)
+
+  
 
     this.props.saveIdentity({ variables: { input: data } })
       .then(res => {
