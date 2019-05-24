@@ -134,10 +134,12 @@ export default class extends React.Component {
     StatusBar.setBarStyle(open ? "dark-content" : "light-content")
     return (
       <View>
-        <TouchableOpacity onPress={() => {
-          this.onHandleSetText({ text: this.state.text, field })
-          this.setState({ open: true })
-        }}>
+        <TouchableOpacity
+          onPress={() => {
+            this.onHandleSetText({ text: this.state.text, field })
+            this.setState({ open: true })
+          }}
+        >
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             {confirmText || value
               ? <TBold textAlign="left" color={colors.midnight}>{value || confirmText}</TBold>
@@ -152,7 +154,7 @@ export default class extends React.Component {
         <Modal visible={open} animationType="slide">
           <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
 
-            <View style={{ paddingHorizontal: 24, paddingBottom: 24 }}>
+            <View style={{ paddingHorizontal: 24, paddingVertical: 24 }}>
               <TouchableOpacity onPress={() => this.setState({ open: false })}>
                 <Image source={images.iconback} style={{ tintColor: 'rgb(80, 87, 89)' }} />
               </TouchableOpacity>
