@@ -53,27 +53,27 @@ export default class extends React.Component {
         <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
           <View style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
             <Image source={images.group3} style={{ height: heightView * .2 }} resizeMode="contain"  />
-            <TSemiBold fontSize={16} mt="5%" color={colors.white}>{`กรุณาเลือกธนาคารที่ท่าน\nต้องการใช้ทำธุรกรรมอัตโนมัติและ\nทำการยืนยันตัวตนออนไลน์`}</TSemiBold>
+            <TSemiBold fontSize={16} mt="5%" color={colors.white}>{`กรุณาเลือกธนาคารที่ท่าน\nต้องการใช้เป็นบัญชี`}</TSemiBold>
 
             <View style={{ marginHorizontal: 24, marginTop: '6%' }}>
               <View style={{ flexDirection: 'row' }}>
                 <Image source={images.stroke1} style={{ marginTop: '3%' }} />
                 <View style={{ paddingHorizontal: 16 }}>
-                  <TLight fontSize={16} color={colors.smoky} textAlign="left">ตัดเงินจากบัญชีอัตโนมัติ</TLight>
+                  <TLight fontSize={16} color={colors.smoky} textAlign="left">ชำระค่าซื้อกองทุนผ่าน K-My Funds</TLight>
                 </View>
               </View>
 
               <View style={{ flexDirection: 'row' }}>
                 <Image source={images.stroke1} style={{ marginTop: '2%' }} />
                 <View style={{ paddingHorizontal: 16 }}>
-                  <TLight fontSize={16} color={colors.smoky} textAlign="left">รับเงินปันผล</TLight>
+                  <TLight fontSize={16} color={colors.smoky} textAlign="left">รับเงินปันผลกองทุน</TLight>
                 </View>
               </View>
 
               <View style={{ flexDirection: 'row' }}>
                 <Image source={images.stroke1} style={{ marginTop: '2%' }} />
                 <View style={{ paddingHorizontal: 16 }}>
-                  <TLight fontSize={16} color={colors.smoky} textAlign="left">รับเงินค่าขายคืน</TLight>
+                  <TLight fontSize={16} color={colors.smoky} textAlign="left">รับเงินค่าขายคืนกองทุน</TLight>
                 </View>
               </View>
             </View>
@@ -81,9 +81,9 @@ export default class extends React.Component {
 
 
           <View style={widthView <= 320 ? { width: widthView, marginBottom: 24 } : { width: widthView }}>
-            <TSemiBold fontSize={16} color={colors.sunflower} mt="9%">{`โดยชื่อบัญชีธนาคารต้องเป็นชื่อเดียวกันกับ\nชื่อที่ใช้สมัครเปิดบัญชี KmyFunds`}</TSemiBold>
+            <TSemiBold fontSize={16} color={colors.sunflower} mt="9%">{`โดยชื่อบัญชีธนาคารจะต้องตรงกับ\nชื่อผู้ขอเปิดบัญชีกองทุนเท่านั้น`}</TSemiBold>
             <LongButton
-              label="รับทราบ"
+              label="ตกลง"
               style={{ marginHorizontal: 24 }}
               onPress={() => navigateAction({ ...this.props, page: 'chooseBank' })}
             />

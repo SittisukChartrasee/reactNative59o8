@@ -17,7 +17,7 @@ import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
-import { convertDate, getOfBirth, getStatusGender, getStatusMartial, getStatusChild } from '../../utility/helper'
+import { convertDate, getOfBirth, replaceSpace, tomorrowDate } from '../../utility/helper'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -38,12 +38,6 @@ export default class extends React.Component {
         label: 'ข้อมูลบุตรคนที่ 1',
         field: 'idcard',
         type: 'titleHead'
-      }, {
-        type: 'mask',
-        label: 'หมายเลขบัตรประชาชน',
-        field: 'idcard',
-        option: '9 9999 99999 99 9',
-        required: true,
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
         type: 'search',
@@ -79,6 +73,7 @@ export default class extends React.Component {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'firstDocExpDate',
+        date: tomorrowDate(),
         required: true,
       },
       {
@@ -120,6 +115,7 @@ export default class extends React.Component {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'secondDocExpDate',
+        date: tomorrowDate(),
         required: true,
       }
     ]
@@ -129,11 +125,7 @@ export default class extends React.Component {
     const { updateUser, user } = this.props
     updateUser('child', { ...user.child, [props.field]: props.value })
     if (props.field === 'firstExpireDateFlag') {
-      if (props.field === 'firstDocNo') {
-        updateUser('child', { ...user.child, [props.field]: props.value.split(' ').join('') })
-      } else {
-        updateUser('child', { ...user.child, [props.field]: props.value })
-      }
+      updateUser('child', { ...user.child, [props.field]: props.value })
       this.setState({
         fields: this.state.fields.map((d) => {
           if (props.value === 'มีวันหมดอายุ') {
@@ -146,11 +138,7 @@ export default class extends React.Component {
         })
       })
     } else if (props.field === 'secondExpireDateFlag') {
-      if (props.field === 'secondDocNo') {
-        updateUser('child', { ...user.child, [props.field]: props.value.split(' ').join('') })
-      } else {
-        updateUser('child', { ...user.child, [props.field]: props.value })
-      }
+      updateUser('child', { ...user.child, [props.field]: props.value })
       this.setState({
         fields: this.state.fields.map((d) => {
           if (props.value === 'มีวันหมดอายุ') {
@@ -230,7 +218,7 @@ export default class extends React.Component {
       firstDayOfBirth: getOfBirth(firstBirthDay, 'day'),
       firstMonthOfBirth: `${getOfBirth(firstBirthDay, 'month')}`,
       firstYearOfBirth: getOfBirth(firstBirthDay, 'year'),
-      firstDocNo,
+      firstDocNo: replaceSpace(firstDocNo),
       firstIsNoExpDate: firstExpireDateFlag === 'มีวันหมดอายุ' ? true : false,
       firstDocExpDate: convertDate(firstDocExpDate),
       secondTitle,
@@ -239,10 +227,12 @@ export default class extends React.Component {
       secondDayOfBirth: getOfBirth(secondBirthDay, 'day'),
       secondMonthOfBirth: `${getOfBirth(secondBirthDay, 'month')}`,
       secondYearOfBirth: getOfBirth(secondBirthDay, 'year'),
-      secondDocNo,
+      secondDocNo: replaceSpace(secondDocNo),
       secondIsNoExpDate: secondExpireDateFlag === 'มีวันหมดอายุ' ? true : false,
       secondDocExpDate: convertDate(secondDocExpDate),
     }
+
+    console.log(data)
 
     this.props.saveChild({ variables: { input: data } })
       .then(res => {
@@ -310,6 +300,7 @@ export default class extends React.Component {
               option: d.option,
               value: user.child[d.field],
               inVisible: d.inVisible,
+              date: d.date,
               handleInput: (props) => this.handleInput(props),
               err: this.onValidation(d.field)
             }, key))

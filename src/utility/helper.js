@@ -13,6 +13,18 @@ const month = [
   'ธันวาคม'
 ]
 
+export const tomorrowDate = () => {
+  const day = new Date()
+  const nextDay = new Date()
+  nextDay.setDate(day.getDate() + 1)
+  const defaultDate = [
+    nextDay.getFullYear() + 543,
+    month[nextDay.getMonth()],
+    nextDay.getDate(),
+  ]
+  return defaultDate
+}
+
 export const convertDate = (date) => {
   const splitDate = date.split('-')
   const convert = `${splitDate[2]}-${(month.indexOf(splitDate[1]) + 1).toString().padStart(2, '00')}-${splitDate[0].toString().padStart(2, '00')}`
@@ -51,14 +63,14 @@ export const getStatusMartial = (data) => {
 }
 
 export const getStatusMartial_reverse = (data) => {
-  if(data === 'D') return 'หย่าร้าง'
-  else if(data === 'M') return 'สมรส' /* สมรส (ไม่ระบุ) **/
-  else if(data === 'N') return 'สมรสไม่จดทะเบียน'
-  else if(data === 'O') return 'อื่นๆ'
-  else if(data === 'R') return 'สมรสจดทะเบียน'
-  else if(data === 'S') return 'แยกกันอยู่'
-  else if(data === 'U') return 'โสด'
-  else if(data === 'W') return 'หม้าย'
+  if (data === 'D') return 'หย่าร้าง'
+  else if (data === 'M') return 'สมรส' /* สมรส (ไม่ระบุ) **/
+  else if (data === 'N') return 'สมรสไม่จดทะเบียน'
+  else if (data === 'O') return 'อื่นๆ'
+  else if (data === 'R') return 'สมรสจดทะเบียน'
+  else if (data === 'S') return 'แยกกันอยู่'
+  else if (data === 'U') return 'โสด'
+  else if (data === 'W') return 'หม้าย'
   else return '-'
 }
 
@@ -69,3 +81,9 @@ export const getStatusChild = (data) => {
     default: return false
   }
 }
+
+export const replaceSpace = (data) => data.trim().replace(/\s/g, '')
+
+export const fontToLower = (data) => data.trim().toLowerCase()
+
+export const replaceJsCard = (data) => data ? data.trim().replace(/\-/g, '').toUpperCase() : ''

@@ -23,6 +23,8 @@ import { updateUser, root } from '../redux/actions/commonAction'
 import lockout from '../containers/hoc/lockout'
 import { NavBar } from '../component/gradient'
 import { NavigationActions } from 'react-navigation'
+import { replaceSpace, fontToLower } from '../utility/helper'
+
 // import * as validate from '../utility/validation'
 
 const { width: widthScreen } = Dimensions.get('window')
@@ -77,11 +79,11 @@ export default class extends React.Component {
     const { user } = this.props
     const { details } = this.state
     if (obj.field === 'idCard') {
-      this.props.updateUser('profile', { ...user.profile, [obj.field]: obj.value.split(' ').join('') })
+      this.props.updateUser('profile', { ...user.profile, [obj.field]: obj.value })
     } else if (obj.field === 'email') {
       this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value })
     } else if (obj.field === 'mobilePhone') {
-      this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value.split(' ').join('') })
+      this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value })
     }
   }
 
@@ -104,10 +106,12 @@ export default class extends React.Component {
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
     const data = {
-      idCard: user.profile.idCard,
-      email: (user.contact.email).trim().toLowerCase(),
-      mobilePhone: user.contact.mobilePhone,
+      idCard: replaceSpace(user.profile.idCard),
+      email: fontToLower(user.contact.email),
+      mobilePhone: replaceSpace(user.contact.mobilePhone),
     }
+
+    console.log(data)
 
     this.props.requestOtp(data)
       .then(res => {
@@ -150,36 +154,36 @@ export default class extends React.Component {
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
-          // navRight={
-          //   <TouchableOpacity
-          //     onPress={() => this.props.lockout()}
-          //     style={{ paddingLeft: 30 }}
-          //   >
-          //     <Image source={images.iconlogoOff} />
-          //   </TouchableOpacity>
-          // }
+        // navRight={
+        //   <TouchableOpacity
+        //     onPress={() => this.props.lockout()}
+        //     style={{ paddingLeft: 30 }}
+        //   >
+        //     <Image source={images.iconlogoOff} />
+        //   </TouchableOpacity>
+        // }
         />
-          <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
-            <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
-            <TBold fontSize={20} color={colors.white} mt="24" mb="40">{`กรุณากรอกข้อมูล\nเพื่อเปิดบัญชีกองทุน`}</TBold>
-          </View>
-          <KeyboardAwareScrollView
-            extraScrollHeight={Platform.OS === 'ios' ? 0 : 50}
-            enableOnAndroid
-            style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}
-          >
-            {
-              fields.map((setField, key) => Input({
-                ...setField,
-                value: (setField.field === 'idCard')
-                  ? this.props.user.profile.idCard
-                  : this.props.user.contact[setField.field],
-                handleInput: value => this.handleInput(value),
-                err: this.onValidation(setField.field)
-              }, key))
-            }
+        <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+          <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
+          <TBold fontSize={20} color={colors.white} mt="24" mb="40">{`กรุณากรอกข้อมูล\nเพื่อเปิดบัญชีกองทุน`}</TBold>
+        </View>
+        <KeyboardAwareScrollView
+          extraScrollHeight={Platform.OS === 'ios' ? 0 : 50}
+          enableOnAndroid
+          style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}
+        >
+          {
+            fields.map((setField, key) => Input({
+              ...setField,
+              value: (setField.field === 'idCard')
+                ? this.props.user.profile.idCard
+                : this.props.user.contact[setField.field],
+              handleInput: value => this.handleInput(value),
+              err: this.onValidation(setField.field)
+            }, key))
+          }
 
-          </KeyboardAwareScrollView>
+        </KeyboardAwareScrollView>
         <LongPositionButton label="ถัดไป" onPress={this.onNext} />
       </Screen>
     )

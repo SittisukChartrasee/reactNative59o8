@@ -18,6 +18,7 @@ import { navigateAction } from '../../redux/actions'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
 import setMutation from '../../containers/mutation'
+import { replaceSpace } from '../../utility/helper'
 
 const fields = [
   {
@@ -87,13 +88,13 @@ export default class extends React.Component {
     const data = {
       workPhone,
       homePhone,
-      mobilePhone,
+      mobilePhone: replaceSpace(mobilePhone),
       email
     }
     navigateAction({ ...this.props, page: 'tutorialBank' })
 
 
-    
+
 
     // this.props.saveContact({ variables: { input: data } })
     //   .then(res => {
@@ -118,7 +119,7 @@ export default class extends React.Component {
     //   .catch(err => {
     //     console.log(err)
     //   })
-    
+
   }
 
   render() {
