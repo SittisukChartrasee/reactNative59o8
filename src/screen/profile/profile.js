@@ -115,8 +115,8 @@ export default class extends React.Component {
   handleInput = (props) => {
     const { updateUser, user, updateRoot } = this.props
 
-    if (props.field === 'jcNumber' && props.value) {
-      updateUser('profile', { ...user.profile, [props.field]: (props.value).toUpperCase() })
+    if (props.field === 'jcNumber') {
+      updateUser('profile', { ...user.profile, [props.field]: props.value ? (props.value).toUpperCase() : '' })
     } else if (props.field !== 'jcNumber') {
       updateUser('profile', { ...user.profile, [props.field]: props.value })
     }
