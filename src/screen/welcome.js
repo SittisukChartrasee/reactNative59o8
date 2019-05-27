@@ -128,7 +128,8 @@ export default class extends React.Component {
               const modal = {
                 dis: res.message,
                 visible: true,
-                onPress: () => this.props.updateRoot('modal', { visible: false })
+                onPress: () => this.props.updateRoot('modal', { visible: false }),
+                onPressClose: () => this.props.updateRoot('modal', { visible: false })
               }
               return this.props.updateRoot('modal', modal)
           }

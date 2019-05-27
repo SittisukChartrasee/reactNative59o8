@@ -27,11 +27,12 @@ export default ({
   labelBtn="ตกลง",
   dis="รหัส OTP ไม่ถูกต้อง \nคุณสามารถกรอกได้อีก n ครั้ง",
   onPress=() => {},
+  onPressClose=() => {},
   disabled=false
 }) => (
-  <Modal isVisible={visible} onSwipeComplete={onPress} swipeDirection="left" useNativeDriver={true}>
+  <Modal isVisible={visible} onSwipeComplete={onPressClose} swipeDirection="left" useNativeDriver={true}>
     <TouchableOpacity 
-      onPress={onPress}
+      onPress={onPressClose}
       activeOpacity={1}
       disabled={disabled}
       style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}
@@ -48,7 +49,7 @@ export default ({
             ? (
               <View style={{ flexDirection: 'row' }}>
                 <FlexButton border onPress={() => alert('connect api logout yet!')}>ใช่</FlexButton>
-                <FlexButton marginLeft={16} onPress={onPress}>ไม่ใช่</FlexButton>
+                <FlexButton marginLeft={16} onPress={onPressClose}>ไม่ใช่</FlexButton>
               </View>
             ) : (
               <LongButton label={labelBtn} onPress={onPress} />
