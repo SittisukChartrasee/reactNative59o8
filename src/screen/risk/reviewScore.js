@@ -18,6 +18,7 @@ import { LongButton } from '../../component/button'
 import images from '../../config/images'
 import { RiskList } from '../../component/lists'
 import { navigateAction } from '../../redux/actions'
+import lockout from '../../containers/hoc/lockout'
 import { data } from './data'
 import {
   getInvestment
@@ -36,6 +37,7 @@ const dispatchToProps = dispatch => ({
 
 @connect(mapToProps, dispatchToProps)
 @withApollo
+@lockout
 export default class extends React.Component {
   state = {
     risk: 0,
@@ -69,7 +71,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { navigateAction } = this.props
+    const { navigateAction, navigation } = this.props
     const { risk, descTH, assetClass, fundCodeKAsset, returnText } = this.state
     console.log(this.state)
     return (
@@ -78,12 +80,18 @@ export default class extends React.Component {
           color="transparent"
           title="ผลการประเมินความเสี่ยง"
           navLeft={
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity 
+              onPress={() => navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
           navRight={
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }

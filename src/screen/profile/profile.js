@@ -17,7 +17,16 @@ import { navigateAction } from '../../redux/actions'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
-import { convertDate, getOfBirth, getStatusGender, getStatusMartial, getStatusChild } from '../../utility/helper'
+import {
+  convertDate,
+  getOfBirth,
+  getStatusGender,
+  getStatusMartial,
+  getStatusChild,
+  tomorrowDate,
+  replaceJsCard,
+  replaceSpace
+} from '../../utility/helper'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -40,9 +49,10 @@ export default class extends React.Component {
         field: 'idCard',
         required: false,
       }, {
-        label: 'หมายเลขหลังบัตรประชาชน (Laser Code)',
         type: 'Icustom',
+        label: 'หมายเลขหลังบัตรประชาชน (Laser Code)',
         field: 'jcNumber',
+        option: 'SSS-SSSSSSS-SS',
         required: true,
       }, {
         label: 'วันบัตรหมดอายุ',
@@ -54,6 +64,7 @@ export default class extends React.Component {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'docExpDate',
+        date: tomorrowDate(),
         required: true,
       }, {
         label: 'เพศ',
@@ -114,12 +125,6 @@ export default class extends React.Component {
 
   handleInput = (props) => {
     const { updateUser, user, updateRoot } = this.props
-
-    if (props.field === 'jcNumber') {
-      updateUser('profile', { ...user.profile, [props.field]: props.value ? (props.value).toUpperCase() : '' })
-    } else if (props.field !== 'jcNumber') {
-      updateUser('profile', { ...user.profile, [props.field]: props.value })
-    }
     if (props.type === 'modal') {
       const modal = {
         image: images.iconBackIdcard,
@@ -142,6 +147,8 @@ export default class extends React.Component {
           }
         })
       })
+    } else {
+      updateUser('profile', { ...user.profile, [props.field]: props.value })
     }
   }
 
@@ -204,9 +211,11 @@ export default class extends React.Component {
       martialStatus,
     } = user.profile
 
+    console.log(birthDay)
+    
     const data = {
-      docNo: idCard,
-      jcNumber: jcNumber ? jcNumber.trim().toUpperCase() : '',
+      docNo: replaceSpace(idCard),
+      jcNumber: replaceJsCard(jcNumber),
       isNoDocExpDate,
       docExpDate: expireSatus === 'มีวันหมดอายุ' ? convertDate(docExpDate) : new Date('9999-12-31'),
       genderCode: getStatusGender(gender),
@@ -224,8 +233,6 @@ export default class extends React.Component {
     }
 
     console.log(data)
-
-  
 
     this.props.saveIdentity({ variables: { input: data } })
       .then(res => {
@@ -298,6 +305,8 @@ export default class extends React.Component {
               init: d.init,
               value: user.profile[d.field],
               inVisible: d.inVisible,
+              date: d.date,
+              option: d.option,
               handleInput: (props) => this.handleInput(props),
               err: this.onValidation(d.field)
             }, key))

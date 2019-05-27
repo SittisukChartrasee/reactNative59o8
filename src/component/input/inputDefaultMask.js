@@ -3,8 +3,10 @@ import { Platform } from 'react-native'
 import PropsType from 'prop-types'
 import styled from 'styled-components/native'
 import { TextInputMask } from 'react-native-masked-text'
-import Imaterial from './inputDefaultMatiral'
 import colors from '../../config/colors'
+import { TextField } from 'react-native-material-textfield'
+import fonts from '../../config/fonts'
+
 
 const TextMask = styled(TextInputMask)`
   borderBottomWidth: ${props => (props.checkField ? '1' : '2')};
@@ -50,26 +52,45 @@ export default class extends React.Component {
       field,
       err
     } = this.props
-
+    const { value } = this.state
     return (
-      <TextMask
+      <TextInputMask
         type={'custom'}
         options={{
           mask: option,
         }}
-        customTextInput={Imaterial}
+        customTextInput={TextField}
         customTextInputProps={{
           label,
-          err
+          error: err,
+          value,
+          autoComplete: "off",
+          autoCapitalize: "none",
+          style:
+            [
+              { fontFamily: fonts.sukhumvitBold, color: colors.hunterGreen },
+              this.props.label === '' && { fontSize: this.props.fs, textAlign: 'center' },
+              { ...this.props.styled },
+            ],
+          labelTextStyle: { fontFamily: fonts.sukhumvitLight, fontSize: 100 },
+          tintColor: colors.grey,
+          baseColor: colors.grey,
+          titleFontSize: 12,
+          labelFontSize: this.props.labelFontSize !== undefined ? 20 : 14,
+          activeLineWidth: this.props.activeLineWidth !== undefined ? 0 : 2,
+          fontSize: 18,
+          onChangeText: this.handleInput,
+          height: "100%",
+          autoCorrect: false,
+          autoComplete: "off",
+          autoCapitalize: "none"
         }}
-        value={this.state.value}
+        value={value}
         onChangeText={this.handleInput}
       />
     )
   }
 }
-
-
 
 // const {
 //   value, maskingOptions, type, fs, editable, placeholder, valifie,

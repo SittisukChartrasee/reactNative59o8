@@ -24,7 +24,7 @@ export default ({
   visible=true,
   image,
   type,
-  labelBtn="รับทราบ",
+  labelBtn="ตกลง",
   dis="รหัส OTP ไม่ถูกต้อง \nคุณสามารถกรอกได้อีก n ครั้ง",
   onPress=() => {},
   disabled=false

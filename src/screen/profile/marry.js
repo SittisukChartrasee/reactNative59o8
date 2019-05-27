@@ -18,7 +18,7 @@ import { navigateAction } from '../../redux/actions'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
-import { convertDate, getOfBirth, getStatusGender, getStatusMartial } from '../../utility/helper'
+import { convertDate, tomorrowDate, replaceSpace} from '../../utility/helper'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -78,6 +78,7 @@ export default class extends React.Component {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'marryExpireDate', // ต้อง save ที่ field => cardExpiredDate
+        date: tomorrowDate(),
         required: true,
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
@@ -210,7 +211,7 @@ export default class extends React.Component {
       lastName,
       pepFlag: pepFlag === 'ใช่',
       nationalityCode,
-      IDCardNo: nationSatus === 'ไทย' ? IDCardNo : marryPassport,
+      IDCardNo: nationSatus === 'ไทย' ? replaceSpace(IDCardNo) : marryPassport,
       isIDCardExpDate,
       cardExpiredDate: (expireSatus === 'มีวันหมดอายุ')
         ? (nationSatus === 'ไทย')
@@ -296,6 +297,7 @@ export default class extends React.Component {
               option: d.option,
               value: user.spouse[d.field],
               inVisible: d.inVisible,
+              date: d.date,
               handleInput: (props) => this.handleInput(props),
               err: this.onValidation(d.field)
             }, key))

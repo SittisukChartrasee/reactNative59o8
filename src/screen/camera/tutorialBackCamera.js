@@ -53,7 +53,7 @@ export default class extends React.Component {
 
         <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
           <View style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
-            <TLight fontSize={16} mb="7%" color={colors.white}>{`ข้อมูลบนรูปบัตรประชาชนต้องชัดเจน \nไม่มีการปิดบังส่วนหนึ่งส่วนใดของบัตร`}</TLight>
+            <TLight fontSize={16} mb="7%" color={colors.white}>{`ถ่ายบัตรประชาชน\nเพื่อใช้ในการยืนยันตัวตนของท่าน`}</TLight>
             <Image source={images.idCardMockup} style={{ width: widthView * .6 }} resizeMode="contain"  />
 
             <View style={{ marginHorizontal: 24, marginTop: '6%' }}>
@@ -75,7 +75,7 @@ export default class extends React.Component {
 
           <View style={{ width: widthView }}>
             <LongButton
-              label="รับทราบ"
+              label="ตกลง"
               style={{ marginHorizontal: 24 }}
               onPress={() => navigateAction({ ...this.props, page: 'cameraIdcard' })}
             />

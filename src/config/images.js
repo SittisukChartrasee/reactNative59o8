@@ -9,6 +9,7 @@ import nextArrow from '../../assets/image/iconnextArrow.png'
 import idCardMockup from '../../assets/image/idCardMockup.png'
 import stroke1 from '../../assets/image/stroke1.png'
 import selfie from '../../assets/image/selfieId.png'
+import group2 from '../../assets/image/group2.png'
 import group3 from '../../assets/image/group3.png'
 import bookmark from '../../assets/image/bookmarkRibbon.png'
 import logoKasset from '../../assets/image/logoKasset.png'
@@ -93,5 +94,6 @@ export default {
   oval,
   ovalFill,
   unlocked,
-  logoKasset
+  logoKasset,
+  group2
 }

@@ -14,13 +14,15 @@ import colors from '../../config/colors'
 import { LongButton } from '../../component/button'
 import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
+import { updateUser } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
 
 const { width: widthView } = Dimensions.get('window')
 
-const mapToProps = () => ({})
+const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateUser: bindActionCreators(updateUser, dispatch),
 })
 @connect(mapToProps, dispatchToProps)
 @lockout
@@ -55,6 +57,8 @@ export default class extends React.Component {
   }
 
   render() {
+    const { user } = this.props    
+    const { email } = user.contact
     return (
       <Screen>
         <NavBar
@@ -71,10 +75,10 @@ export default class extends React.Component {
         />
 
         <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
-            <Image source={images.iconVerifyEmail} style={{ width: widthView * .6 }} resizeMode="contain"  />
+          <Image source={images.iconVerifyEmail} style={{ width: widthView * .6 }} resizeMode="contain" />
           <View>
             <TBold color={colors.white} mb={24}>กรุณายืนยันที่อยู่อีเมล</TBold>
-            <TLight color={colors.white}>{`ระบบได้จัดส่งลิงก์ (Link) สำหรับยืนยันตัวตน\nไปยัง Email ของท่าน\nUsername@domainname.com กรุณาคลิกลิงก์ (Link) เพื่อดำเนินการต่อ  `}</TLight>
+            <TLight color={colors.white}>{`ระบบได้จัดส่งลิงก์ (Link) สำหรับยืนยันตัวตน\nไปยัง Email ของท่าน\n${email}\nกรุณาคลิกลิงก์ (Link) เพื่อดำเนินการต่อ`}</TLight>
           </View>
           <TLight color={colors.white}>{`หากมีข้อสงสัยกรุณาติดต่อ\n02 673 3888 กด 1 และ กด 1`}</TLight>
         </View>
