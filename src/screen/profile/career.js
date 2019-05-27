@@ -36,6 +36,12 @@ export default class extends React.Component {
         required: true
       },
       {
+        label: 'อื่นๆ (โปรดระบุ)',
+        type: 'textInput',
+        field: 'busTypeOther',
+        inVisible: true,
+      }, 
+      {
         label: 'อาชีพ',
         type: 'search',
         field: 'occupation', // occupationCode
@@ -70,17 +76,28 @@ export default class extends React.Component {
     const { updateUser, user } = this.props
     console.log(props)
     if (props.field === 'busType') {
-      updateUser('career', {
-        ...user.career,
-        [props.field]: props.value,
-        isicCode: props.code
-      })
-    } else if (props.field === 'busType') {
-      updateUser('career', {
-        ...user.career,
-        [props.field]: props.value,
-        isicCode: props.code
-      })
+      if (props.value === 'อื่นๆ') {
+        this.setState({
+          fields: this.state.fields.map((d) => {
+            if (d.field === 'busTypeOther') return { ...d, inVisible: false }
+            else return d
+          })
+        })
+      } else { 
+        this.setState({
+          fields: this.state.fields.map((d) => {
+            if (d.field === 'busTypeOther') return { ...d, inVisible: true }
+            else return d
+          })
+        })
+
+        updateUser('career', {
+          ...user.career,
+          [props.field]: props.value,
+          isicCode: props.code,
+          busTypeOther: ' ',
+        })
+      }
     } else if (props.field === 'occupation') {
       updateUser('career', {
         ...user.career,
@@ -88,6 +105,8 @@ export default class extends React.Component {
         occupationCode: props.code
       })
     } else if (props.field === 'incomeRange') {
+      updateUser('career', { ...user.career, [props.field]: props.value })
+    } else if (props.field === 'busTypeOther') {
       updateUser('career', { ...user.career, [props.field]: props.value })
     }
 
