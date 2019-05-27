@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity, ScrollView, Image } from 'react-native'
+import { TouchableOpacity, ScrollView, Image, Linking } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
@@ -166,7 +166,7 @@ export default class extends React.Component {
         dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
         visible: true,
         labelBtn: 'ติดต่อ 02 673 3888',
-        onPress: () => updateRoot('modal', { visible: false })
+        onPress: () => Linking.openURL(`tel:026733888`)
       }
       return updateRoot('modal', modal)
     } else {

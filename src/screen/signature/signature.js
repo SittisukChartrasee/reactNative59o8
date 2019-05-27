@@ -49,6 +49,7 @@ export default class Demo extends Component {
 
   resetSign = () => {
     this.signature.resetImage()
+    this.setState({ dragged: null })
   }
 
   _onSaveEvent = async result => {
