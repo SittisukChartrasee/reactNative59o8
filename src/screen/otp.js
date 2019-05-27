@@ -10,14 +10,15 @@ import colors from '../config/colors'
 import { TLight, TBold, TMed } from '../component/texts'
 import images from '../config/images'
 import { velidateOtp, requestOtp } from '../redux/actions/root-active'
-import Modal from '../component/modal'
+import { root } from '../redux/actions/commonAction'
 
 const mapToProps = ({ root, user }) => ({ root, user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   navigateReset: bindActionCreators(navigateReset, dispatch),
   requestOtp: bindActionCreators(requestOtp, dispatch),
-  velidateOtp: bindActionCreators(velidateOtp, dispatch)
+  velidateOtp: bindActionCreators(velidateOtp, dispatch),
+  updateRoot: bindActionCreators(root, dispatch),
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -27,8 +28,6 @@ export default class extends React.Component {
     number: '',
     currentDot: '',
     restart: false,
-    modal: false,
-    dis: ''
   }
 
   setNumber = async (obj) => {
@@ -52,7 +51,12 @@ export default class extends React.Component {
           if (res.success) {
             navigateAction({ ...this.props, page: 'passcode' })
           } else if (!res.success) {
-            this.setState({ dis: res.message, modal: true })
+            const modal = {
+              dis: res.message,
+              visible: true,
+              onPress: () => this.props.updateRoot('modal', { visible: false })
+            }
+            return this.props.updateRoot('modal', modal)
           }
         })
         .catch(err => {
@@ -83,7 +87,12 @@ export default class extends React.Component {
           this.setState({ restart: true, })
         }
         else if (!res.success) {
-          this.setState({ dis: res.message, modal: true })
+          const modal = {
+            dis: res.message,
+            visible: true,
+            onPress: () => this.props.updateRoot('modal', { visible: false })
+          }
+          return this.props.updateRoot('modal', modal)
         }
       })
       .catch(err => {
@@ -95,7 +104,6 @@ export default class extends React.Component {
   onPrevPage = () => this.props.navigation.goBack()
 
   render() {
-    const { modal, dis } = this.state
     const { ref_no } = this.props.root
     return (
       <Screen>
@@ -110,13 +118,6 @@ export default class extends React.Component {
           })
         }
         <Keyboard setNumber={this.setNumber} />
-        {
-          Modal({
-            visible: modal,
-            dis,
-            onPress: () => this.setState({ dis: '', modal: false })
-          })
-        }
       </Screen>
     )
   }

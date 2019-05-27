@@ -27,10 +27,19 @@ export default ({
   labelBtn="รับทราบ",
   dis="รหัส OTP ไม่ถูกต้อง \nคุณสามารถกรอกได้อีก n ครั้ง",
   onPress=() => {},
+  disabled=false
 }) => (
   <Modal isVisible={visible} onSwipeComplete={onPress} swipeDirection="left" useNativeDriver={true}>
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-      <View style={{ flex: 1, padding: 24, backgroundColor: 'white', borderRadius: 8 }}>
+    <TouchableOpacity 
+      onPress={onPress}
+      activeOpacity={1}
+      disabled={disabled}
+      style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}
+    >
+      <TouchableOpacity
+        activeOpacity={1}
+        style={{ flex: 1, padding: 24, backgroundColor: 'white', borderRadius: 8 }}
+      >
         { image && <Image source={image} style={{ alignSelf: 'center', marginBottom: 24 }} /> }
         <TLight>{dis}</TLight>
 
@@ -46,7 +55,7 @@ export default ({
             )
         }
         
-      </View>
-    </View>
+      </TouchableOpacity>
+    </TouchableOpacity>
   </Modal>
 )

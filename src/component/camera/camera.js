@@ -88,7 +88,7 @@ export default class extends React.Component {
                       <View style={{ flex: 1, backgroundColor: colors.white, borderRadius: 72/2, borderColor: colors.black, borderWidth: 3 }} />
                     </TouchableHighlight>
                   </View>
-                  { this.props.switchCamera ? <TouchableOpacity
+                  {/* { this.props.switchCamera ? <TouchableOpacity
                     onPress={() => this.setState({ switch: !this.state.switch })}
                     style={{
                       flex: 1,
@@ -97,7 +97,8 @@ export default class extends React.Component {
                     }}
                   >
                     <Image source={images.iconCameraRefresh} />
-                  </TouchableOpacity> : <View style={{ flex: 1 }}/>}
+                  </TouchableOpacity> : } */}
+                  <View style={{ flex: 1 }}/>
                 </View>
               </View>
             )
