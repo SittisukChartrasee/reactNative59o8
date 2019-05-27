@@ -52,7 +52,7 @@ export default class extends React.Component {
 
         <View style={{ flex: 4, justifyContent: 'space-around', alignItems: 'center', paddingTop: 40 }}>
           <TLight fontSize={16} mb="5%" color={colors.white}>{`ถ่ายรูปเซลฟี่คู่บัตรประชาชน\nเพื่อใช้ในการยืนยันตัวตนของท่าน`}</TLight>
-          <Image source={images.selfie} style={widthView <= 320 ? { flex: 1, width: widthView } : { width: widthView }} resizeMode="contain"  />
+          <Image source={images.group2} style={widthView <= 320 ? { flex: 1, width: widthView } : { width: widthView }} resizeMode="contain"  />
 
           <View style={{ marginHorizontal: 24 }}>
             <View style={{ flexDirection: 'row' }}>
