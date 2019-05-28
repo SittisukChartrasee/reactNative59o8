@@ -6,7 +6,8 @@ import {
   View,
   SafeAreaView,
 } from 'react-native'
-import { WebView } from 'react-native-webview'
+import WKWebView from 'react-native-wkwebview-reborn'
+// import { WebView } from 'react-native-webview'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Screen from '../../component/screenComponent'
@@ -70,12 +71,18 @@ export default class extends React.Component {
 
         <SafeAreaView style={{ flex: 1 }}>
           <View style={{ flex: 1 }}>
-            <WebView
+            <WKWebView
+              source={{ uri: url }}
+              // onProgress={(progress) => console.log(progress)}
+              onNavigationResponse={(e) => console.log(e.nativeEvent)}
+              onNavigationStateChange={this.onHandleWebView}
+            />
+            {/* <WebView
             // this.props.user.bank.urlbank
               source={{ uri: url }}
               injectedJavaScript={'(function(){ return "test element" }());'}
               onNavigationStateChange={this.onHandleWebView}
-            />
+            /> */}
           </View>
           <View style={{ height: 56, backgroundColor: colors.lightgrey, justifyContent: 'center' }}>
             <TMed fontSize={14} color={colors.grey}>คุณได้ออกจาก Kmyfunds และเข้าสู่เว็บไซต์ {handleNameBank(bankName)} แล้ว</TMed>
