@@ -19,7 +19,7 @@ export default class extends React.Component {
   }
 
   state = {
-    startState: 1,
+    startState: 180,
     endState: 0
   }
 

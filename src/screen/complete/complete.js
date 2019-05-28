@@ -6,6 +6,7 @@ import {
   Image
 } from 'react-native'
 import { bindActionCreators } from 'redux'
+import { withApollo } from 'react-apollo'
 import { connect } from 'react-redux'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -15,6 +16,7 @@ import { LongButton } from '../../component/button'
 import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
 import lockout from '../../containers/hoc/lockout'
+import { checkVerifiedEmail } from '../../containers/query'
 
 const { width: widthView } = Dimensions.get('window')
 
@@ -24,36 +26,17 @@ const dispatchToProps = dispatch => ({
 })
 @connect(mapToProps, dispatchToProps)
 @lockout
+@withApollo
 export default class extends React.Component {
 
   onNext = async () => {
     const { navigateAction } = this.props
-    const verifyStatus = false
-
-    // รอ backEnd ทำ API
-
-    // this.props.verify({ variables: { input: data } })
-    // .then(res => {
-    //   if (res.data.saveFatca.success) {
-    //     navigateAction({ ...this.props, page: 'fraud' })
-    //   } else if (!res.data.saveFatca.success) {
-    //     const modal = {
-    //       dis: res.data.saveFatca.message,
-    //       visible: true,
-    //       onPress: () => this.setState({ modal: { visible: false } })
-    //     }
-    //     return this.setState({ modal })
-    //   }
-    // })
-    // .catch(err => {
-    //   console.log(err)
-    // })
-
-    if (verifyStatus) {
-      navigateAction({ ...this.props, page: 'waiting' })
-    } else {
-      navigateAction({ ...this.props, page: 'verifyEmail' })
-    }
+    this.props.client.query({ query: checkVerifiedEmail })
+      .then(res => {
+        if (res.data.checkVerifiedEmail) navigateAction({ ...this.props, page: 'waiting' })
+        else navigateAction({ ...this.props, page: 'verifyEmail' })
+      })
+      .catch(err => console.log(err))
   }
 
   render() {

@@ -3,9 +3,11 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
-  Image
+  Image,
+  AppState
 } from 'react-native'
 import { bindActionCreators } from 'redux'
+import { withApollo } from 'react-apollo'
 import { connect } from 'react-redux'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -14,45 +16,48 @@ import colors from '../../config/colors'
 import { LongButton } from '../../component/button'
 import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
-import { updateUser } from '../../redux/actions/commonAction'
+import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
+import setMutation from '../../containers/mutation'
+import { checkVerifiedEmail } from '../../containers/query'
 
 const { width: widthView } = Dimensions.get('window')
 
-const mapToProps = ({ user }) => ({ user })
+const mapToProps = ({ user, root }) => ({ user, root })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   updateUser: bindActionCreators(updateUser, dispatch),
+  updateRoot: bindActionCreators(root, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
 @lockout
+@setMutation
+@withApollo
 export default class extends React.Component {
-
   onNext = async () => {
+    const { user } = this.props    
+    const { email } = user.contact
+
+    const res = await this.props.acceptTerm()
+    if (res.data.acceptTerm.success) {
+      const modal = {
+        dis: `ระบบได้จัดส่งลิงก์ (Link) สำหรับยืนยันตัวตน\nไปยัง Email ของท่านแล้วกรุณาตรวจสอบ\n${email}`,
+        visible: true,
+        onPress: () => this.props.updateRoot('modal', { visible: false }),
+        onPressClose: () => this.props.updateRoot('modal', { visible: false })
+      }
+      this.props.updateRoot('modal', modal)
+    }
+  }
+
+  componentWillReceiveProps = newProps => {
     const { navigateAction } = this.props
-    const verifyStatus = true
-
-    // รอ backEnd ทำ API
-
-    // this.props.verify({ variables: { input: data } })
-    // .then(res => {
-    //   if (res.data.saveFatca.success) {
-    //     navigateAction({ ...this.props, page: 'fraud' })
-    //   } else if (!res.data.saveFatca.success) {
-    //     const modal = {
-    //       dis: res.data.saveFatca.message,
-    //       visible: true,
-    //       onPress: () => this.setState({ modal: { visible: false } })
-    //     }
-    //     return this.setState({ modal })
-    //   }
-    // })
-    // .catch(err => {
-    //   console.log(err)
-    // })
-
-    if (verifyStatus) {
-      navigateAction({ ...this.props, page: 'waiting' })
+    if (newProps.root.appState === 'active') {
+      this.props.client.query({ query: checkVerifiedEmail })
+        .then(res => {
+          if (res.data.checkVerifiedEmail) navigateAction({ ...this.props, page: 'waiting' })
+        })
+        .catch(err => console.log(err))
     }
   }
 

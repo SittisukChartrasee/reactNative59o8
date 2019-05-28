@@ -89,6 +89,12 @@ export const getRegisterBankStatus = gql`
   }
 `
 
+export const checkVerifiedEmail = gql`
+  query checkVerifiedEmail {
+    checkVerifiedEmail
+  }
+`
+
 export default graphql(getRegisterBankStatus, {
   name: 'getRegisterBankStatus',
   options: {
