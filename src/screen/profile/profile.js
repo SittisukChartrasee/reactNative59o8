@@ -130,7 +130,8 @@ export default class extends React.Component {
         image: images.iconBackIdcard,
         dis: `ด้านหลังบัตรประชาชน ประกอบด้วยอักษรภาษาอังกฤษ 2 ตัว และตัวเลข 10 ตัว \nตัวอย่างการกรอก : JC1234567890`,
         visible: true,
-        onPress: () => updateRoot('modal', { visible: false })
+        onPress: () => updateRoot('modal', { visible: false }),
+        onPressClose: () => this.props.updateRoot('modal', { visible: false })
       }
       return updateRoot('modal', modal)
     }
@@ -255,7 +256,8 @@ export default class extends React.Component {
               const modal = {
                 dis: res.data.saveIdentity.message,
                 visible: true,
-                onPress: () => updateRoot('modal', { visible: false })
+                onPress: () => updateRoot('modal', { visible: false }),
+                onPressClose: () => this.props.updateRoot('modal', { visible: false })
               }
               return updateRoot('modal', modal)
           }

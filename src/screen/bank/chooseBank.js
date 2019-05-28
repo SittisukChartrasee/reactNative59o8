@@ -83,13 +83,14 @@ export default class extends React.Component {
             urlbank: res.data.registerBank.url,
           })
           if (this.state.selected === 'ธนาคารไทยพาณิชย์') return navigateAction({ ...this.props, page: "suittest" })
-          return navigateAction({ ...this.props, page: "connectBank" })
+          return navigateAction({ ...this.props, page: "connectBank", params: { bankName: this.state.selected } })
         } 
 
         const modal = {
           dis: res.data.registerBank.message,
           visible: true,
-          onPress: () => updateRoot("modal", { visible: false })
+          onPress: () => updateRoot("modal", { visible: false }),
+          onPressClose: () => this.props.updateRoot('modal', { visible: false })
         };
         return updateRoot("modal", modal);
       })

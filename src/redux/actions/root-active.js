@@ -13,10 +13,6 @@ export const requestOtp = (obj) => async dispatch => {
   })
 
   if (res) {
-    if (res.success) {
-      for (const key in res.result ) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
-    }
-
     for (const key in res.result ) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
   }
@@ -35,10 +31,6 @@ export const velidateOtp = (obj) => async dispatch => {
   })
 
   if (res) {
-    if (res.success) {
-      for (const key in res.result ) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
-    }
-
     for (const key in res.result ) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
   }
@@ -55,10 +47,6 @@ export const requestRegister = (obj, token) => async dispatch => {
   }, token)
 
   if (res) {
-    if (res.success) {
-      for (const key in res.result ) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
-    }
-
     for (const key in res.result ) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
   }

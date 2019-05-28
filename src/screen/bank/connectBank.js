@@ -18,6 +18,14 @@ import { navigateAction } from '../../redux/actions'
 import colors from '../../config/colors';
 import { TBold, TMed } from '../../component/texts';
 
+const handleNameBank = key => {
+  switch (key) {
+    case 'ธนาคารกสิกรไทย': return 'Kbank'
+    case 'ธนาคารไทยพาณิชย์': return 'SCB'
+    default: return '[default bank]'
+  }
+}
+
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
@@ -44,6 +52,7 @@ export default class extends React.Component {
   }
 
   render() {
+    const bankName = this.props.navigation.getParam('bankName', '')
     return (
       <Screen color="transparent">
         <NavBar
@@ -67,7 +76,7 @@ export default class extends React.Component {
             />
           </View>
           <View style={{ height: 56, backgroundColor: colors.lightgrey, justifyContent: 'center' }}>
-            <TMed fontSize={14} color={colors.grey}>คุณได้ออกจาก Kmyfunds และเข้าสู่เว็บไซต์ KBank แล้ว</TMed>
+            <TMed fontSize={14} color={colors.grey}>คุณได้ออกจาก Kmyfunds และเข้าสู่เว็บไซต์ {handleNameBank(bankName)} แล้ว</TMed>
           </View>
           {
             this.state.status

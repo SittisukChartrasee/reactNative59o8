@@ -100,6 +100,7 @@ const init = {
   },
   career: {
     busType: '',
+    busTypeOther: '',
     isicCode: '',
     occupation: '',
     occupationCode: '',

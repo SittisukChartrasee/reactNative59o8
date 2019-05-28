@@ -14,7 +14,6 @@ export default class extends React.Component {
   static defaultProps = {
     dot: [false, false, false, false, false, false],
     currentDot: '',
-    restart: false,
     refNo: null,
     onPress: () => { },
   }
@@ -24,23 +23,14 @@ export default class extends React.Component {
     endState: 0
   }
 
+  componentDidMount = () => this.timer()
+
   timer = () => {
     if (this.state.startState > this.state.endState) {
       setTimeout(() => {
         this.setState({ startState: this.state.startState - 1 })
         this.timer()
       }, 1000)
-    }
-  }
-
-  componentDidMount = () => {
-    this.timer()
-  }
-
-  componentWillReceiveProps = async (newProps) => {
-    if (newProps.restart) {
-      await this.setState({ startState: 180 })
-      this.timer()
     }
   }
 
@@ -87,9 +77,10 @@ export default class extends React.Component {
                   <TouchableOpacity
                     onPress={
                       async () => {
-                        await this.setState({ start: 180 })
-                        await this.timer()
-                        await onPress()
+                        await onPress(async (time = 180) => {
+                          await this.setState({ startState: time })
+                          await this.timer()
+                        })
                       }}
                     style={{
                       width: 160,

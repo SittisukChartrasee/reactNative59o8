@@ -11,7 +11,8 @@ export default WrapperComponent => {
       type: 'LOGOUT',
       dis: 'คุณต้องการออกจากหน้าเชื่อมบัญชี\nใช่หรือไม่ ?',
       visible: true,
-      onPress: () => props.updateRoot('modal', { visible: false })
+      onPress: () => props.updateRoot('modal', { visible: false }),
+      onPressClose: () => props.updateRoot('modal', { visible: false })
     }
     return <WrapperComponent lockout={() => props.updateRoot('modal', modal)} {...props}/>
   }

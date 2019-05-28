@@ -5,6 +5,7 @@ import {
   Dimensions,
   AsyncStorage,
   Platform,
+  ScrollView,
   TouchableOpacity
 } from 'react-native'
 import { bindActionCreators } from 'redux'
@@ -128,7 +129,8 @@ export default class extends React.Component {
               const modal = {
                 dis: res.message,
                 visible: true,
-                onPress: () => this.props.updateRoot('modal', { visible: false })
+                onPress: () => this.props.updateRoot('modal', { visible: false }),
+                onPressClose: () => this.props.updateRoot('modal', { visible: false })
               }
               return this.props.updateRoot('modal', modal)
           }
@@ -143,48 +145,42 @@ export default class extends React.Component {
     const sizing = widthScreen <= 320 || heightScreen <= 690 ? { width: 176, height: 128, } : {}
     return (
       <Screen>
-        <NavBar
-          img={images.logoKasset}
-          color="transparent"
-          navLeft={
-            <TouchableOpacity
-              onPress={() => this.props.navigation.goBack()}
-              style={{ paddingRight: 30 }}
-            >
-              <Image source={images.iconback} />
-            </TouchableOpacity>
-          }
-        // navRight={
-        //   <TouchableOpacity
-        //     onPress={() => this.props.lockout()}
-        //     style={{ paddingLeft: 30 }}
-        //   >
-        //     <Image source={images.iconlogoOff} />
-        //   </TouchableOpacity>
-        // }
-        />
-        <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-          <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
-          <TBold fontSize={20} color={colors.white} mt="24" mb="40">{`กรุณากรอกข้อมูล\nเพื่อเปิดบัญชีกองทุน`}</TBold>
-        </View>
-        <KeyboardAwareScrollView
-          extraScrollHeight={Platform.OS === 'ios' ? 0 : 50}
-          enableOnAndroid
-          style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}
-        >
-          {
-            fields.map((setField, key) => Input({
-              ...setField,
-              value: (setField.field === 'idCard')
-                ? this.props.user.profile.idCard
-                : this.props.user.contact[setField.field],
-              handleInput: value => this.handleInput(value),
-              err: this.onValidation(setField.field)
-            }, key))
-          }
+        <ScrollView contentContainerStyle={{ flex: 1 }}>
+          <NavBar
+            img={images.logoKasset}
+            color="transparent"
+            navLeft={
+              <TouchableOpacity
+                onPress={() => this.props.navigation.goBack()}
+                style={{ paddingRight: 30 }}
+              >
+                <Image source={images.iconback} />
+              </TouchableOpacity>
+            }
+          />
+          <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+            <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
+            <TBold fontSize={20} color={colors.white} mt="24" mb="40">{`กรุณากรอกข้อมูล\nเพื่อเปิดบัญชีกองทุน`}</TBold>
+          </View>
+          <KeyboardAwareScrollView
+            extraScrollHeight={Platform.OS === 'ios' ? 0 : 50}
+            enableOnAndroid
+            style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}
+          >
+            {
+              fields.map((setField, key) => Input({
+                ...setField,
+                value: (setField.field === 'idCard')
+                  ? this.props.user.profile.idCard
+                  : this.props.user.contact[setField.field],
+                handleInput: value => this.handleInput(value),
+                err: this.onValidation(setField.field)
+              }, key))
+            }
 
-        </KeyboardAwareScrollView>
-        <LongPositionButton label="ถัดไป" onPress={this.onNext} />
+          </KeyboardAwareScrollView>
+          <LongPositionButton label="ถัดไป" onPress={this.onNext} />
+        </ScrollView>
       </Screen>
     )
   }

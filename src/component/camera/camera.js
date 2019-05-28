@@ -53,18 +53,18 @@ export default class extends React.Component {
           style={styles.preview}
           type={this.props.switchCamera ? (this.state.switch ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back) : RNCamera.Constants.Type.back}
           flashMode={RNCamera.Constants.FlashMode.off}
-          androidCameraPermissionOptions={{
-            title: 'Permission to use camera',
-            message: 'We need your permission to use your camera',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-          androidRecordAudioPermissionOptions={{
-            title: 'Permission to use audio recording',
-            message: 'We need your permission to use your audio',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
+          // androidCameraPermissionOptions={{
+          //   title: 'Permission to use camera',
+          //   message: 'We need your permission to use your camera',
+          //   buttonPositive: 'Ok',
+          //   buttonNegative: 'Cancel',
+          // }}
+          // androidRecordAudioPermissionOptions={{
+          //   title: 'Permission to use audio recording',
+          //   message: 'We need your permission to use your audio',
+          //   buttonPositive: 'Ok',
+          //   buttonNegative: 'Cancel',
+          // }}
         >
           {({ camera, status, recordAudioPermissionStatus }) => {
             if (status !== 'READY') return <PendingView />
@@ -88,7 +88,7 @@ export default class extends React.Component {
                       <View style={{ flex: 1, backgroundColor: colors.white, borderRadius: 72/2, borderColor: colors.black, borderWidth: 3 }} />
                     </TouchableHighlight>
                   </View>
-                  { this.props.switchCamera ? <TouchableOpacity
+                  {/* { this.props.switchCamera ? <TouchableOpacity
                     onPress={() => this.setState({ switch: !this.state.switch })}
                     style={{
                       flex: 1,
@@ -97,7 +97,8 @@ export default class extends React.Component {
                     }}
                   >
                     <Image source={images.iconCameraRefresh} />
-                  </TouchableOpacity> : <View style={{ flex: 1 }}/>}
+                  </TouchableOpacity> : } */}
+                  <View style={{ flex: 1 }}/>
                 </View>
               </View>
             )
@@ -122,7 +123,7 @@ export default class extends React.Component {
       markerSrc: images.textTermAndCon,
       position: 'center',
       scale: 1,
-      markerScale: Platform.OS === 'android' ? heightPage >= 700 ? .4 : .6 : .4,
+      markerScale: Platform.OS === 'android' ? heightPage >= 700 ? .4 : .6 : .6,
       quality: 100
     })
       .then(path => {
