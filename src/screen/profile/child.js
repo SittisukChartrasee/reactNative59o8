@@ -2,7 +2,9 @@ import React from 'react'
 import {
   TouchableOpacity,
   ScrollView,
+  Dimensions,
   Image,
+  View
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -10,14 +12,19 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import find from 'lodash/find'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
+import { LongButton } from '../../component/button'
 import { NextButton } from '../../component/button'
+import { TBold } from '../../component/texts'
 import images from '../../config/images'
 import Input from '../../component/input'
 import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
+import colors from '../../config/colors'
 import { convertDate, getOfBirth, replaceSpace, tomorrowDate } from '../../utility/helper'
+
+const { width: widthView } = Dimensions.get('window')
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -33,90 +40,107 @@ export default class extends React.Component {
   state = {
     PreconditionRequired: [],
     InvalidArgument: [],
+    inVisible: false,
     fields: [
       {
-        label: 'ข้อมูลบุตรคนที่ 1',
-        field: 'idcard',
-        type: 'titleHead'
+        label: 'ข้อมูลบุตร หรือบุตรบุญธรรมคนที่ 1',
+        field: 'firstIdcard',
+        type: 'titleHead',
+        static: true
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
         type: 'search',
         field: 'firstTitle',
         required: true,
+        static: true
       }, {
         label: 'ชื่อ (ภาษาไทย)',
         type: 'textInput',
         field: 'firstFirstName',
         required: true,
+        static: true
       }, {
         label: 'นามสกุล (ภาษาไทย)',
         type: 'textInput',
         field: 'firstLastName',
         required: true,
+        static: true
       }, {
         label: 'ปีเกิด,เดือนเกิด,วันเกิด',
         type: 'ymd',
         field: 'firstBirthDay',
         required: true,
+        static: true
       }, {
         type: 'mask',
         label: 'เลขบัตรประชาชน',
         field: 'firstDocNo',
         option: '9 9999 99999 99 9',
         required: true,
+        static: true
       }, {
         label: 'วันบัตรหมดอายุ',
         type: 'radio',
         init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
         field: 'firstExpireDateFlag',
+        static: true
       }, {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'firstDocExpDate',
         date: tomorrowDate(),
         required: true,
+        static: true
       },
       {
-        label: 'ข้อมูลบุตรคนที่ 2',
-        field: 'idcard',
-        type: 'titleHead'
+        label: 'ข้อมูลบุตร หรือบุตรบุญธรรมคนที่ 2',
+        field: 'secondIdcard',
+        type: 'titleHead',
+        inVisible: true,
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
         type: 'search',
         field: 'secondTitle',
         required: true,
+        inVisible: true,
       }, {
         label: 'ชื่อ (ภาษาไทย)',
         type: 'textInput',
         field: 'secondFirstName',
         required: true,
+        inVisible: true,
       }, {
         label: 'นามสกุล (ภาษาไทย)',
         type: 'textInput',
         field: 'secondLastName',
         required: true,
+        inVisible: true,
       }, {
         label: 'ปีเกิด,เดือนเกิด,วันเกิด',
         type: 'ymd',
         field: 'secondBirthDay',
         required: true,
+        inVisible: true,
       }, {
         type: 'mask',
         label: 'เลขบัตรประชาชน',
         field: 'secondDocNo',
         option: '9 9999 99999 99 9',
         required: true,
+        inVisible: true,
       }, {
         label: 'วันบัตรหมดอายุ',
         type: 'radio',
         init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
         field: 'secondExpireDateFlag',
+        inVisible: true,
       }, {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'secondDocExpDate',
         date: tomorrowDate(),
         required: true,
+        inVisible: true,
       }
     ]
   }
@@ -149,6 +173,28 @@ export default class extends React.Component {
             else return d
           }
         })
+      })
+    } else if (props.field === 'secondIdcard') {
+      this.onPressNewChild()
+    }
+  }
+
+  onPressNewChild = () => {
+    const { inVisible, fields } = this.state
+    if (!inVisible) {
+      this.setState({
+        fields: fields.map((d) => {
+          return { ...d, inVisible: false }
+        }),
+        inVisible: !inVisible
+      })
+    } else {
+      this.setState({
+        fields: fields.map((d) => {
+          if (!d.static) return { ...d, inVisible: true }
+          else return d
+        }),
+        inVisible: !inVisible
       })
     }
   }
@@ -265,7 +311,7 @@ export default class extends React.Component {
     return (
       <Screen color="transparent">
         <NavBar
-          title="ข้อมูลบุตร"
+          title="ข้อมูลบุตร หรือบุตรบุญธรรม"
           navLeft={
             <TouchableOpacity
               onPress={() => this.props.navigation.goBack()}
@@ -305,9 +351,19 @@ export default class extends React.Component {
               err: this.onValidation(d.field)
             }, key))
           }
+          <View style={{ display: this.state.inVisible ? 'none' : 'flex', flex: 1, width: widthView, justifyContent: 'flex-end', padding: 24, backgroundColor: colors.lightgrey }}>
+            <TBold fontSize={16} color={colors.midnight} textAlign="left">ท่านมีบุตร หรือบุตรบุญธรรมมากกว่า 1 คนใช่ไหม?</TBold>
+            <LongButton
+              label="เพิ่มบุตร หรือบุตรบุญธรรม"
+              style={{}}
+              onPress={this.onPressNewChild}
+            />
+          </View>
         </KeyboardAwareScrollView>
         <NextButton onPress={this.onNext} />
       </Screen>
     )
   }
 }
+
+// display:  ? 'none' : 'flex'

@@ -125,8 +125,14 @@ export default (props, key) => {
     case 'titleHead':
       return (
         <View key={key} style={{ marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
-          <View style={{ backgroundColor: colors.lightgrey, paddingHorizontal: 24, paddingVertical: 16 }}>
+          <View style={{ backgroundColor: colors.lightgrey, paddingHorizontal: 24, paddingVertical: 16, flexDirection: 'row', justifyContent: 'space-between' }}>
             <TBold textAlign="left">{props.label}</TBold>
+            <TouchableOpacity
+              onPress={() => props.handleInput({ type: 'titleHead', field: props.field, })}
+              style={{ display: props.field === 'secondIdcard' ? 'flex' : 'none' }}
+            >
+              <TBold color={colors.softRed}>ลบ</TBold>
+            </TouchableOpacity>
           </View>
         </View>
       )

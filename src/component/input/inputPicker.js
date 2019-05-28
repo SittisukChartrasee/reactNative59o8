@@ -23,7 +23,7 @@ const genDate = (y = 2539, m = 2) => {
   const month = []
   const day = []
   const mL = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']
-  for (let i = +moment().format('YYYY') + 443; i <= +moment().format('YYYY') + 543; i += 1) year.push(i)
+  for (let i = +moment().format('YYYY') + 443; i <= +moment().format('YYYY') + 543 - 20; i += 1) year.push(i)
   for (let i = 0; i <= 11; i += 1) month.push(mL[i])
   for (let i = 1; i <= new Date(y - 543, mL.indexOf(m) + 1, 0).getDate(); i += 1) day.push(i)
 
