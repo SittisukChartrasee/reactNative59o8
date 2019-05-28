@@ -53,12 +53,12 @@ export default class extends React.Component {
           style={styles.preview}
           type={this.props.switchCamera ? (this.state.switch ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back) : RNCamera.Constants.Type.back}
           flashMode={RNCamera.Constants.FlashMode.off}
-          androidCameraPermissionOptions={{
-            title: 'Permission to use camera',
-            message: 'We need your permission to use your camera',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
+          // androidCameraPermissionOptions={{
+          //   title: 'Permission to use camera',
+          //   message: 'We need your permission to use your camera',
+          //   buttonPositive: 'Ok',
+          //   buttonNegative: 'Cancel',
+          // }}
           // androidRecordAudioPermissionOptions={{
           //   title: 'Permission to use audio recording',
           //   message: 'We need your permission to use your audio',
@@ -123,7 +123,7 @@ export default class extends React.Component {
       markerSrc: images.textTermAndCon,
       position: 'center',
       scale: 1,
-      markerScale: Platform.OS === 'android' ? heightPage >= 700 ? .4 : .6 : .4,
+      markerScale: Platform.OS === 'android' ? heightPage >= 700 ? .4 : .6 : .6,
       quality: 100
     })
       .then(path => {

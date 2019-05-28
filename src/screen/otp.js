@@ -73,21 +73,21 @@ export default class extends React.Component {
     }, 200)
   }
 
-  onPress = async () => {
+  onPress = async setTimeWaiting => {
     const { user } = this.props
     const data = {
-      idCard: user.profile.idCard,
+      idCard: user.profile.idCard.replace(/ /g, ''),
       email: (user.contact.email).trim().toLowerCase(),
-      mobilePhone: user.contact.mobilePhone,
+      mobilePhone: user.contact.mobilePhone.replace(/ /g, ''),
     }
 
     this.props.requestOtp(data)
       .then(res => {
         console.log(res)
-        if (res.success) {
-          this.setState({ restart: true, })
-        }
+        if (res.success) setTimeWaiting()
         else if (!res.success) {
+          // if (res.message.sear) 
+
           const modal = {
             dis: res.message,
             visible: true,
@@ -113,12 +113,12 @@ export default class extends React.Component {
           headerotp({
             dot: this.state.dot,
             currentDot: this.state.currentDot,
-            restart: this.state.restart,
             refNo: ref_no || null,
             onPress: this.onPress,
             onPrevPage: this.onPrevPage,
           })
         }
+        
         <Keyboard setNumber={this.setNumber} />
       </Screen>
     )

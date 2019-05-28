@@ -21,12 +21,14 @@ import { navigateAction } from '../../redux/actions'
 import { TLight, TBold } from '../../component/texts';
 import colors from '../../config/colors';
 import request from '../../utility/requestApi'
+import lockout from '../../containers/hoc/lockout'
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
+@lockout
 export default class Demo extends Component {
   state = {
     dragged: null,
@@ -110,7 +112,7 @@ export default class Demo extends Component {
             </TouchableOpacity>
           }
           navRight={
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => this.props.lockout()}>
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }
