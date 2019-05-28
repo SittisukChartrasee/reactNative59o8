@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -35,7 +35,7 @@ export default class Demo extends Component {
   }
 
   componentWillMount = async () => {
-    
+
     if (Platform.OS === 'android') {
       PermissionsAndroid.requestMultiple([
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -75,8 +75,8 @@ export default class Demo extends Component {
     }
   }
   _onDragEvent() {
-      // This callback will be called when the user enters signature
-      console.log("dragged");
+    // This callback will be called when the user enters signature
+    console.log("dragged");
   }
 
   render = () => {
@@ -86,42 +86,48 @@ export default class Demo extends Component {
         justifyContent: "center",
         alignItems: "center",
         height: 50,
-        borderRadius: 50/2,
+        borderRadius: 50 / 2,
         backgroundColor: colors.grey,
         margin: 10
-      }, 
+      },
       buttonCancelStyle: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
         height: 50,
-        borderRadius: 50/2,
+        borderRadius: 50 / 2,
         borderColor: colors.grey,
         borderWidth: 1,
         margin: 10
       }
     })
-    
+
     return (
       <Screen color="transparent">
         <NavBar
           title="ลายเซ็นอิเล็กทรอนิกส์"
           navLeft={
-            <TouchableOpacity  onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
           navRight={
-            <TouchableOpacity onPress={() => this.props.lockout()}>
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
               <Image source={images.iconlogoOff} />
             </TouchableOpacity>
           }
         />
 
-        <Image source={{ uri: '/storage/emulated/0/saved_signature/signature.png' }}/>
+        <Image source={{ uri: '/storage/emulated/0/saved_signature/signature.png' }} />
 
         <SafeAreaView style={{ flex: 1 }}>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems:'center' }}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
             <View style={{ position: 'absolute', width: '70%' }}>
               <View style={{ alignItems: 'center', opacity: this.state.dragged === null ? 1 : 0 }}>
                 <Image source={images.iconsign} />
