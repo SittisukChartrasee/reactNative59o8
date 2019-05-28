@@ -53,6 +53,7 @@ export default class extends React.Component {
 
   render() {
     const bankName = this.props.navigation.getParam('bankName', '')
+    const url = 'https://ws06.uatebpp.kasikornbank.com/PGSRegistration.do?reg_id=098765434567&langLocale=th_TH'
     return (
       <Screen color="transparent">
         <NavBar
@@ -70,7 +71,8 @@ export default class extends React.Component {
         <SafeAreaView style={{ flex: 1 }}>
           <View style={{ flex: 1 }}>
             <WebView
-              source={{ uri: this.props.user.bank.urlbank }}
+            // this.props.user.bank.urlbank
+              source={{ uri: url }}
               injectedJavaScript={'(function(){ return "test element" }());'}
               onNavigationStateChange={this.onHandleWebView}
             />

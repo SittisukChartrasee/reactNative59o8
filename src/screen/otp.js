@@ -27,7 +27,7 @@ export default class extends React.Component {
     dot: [false, false, false, false, false, false],
     number: '',
     currentDot: '',
-    restart: false,
+    overRequest: false,
   }
 
   setNumber = async (obj) => {
@@ -119,7 +119,15 @@ export default class extends React.Component {
           })
         }
         
-        <Keyboard setNumber={this.setNumber} />
+        {
+          this.state.overRequest
+            ? (
+              <View style={{ flex: 1, backgroundColor: colors.white, marginTop: -40 }}>
+                <TBold>ท่านกรอกผิดเกินจำนวนครั้งที่กำหนด</TBold>
+              </View>
+            ) : <Keyboard setNumber={this.setNumber} />
+        }
+        
       </Screen>
     )
   }
