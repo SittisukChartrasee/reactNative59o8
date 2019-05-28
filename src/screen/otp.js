@@ -83,11 +83,10 @@ export default class extends React.Component {
 
     this.props.requestOtp(data)
       .then(res => {
-        console.log(res)
+        const resPonse = res
+        console.log(resPonse)
         if (res.success) setTimeWaiting()
         else if (!res.success) {
-          // if (res.message.sear) 
-
           const modal = {
             dis: res.message,
             visible: true,
@@ -106,7 +105,7 @@ export default class extends React.Component {
   onPrevPage = () => this.props.navigation.goBack()
 
   render() {
-    const { ref_no } = this.props.root
+    const { ref_no } = this.props
     return (
       <Screen>
         {
