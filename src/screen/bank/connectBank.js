@@ -6,6 +6,7 @@ import {
   View,
   SafeAreaView,
 } from 'react-native'
+import WKWebView from 'react-native-wkwebview-reborn'
 // import { WebView } from 'react-native-webview'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -70,6 +71,12 @@ export default class extends React.Component {
 
         <SafeAreaView style={{ flex: 1 }}>
           <View style={{ flex: 1 }}>
+            <WKWebView
+              source={{ uri: url }}
+              // onProgress={(progress) => console.log(progress)}
+              onNavigationResponse={(e) => console.log(e.nativeEvent)}
+              onNavigationStateChange={this.onHandleWebView}
+            />
             {/* <WebView
             // this.props.user.bank.urlbank
               source={{ uri: url }}
