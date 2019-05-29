@@ -93,7 +93,7 @@ export default class extends React.Component {
         console.log(resPonse)
         if (res.success) {
           setTimeWaiting(res.details)
-          this.setState({ ref_no: res.result.ref_no })
+          this.setState({ ref_no: res.result.ref_no, overRequestUi: false })
         }
         else if (!res.success) {
           const modal = {
