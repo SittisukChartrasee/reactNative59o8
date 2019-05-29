@@ -119,6 +119,7 @@ export default class extends React.Component {
             overRequest: this.state.overRequest,
             onPress: this.onPress,
             onPrevPage: this.onPrevPage,
+            setState: () => this.setState({ overRequest: false }),
           })
         }
 

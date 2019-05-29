@@ -4,11 +4,11 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native'
-import colors from '../../config/colors';
-import images from '../../config/images';
-import { TLight, TMed, TBold } from '../texts';
+import colors from '../../config/colors'
+import images from '../../config/images'
+import { TLight, TMed, TBold } from '../texts'
 
-const secToMinute = (sec) => `${Math.floor(sec / 60).toString().padStart(2, '0')}:${(sec % 60).toString().padStart(2, '0')}`
+// const secToMinute = (sec) => `${Math.floor(sec / 60).toString().padStart(2, '0')}:${(sec % 60).toString().padStart(2, '0')}`
 
 export default class extends React.Component {
   static defaultProps = {
@@ -19,38 +19,82 @@ export default class extends React.Component {
     onPress: () => { },
   }
 
+  timerCount = ''
+
   state = {
-    startState: 3,
+    startState: 180,
     endState: 0,
-    disabled: false,
+    start: Date.now(),
+    diff: 0,
+    minutes: 0,
+    seconds: 0,
+    duration: 60 * 3,
+    resend: false,
   }
 
-  componentDidMount = () => {
-    if (!this.props.overRequest) {
+  // componentDidMount = () => this.timer()
+
+  componentDidMount() {
+    clearInterval(this.timerCount)
+    this.timerCount = setInterval(() => {
       this.timer()
+    }, 1000)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.overRequest) {
+      clearInterval(this.timerCount)
+      this.resendOTP(6)
+      this.props.setState()
     }
   }
 
-  componentWillReceiveProps = async newProps => {
-    if (newProps.overRequest) {
-      await this.setState({ startState: 6, disabled: true })
-      await this.timer()
+  // timer = () => {
+  //   if (this.state.startState > this.state.endState) {
+  //     setTimeout(() => {
+  //       this.setState({ startState: this.state.startState - 1 })
+  //       this.timer()
+  //     }, 1000)
+  //   }
+  // }
+
+  starttimer() {
+    clearInterval(this.timerCount)
+    this.timerCount = setInterval(() => {
+      this.timer()
+    }, 1000)
+  }
+
+
+  componentWillUnmount() {
+    clearInterval(this.timerCount)
+  }
+
+  timer() {
+    let diff = this.state.diff
+    let minutes = this.state.minutes
+    let seconds = this.state.seconds
+    diff = this.state.duration - (((Date.now() - this.state.start) / 1000) | 0)
+    minutes = (diff / 60) | 0
+    seconds = (diff % 60) | 0
+    minutes = minutes < 10 ? "0" + minutes : minutes
+    seconds = seconds < 10 ? "0" + seconds : seconds
+    this.setState({ minutes: minutes, seconds: seconds })
+
+    if (diff <= 0) {
+      this.setState({ resend: true })
+      clearInterval(this.timerCount)
     }
   }
 
-  timer = () => {
-    if (this.state.startState > this.state.endState) {
-      setTimeout(() => {
-        this.setState({ startState: this.state.startState - 1 })
-        this.timer()
-      }, 1000)
-    }
+  resendOTP(minutes) {
+    this.setState({ start: Date.now(), minutes: 6, seconds: 0, duration: 60 * minutes })
+    this.starttimer()
   }
 
   render() {
     const { startState } = this.state
     const { dot, onPress, refNo, onPrevPage } = this.props
-    console.log(startState)
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 0.8, justifyContent: 'flex-end' }}>
@@ -85,11 +129,11 @@ export default class extends React.Component {
                       justifyContent: 'center',
                     }}
                   >
-                    <TBold>{secToMinute(startState)}</TBold>
+                    {/* <TBold>{secToMinute(startState)}</TBold> */}
+                    <TBold>{this.state.minutes.toString().padStart(2, '0')} : {this.state.seconds.toString().padStart(2, '0')}</TBold>
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
-                    disabled={this.state.disabled}
                     onPress={
                       async () => {
                         await onPress(async (time = 180) => {
