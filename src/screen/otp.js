@@ -28,7 +28,9 @@ export default class extends React.Component {
     number: '',
     currentDot: '',
     overRequest: false,
-    overRequestUi: false
+    overRequestUi: false,
+    minutes: 3,
+    ref_no: this.props.root.ref_no,
   }
 
   setNumber = async (obj) => {
@@ -53,7 +55,7 @@ export default class extends React.Component {
             navigateAction({ ...this.props, page: 'passcode' })
           } else if (!res.success) {
             if (res.details === 6) {
-              this.setState({ overRequest: true, overRequestUi: true })
+              this.setState({ overRequest: true, overRequestUi: true, minutes: res.details })
             }
             const modal = {
               dis: res.message,
@@ -89,7 +91,10 @@ export default class extends React.Component {
       .then(res => {
         const resPonse = res
         console.log(resPonse)
-        if (res.success) setTimeWaiting()
+        if (res.success) {
+          setTimeWaiting(res.details)
+          this.setState({ ref_no: res.result.ref_no })
+        }
         else if (!res.success) {
           const modal = {
             dis: res.message,
@@ -109,7 +114,7 @@ export default class extends React.Component {
   onPrevPage = () => this.props.navigation.goBack()
 
   render() {
-    const { ref_no } = this.props
+    const { ref_no } = this.state
     return (
       <Screen>
         {
@@ -120,6 +125,7 @@ export default class extends React.Component {
             overRequest: this.state.overRequest,
             onPress: this.onPress,
             onPrevPage: this.onPrevPage,
+            minutes: this.state.minutes,
             setState: () => this.setState({ overRequest: false }),
           })
         }
