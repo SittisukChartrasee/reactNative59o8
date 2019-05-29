@@ -15,6 +15,7 @@ export default class extends React.Component {
     dot: [false, false, false, false, false, false],
     currentDot: '',
     refNo: null,
+    overRequest: false,
     onPress: () => { },
   }
 
@@ -24,6 +25,13 @@ export default class extends React.Component {
   }
 
   componentDidMount = () => this.timer()
+
+  componentWillReceiveProps = async newProps => {
+    if (newProps.overRequest) {
+      await this.setState({ startState: 360 })
+      await this.timer()
+    }
+  }
 
   timer = () => {
     if (this.state.startState > this.state.endState) {
