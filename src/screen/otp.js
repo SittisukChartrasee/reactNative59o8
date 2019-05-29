@@ -31,10 +31,17 @@ export default class extends React.Component {
     overRequestUi: false,
     ref_no: this.props.root.ref_no,
     details: 3,
+    defaultDot: {
+      dot: [false, false, false, false, false, false],
+      number: '',
+      currentDot: '',
+    },
+    defaultKey: false,
   }
 
   setNumber = async (obj) => {
     const { navigateAction, root } = this.props
+    const { defaultDot } = this.state
     const data = {
       trans_id: root.trans_id,
       ref_no: root.ref_no,
@@ -55,14 +62,25 @@ export default class extends React.Component {
             navigateAction({ ...this.props, page: 'passcode' })
           } else if (!res.success) {
             if (res.details === 6) {
-              this.setState({ overRequest: true, overRequestUi: true, details: res.details })
+              this.setState({
+                overRequest: true,
+                overRequestUi: true,
+                details: res.details,
+              })
             }
             const modal = {
               dis: res.message,
               visible: true,
-              onPress: () => this.props.updateRoot('modal', { visible: false }),
-              onPressClose: () => this.props.updateRoot('modal', { visible: false })
+              onPress: () => {
+                this.setState({ ...defaultDot })
+                this.props.updateRoot('modal', { visible: false })
+              },
+              onPressClose: () => {
+                this.setState({ ...defaultDot })
+                this.props.updateRoot('modal', { visible: false })
+              }
             }
+            this.setState({ defaultKey: true })
             return this.props.updateRoot('modal', modal)
           }
         })
@@ -93,7 +111,11 @@ export default class extends React.Component {
         console.log(resPonse)
         if (res.success) {
           setTimeWaiting(res.details)
-          this.setState({ ref_no: res.result.ref_no, overRequestUi: false })
+          this.setState({
+            ref_no: res.result.ref_no,
+            overRequestUi: false,
+            ...defaultDot
+          })
         }
         else if (!res.success) {
           const modal = {
@@ -102,6 +124,7 @@ export default class extends React.Component {
             onPress: () => this.props.updateRoot('modal', { visible: false }),
             onPressClose: () => this.props.updateRoot('modal', { visible: false })
           }
+          this.setState({ defaultKey: true })
           return this.props.updateRoot('modal', modal)
         }
       })
@@ -114,7 +137,7 @@ export default class extends React.Component {
   onPrevPage = () => this.props.navigation.goBack()
 
   render() {
-    const { ref_no } = this.state
+    const { ref_no, defaultKey } = this.state
     return (
       <Screen>
         {
@@ -137,7 +160,7 @@ export default class extends React.Component {
               <View style={{ flex: 1, backgroundColor: colors.white, marginTop: -40 }}>
                 <TBold color={colors.softRed}>ท่านกรอกผิดเกินจำนวนครั้งที่กำหนด</TBold>
               </View>
-            ) : <Keyboard setNumber={this.setNumber} />
+            ) : <Keyboard setNumber={this.setNumber} defaultKey={defaultKey} />
         }
 
       </Screen>
