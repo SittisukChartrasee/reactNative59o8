@@ -20,15 +20,20 @@ export default class extends React.Component {
   }
 
   state = {
-    startState: 180,
-    endState: 0
+    startState: 3,
+    endState: 0,
+    disabled: false,
   }
 
-  componentDidMount = () => this.timer()
+  componentDidMount = () => {
+    if (!this.props.overRequest) {
+      this.timer()
+    }
+  }
 
   componentWillReceiveProps = async newProps => {
     if (newProps.overRequest) {
-      await this.setState({ startState: 360 })
+      await this.setState({ startState: 6, disabled: true })
       await this.timer()
     }
   }
@@ -45,6 +50,7 @@ export default class extends React.Component {
   render() {
     const { startState } = this.state
     const { dot, onPress, refNo, onPrevPage } = this.props
+    console.log(startState)
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 0.8, justifyContent: 'flex-end' }}>
@@ -83,6 +89,7 @@ export default class extends React.Component {
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
+                    disabled={this.state.disabled}
                     onPress={
                       async () => {
                         await onPress(async (time = 180) => {

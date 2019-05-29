@@ -51,6 +51,9 @@ export default class extends React.Component {
           if (res.success) {
             navigateAction({ ...this.props, page: 'passcode' })
           } else if (!res.success) {
+            if (res.details === 6) {
+              this.setState({ overRequest: true })
+            }
             const modal = {
               dis: res.message,
               visible: true,
@@ -118,16 +121,16 @@ export default class extends React.Component {
             onPrevPage: this.onPrevPage,
           })
         }
-        
+
         {
           this.state.overRequest
             ? (
               <View style={{ flex: 1, backgroundColor: colors.white, marginTop: -40 }}>
-                <TBold>ท่านกรอกผิดเกินจำนวนครั้งที่กำหนด</TBold>
+                <TBold color={colors.softRed}>ท่านกรอกผิดเกินจำนวนครั้งที่กำหนด</TBold>
               </View>
             ) : <Keyboard setNumber={this.setNumber} />
         }
-        
+
       </Screen>
     )
   }
