@@ -107,8 +107,7 @@ export default class extends React.Component {
 
     this.props.requestOtp(data)
       .then(res => {
-        const resPonse = res
-        console.log(resPonse)
+        const { defaultDot } = this.state
         if (res.success) {
           setTimeWaiting(res.details)
           this.setState({
