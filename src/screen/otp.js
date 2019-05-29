@@ -28,7 +28,8 @@ export default class extends React.Component {
     number: '',
     currentDot: '',
     overRequest: false,
-    overRequestUi: false
+    overRequestUi: true,
+    details: 3,
   }
 
   setNumber = async (obj) => {
@@ -53,7 +54,7 @@ export default class extends React.Component {
             navigateAction({ ...this.props, page: 'passcode' })
           } else if (!res.success) {
             if (res.details === 6) {
-              this.setState({ overRequest: true, overRequestUi: true })
+              this.setState({ overRequest: true, overRequestUi: true, details: res.details })
             }
             const modal = {
               dis: res.message,
@@ -118,6 +119,8 @@ export default class extends React.Component {
             currentDot: this.state.currentDot,
             refNo: ref_no || null,
             overRequest: this.state.overRequest,
+            overRequestUi: this.state.overRequestUi,
+            details: this.state.details,
             onPress: this.onPress,
             onPrevPage: this.onPrevPage,
             setState: () => this.setState({ overRequest: false }),
