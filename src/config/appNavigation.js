@@ -28,7 +28,7 @@ import branchComplete from '../screen/complete'
 import branchsignature from '../screen/signature'
 
 export default {
-  // firstTerm,
+  firstTerm,
   welcome,
   login,
   checkpoint,

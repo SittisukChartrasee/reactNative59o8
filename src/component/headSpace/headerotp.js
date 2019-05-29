@@ -16,7 +16,7 @@ export default class extends React.Component {
     currentDot: '',
     refNo: null,
     overRequest: false,
-    minutes: 3,
+    details: 3,
     onPress: () => { },
   }
 
@@ -28,10 +28,10 @@ export default class extends React.Component {
     diff: 0,
     minutes: 0,
     seconds: 0,
-    duration: 60 * this.props.minutes,
+    duration: 60 * this.props.details,
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     clearInterval(this.timerCount)
     this.timerCount = setInterval(() => {
       this.timer()
@@ -41,21 +41,20 @@ export default class extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.overRequest) {
       clearInterval(this.timerCount)
-      this.resendOTP(6)
+      this.resendOTP(nextProps.details)
       this.props.setState()
     }
   }
 
-  starttimer() {
+  componentWillUnmount = () => {
+    clearInterval(this.timerCount)
+  }
+
+  starttimer = () => {
     clearInterval(this.timerCount)
     this.timerCount = setInterval(() => {
       this.timer()
     }, 1000)
-  }
-
-
-  componentWillUnmount() {
-    clearInterval(this.timerCount)
   }
 
   timer() {
@@ -75,14 +74,14 @@ export default class extends React.Component {
     }
   }
 
-  resendOTP(minutes) {
+  resendOTP = (minutes) => {
     this.setState({ start: Date.now(), minutes, seconds: 0, duration: 60 * minutes })
     this.starttimer()
   }
 
   render() {
     const { minutes, seconds } = this.state
-    const { dot, onPress, refNo, onPrevPage } = this.props
+    const { dot, onPress, refNo, overRequestUi, onPrevPage } = this.props
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 0.8, justifyContent: 'flex-end' }}>
@@ -144,44 +143,61 @@ export default class extends React.Component {
         </View>
 
         <View style={{ flex: 1, paddingHorizontal: 24, paddingTop: 5, backgroundColor: colors.white }}>
-          <TLight color={colors.grey}>กรุณากรอกรหัสผ่านแบบใช้ครั้งเดียว ( SMS OTP) ที่ได้รับทาง SMS บนมือถือของท่าน (รหัส OTP มีอายุการใช้งาน 3 นาที)</TLight>
+          <TLight color={colors.grey}>กรุณากรอกรหัสผ่านแบบใช้ครั้งเดียว ( SMS OTP) ที่ได้รับทาง SMS บนมือถือของท่าน (รหัส OTP มีอายุการใช้งาน {this.props.details} นาที)</TLight>
           <TBold color={colors.emerald} fontSize={16} mt={16}>รหัสอ้างอิง : {refNo}</TBold>
 
           <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 10 }}>
             {
-              dot.map((d, key) => {
-                return d ? (
-                  <View
-                    key={key}
-                    style={{
-                      width: 40,
-                      borderColor: colors.emerald,
-                      borderWidth: 2,
-                      borderRadius: 4,
-                      marginLeft: key === 0 ? 0 : 8
-                    }}
-                  >
-                    {
-                      key + 1 < (dot.indexOf(false) < 0 ? 6 : dot.indexOf(false))
-                        ? <TMed fontSize={28} color={colors.emerald}>•</TMed>
-                        : <TMed fontSize={28}>{this.props.currentDot}</TMed>
-                    }
-                  </View>
-                ) : (
+              overRequestUi
+                ? (
+                  dot.map((d, key) => (
                     <View
                       key={key}
                       style={{
                         width: 40,
-                        borderColor: key === dot.indexOf(false) ? colors.emerald : colors.smoky,
-                        borderWidth: 2,
+                        backgroundColor: colors.smoky,
                         borderRadius: 4,
                         marginLeft: key === 0 ? 0 : 8
                       }}
                     >
                       <TMed fontSize={28}>{` `}</TMed>
                     </View>
-                  )
-              })
+                  )))
+                : (
+                  dot.map((d, key) => {
+                    return d ? (
+                      <View
+                        key={key}
+                        style={{
+                          width: 40,
+                          borderColor: colors.emerald,
+                          borderWidth: 2,
+                          borderRadius: 4,
+                          marginLeft: key === 0 ? 0 : 8
+                        }}
+                      >
+                        {
+                          key + 1 < (dot.indexOf(false) < 0 ? 6 : dot.indexOf(false))
+                            ? <TMed fontSize={28} color={colors.emerald}>•</TMed>
+                            : <TMed fontSize={28}>{this.props.currentDot}</TMed>
+                        }
+                      </View>
+                    ) : (
+                        <View
+                          key={key}
+                          style={{
+                            width: 40,
+                            borderColor: key === dot.indexOf(false) ? colors.emerald : colors.smoky,
+                            borderWidth: 2,
+                            borderRadius: 4,
+                            marginLeft: key === 0 ? 0 : 8
+                          }}
+                        >
+                          <TMed fontSize={28}>{` `}</TMed>
+                        </View>
+                      )
+                  })
+                )
             }
           </View>
 
