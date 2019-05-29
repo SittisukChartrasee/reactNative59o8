@@ -114,6 +114,7 @@ export default class extends React.Component {
             dot: this.state.dot,
             currentDot: this.state.currentDot,
             refNo: ref_no || null,
+            overRequest: this.state.overRequest,
             onPress: this.onPress,
             onPrevPage: this.onPrevPage,
           })
