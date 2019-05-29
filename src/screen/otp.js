@@ -28,6 +28,7 @@ export default class extends React.Component {
     number: '',
     currentDot: '',
     overRequest: false,
+    overRequestUi: false
   }
 
   setNumber = async (obj) => {
@@ -52,7 +53,7 @@ export default class extends React.Component {
             navigateAction({ ...this.props, page: 'passcode' })
           } else if (!res.success) {
             if (res.details === 6) {
-              this.setState({ overRequest: true })
+              this.setState({ overRequest: true, overRequestUi: true })
             }
             const modal = {
               dis: res.message,
@@ -124,7 +125,7 @@ export default class extends React.Component {
         }
 
         {
-          this.state.overRequest
+          this.state.overRequestUi
             ? (
               <View style={{ flex: 1, backgroundColor: colors.white, marginTop: -40 }}>
                 <TBold color={colors.softRed}>ท่านกรอกผิดเกินจำนวนครั้งที่กำหนด</TBold>
