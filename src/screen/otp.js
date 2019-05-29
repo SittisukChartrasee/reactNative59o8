@@ -28,7 +28,7 @@ export default class extends React.Component {
     number: '',
     currentDot: '',
     overRequest: false,
-    overRequestUi: true,
+    overRequestUi: false,
     details: 3,
   }
 
