@@ -163,7 +163,7 @@ export default class extends React.Component {
             <TBold fontSize={20} color={colors.white} mt="24" mb="40">{`กรุณากรอกข้อมูล\nเพื่อเปิดบัญชีกองทุน`}</TBold>
           </View>
           <KeyboardAwareScrollView
-            extraScrollHeight={Platform.OS === 'ios' ? 0 : 50}
+            extraScrollHeight={Platform.OS === 'ios' ? -50 : 50}
             enableOnAndroid
             style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}
           >
