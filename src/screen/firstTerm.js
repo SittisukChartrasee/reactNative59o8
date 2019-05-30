@@ -38,8 +38,16 @@ const dispatchToProps = dispatch => ({
 })
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
+
+  onNext = async () => {
+    const userToken = await AsyncStorage.getItem('user_token')
+    const accessToken = await AsyncStorage.getItem('access_token')
+  
+    if (userToken) return this.props.navigateAction({ ...this.props, page: 'login', params: { userToken, accessToken } })
+    return this.props.navigateAction({ ...this.props, page: 'welcome' })
+  }
+
   render() {
-    const { navigateAction } = this.props
     return (
       <Screen>
         <NavBar
@@ -97,18 +105,13 @@ export default class extends React.Component {
               <TBold color={colors.white}>ยกเลิก</TBold>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigateAction({ ...this.props, page: 'welcome' })}
+              onPress={this.onNext}
               style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
               <TBold color={colors.white} style={{ marginRight: 8 }}>ต่อไป</TBold>
               <Image source={images.next} />
             </TouchableOpacity>
           </View>
         </SafeAreaView>
-        {/* <LongButton
-          label="รับทราบ"
-          style={{ marginHorizontal: 24 }}
-          onPress={() => navigateAction({ ...this.props, page: 'cameraIdcard' })}
-        /> */}
       </Screen>
     )
   }

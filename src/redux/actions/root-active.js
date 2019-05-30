@@ -51,3 +51,23 @@ export const requestRegister = (obj, token) => async dispatch => {
     return { ...res }
   }
 }
+
+export const requestLogin = (obj, token) => async dispatch => {
+  const url = 'auth/login'
+
+  const res = await request(url, {
+    method: 'POST',
+    body: JSON.stringify({
+      user_token: obj.userToken,
+      password: obj.password,
+    }),
+  }, token)
+
+  if (res && res.result) {
+    for (const key in res.result ) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    return { ...res }
+  }
+
+  for (const key in res ) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  return { ...res }
+}
