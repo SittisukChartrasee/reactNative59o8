@@ -44,7 +44,7 @@ export default class extends React.Component {
           {...{
             dot,
             title: 'ใส่รหัส Passcode',
-            forgetbtn: () => alert('forget password')
+            forgetbtn: () => this.props.navigateAction({ ...this.props, page: 'forgetPasscode' })
           }}
         />
         <Keyboard setNumber={this.setNumber}/>

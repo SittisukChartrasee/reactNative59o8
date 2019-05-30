@@ -21,7 +21,7 @@ const card = [
   {
     label: 'เลขบัตรประชาชน',
     type: 'textInput',
-    value: '1 1234 12345 12 1'
+    // value: '1 1234 12345 12 1'
   }
 ]
 

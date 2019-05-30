@@ -16,15 +16,18 @@ export default ({
   dis,
   dot,
   forgetbtn,
-  onPrevPage,
+  onPrevPage=undefined,
   component = ({ dot }) => dotComponent({ dot })
 }) => (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 0.8, justifyContent: 'flex-end' }}>
         <View style={{ alignItems: 'flex-start', paddingTop: 60, marginLeft: 16 }}>
-          {/* <TouchableOpacity onPress={onPrevPage} >
+          { onPrevPage && <TouchableOpacity
+            onPress={onPrevPage}
+            style={{ paddingRight: 30 }}
+          >
             <Image source={images.iconback} />
-          </TouchableOpacity> */}
+          </TouchableOpacity> }
           <View />
         </View>
         <View

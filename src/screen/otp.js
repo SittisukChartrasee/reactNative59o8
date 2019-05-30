@@ -133,8 +133,6 @@ export default class extends React.Component {
       })
   }
 
-  // onPrevPage = () => this.props.navigateReset({ ...this.props, page: 'welcome' })
-  onPrevPage = () => this.props.navigation.goBack()
 
   render() {
     const { ref_no, defaultKey } = this.state
@@ -149,7 +147,7 @@ export default class extends React.Component {
             overRequestUi: this.state.overRequestUi,
             details: this.state.details,
             onPress: this.onPress,
-            onPrevPage: this.onPrevPage,
+            onPrevPage: () => this.props.navigation.goBack(),
             setState: () => this.setState({ overRequest: false }),
           })
         }

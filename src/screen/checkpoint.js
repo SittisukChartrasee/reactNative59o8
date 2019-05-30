@@ -33,12 +33,12 @@ const checkPoint = [
   },
   {
     point: 'ขั้นตอนที่ 2',
-    check: 'current',
+    check: 'success',
     text: 'กรอกข้อมูลส่วนตัว'
   },
   {
     point: 'ขั้นตอนที่ 3',
-    check: 'future',
+    check: 'current',    
     text: 'กรอกข้อมูลส่วนตัว'
   },
   {
