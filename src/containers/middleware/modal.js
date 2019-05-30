@@ -1,7 +1,7 @@
 import { CHANGE_ROOT } from '../../redux/types'
 
 export const handleModal = (store) => (next) => action => {
-  console.log(store, next, action)
+  // console.log(store, next, action)
 
   if (action.key === 'success' && action.value === false) {
     const modal = {

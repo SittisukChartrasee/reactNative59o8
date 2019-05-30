@@ -58,8 +58,8 @@ export const requestLogin = (obj, token) => async dispatch => {
   const res = await request(url, {
     method: 'POST',
     body: JSON.stringify({
-      user_token: obj.userToken,
-      password: obj.password,
+      token: obj.userToken,
+      passcode: obj.password,
     }),
   }, token)
 
