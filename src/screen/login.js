@@ -44,6 +44,7 @@ export default class extends React.Component {
           {...{
             dot,
             title: 'ใส่รหัส Passcode',
+            onPrevPage: () => this.props.navigation.goBack(),
             forgetbtn: () => this.props.navigateAction({ ...this.props, page: 'forgetPasscode' })
           }}
         />
