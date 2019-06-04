@@ -129,7 +129,10 @@ export default class extends React.Component {
               </View>
             ))}
           </View>
-        <LongPositionButton label="ดำเนินการต่อ" onPress={navigateAction({ ...this.props, page: 'welcome' })} />
+          <LongPositionButton
+            label="ดำเนินการต่อ"
+            // onPress={navigateAction({ ...this.props, page: 'welcome' })}
+          />
         </KeyboardAwareScrollView>
       </Screen>
     )
