@@ -79,9 +79,11 @@ export default class extends React.Component {
               onPress={() => this.props.toggleModal({
                 type: 'modal',
                 value: {
-                  dis: 'ต้องการออกหรอ',
+                  dis: 'คุณต้องการออกจากหน้าเชื่อมบัญชี\nใช่หรือไม่',
                   visible: true,
-                  onPress: async () => {
+                  type: 'row',
+                  onPress: () => this.props.toggleModal({ type: 'modal', value: { visible: false } }),
+                  onConfirm: async () => {
                     await this.props.toggleModal({ type: 'modal', value: { visible: false } })
                     await this.props.navigation.navigate('chooseBank')
                   },

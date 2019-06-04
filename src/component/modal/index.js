@@ -26,8 +26,9 @@ export default ({
   type,
   labelBtn="ตกลง",
   dis="รหัส OTP ไม่ถูกต้อง \nคุณสามารถกรอกได้อีก n ครั้ง",
-  onPress=() => {},
-  onPressClose=() => {},
+  onPress=() => alert('use func onPress yet!'),
+  onConfirm=() => alert('use func onConfirm yet!'),
+  onPressClose=() => alert('use func onPressClose yet!'),
   disabled=false
 }) => (
   <Modal isVisible={visible} onSwipeComplete={onPressClose} swipeDirection="left" useNativeDriver={true}>
@@ -48,7 +49,7 @@ export default ({
           type
             ? (
               <View style={{ flexDirection: 'row' }}>
-                <FlexButton border onPress={() => alert('connect api logout yet!')}>ใช่</FlexButton>
+                <FlexButton border onPress={onConfirm}>ใช่</FlexButton>
                 <FlexButton marginLeft={16} onPress={onPressClose}>ไม่ใช่</FlexButton>
               </View>
             ) : (
