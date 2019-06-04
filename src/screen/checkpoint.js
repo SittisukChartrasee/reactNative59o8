@@ -33,12 +33,12 @@ const checkPoint = [
   },
   {
     point: 'ขั้นตอนที่ 2',
-    check: 'current',
+    check: 'success',
     text: 'กรอกข้อมูลส่วนตัว'
   },
   {
     point: 'ขั้นตอนที่ 3',
-    check: 'future',
+    check: 'current',    
     text: 'กรอกข้อมูลส่วนตัว'
   },
   {
@@ -129,7 +129,10 @@ export default class extends React.Component {
               </View>
             ))}
           </View>
-        <LongPositionButton label="ดำเนินการต่อ" onPress={navigateAction({ ...this.props, page: 'welcome' })} />
+          <LongPositionButton
+            label="ดำเนินการต่อ"
+            // onPress={navigateAction({ ...this.props, page: 'welcome' })}
+          />
         </KeyboardAwareScrollView>
       </Screen>
     )

@@ -162,7 +162,7 @@ export default class Demo extends Component {
               <TBold fontSize={16} color={colors.grey}>ล้าง</TBold>
             </TouchableHighlight>
 
-            <TouchableHighlight style={styles.buttonStyle} onPress={() => this.saveSign()}>
+            <TouchableHighlight style={[styles.buttonStyle, this.state.dragged && { backgroundColor: colors.emerald }]} onPress={() => this.saveSign()}>
               <TBold fontSize={16} color={colors.white}>ยืนยัน</TBold>
             </TouchableHighlight>
           </View>

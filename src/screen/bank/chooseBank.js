@@ -72,8 +72,7 @@ export default class extends React.Component {
 
   onNext = () => {
     const { navigateAction, updateRoot } = this.props
-    const data = { bank: 'KASIKORN'} 
-
+    const data = { bank: this.state.selected === 'ธนาคารไทยพาณิชย์' ? 'SCB' : 'KASIKORN'} 
 
     this.props.registerBank({ variables: { input: data } })
       .then(res => {

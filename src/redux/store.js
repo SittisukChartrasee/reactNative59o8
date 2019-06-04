@@ -9,8 +9,15 @@ import {
 } from "react-navigation-redux-helpers"
 import reducers from './reducers'
 import AppRouteConfigs from '../config/appNavigation'
+import { handleModal } from '../containers/middleware/modal'
 
-export const AppNavigator = createStackNavigator(AppRouteConfigs, { headerMode: 'none' })
+export const AppNavigator = createStackNavigator(AppRouteConfigs,
+  {
+    headerMode: 'none',
+    defaultNavigationOptions: {
+      gesturesEnabled: false
+    }
+  })
 
 const store = createStore(
   combineReducers({
@@ -20,7 +27,8 @@ const store = createStore(
   composeWithDevTools(
     applyMiddleware(
       createReactNavigationReduxMiddleware(state => state.nav),
-      thunk
+      thunk,
+      handleModal,
     )
   ),
 )

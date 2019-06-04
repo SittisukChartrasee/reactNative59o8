@@ -21,7 +21,7 @@ const card = [
   {
     label: 'เลขบัตรประชาชน',
     type: 'textInput',
-    value: '1 1234 12345 12 1'
+    // value: '1 1234 12345 12 1'
   }
 ]
 
@@ -40,7 +40,10 @@ export default class extends React.Component {
         <NavBar
           title="ตั้งรหัสผ่านใหม่"
           navLeft={
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }

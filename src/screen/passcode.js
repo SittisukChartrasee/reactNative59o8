@@ -32,14 +32,13 @@ export default class extends React.Component {
     }
   }
 
-  onPrevPage = () => this.props.navigation.goBack()
 
   render() {
     const { dot, number } = this.state
     return (
       <Screen>
         <HeadSpace
-          {...{ dot, title: 'ตั้งรหัสผ่าน', dis: 'เพื่อเข้าใช้งานในครั้งถัดไป', onPrevPage: this.onPrevPage }}
+          {...{ dot, title: 'ตั้งรหัสผ่าน', dis: 'เพื่อเข้าใช้งานในครั้งถัดไป' }}
         />
         <Keyboard setNumber={this.setNumber} />
       </Screen>

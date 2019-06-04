@@ -12,8 +12,15 @@ export default class extends React.Component {
     number: '',
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.defaultKey) {
+      this.setState({ number: '', dot: ['', '', '', '', '', ''] })
+      nextProps.setNumber({ number: '', dot: ['', '', '', '', '', ''], defaultKey: false })
+    }
+  }
+
   ontoggledot = (d) => {
-    const { setNumber, defaultKey } = this.props
+    const { setNumber } = this.props
     if (d === 'del') {
       this.setState(({ number, dot }) => {
         const numberDecrease = number.slice(0, number.length - 1)
@@ -26,9 +33,6 @@ export default class extends React.Component {
           dot: decrease,
         }
       })
-    } else if (defaultKey) {
-      this.setState({ number: d, dot: [d, '', '', '', '', ''] })
-      setNumber({ number: d, dot: [d, '', '', '', '', ''], defaultKey: false })
     } else {
       this.setState(({ number, dot }) => {
         const numbers = number.length < 6 ? { number: number + d } : { number: number }
@@ -45,7 +49,6 @@ export default class extends React.Component {
   }
 
   render() {
-    const { dot, number } = this.state
     return <Button onSet={this.ontoggledot} />
   }
 }
