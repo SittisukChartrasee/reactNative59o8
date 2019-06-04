@@ -29,7 +29,8 @@ const handleNameBank = key => {
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  toggleModal: val => dispatch(val)
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -49,19 +50,44 @@ export default class extends React.Component {
 
   onHandleWebView = navEvent => {
     this.setState({ status: navEvent.title === 'การสมัครไม่สำเร็จ' })
-    if (!navEvent.loading && navEvent.title !== 'การสมัครไม่สำเร็จ') this.props.navigation.navigate('statusBank')
+    console.log(navEvent)
+    if (!navEvent.loading) {
+      switch (navEvent.title) {
+        case 'การสมัครไม่สำเร็จ':
+          break
+
+        case 'ความสำเร็จในการลงทะเบียน':
+          this.props.navigation.navigate('statusBank')
+          break
+
+        default:
+          break
+      }
+    }
   }
 
   render() {
+    const { user } = this.props
     const bankName = this.props.navigation.getParam('bankName', '')
-    const url = 'https://ws06.uatebpp.kasikornbank.com/PGSRegistration.do?reg_id=098765434567&langLocale=th_TH'
+    const url = this.props.navigation.getParam('url', 'https://ws06.uatebpp.kasikornbank.com/PGSRegistration.do?reg_id=20190604114131234908234&langLocale=th_TH')
     return (
       <Screen color="transparent">
         <NavBar
           title="เชื่อมบัญชีธนาคาร"
           navLeft={
             <TouchableOpacity
-              onPress={() => this.props.navigation.goBack()}
+              onPress={() => this.props.toggleModal({
+                type: 'modal',
+                value: {
+                  dis: 'ต้องการออกหรอ',
+                  visible: true,
+                  onPress: async () => {
+                    await this.props.toggleModal({ type: 'modal', value: { visible: false } })
+                    await this.props.navigation.navigate('chooseBank')
+                  },
+                  onPressClose: () => this.props.toggleModal({ type: 'modal', value: { visible: false } }),
+                }
+               })}
               style={{ paddingRight: 30 }}
             >
               <Image source={images.iconback} />
@@ -73,7 +99,13 @@ export default class extends React.Component {
           <View style={{ flex: 1 }}>
             <WKWebView
               source={{ uri: url }}
-              // onProgress={(progress) => console.log(progress)}
+              onProgress={(progress) => console.log(progress)}
+              // injectedJavaScript={`(function(){
+              //   document.querySelector("#emailAdd").value = '${user.contact.email}'
+              //   document.querySelector("#mobileNo").value = '${user.contact.mobilePhone}'
+              //   document.querySelector("#nationalID").value = '${user.profile.idCard}'
+              //   return false
+              // }())`}
               onNavigationResponse={(e) => console.log(e.nativeEvent)}
               onNavigationStateChange={this.onHandleWebView}
             />

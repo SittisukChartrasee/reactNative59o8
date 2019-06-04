@@ -13,5 +13,9 @@ export const handleModal = (store) => (next) => action => {
     return store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: modal })
   }
 
+  if (action.type === 'modal' && action.value) {
+    return store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: action.value })
+  }
+
   return next(action)
 }

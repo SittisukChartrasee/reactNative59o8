@@ -59,10 +59,8 @@ export default class extends React.Component {
   }
 
   render() {
-    const { navigateAction } = this.props
-    const { status } = this.state
-
-    this.props.getRegisterBankStatus && this.props.getRegisterBankStatus.status === 'Fail' && this.setState({ status: 'Fail' })
+    const { navigateAction, getRegisterBankStatus } = this.props
+    const status = getRegisterBankStatus.getRegisterBankStatus && getRegisterBankStatus.getRegisterBankStatus.status
     return (
       <Screen>
         <NavBar
