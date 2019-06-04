@@ -67,11 +67,13 @@ export default class extends React.Component {
           visible: true,
           onPress: () => {
             updateRoot('modal', { visible: false })
-            this.setState({...defaultPasscode})
+            this.setState({ ...defaultPasscode, defaultKey: true })
           },
-          onPressClose: () => this.props.updateRoot('modal', { visible: false })
+          onPressClose: () => {
+            updateRoot('modal', { visible: false })
+            this.setState({ ...defaultPasscode, defaultKey: true })
+          }
         }
-        this.setState({ defaultKey: true })
         return updateRoot('modal', modal)
       }
     }

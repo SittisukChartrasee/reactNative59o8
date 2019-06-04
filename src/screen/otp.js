@@ -72,15 +72,14 @@ export default class extends React.Component {
               dis: res.message,
               visible: true,
               onPress: () => {
-                this.setState({ ...defaultDot })
+                this.setState({ ...defaultDot, defaultKey: true })
                 this.props.updateRoot('modal', { visible: false })
               },
               onPressClose: () => {
-                this.setState({ ...defaultDot })
+                this.setState({ ...defaultDot, defaultKey: true })
                 this.props.updateRoot('modal', { visible: false })
               }
             }
-            this.setState({ defaultKey: true })
             return this.props.updateRoot('modal', modal)
           }
         })
@@ -107,13 +106,13 @@ export default class extends React.Component {
 
     this.props.requestOtp(data)
       .then(res => {
-        const resPonse = res
-        console.log(resPonse)
+        const { defaultDot } = this.state
         if (res.success) {
           setTimeWaiting(res.details)
           this.setState({
             ref_no: res.result.ref_no,
             overRequestUi: false,
+            defaultKey: true,
             ...defaultDot
           })
         }
@@ -121,10 +120,15 @@ export default class extends React.Component {
           const modal = {
             dis: res.message,
             visible: true,
-            onPress: () => this.props.updateRoot('modal', { visible: false }),
-            onPressClose: () => this.props.updateRoot('modal', { visible: false })
+            onPress: () => {
+              this.setState({ ...defaultDot, defaultKey: true })
+              this.props.updateRoot('modal', { visible: false })
+            },
+            onPressClose: () => {
+              this.setState({ ...defaultDot, defaultKey: true })
+              this.props.updateRoot('modal', { visible: false })
+            }
           }
-          this.setState({ defaultKey: true })
           return this.props.updateRoot('modal', modal)
         }
       })
