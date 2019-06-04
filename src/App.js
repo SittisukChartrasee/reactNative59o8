@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
-import { View, AppState, BackHandler } from 'react-native'
+import { View, AppState, BackHandler, DeviceEventEmitter, ToastAndroid } from 'react-native'
 import { createReduxContainer } from 'react-navigation-redux-helpers'
 import { bindActionCreators } from 'redux'
 import { onStore, AppNavigator } from './redux/store'
@@ -29,6 +29,17 @@ export default class extends React.Component {
   componentDidMount() {
     AppState.addEventListener('change', this._handleAppStateChange);
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+
+    // const nativeEventListener = DeviceEventEmitter.addListener('ActivityStateChange',
+    //   (e)=>{
+    //       console.log(e.event);
+    //       // this.setState({ test: e.event })
+
+    //       if (e.event === 'inactive') return ToastAndroid.show('bye bye', ToastAndroid.SHORT)
+    //       else if (e.event === 'active') return ToastAndroid.show('Welcome', ToastAndroid.SHORT)
+    // })
+
+    
   }
 
   componentWillUnmount() {
