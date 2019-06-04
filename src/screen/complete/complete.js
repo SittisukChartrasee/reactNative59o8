@@ -30,11 +30,17 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
 
   onNext = async () => {
-    const { navigateAction } = this.props
+    const { navigateAction, navigation } = this.props
+    const risk = navigation.getParam('risk', 0)
     this.props.client.query({ query: checkVerifiedEmail })
       .then(res => {
-        if (res.data.checkVerifiedEmail) navigateAction({ ...this.props, page: 'waiting' })
-        else navigateAction({ ...this.props, page: 'verifyEmail' })
+        if (res.data.checkVerifiedEmail) {
+          navigateAction({ ...this.props, page: 'waiting' })
+          // API ตรวจสอบ ความเสี่ยง
+          console.log(risk)
+        } else {
+          navigateAction({ ...this.props, page: 'verifyEmail' })
+        }
       })
       .catch(err => console.log(err))
   }
@@ -64,7 +70,7 @@ export default class extends React.Component {
         />
 
         <View style={{ flex: 1, alignItems: 'center', paddingTop: 40 }}>
-          <Image source={images.iconPlete} style={{ width: widthView * .6, marginBottom: 53 }} resizeMode="contain"  />
+          <Image source={images.iconPlete} style={{ width: widthView * .6, marginBottom: 53 }} resizeMode="contain" />
           <TBold color={colors.white} mb={24}>ท่านได้กรอกข้อมูลครบถ้วนแล้ว</TBold>
           <TLight color={colors.white}>{`กรุณากดปุ่ม “ยืนยันเปิดบัญชีกองทุน” เพื่อยืนยัน\nการส่งข้อมูลเปิดบัญชีกองทุนของท่านไปยัง\nบริษัท หลักทรัพย์จัดการกองทุนกสิกรไทย จำกัด`}</TLight>
         </View>

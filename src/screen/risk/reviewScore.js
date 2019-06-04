@@ -70,8 +70,15 @@ export default class extends React.Component {
     )
   }
 
+  onNext = () => {
+    const { navigateAction } = this.props
+    const { risk } = this.state
+    console.log(risk)
+    navigateAction({ ...this.props, page: 'complete', params: { risk } })
+  }
+
   render() {
-    const { navigateAction, navigation } = this.props
+    const { navigation } = this.props
     const { risk, descTH, assetClass, fundCodeKAsset, returnText } = this.state
     console.log(this.state)
     return (
@@ -80,7 +87,7 @@ export default class extends React.Component {
           color="transparent"
           title="ผลการประเมินความเสี่ยง"
           navLeft={
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => navigation.goBack()}
               style={{ paddingRight: 30 }}
             >
@@ -140,7 +147,7 @@ export default class extends React.Component {
           <LongButton
             label="ถัดไป"
             style={{ marginHorizontal: 24 }}
-            onPress={() => navigateAction({ ...this.props, page: 'complete' })}
+            onPress={this.onNext}
           />
         </View>
       </Screen>
