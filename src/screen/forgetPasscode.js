@@ -40,7 +40,10 @@ export default class extends React.Component {
         <NavBar
           title="ตั้งรหัสผ่านใหม่"
           navLeft={
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
