@@ -28,7 +28,7 @@ export default class extends React.Component {
     image: undefined,
     type: undefined,
     labelBtn: "ตกลง",
-    dis: "รหัส OTP ไม่ถูกต้อง \nคุณสามารถกรอกได้อีก n ครั้ง",
+    dis: "[default discription]",
     onChange: undefined,
     onPress: () => alert('use func onPress yet!'),
     onConfirm: () => alert('use func onConfirm yet!'),
@@ -50,7 +50,6 @@ export default class extends React.Component {
       disabled
     } = this.props
 
-    // console.log(onChange)
     return (
       <Modal isVisible={visible} onSwipeComplete={onPressClose} swipeDirection="left" useNativeDriver={true}>
         <TouchableOpacity 
@@ -83,7 +82,14 @@ export default class extends React.Component {
 
             {
               type
-                ? (
+                ? onChange
+                  ? (
+                    <View style={{ flexDirection: 'row' }}>
+                      <FlexButton border onPress={onConfirm}>ไม่ใช่</FlexButton>
+                      <FlexButton marginLeft={16} onPress={onPressClose}>ใช่</FlexButton>
+                    </View>
+                  )
+                  : (
                   <View style={{ flexDirection: 'row' }}>
                     <FlexButton border onPress={onConfirm}>ใช่</FlexButton>
                     <FlexButton marginLeft={16} onPress={onPressClose}>ไม่ใช่</FlexButton>
