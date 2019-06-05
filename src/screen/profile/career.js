@@ -60,7 +60,7 @@ export default class extends React.Component {
           { value: 'มากกว่า 200,000 บาท' },
           { value: 'ไม่มีรายได้' }
         ],
-        field: 'incomeRange', //incomeRangeCode
+        field: 'incomeRangeCode', //incomeRangeCode
         required: true
       },
       {
@@ -75,87 +75,35 @@ export default class extends React.Component {
   handleInput = props => {
     const { updateUser, user } = this.props
     console.log(props)
-    if (props.field === 'busType') {
-      if (props.value === 'อื่นๆ') {
-        this.setState({
-          fields: this.state.fields.map((d) => {
-            if (d.field === 'busTypeOther') return { ...d, inVisible: false }
-            else return d
-          })
-        })
-      } else { 
-        this.setState({
-          fields: this.state.fields.map((d) => {
-            if (d.field === 'busTypeOther') return { ...d, inVisible: true }
-            else return d
-          })
-        })
-
-        updateUser('career', {
-          ...user.career,
-          [props.field]: props.value,
-          isicCode: props.code,
-          busTypeOther: ' ',
-        })
-      }
-    } else if (props.field === 'occupation') {
-      updateUser('career', {
-        ...user.career,
-        [props.field]: props.value,
-        occupationCode: props.code
-      })
-    } else if (props.field === 'incomeRange') {
+    if (props.field === 'occupation') {
+      updateUser('career', { ...user.career, [props.field]: props.value, occupationCode: props.code })
+    } else if (props.field === 'countrySourceOfIncome') {
+      updateUser('career', { ...user.career, [props.field]: props.value, countyCode: props.code })
+    } else if (props.field === 'busType') {
+      updateUser('career', { ...user.career, [props.field]: props.value, isicCode: props.code })
+    } else if (props.field === 'incomeRangeCode') {
       updateUser('career', { ...user.career, [props.field]: props.value })
-    } else if (props.field === 'busTypeOther') {
-      updateUser('career', { ...user.career, [props.field]: props.value })
-    }
-
-    // ตรวจสอบความเสี่ยงแหล่งที่มาของเงิน
-
-    // if (props.field === 'countrySourceOfIncome') {
-    //   updateUser('career', { ...user.career, [props.field]: props.value, countyCode: props.code, countryRisk: props.risk })
-    // }
-
-    if (props.field === 'countrySourceOfIncome') {
-      updateUser('career', {
-        ...user.career,
-        [props.field]: props.value,
-        countyCode: props.code
-      })
+    } else {
+      updateUser('career', { ...user.career, [props.field]: props.value.value })
     }
   }
 
   onValidation = field => {
     const { PreconditionRequired, InvalidArgument } = this.state
     const Required = find(PreconditionRequired, o => {
-      if (o.field === 'isicCode' && field === 'busType') {
-        return o
-      }
-      if (o.field === 'occupationCode' && field === 'occupation') {
-        return o
-      }
-      if (o.field === 'incomeRangeCode' && field === 'incomeRange') {
-        return o
-      }
+      if (o.field === 'isicCode' && field === 'busType') return o
+      if (o.field === 'occupationCode' && field === 'occupation') return o
+      if (o.field === 'incomeRangeCode' && field === 'incomeRange') return o
       return o.field === field
     })
     const Invalid = find(InvalidArgument, o => {
-      if (o.field === 'isicCode' && field === 'busType') {
-        return o
-      }
-      if (o.field === 'occupationCode' && field === 'occupation') {
-        return o
-      }
-      if (o.field === 'incomeRangeCode' && field === 'incomeRange') {
-        return o
-      }
+      if (o.field === 'isicCode' && field === 'busType') return o
+      if (o.field === 'occupationCode' && field === 'occupation') return o
+      if (o.field === 'incomeRangeCode' && field === 'incomeRange') return o
       return o.field === field
     })
-    if (Required) {
-      return Required.description
-    } else if (Invalid) {
-      return Invalid.description
-    }
+    if (Required) return Required.description
+    else if (Invalid) return Invalid.description
     return null
   }
 
@@ -165,7 +113,6 @@ export default class extends React.Component {
     const {
       isicCode,
       occupationCode,
-      incomeRange,
       incomeRangeCode,
       countrySourceOfIncome,
       countyCode
@@ -174,7 +121,7 @@ export default class extends React.Component {
     const data = {
       isicCode,
       occupationCode,
-      incomeRangeCode: incomeRange,
+      incomeRangeCode,
       countrySourceOfIncome: countyCode
     }
 
@@ -193,13 +140,7 @@ export default class extends React.Component {
       this.props.saveCareer({ variables: { input: data } })
         .then(res => {
           console.log(res)
-
-          // ตรวจสอบความเสี่ยงของประเทศ
-
-          // if (user.career.countryRisk) {
-
-          // } else if (res.data.saveCareer.success) {
-
+          
           if (res.data.saveCareer.success) {
             navigateAction({ ...this.props, page: 'sourceOfFund' })
           } else if (!res.data.saveCareer.success) {

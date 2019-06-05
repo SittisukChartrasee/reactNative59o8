@@ -100,11 +100,11 @@ const init = {
   },
   career: {
     busType: '',
-    busTypeOther: '',
+    busType_other: '',
     isicCode: '',
     occupation: '',
+    occupation_other: '',
     occupationCode: '',
-    incomeRange: '',
     incomeRangeCode: '',
     countrySourceOfIncome: '',
     countyCode: '',

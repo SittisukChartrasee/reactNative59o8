@@ -44,7 +44,7 @@ export default (props, key) => {
 
     case 'textInput':
       return (
-        <View key={key} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
+        <View key={key} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex', ...props.style }}>
           <Imaterial {...props} />
           {props.required ? <Star /> : null}
         </View>
