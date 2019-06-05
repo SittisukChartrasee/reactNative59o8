@@ -30,6 +30,7 @@ export default class extends React.Component {
     labelBtn: "ตกลง",
     dis: "[default discription]",
     onChange: undefined,
+    swap: false,
     onPress: () => alert('use func onPress yet!'),
     onConfirm: () => alert('use func onConfirm yet!'),
     onPressClose: () => alert('use func onPressClose yet!'),
@@ -42,6 +43,7 @@ export default class extends React.Component {
       image,
       type,
       labelBtn,
+      swap,
       dis,
       onPress,
       onChange,
@@ -82,11 +84,11 @@ export default class extends React.Component {
 
             {
               type
-                ? onChange
+                ? swap
                   ? (
                     <View style={{ flexDirection: 'row' }}>
-                      <FlexButton border onPress={onConfirm}>ไม่ใช่</FlexButton>
-                      <FlexButton marginLeft={16} onPress={onPressClose}>ใช่</FlexButton>
+                      <FlexButton border onPress={onPressClose}>ไม่ใช่</FlexButton>
+                      <FlexButton marginLeft={16} onPress={onConfirm}>ใช่</FlexButton>
                     </View>
                   )
                   : (

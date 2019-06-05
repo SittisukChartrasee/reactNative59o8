@@ -30,7 +30,7 @@ const handleNameBank = key => {
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
-  toggleModal: val => dispatch(val)
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -77,19 +77,16 @@ export default class extends React.Component {
           navLeft={
             <TouchableOpacity
               onPress={() => this.props.toggleModal({
-                type: 'modal',
-                value: {
-                  dis: 'คุณต้องการออกจากหน้าเชื่อมบัญชี\nใช่หรือไม่',
-                  visible: true,
-                  type: 'row',
-                  onPress: () => this.props.toggleModal({ type: 'modal', value: { visible: false } }),
-                  onConfirm: async () => {
-                    await this.props.toggleModal({ type: 'modal', value: { visible: false } })
-                    await this.props.navigation.navigate('chooseBank')
-                  },
-                  onPressClose: () => this.props.toggleModal({ type: 'modal', value: { visible: false } }),
-                }
-               })}
+                dis: 'คุณต้องการออกจากหน้าเชื่อมบัญชี\nใช่หรือไม่',
+                visible: true,
+                type: 'row',
+                onPress: () => this.props.toggleModal({ visible: false }),
+                onConfirm: async () => {
+                  await this.props.toggleModal({ visible: false })
+                  await this.props.navigation.navigate('chooseBank')
+                },
+                onPressClose: () => this.props.toggleModal({ visible: false }),
+              })}
               style={{ paddingRight: 30 }}
             >
               <Image source={images.iconback} />

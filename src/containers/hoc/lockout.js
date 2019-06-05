@@ -11,6 +11,7 @@ export default WrapperComponent => {
       type: 'LOGOUT',
       dis: 'คุณต้องการออกไปหน้า Login ใช่หรือไม่',
       visible: true,
+      swap: true,
       onChange: val => alert(val),
       onPress: () => props.updateRoot('modal', { visible: false }),
       onPressClose: () => props.updateRoot('modal', { visible: false })
