@@ -82,20 +82,19 @@ export default class extends React.Component {
         onPress: () => Linking.openURL(`tel://026733888`),
         onPressClose: () => this.props.updateRoot('modal', { visible: false })
       }
-      return this.props.updateRoot('modal', modal)
+      this.props.updateRoot('modal', modal)
     } else {
       this.props.saveFatca({ variables: { input: data } })
         .then(res => {
-          if (res.data.saveFatca.success) {
-            navigateAction({ ...this.props, page: 'fraud' })
-          } else if (!res.data.saveFatca.success) {
+          if (res.data.saveFatca.success) navigateAction({ ...this.props, page: 'fraud' })
+          else if (!res.data.saveFatca.success) {
             const modal = {
               dis: res.data.saveFatca.message,
               visible: true,
               onPress: () => this.props.updateRoot('modal', { visible: false }),
               onPressClose: () => this.props.updateRoot('modal', { visible: false })
             }
-            return this.props.updateRoot('modal', modal)
+            this.props.updateRoot('modal', modal)
           }
         })
         .catch(err => {
