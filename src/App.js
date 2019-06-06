@@ -72,7 +72,7 @@ export default class extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <ReactWithState />
-        { Modal(modal) }
+        <Modal {...modal} />
       </View>
     )
   }

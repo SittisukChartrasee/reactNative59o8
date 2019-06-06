@@ -14,9 +14,11 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { TBold, TLight } from '../component/texts'
+import { NavBar } from '../component/gradient'
 import Screen from '../component/screenComponent'
 import colors from '../config/colors'
 import images from '../config/images'
+import lockout from '../containers/hoc/lockout'
 import Input from '../component/input'
 import { LongPositionButton, NextButton } from '../component/button'
 import { navigateAction } from '../redux/actions'
@@ -54,12 +56,25 @@ const dispatchToProps = dispatch => ({
 })
 
 @connect(mapToProps, dispatchToProps)
+@lockout
 export default class extends React.Component {
 
   render() {
     let sizing = { width: 108, height: 78 }
     return (
       <Screen>
+        <NavBar
+          title=" "
+          color="transparent"
+          navRight={
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
+              <Image source={images.iconlogoOff} />
+            </TouchableOpacity>
+          }
+        />
         <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
           <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 20 }}>
             <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
@@ -129,7 +144,10 @@ export default class extends React.Component {
               </View>
             ))}
           </View>
-        <LongPositionButton label="ดำเนินการต่อ" onPress={navigateAction({ ...this.props, page: 'welcome' })} />
+          <LongPositionButton
+            label="ดำเนินการต่อ"
+            // onPress={navigateAction({ ...this.props, page: 'welcome' })}
+          />
         </KeyboardAwareScrollView>
       </Screen>
     )

@@ -76,13 +76,21 @@ export default class extends React.Component {
 
     this.props.registerBank({ variables: { input: data } })
       .then(res => {
+        console.log(res)
         if (res.data.registerBank.success) {
           this.props.updateUser('bank', {
             ...this.props.user.bank,
             urlbank: res.data.registerBank.url,
           })
-          if (this.state.selected === 'ธนาคารไทยพาณิชย์') return navigateAction({ ...this.props, page: "suittest" })
-          return navigateAction({ ...this.props, page: "connectBank", params: { bankName: this.state.selected } })
+          // if (this.state.selected === 'ธนาคารไทยพาณิชย์') return navigateAction({ ...this.props, page: "suittest" })
+          return navigateAction({
+            ...this.props,
+            page: "connectBank",
+            params: {
+              bankName: this.state.selected,
+              url: res.data.registerBank.url
+            }
+          })
         } 
 
         const modal = {

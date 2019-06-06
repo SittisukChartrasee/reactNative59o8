@@ -35,6 +35,7 @@ import {
   getOccupation
 } from '../../containers/query'
 import { updateUser } from '../../redux/actions/commonAction'
+import Input from '../input'
 
 const checkTitle = (field = '') => {
   if (field.toLowerCase().search('title') > -1) return 'ค้นหาคำนำหน้า (ตัวย่อ)'
@@ -112,10 +113,15 @@ export default class extends React.Component {
     }
   }
 
-  onHandleOnPress = data => {
+  onHandleOnPress = async data => {
     const { field, user, onHandleDistrict } = this.props
     this.setState({ open: false, confirmText: data.nameTH, text: data.nameTH })
-    this.props.handleInput && this.props.handleInput({ type: 'SEARCH', field, value: data.nameTH, ...(code => code ? ({ code, risk: data.risk }) : {})(data.code) })
+    
+    await this.props.handleInput && this.props.handleInput({
+      type: 'SEARCH',
+      field,
+      value: data.nameTH, ...(code => code ? ({ code, risk: data.risk }) : {})(data.code)
+    })
 
     if (data.displayName) {
       query(this.props.client, {
@@ -126,12 +132,21 @@ export default class extends React.Component {
       }
       )
     }
+
+    if (data.nameTH.indexOf('อื่นๆ') < 0) {
+      this.props.handleInput && this.props.handleInput({
+        type: 'textInput',
+        field: `${field}_other`,
+        value: ''
+      })
+    }
   }
 
   render() {
     const { open, confirmText } = this.state
-    const { field, value, err } = this.props
+    const { field, value, err, handleInput } = this.props
     StatusBar.setBarStyle(open ? "dark-content" : "light-content")
+
     return (
       <View>
         <TouchableOpacity
@@ -150,6 +165,17 @@ export default class extends React.Component {
           <View style={{ height: err ? 2 : 1, backgroundColor: err ? 'rgb(213, 0, 0)' : colors.smoky, marginTop: 5 }} />
           <Text style={{ fontSize: 12, color: err ? 'rgb(213, 0, 0)' : undefined, marginTop: 4 }}>{err}</Text>
         </TouchableOpacity>
+
+        {
+          this.state.text.indexOf('อื่นๆ') > -1 &&
+          Input({
+            label: 'อื่นๆ (โปรดระบุ)',
+            type: 'textInput',
+            field: `${field}_other`,
+            handleInput: value => handleInput({ value, type: 'textInput', field: `${field}_other` }),
+            style: { paddingHorizontal: 0, marginTop: -20 },
+          })
+        }
 
         <Modal visible={open} animationType="slide">
           <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
@@ -174,12 +200,16 @@ export default class extends React.Component {
                   onChangeText={text => this.onHandleSetText({ text, field })}
                 />
                 <TouchableOpacity
-                  onPress={() => this.setState({ text: '', confirmText: '' })}
+                  onPress={() => {
+                    this.setState({ text: '', confirmText: '' })
+                    this.onHandleSetText({ text: '', field })
+                  }}
                   style={{
                     width: 30,
                     height: 30,
+                    padding: 20,
                     justifyContent: 'center',
-                    alignItems: 'flex-end',
+                    alignItems: 'center',
                   }}
                 >
                   <Image source={images.iconRemove} />

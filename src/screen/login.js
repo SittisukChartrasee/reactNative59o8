@@ -31,7 +31,8 @@ export default class extends React.Component {
       const res = await this.props.requestLogin({ userToken, password: obj.number })
       if (res && res.result) {
         AsyncStorage.setItem('access_token', res.result.access_token)
-        this.props.navigateAction({ ...this.props, page: 'checkpoint' })
+        this.props.navigateAction({ ...this.props, page: 'confirmAccount' })
+        // checkpoint
       }
     }
   }

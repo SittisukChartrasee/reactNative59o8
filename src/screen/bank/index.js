@@ -7,7 +7,7 @@ import connectBank from './connectBank'
 export default {
   chooseBank,
   connectBank,
+  statusBank,
   reviewBank,
   tutorialBank,
-  statusBank
 }

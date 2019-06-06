@@ -16,12 +16,16 @@ import { LongButton } from '../../component/button'
 import images from '../../config/images'
 import { RiskList } from '../../component/lists'
 import { navigateAction } from '../../redux/actions'
+import { root } from '../../redux/actions/commonAction'
+import { requestOtp } from '../../redux/actions/root-active'
 
 const text = `1. ผู้ขอใช้บริการมีความประสงค์ให้ธนาคารหักเงินจากบัญชีเงินฝากของผู้ขอใช้บริการ เพื่อชำระหนี้ และ หรือ ภาระผูกพันใด ๆให้แก่ผู้รับเงิน ตามจำนวนเงินและวันที่ที่ปรากฏในใบแจ้งหนี้ และ หรือ ข้อมูลที่ผู้รับเงินได้นำส่งให้แก่ธนาคารผ่านช่องทางอิเล็กทรอนิกส์ หรือด้วยวิธีใดที่ธนาคารได้ตกลงกับผู้รับเงิน หรือตามคำสั่งที่ธนาคารได้รับจากผู้รับเงิน ตัวแทนของผู้รับเงิน และ หรือบุคคลอื่นใดที่ได้รับแต่งตั้งหรือมอบหมายจากผู้รับเงินให้กระทำการแทน และ หรือในนามของผู้รับเงิน (ต่อไปนี้จะเรียกว่า ”ข้อมูลที่นำส่ง”) และนำเงินดังกล่าวโอนเข้าบัญชีเงินฝากของผู้รับเงิน และ หรือบุคคลดังกล่าว.   	ผู้ขอใช้บริการมีความประสงค์ให้ธนาคารหักเงินจากบัญชีเงินฝากของผู้ขอใช้บริการ เพื่อชำระหนี้ และ/หรือ ภาระผูกพันใด ๆ ให้แก่ผู้รับเงิน ตามจำนวนเงินและวันที่ที่ปรากฏในใบแจ้งหนี้ และ/หรือ ข้อมูลที่ผู้รับเงินได้นำส่งให้แก่ธนาคารผ่านช่องทางอิเล็กทรอนิกส์ หรือด้วยวิธีใดที่ธนาคารได้ตกลงกับผู้รับเงิน หรือตามคำสั่งที่ธนาคารได้รับจากผู้รับเงิน ตัวแทนของผู้รับเงิน และ/หรือบุคคลอื่นใดที่ได้รับแต่งตั้งหรือมอบหมายจากผู้รับเงินให้กระทำการแทน และ/หรือในนามของผู้รับเงิน (ต่อไปนี้จะเรียกว่า ”ข้อมูลที่นำส่ง”) และนำเงินดังกล่าวโอนเข้าบัญชีเงินฝากของผู้รับเงิน และ/หรือบุคคลดังกล่าว. `
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  requestOtp: bindActionCreators(requestOtp, dispatch),
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateRoot: bindActionCreators(root, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
@@ -38,8 +42,35 @@ export default class extends React.Component {
     else if (sumSuittest > 30) this.setState({ risk: 3 })
   }
 
+  onNext = () => {
+    alert(`User Status จะเปลี่ยนเป็น Approved`)
+
+    const data = {
+      idCard: '1361200221627',
+      email: 'beerxp1@gmail.com',
+      mobilePhone: '0830015610',
+    }
+
+    // this.props.requestOtp(data)
+    //   .then(res => {
+
+        // if (res.success) {
+          this.props.navigateAction({ ...this.props, page: 'otp' })
+        // }
+
+        // this.props.updateRoot('modal', {
+        //   dis: res.message,
+        //   visible: true,
+        //   onPress: () => this.props.updateRoot('modal', { visible: false }),
+        //   onPressClose: () => this.props.updateRoot('modal', { visible: false })
+        // })
+      // })
+      // .catch(err => {
+      //   console.log(err)
+      // })
+  }
+
   render() {
-    const { navigateAction } = this.props
     const { risk, agree } = this.state
     return (
       <Screen>
@@ -109,7 +140,7 @@ export default class extends React.Component {
             label="เริ่มใช้งาน K-My Funds"
             style={{ marginHorizontal: 24 }}
             disabled={!agree}
-            onPress={() => alert(`User Status จะเปลี่ยนเป็น Approved`)}
+            onPress={this.onNext}
           />
         </View>
       </Screen>

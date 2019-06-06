@@ -17,7 +17,6 @@ import logoKasset from '../../assets/image/logoKasset.png'
 import iconLock from '../../assets/image/iconLock.png'
 import iconlogoOff from '../../assets/image/iconlogoff.png'
 import iconinformation from '../../assets/image/iconinformationblack.png'
-import iconCheck from '../../assets/image/check.png'
 import iconNextPageBlack from '../../assets/image/iconnextpageblack.png'
 import iconRemove from '../../assets/image/iconremoveblack.png'
 import iconCalenda from '../../assets/image/iconcalendablack.png'
@@ -42,6 +41,8 @@ import iconlinepath from '../../assets/image/path6.png'
 import textTermAndCon from '../../assets/image/textTermAndCon.png'
 import tutorialBankaccount from '../../assets/image/tutorialBankaccount.png'
 import cancelFirst from '../../assets/image/cancelFirst.png'
+import iconuncheck from '../../assets/image/uncheck.png'
+import iconCheck from '../../assets/image/check.png'
 
 import iconrisk12 from '../../assets/image/risk1-2.png'
 import iconrisk34 from '../../assets/image/risk3-4.png'
@@ -79,6 +80,7 @@ export default {
   iconRemove,
   iconNextPageBlack,
   iconCheck,
+  iconuncheck,
   iconinformation,
   iconlogoOff,
   iconLock,

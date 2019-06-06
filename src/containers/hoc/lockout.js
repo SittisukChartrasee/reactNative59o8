@@ -9,8 +9,10 @@ export default WrapperComponent => {
   const Enhance = props => {
     const modal = {
       type: 'LOGOUT',
-      dis: 'คุณต้องการออกจากหน้าเชื่อมบัญชี\nใช่หรือไม่ ?',
+      dis: 'คุณต้องการออกไปหน้า Login ใช่หรือไม่',
       visible: true,
+      swap: true,
+      onChange: val => alert(val),
       onPress: () => props.updateRoot('modal', { visible: false }),
       onPressClose: () => props.updateRoot('modal', { visible: false })
     }
