@@ -114,13 +114,14 @@ export default class extends React.Component {
       isicCode,
       occupationCode,
       incomeRangeCode,
-      countrySourceOfIncome,
       countyCode
     } = user.career
 
     const data = {
       isicCode,
+      isicOther: '',
       occupationCode,
+      occupationOther: '',
       incomeRangeCode,
       countrySourceOfIncome: countyCode
     }
