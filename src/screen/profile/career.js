@@ -40,7 +40,7 @@ export default class extends React.Component {
         type: 'textInput',
         field: 'busTypeOther',
         inVisible: true,
-      }, 
+      },
       {
         label: 'อาชีพ',
         type: 'search',
@@ -74,7 +74,6 @@ export default class extends React.Component {
 
   handleInput = props => {
     const { updateUser, user } = this.props
-    console.log(props)
     if (props.field === 'occupation') {
       updateUser('career', { ...user.career, [props.field]: props.value, occupationCode: props.code })
     } else if (props.field === 'countrySourceOfIncome') {
@@ -111,14 +110,17 @@ export default class extends React.Component {
     const {
       isicCode,
       occupationCode,
+      busType_other,
       incomeRangeCode,
-      countrySourceOfIncome,
+      occupation_other,
       countyCode
     } = user.career
 
     const data = {
       isicCode,
+      isicOther: busType_other ? busType_other : '',
       occupationCode,
+      occupationOther: occupation_other ? occupation_other : '',
       incomeRangeCode,
       countrySourceOfIncome: countyCode
     }
@@ -138,7 +140,7 @@ export default class extends React.Component {
       this.props.saveCareer({ variables: { input: data } })
         .then(res => {
           console.log(res)
-          
+
           if (res.data.saveCareer.success) {
             navigateAction({ ...this.props, page: 'sourceOfFund' })
           } else if (!res.data.saveCareer.success) {
