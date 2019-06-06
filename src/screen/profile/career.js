@@ -93,13 +93,11 @@ export default class extends React.Component {
     const Required = find(PreconditionRequired, o => {
       if (o.field === 'isicCode' && field === 'busType') return o
       if (o.field === 'occupationCode' && field === 'occupation') return o
-      if (o.field === 'incomeRangeCode' && field === 'incomeRange') return o
       return o.field === field
     })
     const Invalid = find(InvalidArgument, o => {
       if (o.field === 'isicCode' && field === 'busType') return o
       if (o.field === 'occupationCode' && field === 'occupation') return o
-      if (o.field === 'incomeRangeCode' && field === 'incomeRange') return o
       return o.field === field
     })
     if (Required) return Required.description
