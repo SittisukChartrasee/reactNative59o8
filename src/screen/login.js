@@ -44,7 +44,7 @@ export default class extends React.Component {
         <HeadSpace
           {...{
             dot,
-            title: 'ใส่รหัส Passcode',
+            title: 'กรุณากรอกรหัสผ่าน',
             onPrevPage: () => this.props.navigation.goBack(),
             forgetbtn: () => this.props.navigateAction({ ...this.props, page: 'forgetPasscode' })
           }}
