@@ -41,7 +41,7 @@ const checkPoint = [
   {
     point: 'ขั้นตอนที่ 3',
     check: 'current',    
-    text: 'กรอกข้อมูลส่วนตัว'
+    text: 'เชื่อมบัญชีธนาคาร'
   },
   {
     point: 'ขั้นตอนที่ 4',
