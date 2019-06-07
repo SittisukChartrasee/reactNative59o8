@@ -44,23 +44,18 @@ export default class extends React.Component {
   }
 
   componentDidMount = () => {
-    const sumSuittest = this.props.navigation.getParam('sumSuittest', 0)
-    let point = 1
-    if (sumSuittest <= 15) {
+    const point = this.props.navigation.getParam('sumSuittest', 0)
+    if (point <= 15) {
       this.setState({ risk: 0 })
-      point = 1
     }
-    else if (sumSuittest <= 21) {
+    else if (point <= 21) {
       this.setState({ risk: 1 })
-      point = 2
     }
-    else if (sumSuittest <= 29) {
+    else if (point <= 29) {
       this.setState({ risk: 2 })
-      point = 3
     }
-    else if (sumSuittest > 30) {
+    else if (point > 30) {
       this.setState({ risk: 3 })
-      point = 4
     }
 
     query(this.props.client, {
