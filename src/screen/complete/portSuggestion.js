@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  Linking,
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -30,7 +31,7 @@ const query = debounce((client, obj, setState) => {
     .catch(err => console.error(err))
 }, 300)
 
-const mapToProps = () => ({})
+const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   toggleModal: value => dispatch({ type: 'modal', value })
@@ -154,9 +155,8 @@ export default class extends React.Component {
               type: 'row',
               onPress: () => this.props.toggleModal({ visible: false }),
               onConfirm: async () => {
-                alert('ปิด application และเข้าสู่แบบประเมินความเสี่ยงของ Kasset')
-                // await this.props.toggleModal({ visible: false })
-                // await this.props.navigation.navigate('chooseBank')
+                this.props.toggleModal({ visible: false })
+                setTimeout(() => Linking.openURL('https://google.com'), 100)
               },
               onPressClose: () => this.props.toggleModal({ visible: false }),
             })}
