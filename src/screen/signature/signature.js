@@ -70,7 +70,7 @@ export default class Demo extends Component {
       body: data
     }, token)
 
-    if (res.success) {
+    if (res.success && this.state.dragged) {
       navigateAction({ ...this.props, page: 'fatca' })
     }
   }

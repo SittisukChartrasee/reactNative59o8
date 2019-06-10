@@ -123,7 +123,7 @@ export default class extends React.Component {
       markerSrc: images.textTermAndCon,
       position: 'center',
       scale: 1,
-      markerScale: Platform.OS === 'android' ? heightPage >= 700 ? .4 : .6 : .6,
+      markerScale: Platform.OS === 'android' ? heightPage >= 700 ? .4 : .6 : 1,
       quality: 100
     })
       .then(path => {

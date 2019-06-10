@@ -40,6 +40,7 @@ export default class extends React.PureComponent {
           { ...this.props.styled },
         ]}
         labelTextStyle={{ fontFamily: fonts.sukhumvitLight, fontSize: 100 }}
+        titleTextStyle={{ fontFamily: fonts.sukhumvitLight }}
         tintColor={colors.grey}
         baseColor={colors.grey}
         titleFontSize={12}

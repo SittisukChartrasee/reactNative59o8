@@ -17,7 +17,7 @@ import { LongButton, NextButton } from '../component/button'
 import images from '../config/images'
 import Input from '../component/input'
 import { Choice } from '../component/cardSelect'
-import { root } from '../redux/actions/commonAction'
+import { root, updateUser } from '../redux/actions/commonAction'
 import { navigateAction } from '../redux/actions'
 import setMutation from '../containers/mutation'
 import lockout from '../containers/hoc/lockout'
@@ -49,10 +49,11 @@ const checkActiveData = data => {
   )
 }
 
-const mapToProps = () => ({})
+const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
-  updateRoot: bindActionCreators(root, dispatch)
+  updateRoot: bindActionCreators(root, dispatch),
+  updateUser: bindActionCreators(updateUser, dispatch)
 })
 
 @connect(
@@ -62,22 +63,11 @@ const dispatchToProps = dispatch => ({
 @setMutation
 @lockout
 export default class extends React.Component {
-  state = {
-    choice: [
-      {
-        title: 'ท่านมีประวัติความผิดกฎหมายฟอกเงินย้อนหลังภายใน 3 ปีหรือไม่',
-        choice: ['ใช่', 'ไม่ใช่']
-      },
-      {
-        title: 'คุณเป็นนักการเมือง มีความเกี่ยวข้องกับนักการเมือง หรือบุคคลที่มีสถานภาพทางการเมือง ใช่หรือไม่',
-        choice: ['ใช่', 'ไม่ใช่']
-      }
-    ],
-    sumChoice: 0,
-  }
 
   onPress = obj => {
-    this.setState({
+    const { user } = this.props
+    this.props.updateUser('fraud', {
+      ...user.fraud,
       choice: obj.choice,
       sumChoice: checkActiveData(obj.choice).IS_SUM
     })
@@ -87,11 +77,11 @@ export default class extends React.Component {
     const { navigateAction } = this.props
 
     const data = {
-      hasLaunderingRecord: checkActiveData(this.state.choice).IS_TRUE,
-      isPolitician: checkActiveData(this.state.choice).IS_TRUE
+      hasLaunderingRecord: checkActiveData(this.props.user.fraud.choice).IS_TRUE,
+      isPolitician: checkActiveData(this.props.user.fraud.choice).IS_TRUE
     }
 
-    if (!checkActiveData(this.state.choice).IS_INCORRECT) {
+    if (!checkActiveData(this.props.user.fraud.choice).IS_INCORRECT) {
       const modal = {
         dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
         visible: true,
@@ -133,12 +123,12 @@ export default class extends React.Component {
           }
         />
         {Choice({
-          init: this.state.choice,
+          init: this.props.user.fraud.choice,
           onPress: this.onPress,
           paddingBottom: 100
         })}
         <NextButton
-          disabled={checkActiveData(this.state.choice).IS_TRUE}
+          disabled={checkActiveData(this.props.user.fraud.choice).IS_TRUE}
           onPress={this.onNext}
         />
       </Screen>
