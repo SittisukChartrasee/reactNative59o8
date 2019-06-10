@@ -7,6 +7,7 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { withApollo } from 'react-apollo'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { TText, TBold, TSemiBold, TLight } from '../../component/texts'
@@ -15,6 +16,7 @@ import { LongButton } from '../../component/button'
 import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
 import lockout from '../../containers/hoc/lockout'
+// import { mock_inprogress } from '../../containers/query' // Mock Data
 
 const { width: widthView } = Dimensions.get('window')
 
@@ -23,16 +25,25 @@ const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
+@withApollo
 @lockout
 export default class extends React.Component {
 
   onNext = async () => {
     const { navigateAction } = this.props
+    this.props.client.query({ query: mock_inprogress })
+
+      // ================= MockData ================ // ยังไม่ได้เขียน API
+
+      // .then(res => {
+      //   if (res.data.mock_inprogress) {
+      //     navigateAction({ ...this.props, page: 'statusApprove', params: { status: '...' } })
+      //   }
+      // })
     navigateAction({ ...this.props, page: 'statusApprove', params: { status: 'REJECT' } })
   }
 
   render() {
-    const { navigateAction } = this.props
     return (
       <Screen>
         <NavBar

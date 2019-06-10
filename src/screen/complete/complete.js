@@ -17,6 +17,7 @@ import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
 import lockout from '../../containers/hoc/lockout'
 import { checkVerifiedEmail } from '../../containers/query'
+import setMutation from '../../containers//mutation'
 
 const { width: widthView } = Dimensions.get('window')
 
@@ -27,6 +28,7 @@ const dispatchToProps = dispatch => ({
 @connect(mapToProps, dispatchToProps)
 @lockout
 @withApollo
+@setMutation
 export default class extends React.Component {
 
   onNext = async () => {
@@ -35,8 +37,25 @@ export default class extends React.Component {
     this.props.client.query({ query: checkVerifiedEmail })
       .then(res => {
         if (res.data.checkVerifiedEmail) {
+          // ========================== mock Data ตรวจสอบความเสียงสูง ส่ง risk ไป ============================== //
+
+          // this.props.saveApi_Risk({ variables: { input: data } })
+          //   .then(res => {
+          //     if (res.data.saveApi_Risk.success) navigateAction({ ...this.props, page: 'waiting' })
+          //     else if (!res.data.saveApi_Risk.success) {
+          //       const modal = {
+          //         dis: res.data.saveApi_Risk.message,
+          //         visible: true,
+          //         onPress: () => this.props.updateRoot('modal', { visible: false }),
+          //         onPressClose: () => this.props.updateRoot('modal', { visible: false })
+          //       }
+          //       this.props.updateRoot('modal', modal)
+          //     }
+          //   })
+          //   .catch(err => {
+          //     console.log(err)
+          //   })
           navigateAction({ ...this.props, page: 'waiting' })
-          // API ตรวจสอบ ความเสี่ยง
           console.log(risk)
         } else {
           navigateAction({ ...this.props, page: 'verifyEmail' })

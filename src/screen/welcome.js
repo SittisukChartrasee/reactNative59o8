@@ -145,19 +145,19 @@ export default class extends React.Component {
     const sizing = widthScreen <= 320 || heightScreen <= 690 ? { width: 176, height: 128, } : {}
     return (
       <Screen>
+        <NavBar
+          img={images.logoKasset}
+          color="transparent"
+          navLeft={
+            <TouchableOpacity
+              onPress={() => this.props.navigation.goBack()}
+              style={{ paddingRight: 30 }}
+            >
+              <Image source={images.iconback} />
+            </TouchableOpacity>
+          }
+        />
         <ScrollView contentContainerStyle={{ flex: 1 }}>
-          <NavBar
-            img={images.logoKasset}
-            color="transparent"
-            navLeft={
-              <TouchableOpacity
-                onPress={() => this.props.navigation.goBack()}
-                style={{ paddingRight: 30 }}
-              >
-                <Image source={images.iconback} />
-              </TouchableOpacity>
-            }
-          />
           <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
             <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
             <TBold fontSize={20} color={colors.white} mt="24" mb="40">{`กรุณากรอกข้อมูล\nเพื่อเปิดบัญชีกองทุน`}</TBold>

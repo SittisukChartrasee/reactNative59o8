@@ -181,6 +181,7 @@ export default class extends React.Component {
 
   onPressNewChild = () => {
     const { inVisible, fields } = this.state
+    const { updateUser, user } = this.props
     if (!inVisible) {
       this.setState({
         fields: fields.map((d) => {
@@ -189,6 +190,12 @@ export default class extends React.Component {
         inVisible: !inVisible
       })
     } else {
+      // fields.map((d) => {
+      //   if (!d.static) {
+      //     console.log(d)
+      //     updateUser('child', { ...user.child, [d.field]: '' })
+      //   }
+      // })
       this.setState({
         fields: fields.map((d) => {
           if (!d.static) return { ...d, inVisible: true }
