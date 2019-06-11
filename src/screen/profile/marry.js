@@ -18,7 +18,7 @@ import { navigateAction } from '../../redux/actions'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
-import { convertDate, tomorrowDate, replaceSpace} from '../../utility/helper'
+import { convertDate, tomorrowDate, replaceSpace } from '../../utility/helper'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -37,6 +37,7 @@ export default class extends React.Component {
     code: 'TH',
     PreconditionRequired: [],
     InvalidArgument: [],
+    disabledPepFlag: true,
     fields: [
       {
         label: 'สัญชาติ',
@@ -91,14 +92,14 @@ export default class extends React.Component {
         field: 'fistName',
         required: true,
       }, {
-        label: 'นาม-สกุล',
+        label: 'นามสกุล',
         type: 'textInput',
         field: 'lastName',
         required: true,
       }, {
-        label: 'คุณเป็นนักการเมือง มีความเกี่ยวข้องกับนักการเมือง หรือบุคคลที่มีสถานภาพทางการเมือง ใช่หรือไม่',
+        label: 'คู่สมรสเป็นนักการเมือง มีความเกี่ยวข้องกับนักการเมือง หรือบุคคลที่มีสถานภาพทางการเมือง ใช่หรือไม่',
         type: 'radioColumn',
-        init: [{ title: 'ใช่', active: true }, { title: 'ไม่ใช่' }],
+        init: [{ title: 'ใช่' }, { title: 'ไม่ใช่' }],
         field: 'pepFlag',
         required: true,
       },
@@ -147,6 +148,8 @@ export default class extends React.Component {
     } else if (props.field === 'marryCountry') {
       this.setState({ code: props.code })
       updateUser('spouse', { ...user.spouse, nationalityCode: props.code, nationalityRisk: props.risk })
+    } else if (props.field === 'pepFlag') {
+      this.setState({ disabledPepFlag: false })
     } else {
       updateUser('spouse', { ...user.spouse, [props.field]: props.value })
     }
@@ -229,7 +232,7 @@ export default class extends React.Component {
         // ตรวจประเทศเสี่ยงยังไม่มีใน Flow
 
         // if (user.spouse.nationalityRisk) {
-          
+
         // }
 
         if (res.data.saveSpouse.success) {
@@ -259,7 +262,7 @@ export default class extends React.Component {
 
   render() {
     const { user } = this.props
-    const { fields } = this.state
+    const { fields, disabledPepFlag } = this.state
     return (
       <Screen color="transparent">
         <NavBar
@@ -304,7 +307,10 @@ export default class extends React.Component {
             }, key))
           }
         </KeyboardAwareScrollView>
-        <NextButton onPress={this.onNext} />
+        <NextButton
+          onPress={this.onNext}
+          disabled={disabledPepFlag}
+        />
       </Screen>
     )
   }

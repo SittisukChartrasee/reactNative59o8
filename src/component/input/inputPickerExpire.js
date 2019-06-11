@@ -11,9 +11,9 @@ import { TBold, TLight } from '../texts';
 import images from '../../config/images'
 import colors from '../../config/colors'
 import fonts from '../../config/fonts'
-const m = ['', 'มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม']
+const m = ['', 'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']
 
-const createDateData = (start=new Date().getFullYear() + 643, end=new Date().getFullYear() + 543) => {
+const createDateData = (start = new Date().getFullYear() + 643, end = new Date().getFullYear() + 543) => {
   const date = []
   for (let i = end; i <= start; i += 1) {
     const month = []
@@ -81,7 +81,8 @@ const renderFormatText = (date) => {
 export default class extends React.Component {
   static defaultProps = {
     err: '',
-    date: [2562,'มกราคม',1]
+    date: [2562, 'มกราคม', 1],
+    inVisible: false
   }
   state = {
     date: this.props.date
@@ -109,6 +110,9 @@ export default class extends React.Component {
     });
     Picker.show()
   }
+
+  onHidePicker = () => this.props.inVisible ? Picker.hide() : null
+
   render() {
     const { err } = this.props
     return (
@@ -116,11 +120,12 @@ export default class extends React.Component {
         <TouchableOpacity onPress={() => this.onPicker()}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <TBold textAlign="left" color={colors.midnight}>{renderFormatText(this.state.date)}</TBold>
-            <Image source={images.iconCalenda} style={{ ...(err => err && ({ tintColor: 'rgb(213, 0, 0)' }))(err) }}/>
+            <Image source={images.iconCalenda} style={{ ...(err => err && ({ tintColor: 'rgb(213, 0, 0)' }))(err) }} />
           </View>
           <View style={{ height: err ? 2 : 1, backgroundColor: err ? 'rgb(213, 0, 0)' : colors.smoky, marginTop: 5 }} />
           <Text style={{ fontSize: 12, color: err ? 'rgb(213, 0, 0)' : undefined, marginTop: 4 }}>{err}</Text>
         </TouchableOpacity>
+        {this.onHidePicker()}
       </View>
     )
   }

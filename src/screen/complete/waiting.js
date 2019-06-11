@@ -72,6 +72,7 @@ export default class extends React.Component {
           <LongButton
             label="รีเฟรช"
             bgTransparent
+            IconImage={images.iconCameraRefresh}
             style={{ marginHorizontal: 24 }}
             onPress={this.onNext}
           />

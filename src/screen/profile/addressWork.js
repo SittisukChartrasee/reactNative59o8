@@ -35,6 +35,11 @@ const fields = [
     field: 'addressNoTH',
     required: true,
   }, {
+    label: 'หมู่ที่',
+    type: 'textInput',
+    field: 'moo',
+    required: false,
+  }, {
     label: 'อาคาร/หมู่บ้าน',
     type: 'textInput',
     field: 'addressVillageTH',
@@ -43,11 +48,6 @@ const fields = [
     label: 'ชั้น',
     type: 'textInput',
     field: 'floorNo',
-    required: false,
-  }, {
-    label: 'หมู่ที่',
-    type: 'textInput',
-    field: 'moo',
     required: false,
   }, {
     label: 'ตรอก/ซอย/แยก',

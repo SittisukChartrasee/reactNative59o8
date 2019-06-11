@@ -101,6 +101,7 @@ export default class extends React.Component {
         label: 'ปีเกิด,เดือนเกิด,วันเกิด',
         type: 'ymd',
         field: 'birthDay', //yearOfBirth, monthOfBirth, dayOfBirth
+        date: 20, // กำหนด ปี สำหรับ อายุ 20 ปี
         required: true,
       }, {
         label: 'สถานภาพสมรส',

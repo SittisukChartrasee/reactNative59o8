@@ -230,7 +230,7 @@ export default class extends React.Component {
     return (
       <Screen color="transparent">
         <NavBar
-          title="ที่อยุ่จัดส่งเอกสาร"
+          title="ที่อยู่จัดส่งเอกสาร"
           navLeft={
             <TouchableOpacity
               onPress={() => this.props.navigation.goBack()}

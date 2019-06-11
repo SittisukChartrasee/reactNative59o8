@@ -69,7 +69,7 @@ export default class extends React.Component {
     const { fields, otherField } = this.state
     const { handleInput, field } = this.props
     if (val.label === 'อื่นๆ') this.setState({ otherField: val.value })
-    
+
     const result = fields.map((d) => {
       if (d.label === val.label && !val.active) {
         return { ...d, active: true }
@@ -94,16 +94,15 @@ export default class extends React.Component {
 
   render() {
     const { open, data } = this.state
-    const { value } = this.props
-
+    const { value, label, labelOther } = this.props
     return (
       <View>
         <TouchableOpacity onPress={() => this.setState({ open: true })}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', overflow: 'hidden' }}>
-          { data || value
+            {data
               ? <TBold textAlign="left" color={colors.midnight}>{value.toString() || data}</TBold>
               : <TBold textAlign="left" color={colors.smoky}>กรุณาเลือกข้อมูล</TBold>
-          }
+            }
             <Image source={images.iconNextPageBlack} />
           </View>
           <View style={{ height: 1, backgroundColor: colors.smoky, marginTop: 5 }} />
@@ -112,7 +111,7 @@ export default class extends React.Component {
         <Modal visible={open} animationType="slide">
           <View style={{ flex: 1 }}>
             <NavBar
-              title="ได้รับเงินทุนจากแหล่งใด"
+              title={label}
               navLeft={
                 <TouchableOpacity onPress={() => this.setState({ open: false })}>
                   <Image source={images.iconback} />
@@ -128,12 +127,13 @@ export default class extends React.Component {
                 showsVerticalScrollIndicator={false}
               >
                 <View style={{ flex: 1, backgroundColor: colors.white }}>
-                  { 
+                  {
                     this.state.fields.map(
                       (d, k) => Select({
                         ...d,
                         handleInput: this.handleOnpress,
-                        value: this.state.otherField
+                        value: this.state.otherField,
+                        labelOther
                       }, k)
                     )
                   }

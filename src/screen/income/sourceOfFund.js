@@ -36,6 +36,7 @@ export default class extends React.Component {
     fields: [
       {
         label: 'คุณได้รับเงินทุนจากแหล่งใด',
+        labelOther: 'โปรดระบุแหล่งเงินทุน',
         type: 'modal',
         field: 'investmentSource',
         required: true,
@@ -74,6 +75,7 @@ export default class extends React.Component {
         required: true,
       }, {
         label: 'วัตถุประสงค์การลงทุน',
+        labelOther: 'โปรดระบุวัตถุประสงค์การลงทุน',
         type: 'modal',
         field: 'investmentPurpose',
         required: true,
@@ -99,13 +101,15 @@ export default class extends React.Component {
             field: 'investmentPurposeOther',
           }
         ]
-      }, {
-        label: 'คุณต้องการหักภาษี ณ ที่จ่ายสำหรับเงินปันผลและค่าขายคืน หรือไม่ ?',
-        type: 'radioColumn',
-        init: [{ title: 'ต้องการ หักภาษี ณ ที่จ่าย', active: true }, { title: 'ไม่ต้องการ' }],
-        field: 'dividendWithHoldingTax',
-        required: false,
       },
+      // ทาง KA บอกให้ตัดออก
+      // {
+      //   label: 'คุณต้องการหักภาษี ณ ที่จ่ายสำหรับเงินปันผลและค่าขายคืน หรือไม่ ?',
+      //   type: 'radioColumn',
+      //   init: [{ title: 'ต้องการ หักภาษี ณ ที่จ่าย', active: true }, { title: 'ไม่ต้องการ' }],
+      //   field: 'dividendWithHoldingTax',
+      //   required: false,
+      // },
     ]
   }
 
@@ -149,8 +153,8 @@ export default class extends React.Component {
       investmentSourceOther,
       investmentSourceCountry,
       investmentPurpose,
-      dividendWithHoldingTax,
       nationalityCode,
+      dividendWithHoldingTax,
     } = user.sourceOfFund
 
     const data = {
@@ -158,7 +162,8 @@ export default class extends React.Component {
       investmentSourceOther,
       investmentSourceCountry: nationalityCode,
       investmentPurpose,
-      dividendWithHoldingTax: !(dividendWithHoldingTax === 'ไม่ต้องการ'),
+      // dividendWithHoldingTax: !(dividendWithHoldingTax === 'ไม่ต้องการ'), // ทาง KA บอกให้ตัดออก
+      dividendWithHoldingTax
     }
 
     console.log(data)
@@ -231,6 +236,7 @@ export default class extends React.Component {
             this.state.fields.map((d, key) => Input({
               field: d.field,
               label: d.label,
+              labelOther: d.labelOther,
               type: d.type,
               required: d.required,
               init: d.init,

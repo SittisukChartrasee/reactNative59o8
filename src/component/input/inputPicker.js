@@ -18,12 +18,12 @@ const checkField = (data, value) => {
   if (data.indexOf('วัน') > -1) return value.day
 }
 
-const genDate = (y = 2539, m = 2) => {
+const genDate = ({ y = 2539, m = 2, a = 0 }) => {
   const year = []
   const month = []
   const day = []
   const mL = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']
-  for (let i = +moment().format('YYYY') + 443; i <= +moment().format('YYYY') + 543 - 20; i += 1) year.push(i)
+  for (let i = +moment().format('YYYY') + 443; i <= +moment().format('YYYY') + 543 - a; i += 1) year.push(i)
   for (let i = 0; i <= 11; i += 1) month.push(mL[i])
   for (let i = 1; i <= new Date(y - 543, mL.indexOf(m) + 1, 0).getDate(); i += 1) day.push(i)
 
@@ -38,6 +38,7 @@ const genDate = (y = 2539, m = 2) => {
 export default class extends React.Component {
   static defaultProps = {
     value: '-/-/2532',
+    date: 0
   }
 
   state = {
@@ -58,7 +59,7 @@ export default class extends React.Component {
   }
 
   onPicker = (text) => {
-    const { handleInput, field, type } = this.props
+    const { handleInput, field, type, date } = this.props
     const { year, month, day } = this.state
     const configPicker = {
       pickerTitleText: 'กรุณาเลือก',
@@ -70,7 +71,7 @@ export default class extends React.Component {
     }
     if (text.indexOf('ปี') > -1) {
       Picker.init({
-        pickerData: [...genDate().year],
+        pickerData: [...genDate({ a: date }).year],
         selectedValue: [this.state.year],
         ...configPicker,
         onPickerConfirm: data => {
@@ -80,7 +81,7 @@ export default class extends React.Component {
       });
     } else if (text.indexOf('เดือน') > -1) {
       Picker.init({
-        pickerData: ['-', ...genDate().month],
+        pickerData: ['-', ...genDate({ a: date }).month],
         selectedValue: [this.state.month],
         ...configPicker,
         onPickerConfirm: data => {
@@ -91,7 +92,7 @@ export default class extends React.Component {
     } else if (text.indexOf('วัน') > -1) {
       const { year, month } = this.state
       Picker.init({
-        pickerData: ['-', ...genDate(year, month).day],
+        pickerData: ['-', ...genDate({ y: year, m: month, a: date }).day],
         selectedValue: [this.state.day],
         ...configPicker,
         onPickerConfirm: data => {
@@ -106,6 +107,7 @@ export default class extends React.Component {
 
   render() {
     const labelArr = this.props.label.split(',')
+    console.log(this.props)
     const { err } = this.props
     return (
       <View>

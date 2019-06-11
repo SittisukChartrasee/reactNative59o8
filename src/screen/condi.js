@@ -76,8 +76,11 @@ export default class extends React.Component {
             <View style={{ marginRight: 16, marginTop: 5 }}>
               {
                 agree
-                  ? <Image source={images.iconCheck} style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: 'red' }} />
-                  : <Image source={{}} style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: colors.white }} />
+                  ? <Image 
+                      source={images.iconCheck} 
+                      style={{ width: 16,height: 16,borderRadius: 5,backgroundColor: 'red' }} 
+                    />
+                  : <Image source={{}} style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: colors.white, borderWidth: 1, borderColor: colors.grey }} />
               }
             </View>
             <View style={{ flex: 1 }}>
