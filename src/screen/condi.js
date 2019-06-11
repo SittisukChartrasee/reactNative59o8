@@ -33,12 +33,15 @@ export default class extends React.Component {
   onNext = async () => {
     const { navigateAction } = this.props
 
-    const res = await this.props.acceptTerm()
-    if (res.data.acceptTerm.success) {
-      navigateAction({ ...this.props, page: 'tutorialBackCamera' })
-    }
+    this.props.acceptTerm()
+      .then(res => {
+        console.log(res)
+        if (res.data.acceptTerm.success) {
+          navigateAction({ ...this.props, page: 'tutorialBackCamera' })
+        }
+      })
   }
-  
+
   render() {
     const { agree } = this.state
     return (
@@ -53,7 +56,7 @@ export default class extends React.Component {
         />
         <ScrollView contentContainerStyle={{ marginHorizontal: 16, paddingTop: '5%' }} showsVerticalScrollIndicator={false}>
           <TLight color={colors.grey} fontSize={16} textAlign="left">
-          { ` 1. บริษัทจัดการมีสิทธิที่จะไม่อนุมัติหรือปฏิเสธคำขอเปิดบัญชีกองทุนรวม หรือการทำธุรกรรมกับผู้ลงทุนทั้งหมดหรือบางส่วน ได้โดยไม่จำเป็นต้องชี้แจงแสดงเหตุผลใดๆแก่ผู้ลงทุน และการตัดสินใจของบริษัทจัดการให้ถือเป็นที่สุด ทั้งนี้ ให้รวมถึงสิทธิที่จะดำเนินการใดๆให้เป็นไปตามข้อกำหนดสิทธิและหน้าที่ของบริษัทจัดการที่ระบุไว้ในหนังสือชี้ชวน ตลอดจนเงื่อนไขและข้อกำหนดอื่นใดที่บริษัทจัดการได้กำหนดไว้ นอกจากนี้บริษัทจัดการจะไม่รับเปิดบัญชีกองทุนในกรณีดังต่อไปนี้
+            {` 1. บริษัทจัดการมีสิทธิที่จะไม่อนุมัติหรือปฏิเสธคำขอเปิดบัญชีกองทุนรวม หรือการทำธุรกรรมกับผู้ลงทุนทั้งหมดหรือบางส่วน ได้โดยไม่จำเป็นต้องชี้แจงแสดงเหตุผลใดๆแก่ผู้ลงทุน และการตัดสินใจของบริษัทจัดการให้ถือเป็นที่สุด ทั้งนี้ ให้รวมถึงสิทธิที่จะดำเนินการใดๆให้เป็นไปตามข้อกำหนดสิทธิและหน้าที่ของบริษัทจัดการที่ระบุไว้ในหนังสือชี้ชวน ตลอดจนเงื่อนไขและข้อกำหนดอื่นใดที่บริษัทจัดการได้กำหนดไว้ นอกจากนี้บริษัทจัดการจะไม่รับเปิดบัญชีกองทุนในกรณีดังต่อไปนี้
   - พลเมืองสหรัฐอเมริกาหรือผู้ที่มีถิ่นฐานอยู่ในสหรัฐอเมริกา หรือบุคคลซึ่งโดยปกติมีถิ่นที่อยู่ในสหรัฐอเมริกา
   - บุคคลที่อายุต่ำกว่า 20 ปีบริบูรณ์
   2. ในการเปิดบัญชีกองทุนผ่านK-My Funds บัญชีเงินฝากธนาคารที่ผู้ขอเปิดบัญชีกองทุนระบุให้เป็นบัญชีเพื่อซื้อหน่วยลงทุนจะถูกใช้เป็นบัญชีเพื่อรับเงินค่าขายคืนและ/หรือเงินปันผล ในกรณีที่ผู้ขอเปิดบัญชีประสงค์จะเปลี่ยนแปลงบัญชีเงินฝากธนาคารจะต้องปฎิบัติตามหลักเกณฑ์ เงื่อนไขและวิธีการที่บริษัทจัดการกำหนด
@@ -76,10 +79,10 @@ export default class extends React.Component {
             <View style={{ marginRight: 16, marginTop: 5 }}>
               {
                 agree
-                  ? <Image 
-                      source={images.iconCheck} 
-                      style={{ width: 16,height: 16,borderRadius: 5,backgroundColor: 'red' }} 
-                    />
+                  ? <Image
+                    source={images.iconCheck}
+                    style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: 'red' }}
+                  />
                   : <Image source={{}} style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: colors.white, borderWidth: 1, borderColor: colors.grey }} />
               }
             </View>

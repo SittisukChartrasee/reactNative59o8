@@ -107,7 +107,6 @@ export default class extends React.Component {
 
   render() {
     const labelArr = this.props.label.split(',')
-    console.log(this.props)
     const { err } = this.props
     return (
       <View>

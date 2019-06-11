@@ -35,7 +35,7 @@ const handleToken = token => token ? { authorization: `Bearer ${token}` } : {}
 const authLink = store => setContext(async (_, { headers }) => {
   const { root } = store.getState()
   const token = await AsyncStorage.getItem('access_token')
-  
+
   return ({
     headers: {
       ...headers,
@@ -58,6 +58,7 @@ export default (store) => {
     // case 'UAT': return getAuthLink(`${env.API_PATH_UAT}/graphql`, store)
     // case 'SIT': return getAuthLink(`${env.API_PATH_SIT}/graphql`, store)
     // default: return getAuthLink(`${env.API_PATH}/graphql`, store)
-    default: return getAuthLink('https://ka-ob-client-dev.codefin.io/query', store)
+    // default: return getAuthLink('https://ka-ob-client-dev.codefin.io/query', store) // DEV
+    default: return getAuthLink('http://k-myfunds.kasikornasset.com:30443/query', store) // SIT
   }
 }

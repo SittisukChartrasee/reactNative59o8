@@ -16,7 +16,7 @@ import { LongButton } from '../../component/button'
 import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
 import lockout from '../../containers/hoc/lockout'
-// import { mock_inprogress } from '../../containers/query' // Mock Data
+import { getStatus } from '../../containers/query'
 
 const { width: widthView } = Dimensions.get('window')
 
@@ -31,16 +31,23 @@ export default class extends React.Component {
 
   onNext = async () => {
     const { navigateAction } = this.props
-    this.props.client.query({ query: mock_inprogress })
-
-      // ================= MockData ================ // ยังไม่ได้เขียน API
-
-      // .then(res => {
-      //   if (res.data.mock_inprogress) {
-      //     navigateAction({ ...this.props, page: 'statusApprove', params: { status: '...' } })
-      //   }
-      // })
-    navigateAction({ ...this.props, page: 'statusApprove', params: { status: 'REJECT' } })
+    this.props.client.query({ query: getStatus })
+      .then(res => {
+        console.log(res)
+        switch (res.data.getStatus) {
+          case 'Approved':statusApprove
+            navigateAction({ ...this.props, page: 'statusApprove', params: { status: res.data.getStatus } })
+            break
+          case 'Rejected':
+            navigateAction({ ...this.props, page: 'statusApprove', params: { status: res.data.getStatus } })
+            break
+          case 'Editing':
+            navigateAction({ ...this.props, page: 'softReject', params: { status: res.data.getStatus } })
+            break
+          default:
+            break
+        }
+      })
   }
 
   render() {
@@ -60,7 +67,7 @@ export default class extends React.Component {
         />
 
         <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
-            <Image source={images.iconTransfer} style={{ width: widthView * .6 }} resizeMode="contain"  />
+          <Image source={images.iconTransfer} style={{ width: widthView * .6 }} resizeMode="contain" />
           <View>
             <TBold color={colors.white} mb={24}>{`เราได้รับข้อมูลการเปิดบัญชีกองทุน\nของท่านแล้ว`}</TBold>
             <TLight color={colors.white}>{`กรุณารอผลการอนุมัติภายใน 3 วันทำการ\nผ่านระบบแจ้งเตือน`}</TLight>

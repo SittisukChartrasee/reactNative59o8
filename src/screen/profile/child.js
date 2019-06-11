@@ -179,7 +179,7 @@ export default class extends React.Component {
     }
   }
 
-  onPressNewChild = () => {
+  onPressNewChild = async () => {
     const { inVisible, fields } = this.state
     const { updateUser, user } = this.props
     if (!inVisible) {
@@ -189,13 +189,18 @@ export default class extends React.Component {
         }),
         inVisible: !inVisible
       })
-    } else {
-      // fields.map((d) => {
-      //   if (!d.static) {
-      //     console.log(d)
-      //     updateUser('child', { ...user.child, [d.field]: '' })
-      //   }
-      // })
+    } else if (inVisible) {
+      updateUser('child',
+        {
+          ...user.child,
+          ['secondTitle']: '',
+          ['secondFirstName']: '',
+          ['secondLastName']: '',
+          ['secondBirthDay']: `-/-/${tomorrowDate()[0]}`,
+          ['secondDocNo']: '',
+          ['secondExpireDateFlag']: 'มีวันหมดอายุ',
+          ['secondDocExpDate']: `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
+        })
       this.setState({
         fields: fields.map((d) => {
           if (!d.static) return { ...d, inVisible: true }
