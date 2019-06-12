@@ -91,6 +91,7 @@ export default class extends React.Component {
         <View style={{ flex: 1, alignItems: 'center', paddingTop: 40 }}>
           <Image source={images.iconPlete} style={{ width: widthView * .6, marginBottom: 53 }} resizeMode="contain" />
           <TBold color={colors.white} mb={24}>ท่านได้กรอกข้อมูลครบถ้วนแล้ว</TBold>
+          <TBold color={colors.white} mb={24}>{`ข้าพเจ้าขอรับรองว่าข้อมูลที่ให้ไว้กับ\nบลจ.กสิกรไทย มีความถูกต้องและเป็นจริง\nทุกประการ ทั้งนี้ ข้าพเจ้ารับทราบว่าข้อมูลดัง\nกล่าวจะมีผลต่อการแนะนำพอร์ตการลงทุนที่เหมาะสม `}</TBold>
           <TLight color={colors.white}>{`กรุณากดปุ่ม “ยืนยันเปิดบัญชีกองทุน” เพื่อยืนยัน\nการส่งข้อมูลเปิดบัญชีกองทุนของท่านไปยัง\nบริษัท หลักทรัพย์จัดการกองทุนกสิกรไทย จำกัด`}</TLight>
         </View>
 

@@ -43,10 +43,10 @@ export default class extends React.Component {
     risk: 0,
     dataPieChart: [],
     dataTitle: [
-      { title: 'ความเสี่ยงต่ำ', image: images.iconrisk12 },
-      { title: 'ความเสี่ยงปานกลาง\nค่อนข้างต่ำ', image: images.iconrisk34 },
-      { title: 'ความเสี่ยงปานกลาง\nค่อนข้างสูง', image: images.iconrisk56 },
-      { title: 'ความเสี่ยงสูง', image: images.iconrisk78 },
+      { title: 'ความเสี่ยงต่ำ', image: images.iconrisk2 },
+      { title: 'ความเสี่ยงปานกลาง\nค่อนข้างต่ำ', image: images.iconrisk4 },
+      { title: 'ความเสี่ยงปานกลาง\nค่อนข้างสูง', image: images.iconrisk6 },
+      { title: 'ความเสี่ยงสูง', image: images.iconrisk8 },
     ]
   }
 

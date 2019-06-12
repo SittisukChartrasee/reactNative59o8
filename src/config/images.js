@@ -44,10 +44,10 @@ import cancelFirst from '../../assets/image/cancelFirst.png'
 import iconuncheck from '../../assets/image/uncheck.png'
 import iconCheck from '../../assets/image/check.png'
 
-import iconrisk12 from '../../assets/image/risk1-2.png'
-import iconrisk34 from '../../assets/image/risk3-4.png'
-import iconrisk56 from '../../assets/image/risk5-6.png'
-import iconrisk78 from '../../assets/image/risk7-8.png'
+import iconrisk2 from '../../assets/image/risk2.png'
+import iconrisk4 from '../../assets/image/risk4.png'
+import iconrisk6 from '../../assets/image/risk6.png'
+import iconrisk8 from '../../assets/image/risk8.png'
 
 export default {
   cancelFirst,
@@ -59,10 +59,10 @@ export default {
   iconFillterCameraFront2,
   iconFillterCameraFront1,
   iconCameraRefresh,
-  iconrisk78,
-  iconrisk56,
-  iconrisk34,
-  iconrisk12,
+  iconrisk8,
+  iconrisk6,
+  iconrisk4,
+  iconrisk2,
   bookmark,
   iconEdit,
   iconTransfer,
