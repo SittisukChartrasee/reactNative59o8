@@ -133,7 +133,7 @@ export default class extends React.Component {
       )
     }
 
-    if (data.nameTH.indexOf('อื่นๆ') < 0) {
+    if (data.nameTH.indexOf('อื่นๆ') > 0) { // check ผิดรึปล่าว
       this.props.handleInput && this.props.handleInput({
         type: 'textInput',
         field: `${field}_other`,

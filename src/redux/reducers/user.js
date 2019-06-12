@@ -110,20 +110,21 @@ const init = {
     countyCode: '',
   },
   spouse: {
-    nationFlag: '',
+    nationFlag: 'ไทย',
     IDCardNo: '',
     marryPassport: '',
     marryCountry: '',
     nationalityCode: 'TH',
     nationalityRisk: false,
     expireFlag: '',
+    marryIsIDCardExpDate: true,
     isIDCardExpDate: false,
     cardExpiredDate: `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
     marryExpireDate: `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
     title: '',
     fistName: '',
     lastName: '',
-    pepFlag: false,
+    pepFlag: null, // ครั้งแรกที่เข้าหน้า คู่สมรส ปุ่มถัดไปจะไม่สามารถกดได้ เลยใช้ null เป็นค่าเริ่มต้น
   },
   child: {
     firstTitle: '',

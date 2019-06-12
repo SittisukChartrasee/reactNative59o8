@@ -24,7 +24,6 @@ import {
   getStatusGender,
   getStatusMartial,
   getStatusChild,
-  tomorrowDate,
   replaceJsCard,
   replaceSpace
 } from '../../utility/helper'
