@@ -39,12 +39,6 @@ const dispatchToProps = dispatch => ({
 @setMutation
 @lockout
 export default class extends React.Component {
-  static defaultProps = {
-    expireDateFlag: 'มีวันหมดอายุ',
-    isNoDocExpDate: false,
-    isChild: 'ไม่มี'
-  }
-
   state = {
     expireSatus: 'มีวันหมดอายุ',
     PreconditionRequired: [],
@@ -165,17 +159,22 @@ export default class extends React.Component {
         expireSatus: props.value,
         fields: this.state.fields.map((d) => {
           if (props.value === 'มีวันหมดอายุ') {
-            if (d.field === 'docExpDate') return { ...d, inVisible: false }
+            if (d.field === 'docExpDate') {
+              updateUser('profile', { ...user.profile, ['isNoDocExpDate']: false })
+              return { ...d, inVisible: false }
+            }
             else return d
           } else if (props.value === 'ไม่มีวันหมดอายุ') {
-            if (d.field === 'docExpDate') return { ...d, inVisible: true }
+            if (d.field === 'docExpDate') {
+              updateUser('profile', { ...user.profile, ['isNoDocExpDate']: true })
+              return { ...d, inVisible: true }
+            }
             else return d
           }
         })
       })
-    } else {
-      updateUser('profile', { ...user.profile, [props.field]: props.value })
     }
+    updateUser('profile', { ...user.profile, [props.field]: props.value })
   }
 
   onValidation = (field) => {
