@@ -22,6 +22,7 @@ const Drop = props => (
     selectedItemColor={colors.darkSage}
     style={{ fontFamily: fonts.sukhumvitBold }}
     labelTextStyle={{ fontFamily: fonts.sukhumvitText }}
+    titleTextStyle={{ fontFamily: fonts.sukhumvitLight }}
     itemTextStyle={{ fontFamily: fonts.sukhumvitBold }}
     error={props.err}
   />

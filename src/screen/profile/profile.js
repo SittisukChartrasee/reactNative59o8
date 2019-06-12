@@ -39,6 +39,12 @@ const dispatchToProps = dispatch => ({
 @setMutation
 @lockout
 export default class extends React.Component {
+  static defaultProps = {
+    expireDateFlag: 'มีวันหมดอายุ',
+    isNoDocExpDate: false,
+    isChild: 'ไม่มี'
+  }
+
   state = {
     expireSatus: 'มีวันหมดอายุ',
     PreconditionRequired: [],
@@ -57,7 +63,16 @@ export default class extends React.Component {
       }, {
         label: 'วันบัตรหมดอายุ',
         type: 'radio',
-        init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
+        init: [
+          {
+            title: 'มีวันหมดอายุ',
+            active: (this.props.user.profile.expireDateFlag === 'มีวันหมดอายุ')
+          },
+          {
+            title: 'ไม่มีวันหมดอายุ',
+            active: (this.props.user.profile.expireDateFlag === 'ไม่มีวันหมดอายุ')
+          }
+        ],
         field: 'expireDateFlag', // isNoDocExpDate
         required: true,
       }, {
@@ -112,7 +127,16 @@ export default class extends React.Component {
       }, {
         label: 'คุณมีบุตร หรือบุตรบุญธรรมหรือไม่ ',
         type: 'radio',
-        init: [{ title: 'ไม่มี', active: true }, { title: 'มี' }],
+        init: [
+          {
+            title: 'ไม่มี',
+            active: (this.props.user.profile.isChild === 'ไม่มี')
+          },
+          {
+            title: 'มี',
+            active: (this.props.user.profile.isChild === 'มี')
+          }
+        ],
         field: 'isChild',
         required: false,
       }, {
@@ -214,7 +238,7 @@ export default class extends React.Component {
     } = user.profile
 
     console.log(birthDay)
-    
+
     const data = {
       docNo: replaceSpace(idCard),
       jcNumber: replaceJsCard(jcNumber),
