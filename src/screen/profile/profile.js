@@ -7,6 +7,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import reverse from 'lodash/reverse'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -60,11 +61,11 @@ export default class extends React.Component {
         init: [
           {
             title: 'มีวันหมดอายุ',
-            active: (this.props.user.profile.expireDateFlag === 'มีวันหมดอายุ')
+            active: !this.props.user.profile.isNoDocExpDate
           },
           {
             title: 'ไม่มีวันหมดอายุ',
-            active: (this.props.user.profile.expireDateFlag === 'ไม่มีวันหมดอายุ')
+            active: this.props.user.profile.isNoDocExpDate
           }
         ],
         field: 'expireDateFlag', // isNoDocExpDate
@@ -73,8 +74,9 @@ export default class extends React.Component {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'docExpDate',
-        date: tomorrowDate(),
+        date: reverse(this.props.user.profile.docExpDate.split('-')),
         required: true,
+        inVisible: this.props.user.profile.isNoDocExpDate
       }, {
         label: 'เพศ',
         type: 'dropdown',
@@ -144,6 +146,8 @@ export default class extends React.Component {
 
   handleInput = (props) => {
     const { updateUser, user, updateRoot } = this.props
+    const { expireSatus } = this.state
+    let isNoDoc = expireSatus === 'มีวันหมดอายุ' ? false : true
     if (props.type === 'modal') {
       const modal = {
         image: images.iconBackIdcard,
@@ -155,26 +159,25 @@ export default class extends React.Component {
       return updateRoot('modal', modal)
     }
     else if (props.field === 'expireDateFlag') {
+      isNoDoc = props.value === 'มีวันหมดอายุ' ? false : true
       this.setState({
         expireSatus: props.value,
         fields: this.state.fields.map((d) => {
           if (props.value === 'มีวันหมดอายุ') {
-            if (d.field === 'docExpDate') {
-              updateUser('profile', { ...user.profile, ['isNoDocExpDate']: false })
-              return { ...d, inVisible: false }
-            }
+            if (d.field === 'docExpDate') return { ...d, inVisible: false }
             else return d
           } else if (props.value === 'ไม่มีวันหมดอายุ') {
-            if (d.field === 'docExpDate') {
-              updateUser('profile', { ...user.profile, ['isNoDocExpDate']: true })
-              return { ...d, inVisible: true }
-            }
+            if (d.field === 'docExpDate') return { ...d, inVisible: true }
             else return d
           }
         })
       })
     }
-    updateUser('profile', { ...user.profile, [props.field]: props.value })
+    updateUser('profile', {
+      ...user.profile,
+      [props.field]: props.value,
+      ['isNoDocExpDate']: isNoDoc
+    })
   }
 
   onValidation = (field) => {
