@@ -20,7 +20,7 @@ const { width: widthView } = Dimensions.get('window')
 
 const renderText = (caseStatus) => {
   switch (caseStatus) {
-    case 'REJECT':
+    case 'reject':
       return {
         header: 'ผลอนุมัติเปิดบัญชี',
         title: 'ขออภัยท่านไม่สามารถเปิดบัญชีกองทุนได้',
@@ -29,7 +29,7 @@ const renderText = (caseStatus) => {
         btnStatus: true,
       }
 
-    case 'SUCCESS':
+    case 'success':
       return {
         header: 'ผลอนุมัติเปิดบัญชี',
         title: 'เปิดบัญชีสำเร็จ',
@@ -56,11 +56,11 @@ const dispatchToProps = dispatch => ({
 @lockout
 export default class extends React.Component {
   static defaultProps = {
-    status: 'SUCCESS', // SUCCESS, REJECT, nothing
+    status: 'success', // success, reject, nothing
   }
   render() {
     const { navigateAction, navigation } = this.props
-    const status = navigation.getParam('status', 'SUCCESS')
+    const status = navigation.getParam('status', 'success')
     return (
       <Screen>
         <NavBar
