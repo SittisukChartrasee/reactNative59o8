@@ -34,7 +34,6 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     expireSatus: 'มีวันหมดอายุ',
-    nationSatus: 'ไทย',
     code: this.props.user.spouse.nationalityCode,
     PreconditionRequired: [],
     InvalidArgument: [],
@@ -139,21 +138,20 @@ export default class extends React.Component {
     ]
   }
   handleInput = (props) => {
-    const { fields, code } = this.state
+    const { fields } = this.state
     const { updateUser, user } = this.props
 
     if (props.field === 'nationFlag') {
       this.setState({
-        nationSatus: props.value,
         fields: fields.map((d) => {
           if (props.value === 'ไทย') {
-            updateUser('spouse', { ...user.spouse, nationalityCode: 'TH', nationFlag: 'ไทย' })
+            updateUser('spouse', { ...user.spouse, nationFlag: 'ไทย' })
             if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'marryExpireDate') return { ...d, inVisible: true }
             else if (d.field === 'cardExpiredDate') return { ...d, inVisible: this.props.user.spouse.isIDCardExpDate }
             else if (d.field === 'IDCardNo' || d.field === 'expireFlag') return { ...d, inVisible: false }
             else return d
           } else if (props.value === 'ชาวต่างชาติ') {
-            updateUser('spouse', { ...user.spouse, nationalityCode: code, nationFlag: 'ชาวต่างชาติ' })
+            updateUser('spouse', { ...user.spouse, nationalityCode: this.state.code, nationFlag: 'ชาวต่างชาติ' })
             if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'marryExpireDate') return { ...d, inVisible: false }
             else if (d.field === 'cardExpiredDate') return { ...d, inVisible: true }
             else if (d.field === 'IDCardNo' || d.field === 'expireFlag') return { ...d, inVisible: true }
@@ -227,7 +225,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { expireSatus, nationSatus } = this.state
+    const { expireSatus } = this.state
     const { navigateAction, user, updateRoot } = this.props
     const redirec = this.props.navigation.getParam('redirec', '')
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
@@ -251,13 +249,13 @@ export default class extends React.Component {
       title,
       lastName,
       pepFlag,
-      nationalityCode,
-      IDCardNo: nationSatus === 'ไทย' ? replaceSpace(IDCardNo) : marryPassport,
-      isIDCardExpDate: nationSatus === 'ไทย' ? isIDCardExpDate : marryIsIDCardExpDate,
+      nationalityCode: this.props.user.spouse.nationFlag === 'ไทย' ? 'TH' : nationalityCode,
+      IDCardNo: this.props.user.spouse.nationFlag === 'ไทย' ? replaceSpace(IDCardNo) : marryPassport,
+      isIDCardExpDate: this.props.user.spouse.nationFlag === 'ไทย' ? isIDCardExpDate : marryIsIDCardExpDate,
       cardExpiredDate: (expireSatus === 'มีวันหมดอายุ')
-        ? (nationSatus === 'ไทย')
-          ? convertDate(marryExpireDate)
-          : convertDate(cardExpiredDate)
+        ? (this.props.user.spouse.nationFlag === 'ไทย')
+          ? convertDate(cardExpiredDate)
+          : convertDate(marryExpireDate)
         : new Date('9999-12-31'),
       fistName,
     }
