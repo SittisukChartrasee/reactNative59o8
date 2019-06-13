@@ -20,7 +20,7 @@ const { width: widthView } = Dimensions.get('window')
 
 const renderText = (caseStatus) => {
   switch (caseStatus) {
-    case 'REJECT':
+    case 'Rejected':
       return {
         header: 'ผลอนุมัติเปิดบัญชี',
         title: 'ขออภัยท่านไม่สามารถเปิดบัญชีกองทุนได้',
@@ -29,7 +29,7 @@ const renderText = (caseStatus) => {
         btnStatus: true,
       }
 
-    case 'SUCCESS':
+    case 'Approved':
       return {
         header: 'ผลอนุมัติเปิดบัญชี',
         title: 'เปิดบัญชีสำเร็จ',
@@ -37,7 +37,7 @@ const renderText = (caseStatus) => {
         titleBtn: 'เริ่มใช้งาน K-My Fund',
         btnStatus: false,
       }
-  
+
     default:
       return {
         title: 'เกิดข้อผิดพลาด',
@@ -58,9 +58,10 @@ export default class extends React.Component {
   static defaultProps = {
     status: 'SUCCESS', // SUCCESS, REJECT, nothing
   }
+
   render() {
     const { navigateAction, navigation } = this.props
-    const status = navigation.getParam('status', 'SUCCESS')
+    const status = navigation.getParam('status', 0)
     return (
       <Screen>
         <NavBar
@@ -79,7 +80,7 @@ export default class extends React.Component {
         />
 
         <View style={{ flex: 1, alignItems: 'center', paddingTop: 40, paddingHorizontal: 24 }}>
-          <Image source={images.kmyfundLogo} style={{ width: widthView * .6, marginBottom: 53 }} resizeMode="contain"  />
+          <Image source={images.kmyfundLogo} style={{ width: widthView * .6, marginBottom: 53 }} resizeMode="contain" />
           <TBold color={colors.white} mb={24}>{renderText(status).title}</TBold>
           <TLight color={colors.white}>{renderText(status).dis}</TLight>
         </View>

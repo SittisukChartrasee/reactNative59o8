@@ -35,7 +35,7 @@ export default class extends React.Component {
       .then(res => {
         console.log(res)
         switch (res.data.getStatus) {
-          case 'Approved':statusApprove
+          case 'Approved':
             navigateAction({ ...this.props, page: 'statusApprove', params: { status: res.data.getStatus } })
             break
           case 'Rejected':

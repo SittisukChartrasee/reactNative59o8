@@ -267,11 +267,20 @@ const registerBank = gql`
   }
 `
 
+const saveSanction = gql`
+  mutation saveSanction {
+    saveSanction{
+      success
+      message
+    }
+  }
+`
+
 export default compose(
   graphql(saveSpouse, { name: 'saveSpouse' }),
   graphql(saveCareer, { name: 'saveCareer' }),
   graphql(saveSourceOfFund, { name: 'saveSourceOfFund' }),
-  graphql(saveContact, { name: 'saveContact'}),
+  graphql(saveContact, { name: 'saveContact' }),
   graphql(saveCurrentSameWork, { name: 'saveCurrentSameWork' }),
   graphql(SaveCurrentSamePermanent, { name: 'SaveCurrentSamePermanent' }),
   graphql(saveMailingSamePermanent, { name: 'saveMailingSamePermanent' }),
@@ -289,4 +298,5 @@ export default compose(
   graphql(saveSuittest, { name: 'saveSuittest' }),
   graphql(acceptTerm, { name: 'acceptTerm' }),
   graphql(registerBank, { name: 'registerBank' }),
+  graphql(saveSanction, { name: 'saveSanction' }),
 )

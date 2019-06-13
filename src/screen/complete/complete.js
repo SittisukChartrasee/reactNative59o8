@@ -33,30 +33,28 @@ export default class extends React.Component {
 
   onNext = async () => {
     const { navigateAction, navigation } = this.props
-    const risk = navigation.getParam('risk', 0)
+    const risk = navigation.getParam('risk', 0) // เตรียมส่งข้อมูล
     this.props.client.query({ query: checkVerifiedEmail })
       .then(res => {
         if (res.data.checkVerifiedEmail) {
           // ========================== mock Data ตรวจสอบความเสียงสูง ส่ง risk ไป ============================== //
-
-          // this.props.saveApi_Risk({ variables: { input: data } })
-          //   .then(res => {
-          //     if (res.data.saveApi_Risk.success) navigateAction({ ...this.props, page: 'waiting' })
-          //     else if (!res.data.saveApi_Risk.success) {
-          //       const modal = {
-          //         dis: res.data.saveApi_Risk.message,
-          //         visible: true,
-          //         onPress: () => this.props.updateRoot('modal', { visible: false }),
-          //         onPressClose: () => this.props.updateRoot('modal', { visible: false })
-          //       }
-          //       this.props.updateRoot('modal', modal)
-          //     }
-          //   })
-          //   .catch(err => {
-          //     console.log(err)
-          //   })
-          navigateAction({ ...this.props, page: 'waiting' })
-          console.log(risk)
+          this.props.saveSanction()
+            .then(res => {
+              if (res.data.saveSanction.success) navigateAction({ ...this.props, page: 'waiting' })
+              else if (!res.data.saveSanction.success) {
+                const modal = {
+                  dis: res.data.saveSanction.message,
+                  visible: true,
+                  onPress: () => this.props.updateRoot('modal', { visible: false }),
+                  onPressClose: () => this.props.updateRoot('modal', { visible: false })
+                }
+                this.props.updateRoot('modal', modal)
+              }
+            })
+            .catch(err => {
+              console.log(err)
+            })
+          // console.log(risk) //
         } else {
           navigateAction({ ...this.props, page: 'verifyEmail' })
         }
