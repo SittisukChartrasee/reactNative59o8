@@ -49,6 +49,10 @@ export default class extends React.Component {
         label: 'ธนาคารไทยพาณิชย์',
         image: images.iconscb,
         type: 'selectCard',
+      }, {
+        label: 'ข้าม',
+        type: 'selectCard',
+        link: 'suittest',
       }
     ],
     fields: [
@@ -63,7 +67,11 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
+    console.log(props)
     if (props.type === 'selectCard') {
+      if (props.value === 'ข้าม') {
+        return this.props.navigateAction({ ...this.props, page: 'suittest' })
+      }
       this.setState({ selected: props.value })
       this.setState({ card: this.state.card.map((d) => d.label === props.value ? { ...d, active: true } : { ...d, active: false }) })
       this.props.updateUser('bank', { bankName: props.value })
