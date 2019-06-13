@@ -21,9 +21,10 @@ export default class extends React.Component {
   state = {
     dot: ['', '', '', '', '', ''],
     number: '',
+    countPassFail: 0
   }
 
-  setNumber = obj => {
+  setNumber = async obj => {
     const userToken = this.props.navigation.getParam('userToken', '')
     this.setState({
       dot: obj.dot,
@@ -31,36 +32,46 @@ export default class extends React.Component {
     })
 
     if (obj.number.length === 6) {
-      containerQuery(this.props.client, {
-        query: getStatus,
-      }, async val => {
-        switch (val.data.getStatus) {
-          case 'Approved':
-            const res = await this.props.requestLogin({ userToken, password: obj.number })
-            if (res && res.result) {
-              AsyncStorage.setItem('access_token', res.result.access_token)
-              this.props.navigateAction({ ...this.props, page: 'confirmAccount' })
-            }
-            break
+      const res = await this.props.requestLogin({ userToken, password: obj.number })
 
-          case 'InProgress':
-            this.props.navigateAction({ ...this.props, page: 'checkpoint' })
-            break
+      console.log(res)
+      if (res && res.result) {
+        AsyncStorage.setItem('access_token', res.result.access_token)
+        containerQuery(
+          this.props.client,
+          { query: getStatus },
+          this.onHandleChooseScreen
+        )
+      }
+      if (res && res.success === false) {
+        this.setState({ countPassFail: this.state.countPassFail + 1 }, () => {
+          if (this.state.countPassFail > 3) this.props.navigateAction({ ...this.props, page: 'lockUser' })
+        })
+      }
+    }
+  }
 
-          case 'WaitingApprove':
-            this.props.navigateAction({ ...this.props, page: 'waiting' })
-            break
+  onHandleChooseScreen = val => {
+    switch (val.data.getStatus) {
+      case 'Approved':
+        this.props.navigateAction({ ...this.props, page: 'confirmAccount' })
+        break
 
-          case 'Editing':
-            this.props.navigateAction({ ...this.props, page: 'softReject' })
-            break
-        
-          default: // Rejected
-            this.props.navigateAction({ ...this.props, page: 'statusApprove', params: { status: 'reject' } })
-            break
-        }
-        
-      })
+      case 'InProgress':
+        this.props.navigateAction({ ...this.props, page: 'checkpoint' })
+        break
+
+      case 'WaitingApprove':
+        this.props.navigateAction({ ...this.props, page: 'waiting' })
+        break
+
+      case 'Editing':
+        this.props.navigateAction({ ...this.props, page: 'softReject' })
+        break
+    
+      default: // Rejected
+        this.props.navigateAction({ ...this.props, page: 'statusApprove', params: { status: 'reject' } })
+        break
     }
   }
   
