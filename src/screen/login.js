@@ -70,7 +70,7 @@ export default class extends React.Component {
         break
     
       default: // Rejected
-        this.props.navigateAction({ ...this.props, page: 'statusApprove', params: { status: 'reject' } })
+        this.props.navigateAction({ ...this.props, page: 'statusApprove', params: { status: 'Rejected' } })
         break
     }
   }

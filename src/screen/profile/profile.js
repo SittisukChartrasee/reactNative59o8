@@ -7,6 +7,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import reverse from 'lodash/reverse'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -23,7 +24,6 @@ import {
   getStatusGender,
   getStatusMartial,
   getStatusChild,
-  tomorrowDate,
   replaceJsCard,
   replaceSpace
 } from '../../utility/helper'
@@ -57,15 +57,25 @@ export default class extends React.Component {
       }, {
         label: 'วันบัตรหมดอายุ',
         type: 'radio',
-        init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
+        init: [
+          {
+            title: 'มีวันหมดอายุ',
+            active: !this.props.user.profile.isNoDocExpDate
+          },
+          {
+            title: 'ไม่มีวันหมดอายุ',
+            active: this.props.user.profile.isNoDocExpDate
+          }
+        ],
         field: 'expireDateFlag', // isNoDocExpDate
         required: true,
       }, {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'docExpDate',
-        date: tomorrowDate(),
+        date: reverse(this.props.user.profile.docExpDate.split('-')),
         required: true,
+        inVisible: this.props.user.profile.isNoDocExpDate
       }, {
         label: 'เพศ',
         type: 'dropdown',
@@ -112,7 +122,16 @@ export default class extends React.Component {
       }, {
         label: 'คุณมีบุตร หรือบุตรบุญธรรมหรือไม่ ',
         type: 'radio',
-        init: [{ title: 'ไม่มี', active: true }, { title: 'มี' }],
+        init: [
+          {
+            title: 'ไม่มี',
+            active: (this.props.user.profile.isChild === 'ไม่มี')
+          },
+          {
+            title: 'มี',
+            active: (this.props.user.profile.isChild === 'มี')
+          }
+        ],
         field: 'isChild',
         required: false,
       }, {
@@ -126,6 +145,8 @@ export default class extends React.Component {
 
   handleInput = (props) => {
     const { updateUser, user, updateRoot } = this.props
+    const { expireSatus } = this.state
+    let isNoDoc = expireSatus === 'มีวันหมดอายุ' ? false : true
     if (props.type === 'modal') {
       const modal = {
         image: images.iconBackIdcard,
@@ -137,6 +158,7 @@ export default class extends React.Component {
       return updateRoot('modal', modal)
     }
     else if (props.field === 'expireDateFlag') {
+      isNoDoc = props.value === 'มีวันหมดอายุ' ? false : true
       this.setState({
         expireSatus: props.value,
         fields: this.state.fields.map((d) => {
@@ -149,9 +171,12 @@ export default class extends React.Component {
           }
         })
       })
-    } else {
-      updateUser('profile', { ...user.profile, [props.field]: props.value })
     }
+    updateUser('profile', {
+      ...user.profile,
+      [props.field]: props.value,
+      ['isNoDocExpDate']: isNoDoc
+    })
   }
 
   onValidation = (field) => {
@@ -214,7 +239,7 @@ export default class extends React.Component {
     } = user.profile
 
     console.log(birthDay)
-    
+
     const data = {
       docNo: replaceSpace(idCard),
       jcNumber: replaceJsCard(jcNumber),

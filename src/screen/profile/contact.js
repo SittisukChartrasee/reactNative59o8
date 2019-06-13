@@ -91,34 +91,30 @@ export default class extends React.Component {
       mobilePhone: replaceSpace(mobilePhone),
       email
     }
-    navigateAction({ ...this.props, page: 'tutorialBank' })
 
-
-
-
-    // this.props.saveContact({ variables: { input: data } })
-    //   .then(res => {
-    //     if (res.data.saveContact.success) {
-    //       navigateAction({ ...this.props, page: 'tutorialBank' })
-    //     } else if (!res.data.saveContact.success) {
-    //       switch (res.data.saveContact.message) {
-    //         case 'PreconditionRequired':
-    //           return this.setState({ PreconditionRequired: res.data.saveContact.details })
-    //         case 'InvalidArgument':
-    //           return this.setState({ InvalidArgument: res.data.saveContact.details })
-    //         default:
-    //           const modal = {
-    //             dis: res.data.saveContact.message,
-    //             visible: true,
-    //             onPress: () => updateRoot('modal', { visible: false })
-    //           }
-    //           return updateRoot('modal', modal)
-    //       }
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //   })
+    this.props.saveContact({ variables: { input: data } })
+      .then(res => {
+        if (res.data.saveContact.success) {
+          navigateAction({ ...this.props, page: 'tutorialBank' })
+        } else if (!res.data.saveContact.success) {
+          switch (res.data.saveContact.message) {
+            case 'PreconditionRequired':
+              return this.setState({ PreconditionRequired: res.data.saveContact.details })
+            case 'InvalidArgument':
+              return this.setState({ InvalidArgument: res.data.saveContact.details })
+            default:
+              const modal = {
+                dis: res.data.saveContact.message,
+                visible: true,
+                onPress: () => updateRoot('modal', { visible: false })
+              }
+              return updateRoot('modal', modal)
+          }
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
 
   }
 

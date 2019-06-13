@@ -8,6 +8,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import reverse from 'lodash/reverse'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -18,7 +19,7 @@ import { navigateAction } from '../../redux/actions'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
-import { convertDate, tomorrowDate, replaceSpace } from '../../utility/helper'
+import { convertDate, replaceSpace } from '../../utility/helper'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -33,16 +34,24 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     expireSatus: 'มีวันหมดอายุ',
-    nationSatus: 'ไทย',
-    code: 'TH',
+    code: this.props.user.spouse.nationalityCode,
     PreconditionRequired: [],
     InvalidArgument: [],
-    disabledPepFlag: true,
+    disabledPepFlag: this.props.user.spouse.pepFlag === null,
     fields: [
       {
         label: 'สัญชาติ',
         type: 'radio',
-        init: [{ title: 'ไทย', active: true }, { title: 'ชาวต่างชาติ' }],
+        init: [
+          {
+            title: 'ไทย',
+            active: this.props.user.spouse.nationFlag === 'ไทย'
+          },
+          {
+            title: 'ชาวต่างชาติ',
+            active: this.props.user.spouse.nationFlag === 'ชาวต่างชาติ'
+          }
+        ],
         field: 'nationFlag',
         required: true,
       }, {
@@ -50,37 +59,50 @@ export default class extends React.Component {
         label: 'หมายเลขบัตรประชาชน',
         field: 'IDCardNo',
         option: '9 9999 99999 99 9',
+        inVisible: this.props.user.spouse.nationFlag === 'ชาวต่างชาติ',
         required: true,
       }, {
         label: 'ประเทศ',
         type: 'search',
         field: 'marryCountry', // ต้อง save ที่ field => nationalityCode
-        inVisible: true,
+        inVisible: this.props.user.spouse.nationFlag === 'ไทย',
         required: true,
       }, {
         label: 'หมายเลขหนังสือเดินทาง',
         type: 'textInput',
         field: 'marryPassport', // ต้อง save ที่ field => IDCardNo
-        inVisible: true,
+        inVisible: this.props.user.spouse.nationFlag === 'ไทย',
         required: true,
       }, {
         label: 'วันบัตรหมดอายุ',
         type: 'radio',
-        init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
+        init: [
+          {
+            title: 'มีวันหมดอายุ',
+            active: !this.props.user.spouse.isIDCardExpDate
+          },
+          {
+            title: 'ไม่มีวันหมดอายุ',
+            active: this.props.user.spouse.isIDCardExpDate
+          }
+        ],
         field: 'expireFlag', // ต้อง save ที่ field => isIDCardExpDate
+        inVisible: this.props.user.spouse.nationFlag === 'ชาวต่างชาติ',
         required: true,
       }, {
         label: 'วันที่หนังสือเดินทางหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
-        field: 'cardExpiredDate', // ต้อง save ที่ field => cardExpiredDate
-        inVisible: true,
+        field: 'marryExpireDate', // ต้อง save ที่ field => marryExpireDate
+        date: reverse(this.props.user.spouse.marryExpireDate.split('-')),
+        inVisible: this.props.user.spouse.nationFlag === 'ไทย',
         required: true,
       }, {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
-        field: 'marryExpireDate', // ต้อง save ที่ field => cardExpiredDate
-        date: tomorrowDate(),
+        field: 'cardExpiredDate', // ต้อง save ที่ field => cardExpiredDate
+        date: reverse(this.props.user.spouse.cardExpiredDate.split('-')),
         required: true,
+        inVisible: this.props.user.spouse.nationFlag === 'ชาวต่างชาติ',
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
         type: 'search',
@@ -99,57 +121,70 @@ export default class extends React.Component {
       }, {
         label: 'คู่สมรสเป็นนักการเมือง มีความเกี่ยวข้องกับนักการเมือง หรือบุคคลที่มีสถานภาพทางการเมือง ใช่หรือไม่',
         type: 'radioColumn',
-        init: [{ title: 'ใช่' }, { title: 'ไม่ใช่' }],
+        init: [
+          {
+            title: 'ใช่',
+            active: this.props.user.spouse.pepFlag
+          },
+          {
+            title: 'ไม่ใช่',
+            active: !this.props.user.spouse.pepFlag &&
+              this.props.user.spouse.pepFlag !== null
+          }
+        ],
         field: 'pepFlag',
         required: true,
       },
     ]
   }
   handleInput = (props) => {
-    const { fields, code } = this.state
+    const { fields } = this.state
     const { updateUser, user } = this.props
 
-    if (props.field === 'IDCardNo') {
-      this.props.updateUser('spouse', { ...user.spouse, [props.field]: props.value.split(' ').join('') })
-    }
-
     if (props.field === 'nationFlag') {
-      updateUser('spouse', { ...user.spouse, [props.field]: props.value })
       this.setState({
-        nationSatus: props.value,
         fields: fields.map((d) => {
           if (props.value === 'ไทย') {
-            updateUser('spouse', { ...user.spouse, nationalityCode: 'TH' })
-            if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'cardExpiredDate') return { ...d, inVisible: true }
-            else if (d.field === 'IDCardNo' || d.field === 'marryExpireDate' || d.field === 'expireFlag') return { ...d, inVisible: false }
+            updateUser('spouse', { ...user.spouse, nationFlag: 'ไทย' })
+            if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'marryExpireDate') return { ...d, inVisible: true }
+            else if (d.field === 'cardExpiredDate') return { ...d, inVisible: this.props.user.spouse.isIDCardExpDate }
+            else if (d.field === 'IDCardNo' || d.field === 'expireFlag') return { ...d, inVisible: false }
             else return d
           } else if (props.value === 'ชาวต่างชาติ') {
-            updateUser('spouse', { ...user.spouse, nationalityCode: code })
-            if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'cardExpiredDate') return { ...d, inVisible: false }
-            else if (d.field === 'IDCardNo' || d.field === 'marryExpireDate' || d.field === 'expireFlag') return { ...d, inVisible: true }
+            updateUser('spouse', { ...user.spouse, nationalityCode: this.state.code, nationFlag: 'ชาวต่างชาติ' })
+            if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'marryExpireDate') return { ...d, inVisible: false }
+            else if (d.field === 'cardExpiredDate') return { ...d, inVisible: true }
+            else if (d.field === 'IDCardNo' || d.field === 'expireFlag') return { ...d, inVisible: true }
             else return d
           }
         })
       })
     } else if (props.field === 'expireFlag') {
-      updateUser('spouse', { ...user.spouse, [props.field]: props.value })
       this.setState({
         expireSatus: props.value,
         fields: fields.map((d) => {
           if (props.value === 'มีวันหมดอายุ') {
-            if (d.field === 'marryExpireDate') return { ...d, inVisible: false }
+            updateUser('spouse', { ...user.spouse, expireFlag: props.value, isIDCardExpDate: false })
+            if (d.field === 'cardExpiredDate') return { ...d, inVisible: false }
             else return d
           } else if (props.value === 'ไม่มีวันหมดอายุ') {
-            if (d.field === 'marryExpireDate') return { ...d, inVisible: true }
+            updateUser('spouse', { ...user.spouse, expireFlag: props.value, isIDCardExpDate: true })
+            if (d.field === 'cardExpiredDate') return { ...d, inVisible: true }
             else return d
           }
         })
       })
     } else if (props.field === 'marryCountry') {
       this.setState({ code: props.code })
-      updateUser('spouse', { ...user.spouse, nationalityCode: props.code, nationalityRisk: props.risk })
+      updateUser('spouse', {
+        ...user.spouse,
+        marryCountry: props.value,
+        nationalityCode: props.code,
+        nationalityRisk: props.risk
+      })
     } else if (props.field === 'pepFlag') {
       this.setState({ disabledPepFlag: false })
+      updateUser('spouse', { ...user.spouse, [props.field]: (props.value === 'ใช่') })
     } else {
       updateUser('spouse', { ...user.spouse, [props.field]: props.value })
     }
@@ -190,7 +225,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { expireSatus, nationSatus } = this.state
+    const { expireSatus } = this.state
     const { navigateAction, user, updateRoot } = this.props
     const redirec = this.props.navigation.getParam('redirec', '')
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
@@ -202,6 +237,7 @@ export default class extends React.Component {
       nationalityCode,
       IDCardNo,
       marryPassport,
+      marryIsIDCardExpDate,
       isIDCardExpDate,
       marryExpireDate,
       cardExpiredDate,
@@ -212,14 +248,14 @@ export default class extends React.Component {
     const data = {
       title,
       lastName,
-      pepFlag: pepFlag === 'ใช่',
-      nationalityCode,
-      IDCardNo: nationSatus === 'ไทย' ? replaceSpace(IDCardNo) : marryPassport,
-      isIDCardExpDate,
+      pepFlag,
+      nationalityCode: this.props.user.spouse.nationFlag === 'ไทย' ? 'TH' : nationalityCode,
+      IDCardNo: this.props.user.spouse.nationFlag === 'ไทย' ? replaceSpace(IDCardNo) : marryPassport,
+      isIDCardExpDate: this.props.user.spouse.nationFlag === 'ไทย' ? isIDCardExpDate : marryIsIDCardExpDate,
       cardExpiredDate: (expireSatus === 'มีวันหมดอายุ')
-        ? (nationSatus === 'ไทย')
-          ? convertDate(marryExpireDate)
-          : convertDate(cardExpiredDate)
+        ? (this.props.user.spouse.nationFlag === 'ไทย')
+          ? convertDate(cardExpiredDate)
+          : convertDate(marryExpireDate)
         : new Date('9999-12-31'),
       fistName,
     }

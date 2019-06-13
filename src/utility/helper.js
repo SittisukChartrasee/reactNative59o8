@@ -35,7 +35,7 @@ export const getOfBirth = (date, type) => {
   const splitDate = date.split('/')
   switch (type) {
     case 'day': return splitDate[0]
-    case 'month': return `${month.indexOf(splitDate[1]) + 1}`
+    case 'month': return month.indexOf(splitDate[1]) !== -1 ? `${month.indexOf(splitDate[1]) + 1}` : '-'
     case 'year': return splitDate[2]
     default: return null
   }

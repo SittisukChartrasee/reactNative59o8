@@ -86,7 +86,7 @@ export default class extends React.Component {
         ...configPicker,
         onPickerConfirm: data => {
           this.setState({ month: data[0], day: '-' })
-          handleInput({ value: `${day}/${data[0]}/${year}`, type, field })
+          handleInput({ value: `-/${data[0]}/${year}`, type, field })
         }
       });
     } else if (text.indexOf('วัน') > -1) {

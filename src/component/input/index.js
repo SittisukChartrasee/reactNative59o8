@@ -12,8 +12,9 @@ import InputPickerExpire from './inputPickerExpire'
 import InputModal from './inputModal'
 import { ButtonCard, SelectCard, LinkCard } from '../cardSelect'
 import { TMed, TLight, TBold } from '../texts'
-import colors from '../../config/colors';
-import images from '../../config/images';
+import colors from '../../config/colors'
+import fonts from '../../config/fonts'
+import images from '../../config/images'
 
 const Star = ({
   position = 'absolute',
@@ -143,7 +144,7 @@ export default (props, key) => {
           <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={props.err ? 'rgb(213, 0, 0)' : colors.grey}>{props.label}</TLight>
           <InputModal {...props} />
           {props.required ? <Star /> : null}
-          <Text style={{ fontSize: 12, color: props.err ? 'rgb(213, 0, 0)' : undefined, marginTop: 4 }}>{props.err}</Text>
+          <Text style={{ fontFamily: fonts.sukhumvitLight, fontSize: 12, color: props.err ? 'rgb(213, 0, 0)' : undefined, marginTop: 4 }}>{props.err}</Text>
         </View>
       )
 

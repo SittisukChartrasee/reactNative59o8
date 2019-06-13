@@ -133,7 +133,7 @@ export default class extends React.Component {
       )
     }
 
-    if (data.nameTH.indexOf('อื่นๆ') < 0) {
+    if (data.nameTH.indexOf('อื่นๆ') > 0) { // check ผิดรึปล่าว
       this.props.handleInput && this.props.handleInput({
         type: 'textInput',
         field: `${field}_other`,
@@ -163,7 +163,7 @@ export default class extends React.Component {
             <Image source={images.iconNextPageBlack} />
           </View>
           <View style={{ height: err ? 2 : 1, backgroundColor: err ? 'rgb(213, 0, 0)' : colors.smoky, marginTop: 5 }} />
-          <Text style={{ fontSize: 12, color: err ? 'rgb(213, 0, 0)' : undefined, marginTop: 4 }}>{err}</Text>
+          <Text style={{ fontFamily: fonts.sukhumvitLight, fontSize: 12, color: err ? 'rgb(213, 0, 0)' : undefined, marginTop: 4 }}>{err}</Text>
         </TouchableOpacity>
 
         {
