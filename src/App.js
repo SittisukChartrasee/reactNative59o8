@@ -1,13 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
-import { View, AppState, BackHandler, DeviceEventEmitter, ToastAndroid } from 'react-native'
+import { View, AppState, BackHandler, AsyncStorage } from 'react-native'
 import { createReduxContainer } from 'react-navigation-redux-helpers'
 import { bindActionCreators } from 'redux'
 import { onStore, AppNavigator } from './redux/store'
 import provider from './config/provider'
 import Modal from './component/modal'
 import { root } from './redux/actions/commonAction'
+import colors from './config/colors';
+import { TBold } from './component/texts';
 
 export const store = onStore
 const ReactWithState = connect(({ nav }) => ({ state: nav }))(createReduxContainer(AppNavigator, 'root'))
@@ -16,15 +18,35 @@ const ReactWithState = connect(({ nav }) => ({ state: nav }))(createReduxContain
 const mapToProps = ({ root, nav }) => ({ root, nav })
 const dispatchToProps = dispatch => ({
   updateRoot: bindActionCreators(root, dispatch),
-  handleActionBack: () => dispatch(NavigationActions.back())
+  handleActionBack: () => dispatch(NavigationActions.back()),
+  handleScreen: (value) => dispatch({ type: 'CHECKSCREEN', value })
 })
 
 @provider
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
-  state = {
-    appState: AppState.currentState,
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      appState: AppState.currentState,
+      loading: false,
+    }
+    AsyncStorage.getItem('user_token')
+      .then(async d => {
+        const a = await AsyncStorage.getItem('userToken')
+        console.log(a, d)
+        if (d) {
+          this.setState({ loading: true })
+          this.props.handleScreen('login')
+        } else {
+          this.setState({ loading: true })
+          this.props.handleScreen('firstTerm')
+        }
+      })
   }
+  
+
 
   componentDidMount() {
     AppState.addEventListener('change', this._handleAppStateChange);
@@ -38,8 +60,6 @@ export default class extends React.Component {
     //       if (e.event === 'inactive') return ToastAndroid.show('bye bye', ToastAndroid.SHORT)
     //       else if (e.event === 'active') return ToastAndroid.show('Welcome', ToastAndroid.SHORT)
     // })
-
-    
   }
 
   componentWillUnmount() {
@@ -71,7 +91,14 @@ export default class extends React.Component {
     const { modal } = this.props.root
     return (
       <View style={{ flex: 1 }}>
-        <ReactWithState />
+        { 
+          this.state.loading 
+            ? <ReactWithState /> 
+            : <View style={{ flex: 1, backgroundColor: colors.white, justifyContent: 'center', alignItems: 'center' }}>
+                <TBold>Loading...</TBold>
+              </View> 
+        }
+        {/* <ReactWithState /> */}
         <Modal {...modal} />
       </View>
     )

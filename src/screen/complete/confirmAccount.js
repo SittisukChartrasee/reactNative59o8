@@ -51,23 +51,23 @@ export default class extends React.Component {
       mobilePhone: '0830015610',
     }
 
-    // this.props.requestOtp(data)
-    //   .then(res => {
+    this.props.requestOtp(data)
+      .then(res => {
 
-        // if (res.success) {
+        if (res.success) {
           this.props.navigateAction({ ...this.props, page: 'otp' })
-        // }
+        }
 
-        // this.props.updateRoot('modal', {
-        //   dis: res.message,
-        //   visible: true,
-        //   onPress: () => this.props.updateRoot('modal', { visible: false }),
-        //   onPressClose: () => this.props.updateRoot('modal', { visible: false })
-        // })
-      // })
-      // .catch(err => {
-      //   console.log(err)
-      // })
+        this.props.updateRoot('modal', {
+          dis: res.message,
+          visible: true,
+          onPress: () => this.props.updateRoot('modal', { visible: false }),
+          onPressClose: () => this.props.updateRoot('modal', { visible: false })
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   render() {

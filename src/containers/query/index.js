@@ -1,5 +1,12 @@
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
+import debounce from 'lodash/debounce'
+
+export const containerQuery = debounce((client, obj, setState) => {
+  client.query({ ...obj })
+    .then((val) => setState(val))
+    .catch(err => console.error(err))
+}, 300)
 
 export const getUserTitle = gql`
   query getUserTitle($text: String!) {
@@ -98,6 +105,12 @@ export const checkVerifiedEmail = gql`
 export const getStatus = gql`
   query getStatus {
     getStatus
+  }
+`
+
+export const getStatusInProgress = gql`
+  query getStatusInProgress {
+    getStatusInProgress
   }
 `
 

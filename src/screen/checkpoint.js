@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native'
+import { withApollo } from 'react-apollo'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -24,31 +25,9 @@ import { LongPositionButton, NextButton } from '../component/button'
 import { navigateAction } from '../redux/actions'
 import { requestOtp } from '../redux/actions/root-active'
 import { updateUser } from '../redux/actions/commonAction'
+import { containerQuery, getStatusInProgress } from '../containers/query'
 
 const { width: widthScreen } = Dimensions.get('window')
-
-const checkPoint = [
-  {
-    point: 'ขั้นตอนที่ 1',
-    check: 'success',
-    text: 'ยืนยันตัวตน'
-  },
-  {
-    point: 'ขั้นตอนที่ 2',
-    check: 'success',
-    text: 'กรอกข้อมูลส่วนตัว'
-  },
-  {
-    point: 'ขั้นตอนที่ 3',
-    check: 'current',    
-    text: 'เชื่อมบัญชีธนาคาร'
-  },
-  {
-    point: 'ขั้นตอนที่ 4',
-    check: 'future',
-    text: 'ทำแบบระเมินความเสี่ยง'
-  }
-]
 
 const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
@@ -57,9 +36,85 @@ const dispatchToProps = dispatch => ({
 
 @connect(mapToProps, dispatchToProps)
 @lockout
+@withApollo
 export default class extends React.Component {
+  state = {
+    checkPoint: [
+      {
+        point: 'ขั้นตอนที่ 1',
+        check: 'success',
+        text: 'ยืนยันตัวตน'
+      },
+      {
+        point: 'ขั้นตอนที่ 2',
+        check: 'success',
+        text: 'กรอกข้อมูลส่วนตัว'
+      },
+      {
+        point: 'ขั้นตอนที่ 3',
+        check: 'current',    
+        text: 'เชื่อมบัญชีธนาคาร'
+      },
+      {
+        point: 'ขั้นตอนที่ 4',
+        check: 'future',
+        text: 'ทำแบบระเมินความเสี่ยง'
+      }
+    ],
+    link: '',
+  }
+
+  componentDidMount = () => {
+    containerQuery(this.props.client, {
+      query: getStatusInProgress,
+    }, val => {
+      if (val.data.getStatusInProgress === 'Assure') {
+        this.setState({
+          checkPoint: this.state.checkPoint.map(
+            (d, i) => i === 0 
+              ? ({ ...d, check: 'current' }) 
+              : ({ ...d, check: 'future' })),
+          link: 'condi'
+        })
+      } else if (val.data.getStatusInProgress === 'PersonalInformation') {
+        this.setState({ 
+          checkPoint: this.state.checkPoint.map(
+            (d, i) => i < 1
+              ? ({ ...d, check: 'success' }) 
+              : i === 1
+                ? ({ ...d, check: 'current' }) 
+                : ({ ...d, check: 'future' })
+          ),
+          link: 'profile'
+        })
+      } else if (val.data.getStatusInProgress === 'LinkBank') {
+        this.setState({ 
+          checkPoint: this.state.checkPoint.map(
+            (d, i) => i < 2
+              ? ({ ...d, check: 'success' }) 
+              : i === 2
+                ? ({ ...d, check: 'current' }) 
+                : ({ ...d, check: 'future' })
+          ),
+          link: 'tutorialBank'
+        })
+      } else if (val.data.getStatusInProgress === 'Suittest') {
+        this.setState({ 
+          checkPoint: this.state.checkPoint.map(
+            (d, i) => i < 3
+              ? ({ ...d, check: 'success' }) 
+              : i === 3
+                ? ({ ...d, check: 'current' }) 
+                : ({ ...d, check: 'future' })
+          ),
+          link: 'suittest'
+        })
+      }
+    })
+  }
 
   render() {
+    const { checkPoint } = this.state
     let sizing = { width: 108, height: 78 }
     return (
       <Screen>
@@ -146,7 +201,7 @@ export default class extends React.Component {
           </View>
           <LongPositionButton
             label="ดำเนินการต่อ"
-            // onPress={navigateAction({ ...this.props, page: 'welcome' })}
+            onPress={navigateAction({ ...this.props, page: this.state.link })}
           />
         </KeyboardAwareScrollView>
       </Screen>

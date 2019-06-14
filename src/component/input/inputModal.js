@@ -113,7 +113,10 @@ export default class extends React.Component {
             <NavBar
               title={label}
               navLeft={
-                <TouchableOpacity onPress={() => this.setState({ open: false })}>
+                <TouchableOpacity
+                  onPress={() => this.setState({ open: false })}
+                  style={{ paddingRight: 30 }}
+                >
                   <Image source={images.iconback} />
                 </TouchableOpacity>
               }

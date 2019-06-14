@@ -3,6 +3,7 @@ import {
   View,
   ScrollView,
   Image,
+  AsyncStorage,
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native'
@@ -28,6 +29,13 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     agree: false,
+  }
+
+  componentDidMount = async () => {
+    const a = await AsyncStorage.getItem('user_token')
+    const b = await AsyncStorage.getItem('userToken')
+    const c = await AsyncStorage.getAllKeys()
+    console.log(a, b, c)
   }
 
   onNext = async () => {
