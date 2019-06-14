@@ -40,11 +40,12 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
 
   onNext = async () => {
-    const userToken = await AsyncStorage.getItem('user_token')
-    const accessToken = await AsyncStorage.getItem('access_token')
-  
-    if (userToken) return this.props.navigateAction({ ...this.props, page: 'login', params: { userToken, accessToken } })
-    return this.props.navigateAction({ ...this.props, page: 'welcome' })
+    // const userToken = await AsyncStorage.getItem('user_token')
+    // const accessToken = await AsyncStorage.getItem('access_token')
+
+    // if (userToken) return this.props.navigateAction({ ...this.props, page: 'login', params: { userToken, accessToken } })
+    // return 
+    this.props.navigateAction({ ...this.props, page: 'welcome' })
   }
 
   render() {

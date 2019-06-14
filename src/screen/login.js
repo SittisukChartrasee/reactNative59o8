@@ -25,7 +25,7 @@ export default class extends React.Component {
   }
 
   setNumber = async obj => {
-    const userToken = this.props.navigation.getParam('userToken', '')
+    const userToken = await AsyncStorage.getItem('user_token')
     this.setState({
       dot: obj.dot,
       number: obj.number
@@ -83,7 +83,8 @@ export default class extends React.Component {
           {...{
             dot,
             title: 'กรุณากรอกรหัสผ่าน',
-            onPrevPage: () => this.props.navigation.goBack(),
+            // onPrevPage: () => this.props.navigation.goBack(),
+            onPrevPage: () => AsyncStorage.clear(),
             forgetbtn: () => this.props.navigateAction({ ...this.props, page: 'forgetPasscode' })
           }}
         />

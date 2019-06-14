@@ -10,6 +10,7 @@ import {
 import reducers from './reducers'
 import AppRouteConfigs from '../config/appNavigation'
 import { handleModal } from '../containers/middleware/modal'
+import { handleScreen } from '../containers/middleware/handleScreen'
 
 export const AppNavigator = createStackNavigator(AppRouteConfigs,
   {
@@ -29,6 +30,7 @@ const store = createStore(
       createReactNavigationReduxMiddleware(state => state.nav),
       thunk,
       handleModal,
+      handleScreen,
     )
   ),
 )
