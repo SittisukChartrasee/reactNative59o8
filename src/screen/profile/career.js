@@ -73,17 +73,17 @@ export default class extends React.Component {
   }
 
   handleInput = props => {
-    const { updateUser, user } = this.props
+    const { user } = this.props
     if (props.field === 'occupation') {
-      updateUser('career', { ...user.career, [props.field]: props.value, occupationCode: props.code })
+      this.props.updateUser('career', { ...user.career, [props.field]: props.value, occupationCode: props.code })
     } else if (props.field === 'countrySourceOfIncome') {
-      updateUser('career', { ...user.career, [props.field]: props.value, countyCode: props.code })
+      this.props.updateUser('career', { ...user.career, [props.field]: props.value, countyCode: props.code })
     } else if (props.field === 'busType') {
-      updateUser('career', { ...user.career, [props.field]: props.value, isicCode: props.code })
+      this.props.updateUser('career', { ...user.career, [props.field]: props.value, isicCode: props.code })
     } else if (props.field === 'incomeRangeCode') {
-      updateUser('career', { ...user.career, [props.field]: props.value })
+      this.props.updateUser('career', { ...user.career, [props.field]: props.value })
     } else {
-      updateUser('career', { ...user.career, [props.field]: props.value.value })
+      this.props.updateUser('career', { ...user.career, [props.field]: props.value.value })
     }
   }
 
@@ -104,9 +104,9 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = async () => {
-    const { navigateAction, user, updateRoot } = this.props
-    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+  onNext = () => {
+    const { user } = this.props
+    this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       isicCode,
       occupationCode,
@@ -135,14 +135,14 @@ export default class extends React.Component {
         onPress: () => Linking.openURL(`tel:026733888`),
         onPressClose: () => this.props.updateRoot('modal', { visible: false })
       }
-      return updateRoot('modal', modal)
+      return this.props.updateRoot('modal', modal)
     } else {
       this.props.saveCareer({ variables: { input: data } })
         .then(res => {
           console.log(res)
 
           if (res.data.saveCareer.success) {
-            navigateAction({ ...this.props, page: 'sourceOfFund' })
+            this.props.navigateAction({ ...this.props, page: 'sourceOfFund' })
           } else if (!res.data.saveCareer.success) {
             switch (res.data.saveCareer.message) {
               case 'PreconditionRequired':
@@ -157,10 +157,10 @@ export default class extends React.Component {
                 const modal = {
                   dis: res.data.saveCareer.message,
                   visible: true,
-                  onPress: () => updateRoot('modal', { visible: false }),
+                  onPress: () => this.props.updateRoot('modal', { visible: false }),
                   onPressClose: () => this.props.updateRoot('modal', { visible: false })
                 }
-                return updateRoot('modal', modal)
+                return this.props.updateRoot('modal', modal)
             }
           }
         })

@@ -3,7 +3,7 @@ import { tomorrowDate } from '../../utility/helper'
 
 const init = {
   profile: {
-    idCard: '',
+    idCard: '5 4110 07573 40 3',
     jcNumber: '',
     expireDateFlag: 'มีวันหมดอายุ',
     isNoDocExpDate: false,
@@ -95,8 +95,8 @@ const init = {
   contact: {
     workPhone: '',
     homePhone: '',
-    mobilePhone: '',
-    email: ''
+    mobilePhone: '088 752 9727',
+    email: 'looger.tee@gmail.com'
   },
   career: {
     busType: '',

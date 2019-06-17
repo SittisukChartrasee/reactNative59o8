@@ -60,8 +60,8 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
-    const { updateUser, user } = this.props
-    updateUser('contact', { ...user.contact, [props.field]: props.value })
+    const { user } = this.props
+    this.props.updateUser('contact', { ...user.contact, [props.field]: props.value })
   }
 
   onValidation = (field) => {
@@ -76,8 +76,8 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = async () => {
-    const { navigateAction, user, updateRoot } = this.props
+  onNext = () => {
+    const { user } = this.props
     const {
       workPhone,
       homePhone,
@@ -95,7 +95,7 @@ export default class extends React.Component {
     this.props.saveContact({ variables: { input: data } })
       .then(res => {
         if (res.data.saveContact.success) {
-          navigateAction({ ...this.props, page: 'tutorialBank' })
+          this.props.navigateAction({ ...this.props, page: 'tutorialBank' })
         } else if (!res.data.saveContact.success) {
           switch (res.data.saveContact.message) {
             case 'PreconditionRequired':
@@ -106,9 +106,9 @@ export default class extends React.Component {
               const modal = {
                 dis: res.data.saveContact.message,
                 visible: true,
-                onPress: () => updateRoot('modal', { visible: false })
+                onPress: () => this.props.updateRoot('modal', { visible: false })
               }
-              return updateRoot('modal', modal)
+              return this.props.updateRoot('modal', modal)
           }
         }
       })

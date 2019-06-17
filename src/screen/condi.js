@@ -39,13 +39,12 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction } = this.props
 
     this.props.acceptTerm()
       .then(res => {
         console.log(res)
         if (res.data.acceptTerm.success) {
-          navigateAction({ ...this.props, page: 'tutorialBackCamera' })
+          this.props.navigateAction({ ...this.props, page: 'tutorialBackCamera' })
         }
       })
   }

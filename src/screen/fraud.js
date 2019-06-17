@@ -74,7 +74,6 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction } = this.props
 
     const data = {
       hasLaunderingRecord: checkActiveData(this.props.user.fraud.choice).IS_TRUE,
@@ -91,12 +90,11 @@ export default class extends React.Component {
       }
       return this.props.updateRoot('modal', modal)
     } else {
-      this.props
-        .saveFraud({ variables: { input: data } })
+      this.props.saveFraud({ variables: { input: data } })
         .then(res => {
           console.log(res)
           if (res.data.saveFraud.success) {
-            navigateAction({ ...this.props, page: 'profile' })
+            this.props.navigateAction({ ...this.props, page: 'profile' })
           }
         })
         .catch(err => {
@@ -106,13 +104,12 @@ export default class extends React.Component {
   }
 
   render() {
-    const { navigation, navigateAction } = this.props
     return (
       <Screen color='transparent'>
         <NavBar
           title='สถานะที่ถูกกำหนด'
           navLeft={
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }

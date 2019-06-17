@@ -27,7 +27,6 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction } = this.props
     const token = await AsyncStorage.getItem("access_token")
 
     const data = new FormData()
@@ -41,11 +40,10 @@ export default class extends React.Component {
       method: 'POST',
       body: data
     }, token)
-    if (res.success) navigateAction({ ...this.props, page: 'tutorialFrontCamera' })
+    if (res.success) this.props.navigateAction({ ...this.props, page: 'tutorialFrontCamera' })
   }
 
   render() {
-    const { navigateAction, navigation } = this.props
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.black }}>
         {

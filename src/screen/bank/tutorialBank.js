@@ -26,7 +26,6 @@ const dispatchToProps = dispatch => ({
 @lockout
 export default class extends React.Component {
   render() {
-    const { navigateAction } = this.props
     return (
       <Screen>
         <NavBar
@@ -85,7 +84,7 @@ export default class extends React.Component {
             <LongButton
               label="ตกลง"
               style={{ marginHorizontal: 24 }}
-              onPress={() => navigateAction({ ...this.props, page: 'chooseBank' })}
+              onPress={() => this.props.navigateAction({ ...this.props, page: 'chooseBank' })}
             />
           </View>
         </View>

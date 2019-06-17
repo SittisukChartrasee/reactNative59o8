@@ -29,20 +29,19 @@ const dispatchToProps = dispatch => ({
 @lockout
 export default class extends React.Component {
 
-  onNext = async () => {
-    const { navigateAction } = this.props
+  onNext = () => {
     this.props.client.query({ query: getStatus })
       .then(res => {
         console.log(res)
         switch (res.data.getStatus) {
           case 'Approved':
-            navigateAction({ ...this.props, page: 'statusApprove', params: { status: res.data.getStatus } })
+            this.props.navigateAction({ ...this.props, page: 'statusApprove', params: { status: res.data.getStatus } })
             break
           case 'Rejected':
-            navigateAction({ ...this.props, page: 'statusApprove', params: { status: res.data.getStatus } })
+            this.props.navigateAction({ ...this.props, page: 'statusApprove', params: { status: res.data.getStatus } })
             break
           case 'Editing':
-            navigateAction({ ...this.props, page: 'softReject', params: { status: res.data.getStatus } })
+            this.props.navigateAction({ ...this.props, page: 'softReject', params: { status: res.data.getStatus } })
             break
           default:
             break

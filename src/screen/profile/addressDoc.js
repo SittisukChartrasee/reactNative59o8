@@ -91,7 +91,7 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
-    const { updateUser, user } = this.props
+    const { user } = this.props
 
     // ตรวจสอบความเสี่ยงของประเทศ
 
@@ -102,9 +102,9 @@ export default class extends React.Component {
     // }
 
     if (props.field === 'country') {
-      updateUser('addressDoc', { ...user.addressDoc, [props.field]: props.value, countryCode: props.code })
+      this.props.updateUser('addressDoc', { ...user.addressDoc, [props.field]: props.value, countryCode: props.code })
     } else {
-      updateUser('addressDoc', { ...user.addressDoc, [props.field]: props.value })
+      this.props.updateUser('addressDoc', { ...user.addressDoc, [props.field]: props.value })
     }
   }
 
@@ -156,9 +156,9 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = async () => {
-    const { navigateAction, user, updateRoot } = this.props
-    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+  onNext = () => {
+    const { user } = this.props
+    this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       countryCode,
       addressNoTH,
@@ -205,7 +205,7 @@ export default class extends React.Component {
         // } else if (res.data.saveMailingAddress.success) {
 
         if (res.data.saveMailingAddress.success) {
-          navigateAction({ ...this.props, page: 'contact' })
+          this.props.navigateAction({ ...this.props, page: 'contact' })
         } else if (!res.data.saveMailingAddress.success) {
           switch (res.data.saveMailingAddress.message) {
             case 'PreconditionRequired':
@@ -216,10 +216,10 @@ export default class extends React.Component {
               const modal = {
                 dis: res.data.saveMailingAddress.message,
                 visible: true,
-                onPress: () => updateRoot('modal', { visible: false }),
+                onPress: () => this.props.updateRoot('modal', { visible: false }),
                 onPressClose: () => this.props.updateRoot('modal', { visible: false })
               }
-              return updateRoot('modal', modal)
+              return this.props.updateRoot('modal', modal)
           }
         }
       })

@@ -161,9 +161,9 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = async () => {
-    const { navigateAction, user, updateRoot } = this.props
-    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+  onNext = () => {
+    const { user } = this.props
+    this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       countryCode,
       companyName,
@@ -212,7 +212,7 @@ export default class extends React.Component {
         // } else if (res.data.saveWorkplaceAddress.success) {
 
         if (res.data.saveWorkplaceAddress.success) {
-          navigateAction({ ...this.props, page: 'chooseCurr' })
+          this.props.navigateAction({ ...this.props, page: 'chooseCurr' })
         } else if (!res.data.saveWorkplaceAddress.success) {
           switch (res.data.saveWorkplaceAddress.message) {
             case 'PreconditionRequired':
@@ -223,10 +223,10 @@ export default class extends React.Component {
               const modal = {
                 dis: res.data.saveWorkplaceAddress.message,
                 visible: true,
-                onPress: () => updateRoot('modal', { visible: false }),
+                onPress: () => this.props.updateRoot('modal', { visible: false }),
                 onPressClose: () => this.props.updateRoot('modal', { visible: false })
               }
-              return updateRoot('modal', modal)
+              return this.props.updateRoot('modal', modal)
           }
         }
       })

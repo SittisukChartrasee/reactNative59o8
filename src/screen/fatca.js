@@ -64,10 +64,9 @@ export default class extends React.Component {
     this.props.updateFatca('sumFatca', checkActiveData(obj.choice).IS_SUM)
   }
 
-  onNext = async () => {
+  onNext = () => {
                
-    const { navigateAction, fatcaReducer } = this.props
-    const fatca = fatcaReducer.fatca
+    const fatca = this.props.fatcaReducer.fatca
 
     const data = {
       isUSCitizen: checkActiveData(fatca).IS_TRUE,
@@ -86,7 +85,7 @@ export default class extends React.Component {
     } else {
       this.props.saveFatca({ variables: { input: data } })
         .then(res => {
-          if (res.data.saveFatca.success) navigateAction({ ...this.props, page: 'fraud' })
+          if (res.data.saveFatca.success) this.props.navigateAction({ ...this.props, page: 'fraud' })
           else if (!res.data.saveFatca.success) {
             const modal = {
               dis: res.data.saveFatca.message,
@@ -104,7 +103,6 @@ export default class extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
     const fatca = this.props.fatcaReducer.fatca
     return (
       <Screen color="transparent">

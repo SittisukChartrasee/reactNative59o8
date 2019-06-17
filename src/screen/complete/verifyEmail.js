@@ -51,11 +51,10 @@ export default class extends React.Component {
   }
 
   componentWillReceiveProps = newProps => {
-    const { navigateAction } = this.props
     if (newProps.root.appState === 'active') {
       this.props.client.query({ query: checkVerifiedEmail })
         .then(res => {
-          if (res.data.checkVerifiedEmail) navigateAction({ ...this.props, page: 'waiting' })
+          if (res.data.checkVerifiedEmail) this.props.navigateAction({ ...this.props, page: 'waiting' })
         })
         .catch(err => console.log(err))
     }

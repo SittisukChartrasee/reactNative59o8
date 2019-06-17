@@ -59,8 +59,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { navigateAction, getRegisterBankStatus } = this.props
-    const status = getRegisterBankStatus.getRegisterBankStatus && getRegisterBankStatus.getRegisterBankStatus.status
+    const status = this.props.getRegisterBankStatus.getRegisterBankStatus && this.props.getRegisterBankStatus.getRegisterBankStatus.status
     return (
       <Screen>
         <NavBar
@@ -80,7 +79,7 @@ export default class extends React.Component {
             <LongButton
               label={renderText(status).titleBtn}
               style={{ marginHorizontal: 24 }}
-              onPress={() => navigateAction({ ...this.props, page: renderText(status).page })}
+              onPress={() => this.props.navigateAction({ ...this.props, page: renderText(status).page })}
             />
           }
         </View>

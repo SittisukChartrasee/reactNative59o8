@@ -39,7 +39,7 @@ const dispatchToProps = dispatch => ({
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
 
-  onNext = async () => {
+  onNext = () => {
     // const userToken = await AsyncStorage.getItem('user_token')
     // const accessToken = await AsyncStorage.getItem('access_token')
 

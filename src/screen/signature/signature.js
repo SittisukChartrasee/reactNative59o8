@@ -46,7 +46,7 @@ export default class Demo extends Component {
 
 
   saveSign = async () => {
-    this.signature.saveImage()
+    await this.signature.saveImage()
   }
 
   resetSign = () => {
@@ -55,7 +55,6 @@ export default class Demo extends Component {
   }
 
   _onSaveEvent = async result => {
-    const { navigateAction } = this.props
     const token = await AsyncStorage.getItem("access_token")
 
     const data = new FormData()
@@ -71,7 +70,7 @@ export default class Demo extends Component {
     }, token)
 
     if (res.success && this.state.dragged) {
-      navigateAction({ ...this.props, page: 'fatca' })
+      this.props.navigateAction({ ...this.props, page: 'fatca' })
     }
   }
   _onDragEvent() {

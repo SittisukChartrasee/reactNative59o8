@@ -139,19 +139,19 @@ export default class extends React.Component {
   }
   handleInput = (props) => {
     const { fields } = this.state
-    const { updateUser, user } = this.props
+    const { user } = this.props
 
     if (props.field === 'nationFlag') {
       this.setState({
         fields: fields.map((d) => {
           if (props.value === 'ไทย') {
-            updateUser('spouse', { ...user.spouse, nationFlag: 'ไทย' })
+            this.props.updateUser('spouse', { ...user.spouse, nationFlag: 'ไทย' })
             if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'marryExpireDate') return { ...d, inVisible: true }
             else if (d.field === 'cardExpiredDate') return { ...d, inVisible: this.props.user.spouse.isIDCardExpDate }
             else if (d.field === 'IDCardNo' || d.field === 'expireFlag') return { ...d, inVisible: false }
             else return d
           } else if (props.value === 'ชาวต่างชาติ') {
-            updateUser('spouse', { ...user.spouse, nationalityCode: this.state.code, nationFlag: 'ชาวต่างชาติ' })
+            this.props.updateUser('spouse', { ...user.spouse, nationalityCode: this.state.code, nationFlag: 'ชาวต่างชาติ' })
             if (d.field === 'marryCountry' || d.field === 'marryPassport' || d.field === 'marryExpireDate') return { ...d, inVisible: false }
             else if (d.field === 'cardExpiredDate') return { ...d, inVisible: true }
             else if (d.field === 'IDCardNo' || d.field === 'expireFlag') return { ...d, inVisible: true }
@@ -164,11 +164,11 @@ export default class extends React.Component {
         expireSatus: props.value,
         fields: fields.map((d) => {
           if (props.value === 'มีวันหมดอายุ') {
-            updateUser('spouse', { ...user.spouse, expireFlag: props.value, isIDCardExpDate: false })
+            this.props.updateUser('spouse', { ...user.spouse, expireFlag: props.value, isIDCardExpDate: false })
             if (d.field === 'cardExpiredDate') return { ...d, inVisible: false }
             else return d
           } else if (props.value === 'ไม่มีวันหมดอายุ') {
-            updateUser('spouse', { ...user.spouse, expireFlag: props.value, isIDCardExpDate: true })
+            this.props.updateUser('spouse', { ...user.spouse, expireFlag: props.value, isIDCardExpDate: true })
             if (d.field === 'cardExpiredDate') return { ...d, inVisible: true }
             else return d
           }
@@ -176,7 +176,7 @@ export default class extends React.Component {
       })
     } else if (props.field === 'marryCountry') {
       this.setState({ code: props.code })
-      updateUser('spouse', {
+      this.props.updateUser('spouse', {
         ...user.spouse,
         marryCountry: props.value,
         nationalityCode: props.code,
@@ -184,9 +184,9 @@ export default class extends React.Component {
       })
     } else if (props.field === 'pepFlag') {
       this.setState({ disabledPepFlag: false })
-      updateUser('spouse', { ...user.spouse, [props.field]: (props.value === 'ใช่') })
+      this.props.updateUser('spouse', { ...user.spouse, [props.field]: (props.value === 'ใช่') })
     } else {
-      updateUser('spouse', { ...user.spouse, [props.field]: props.value })
+      this.props.updateUser('spouse', { ...user.spouse, [props.field]: props.value })
     }
   }
 
@@ -224,11 +224,11 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = async () => {
+  onNext = () => {
     const { expireSatus } = this.state
-    const { navigateAction, user, updateRoot } = this.props
+    const { user } = this.props
     const redirec = this.props.navigation.getParam('redirec', '')
-    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+    this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
     const {
       title,
@@ -272,8 +272,8 @@ export default class extends React.Component {
         // }
 
         if (res.data.saveSpouse.success) {
-          if (redirec) return navigateAction({ ...this.props, page: redirec })
-          navigateAction({ ...this.props, page: 'career' })
+          if (redirec) return this.props.navigateAction({ ...this.props, page: redirec })
+          this.props.navigateAction({ ...this.props, page: 'career' })
         } else if (!res.data.saveSpouse.success) {
           switch (res.data.saveSpouse.message) {
             case 'PreconditionRequired':
@@ -284,10 +284,10 @@ export default class extends React.Component {
               const modal = {
                 dis: res.data.saveSpouse.message,
                 visible: true,
-                onPress: () => updateRoot('modal', { visible: false }),
+                onPress: () => this.props.updateRoot('modal', { visible: false }),
                 onPressClose: () => this.props.updateRoot('modal', { visible: false })
               }
-              return updateRoot('modal', modal)
+              return this.props.updateRoot('modal', modal)
           }
         }
       })

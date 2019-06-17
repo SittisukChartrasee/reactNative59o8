@@ -31,8 +31,8 @@ export default class extends React.Component {
     dis: ''
   }
 
-  setNumber = async (obj) => {
-    const { navigateAction, root, passcode, updateRoot } = this.props
+  setNumber = (obj) => {
+    const { passcode } = this.props
     const { defaultPasscode } = this.state
     this.setState({ ...obj })
 
@@ -41,21 +41,21 @@ export default class extends React.Component {
     }
     if (obj.number.length === 6) {
       if (passcode.passcode === data.password) {
-        this.props.requestRegister(data, root.access_token)
+        this.props.requestRegister(data, this.props.root.access_token)
           .then(res => {
             console.log(res)
             if (res.success) {
-              navigateAction({ ...this.props, page: 'condi' })
+              this.props.navigateAction({ ...this.props, page: 'condi' })
               AsyncStorage.setItem('access_token', res.result.access_token)
               AsyncStorage.setItem('user_token', res.result.user_token)
             } else if (!res.success) {
               const modal = {
                 dis: res.message,
                 visible: true,
-                onPress: () => updateRoot('modal', { visible: false }),
+                onPress: () => this.props.updateRoot('modal', { visible: false }),
                 onPressClose: () => this.props.updateRoot('modal', { visible: false })
               }
-              return updateRoot('modal', modal)
+              return this.props.updateRoot('modal', modal)
             }
           })
           .catch(err => {
@@ -66,15 +66,15 @@ export default class extends React.Component {
           dis: `รหัสผ่าน (PIN) ไม่ตรงกับที่ตั้งไว้\nกรุณากรอกใหม่อีกครั้ง`,
           visible: true,
           onPress: () => {
-            updateRoot('modal', { visible: false })
+            this.props.updateRoot('modal', { visible: false })
             this.setState({ ...defaultPasscode, defaultKey: true })
           },
           onPressClose: () => {
-            updateRoot('modal', { visible: false })
+            this.props.updateRoot('modal', { visible: false })
             this.setState({ ...defaultPasscode, defaultKey: true })
           }
         }
-        return updateRoot('modal', modal)
+        return this.props.updateRoot('modal', modal)
       }
     }
   }

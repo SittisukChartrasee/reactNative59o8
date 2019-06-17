@@ -82,13 +82,11 @@ export default class extends React.Component {
   }
 
   onNext = () => {
-    const { navigateAction } = this.props
     const { risk } = this.state
-    navigateAction({ ...this.props, page: 'complete', params: { risk } })
+    this.props.navigateAction({ ...this.props, page: 'complete', params: { risk } })
   }
 
   render() {
-    const { navigation } = this.props
     const {
       risk,
       descTH,
@@ -105,7 +103,7 @@ export default class extends React.Component {
           title="ผลการประเมินความเสี่ยง"
           navLeft={
             <TouchableOpacity
-              onPress={() => navigation.goBack()}
+              onPress={() => this.props.navigation.goBack()}
               style={{ paddingRight: 30 }}
             >
               <Image source={images.iconback} />

@@ -90,7 +90,8 @@ export default class extends React.Component {
     InvalidArgument: [],
   }
   handleInput = (props) => {
-    const { updateUser, user } = this.props
+
+    const { user } = this.props
 
     // ตรวจสอบความเสี่ยงของประเทศ
 
@@ -101,9 +102,9 @@ export default class extends React.Component {
     // }
 
     if (props.field === 'country') {
-      updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value, countryCode: props.code })
+      this.props.updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value, countryCode: props.code })
     } else {
-      updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value })
+      this.props.updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value })
     }
   }
 
@@ -155,9 +156,9 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = async () => {
-    const { navigateAction, user, updateRoot } = this.props
-    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+  onNext = () => {
+    const { user } = this.props
+    this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       countryCode,
       addressNoTH,
@@ -204,7 +205,7 @@ export default class extends React.Component {
         // } else if (res.data.saveCurrentAddress.success) {
 
         if (res.data.saveCurrentAddress.success) {
-          navigateAction({ ...this.props, page: 'chooseDoc' })
+          this.props.navigateAction({ ...this.props, page: 'chooseDoc' })
         } else if (!res.data.saveCurrentAddress.success) {
           switch (res.data.saveCurrentAddress.message) {
             case 'PreconditionRequired':
@@ -215,10 +216,10 @@ export default class extends React.Component {
               const modal = {
                 dis: res.data.saveCurrentAddress.message,
                 visible: true,
-                onPress: () => updateRoot('modal', { visible: false }),
+                onPress: () => this.props.updateRoot('modal', { visible: false }),
                 onPressClose: () => this.props.updateRoot('modal', { visible: false })
               }
-              return updateRoot('modal', modal)
+              return this.props.updateRoot('modal', modal)
           }
         }
       })
@@ -263,7 +264,7 @@ export default class extends React.Component {
               init: d.init,
               value: user.addressCurr[d.field],
               onHandleDistrict: this.onHandleDistrict,
-              value: this.props.user.addressCurr[d.field],
+              value: user.addressCurr[d.field],
               handleInput: (props) => this.handleInput(props),
               err: this.onValidation(d.field)
             }, key))
