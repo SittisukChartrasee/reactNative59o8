@@ -58,10 +58,12 @@ export default class extends React.Component {
       this.props.velidateOtp(data)
         .then(res => {
           console.log(res)
-          if (res.result.is_register) {
-            navigateAction({ ...this.props, page: 'login' })
-          } else if (res.success) {
-            navigateAction({ ...this.props, page: 'passcode' })
+          if (res.success) {
+            if (res.result.is_register) {
+              navigateAction({ ...this.props, page: 'login' })
+            } else {
+              navigateAction({ ...this.props, page: 'passcode' })
+            }
           } else if (!res.success) {
             if (res.details === 6) {
               this.setState({

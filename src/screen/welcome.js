@@ -101,9 +101,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    // this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'fatca' }))
     const { navigateAction, user } = this.props
-
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
     const data = {
