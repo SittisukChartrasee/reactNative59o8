@@ -31,9 +31,8 @@ const dispatchToProps = dispatch => ({
 @setMutation
 export default class extends React.Component {
 
-  onNext = async () => {
-    const { navigation } = this.props
-    const risk = navigation.getParam('risk', 0) // เตรียมส่งข้อมูล
+  onNext = () => {
+    const risk = this.props.navigation.getParam('risk', 0) // เตรียมส่งข้อมูล
     this.props.client.query({ query: checkVerifiedEmail })
       .then(res => {
         if (res.data.checkVerifiedEmail) {

@@ -29,7 +29,7 @@ const dispatchToProps = dispatch => ({
 @lockout
 export default class extends React.Component {
 
-  onNext = async () => {
+  onNext = () => {
     this.props.client.query({ query: getStatus })
       .then(res => {
         console.log(res)

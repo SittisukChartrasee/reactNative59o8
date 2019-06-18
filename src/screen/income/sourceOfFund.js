@@ -118,12 +118,12 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
-    const { updateUser, user } = this.props
+    const { user } = this.props
     if (props.field === 'investmentSource') {
       const arr = props.data.split(',')
-      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: arr, investmentSourceOther: props.otherField })
+      this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: arr, investmentSourceOther: props.otherField })
     } else if (props.field === 'investmentSourceCountry') {
-      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value, nationalityCode: props.code })
+      this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value, nationalityCode: props.code })
     }
     // ตรวจสอบความเสี่ยงของประเทศ
 
@@ -131,9 +131,9 @@ export default class extends React.Component {
     //   updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value, nationalityCode: props.code, nationalityRisk: props.risk })
     // } 
     else if (props.field === 'investmentPurpose') {
-      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.data })
+      this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.data })
     } else {
-      updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value })
+      this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value })
     }
   }
 
@@ -149,9 +149,9 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = async () => {
-    const { user, updateRoot } = this.props
-    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+  onNext = () => {
+    const { user } = this.props
+    this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       investmentSource,
       investmentSourceOther,
@@ -180,7 +180,7 @@ export default class extends React.Component {
         onPress: () => Linking.openURL(`tel:026733888`),
         onPressClose: () => this.props.updateRoot('modal', { visible: false })
       }
-      return updateRoot('modal', modal)
+      return this.props.updateRoot('modal', modal)
     } else {
       this.props.saveSourceOfFund({ variables: { input: data } })
         .then(res => {
@@ -196,10 +196,10 @@ export default class extends React.Component {
                 const modal = {
                   dis: res.data.saveSourceOfFund.message,
                   visible: true,
-                  onPress: () => updateRoot('modal', { visible: false }),
+                  onPress: () => this.props.updateRoot('modal', { visible: false }),
                   onPressClose: () => this.props.updateRoot('modal', { visible: false })
                 }
-                return updateRoot('modal', modal)
+                return this.props.updateRoot('modal', modal)
             }
           }
         })

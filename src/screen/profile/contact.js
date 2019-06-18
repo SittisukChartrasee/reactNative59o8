@@ -60,8 +60,8 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
-    const { updateUser, user } = this.props
-    updateUser('contact', { ...user.contact, [props.field]: props.value })
+    const { user } = this.props
+    this.props.updateUser('contact', { ...user.contact, [props.field]: props.value })
   }
 
   onValidation = (field) => {
@@ -76,8 +76,8 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = async () => {
-    const { user, updateRoot } = this.props
+  onNext = () => {
+    const { user } = this.props
     const {
       workPhone,
       homePhone,
@@ -106,9 +106,9 @@ export default class extends React.Component {
               const modal = {
                 dis: res.data.saveContact.message,
                 visible: true,
-                onPress: () => updateRoot('modal', { visible: false })
+                onPress: () => this.props.updateRoot('modal', { visible: false })
               }
-              return updateRoot('modal', modal)
+              return this.props.updateRoot('modal', modal)
           }
         }
       })

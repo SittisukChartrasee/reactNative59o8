@@ -81,13 +81,13 @@ export default class extends React.Component {
 
   render() {
     const { minutes, seconds } = this.state
-    const { dot, onPress, refNo, overRequestUi, onPrevPage } = this.props
+    const { dot, refNo, overRequestUi } = this.props
     
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 0.8, justifyContent: 'flex-end' }}>
           {/* <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', paddingBottom: 24 }}> */}
-          {/* <TouchableOpacity onPress={onPrevPage} >
+          {/* <TouchableOpacity onPress={this.props.onPrevPage} >
               <Image source={images.iconback} />
             </TouchableOpacity> */}
           <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 24 }}>
@@ -123,7 +123,7 @@ export default class extends React.Component {
                   <TouchableOpacity
                     onPress={
                       async () => {
-                        await onPress(async (time = 3) => {
+                        await this.props.onPress(async (time = 3) => {
                           await this.resendOTP(time)
                         })
                       }}

@@ -23,7 +23,6 @@ const dispatchToProps = dispatch => ({
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   render() {
-    const { navigateAction } = this.props
     return (
       <Screen>
         <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center', paddingTop: 40 }}>
@@ -36,7 +35,7 @@ export default class extends React.Component {
             label="ติดต่อ 02-673-3999"
             style={{ marginHorizontal: 24 }}
             bgTransparent
-            onPress={() => navigateAction({ ...this.props, page: 'tutorialBackCamera' })}
+            onPress={() => this.props.navigateAction({ ...this.props, page: 'tutorialBackCamera' })}
           />
         </View>
       </Screen>

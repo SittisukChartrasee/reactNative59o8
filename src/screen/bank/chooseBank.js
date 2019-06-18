@@ -67,7 +67,6 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
-    console.log(props)
     if (props.type === 'selectCard') {
       if (props.value === 'ข้าม') {
         return this.props.navigateAction({ ...this.props, page: 'suittest' })
@@ -79,7 +78,6 @@ export default class extends React.Component {
   }
 
   onNext = () => {
-    const { navigateAction, updateRoot } = this.props
     const data = { bank: this.state.selected === 'ธนาคารไทยพาณิชย์' ? 'SCB' : 'KASIKORN'} 
 
     this.props.registerBank({ variables: { input: data } })
@@ -91,7 +89,7 @@ export default class extends React.Component {
             urlbank: res.data.registerBank.url,
           })
           // if (this.state.selected === 'ธนาคารไทยพาณิชย์') return navigateAction({ ...this.props, page: "suittest" })
-          return navigateAction({
+          return this.props.navigateAction({
             ...this.props,
             page: "connectBank",
             params: {
@@ -104,10 +102,10 @@ export default class extends React.Component {
         const modal = {
           dis: res.data.registerBank.message,
           visible: true,
-          onPress: () => updateRoot("modal", { visible: false }),
+          onPress: () => this.props.updateRoot("modal", { visible: false }),
           onPressClose: () => this.props.updateRoot('modal', { visible: false })
         };
-        return updateRoot("modal", modal);
+        return this.props.updateRoot("modal", modal);
       })
       .catch(err => {
         console.log(err)

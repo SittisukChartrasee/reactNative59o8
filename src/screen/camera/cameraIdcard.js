@@ -44,7 +44,6 @@ export default class extends React.Component {
   }
 
   render() {
-    const { navigateAction, navigation } = this.props
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.black }}>
         {

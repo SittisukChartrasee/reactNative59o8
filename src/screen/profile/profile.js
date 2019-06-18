@@ -144,7 +144,7 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
-    const { updateUser, user, updateRoot } = this.props
+    const { user } = this.props
     const { expireSatus } = this.state
     let isNoDoc = expireSatus === 'มีวันหมดอายุ' ? false : true
     if (props.type === 'modal') {
@@ -152,10 +152,10 @@ export default class extends React.Component {
         image: images.iconBackIdcard,
         dis: `ด้านหลังบัตรประชาชน ประกอบด้วยอักษรภาษาอังกฤษ 2 ตัว และตัวเลข 10 ตัว \nตัวอย่างการกรอก : JC1234567890`,
         visible: true,
-        onPress: () => updateRoot('modal', { visible: false }),
+        onPress: () => this.props.updateRoot('modal', { visible: false }),
         onPressClose: () => this.props.updateRoot('modal', { visible: false })
       }
-      return updateRoot('modal', modal)
+      return this.props.updateRoot('modal', modal)
     }
     else if (props.field === 'expireDateFlag') {
       isNoDoc = props.value === 'มีวันหมดอายุ' ? false : true
@@ -172,10 +172,10 @@ export default class extends React.Component {
         })
       })
     }
-    updateUser('profile', {
+    this.props.updateUser('profile', {
       ...user.profile,
       [props.field]: props.value,
-      ['isNoDocExpDate']: isNoDoc
+      'isNoDocExpDate': isNoDoc
     })
   }
 
@@ -217,10 +217,10 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = async () => {
+  onNext = () => {
     const { expireSatus } = this.state
-    const { user, updateRoot } = this.props
-    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+    const { user } = this.props
+    this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       idCard,
       jcNumber,
@@ -282,10 +282,10 @@ export default class extends React.Component {
               const modal = {
                 dis: res.data.saveIdentity.message,
                 visible: true,
-                onPress: () => updateRoot('modal', { visible: false }),
+                onPress: () => this.props.updateRoot('modal', { visible: false }),
                 onPressClose: () => this.props.updateRoot('modal', { visible: false })
               }
-              return updateRoot('modal', modal)
+              return this.props.updateRoot('modal', modal)
           }
         }
       })

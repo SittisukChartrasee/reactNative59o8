@@ -66,9 +66,8 @@ export default class extends React.Component {
   }
 
   render() {
-    const { navigateAction, navigation } = this.props
     const { agree } = this.state
-    const status = navigation.getParam('status', '')
+    const status = this.props.navigation.getParam('status', '')
     return (
       <Screen>
         <NavBar
@@ -143,7 +142,7 @@ export default class extends React.Component {
             bgTransparent={renderText(status).btnStatus}
             style={{ marginHorizontal: 24 }}
             disabled={!agree}
-            onPress={() => navigateAction({ ...this.props, page: '' })}
+            onPress={() => this.props.navigateAction({ ...this.props, page: '' })}
           />
         </View>
       </Screen>

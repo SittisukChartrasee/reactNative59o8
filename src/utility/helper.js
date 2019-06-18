@@ -82,6 +82,18 @@ export const getStatusChild = (data) => {
   }
 }
 
+export const formatIdCard = (idCard) => {
+  const cleaned = ('' + idCard).replace(/\D/g, '')
+  const match = cleaned.match(/^(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})$/)
+  return match ? `${match[1]} ${match[2]} ${match[3]} ${match[4]} ${match[5]}` : null
+}
+
+export const formatPhoneNumber = (phoneNumberString) => {
+  const cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+  const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+  return match ? `${match[1]} ${match[2]} ${match[3]}` : null
+}
+
 export const replaceSpace = (data) => data.trim().replace(/\s/g, '')
 
 export const fontToLower = (data) => data.trim().toLowerCase()

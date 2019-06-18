@@ -32,7 +32,7 @@ export default class extends React.Component {
     dis: ''
   }
 
-  setNumber = async (obj) => {
+  setNumber = (obj) => {
     const { defaultPasscode } = this.state
     this.setState({ ...obj })
 
@@ -54,7 +54,7 @@ export default class extends React.Component {
                 dis: res.message,
                 visible: true,
                 onPress: () => this.props.updateRoot('modal', { visible: false }),
-                onPressClose: () => this.props.this.props.updateRoot('modal', { visible: false })
+                onPressClose: () => this.props.updateRoot('modal', { visible: false })
               }
               return this.props.updateRoot('modal', modal)
             }

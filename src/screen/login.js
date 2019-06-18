@@ -8,12 +8,15 @@ import Screen from '../component/screenComponent'
 import { HeadSpace } from '../component/headSpace'
 import { navigateAction } from '../redux/actions'
 import { requestLogin } from '../redux/actions/root-active'
+import { updateUser } from '../redux/actions/commonAction'
 import { containerQuery, getStatus } from '../containers/query'
+import { formatIdCard, formatPhoneNumber } from '../utility/helper'
 
-const mapToProps = () => ({})
+const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
-  requestLogin: bindActionCreators(requestLogin, dispatch)
+  requestLogin: bindActionCreators(requestLogin, dispatch),
+  updateUser: bindActionCreators(updateUser, dispatch),
 })
 @connect(mapToProps, dispatchToProps)
 @withApollo
@@ -25,7 +28,9 @@ export default class extends React.Component {
   }
 
   setNumber = async obj => {
-    const userToken = await AsyncStorage.getItem('user_token')
+    let userToken = await AsyncStorage.getItem('user_token')
+    if (!userToken) userToken = this.props.navigation.getParam('user_token', '')
+    const { user } = this.props
     this.setState({
       dot: obj.dot,
       number: obj.number
@@ -34,9 +39,21 @@ export default class extends React.Component {
     if (obj.number.length === 6) {
       const res = await this.props.requestLogin({ userToken, password: obj.number })
 
-      console.log(res)
       if (res && res.result) {
         AsyncStorage.setItem('access_token', res.result.access_token)
+        AsyncStorage.setItem('user_token', userToken)
+
+        this.props.updateUser('profile', {
+          ...user.profile,
+          'idCard': formatIdCard(res.result.id_card)
+        })
+
+        this.props.updateUser('contact', {
+          ...user.contact,
+          mobilePhone: formatPhoneNumber(res.result.phone_no),
+          email: res.result.email
+        })
+
         containerQuery(
           this.props.client,
           { query: getStatus },
@@ -68,13 +85,13 @@ export default class extends React.Component {
       case 'Editing':
         this.props.navigateAction({ ...this.props, page: 'softReject' })
         break
-    
+
       default: // Rejected
         this.props.navigateAction({ ...this.props, page: 'statusApprove', params: { status: 'Rejected' } })
         break
     }
   }
-  
+
   render() {
     const { dot, number } = this.state
     return (
@@ -87,7 +104,7 @@ export default class extends React.Component {
             forgetbtn: () => this.props.navigateAction({ ...this.props, page: 'forgetPasscode' })
           }}
         />
-        <Keyboard setNumber={this.setNumber}/>
+        <Keyboard setNumber={this.setNumber} />
       </Screen>
     )
   }

@@ -39,7 +39,7 @@ export default class extends React.Component {
     defaultKey: false,
   }
 
-  setNumber = async (obj) => {
+  setNumber = (obj) => {
     const { defaultDot } = this.state
     const data = {
       trans_id: this.props.root.trans_id,
@@ -57,10 +57,12 @@ export default class extends React.Component {
       this.props.velidateOtp(data)
         .then(res => {
           console.log(res)
-          if (res.result.is_register) {
-            this.props.navigateAction({ ...this.props, page: 'login' })
-          } else if (res.success) {
-            this.props.navigateAction({ ...this.props, page: 'passcode' })
+          if (res.success) {
+            if (res.result.is_register) {
+              this.props.navigateAction({ ...this.props, page: 'login', params: { user_token: res.result.user_token } })
+            } else {
+              this.props.navigateAction({ ...this.props, page: 'passcode' })
+            }
           } else if (!res.success) {
             if (res.details === 6) {
               this.setState({

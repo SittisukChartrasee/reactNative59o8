@@ -38,8 +38,7 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
 
   onNext = () => {
-    const { navigateAction } = this.props
-    navigateAction({ ...this.props, page: 'suittest' })
+    this.props.navigateAction({ ...this.props, page: 'suittest' })
   }
 
   render() {

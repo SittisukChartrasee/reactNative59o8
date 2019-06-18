@@ -146,10 +146,10 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
-    const { updateUser, user } = this.props
-    updateUser('child', { ...user.child, [props.field]: props.value })
+    const { user } = this.props
+    this.props.updateUser('child', { ...user.child, [props.field]: props.value })
     if (props.field === 'firstExpireDateFlag') {
-      updateUser('child', { ...user.child, [props.field]: props.value })
+      this.props.updateUser('child', { ...user.child, [props.field]: props.value })
       this.setState({
         fields: this.state.fields.map((d) => {
           if (props.value === 'มีวันหมดอายุ') {
@@ -162,7 +162,7 @@ export default class extends React.Component {
         })
       })
     } else if (props.field === 'secondExpireDateFlag') {
-      updateUser('child', { ...user.child, [props.field]: props.value })
+      this.props.updateUser('child', { ...user.child, [props.field]: props.value })
       this.setState({
         fields: this.state.fields.map((d) => {
           if (props.value === 'มีวันหมดอายุ') {
@@ -179,9 +179,9 @@ export default class extends React.Component {
     }
   }
 
-  onPressNewChild = async () => {
+  onPressNewChild = () => {
     const { inVisible, fields } = this.state
-    const { updateUser, user } = this.props
+    const { user } = this.props
     if (!inVisible) {
       this.setState({
         fields: fields.map((d) => {
@@ -190,16 +190,16 @@ export default class extends React.Component {
         inVisible: !inVisible
       })
     } else if (inVisible) {
-      updateUser('child',
+      this.props.updateUser('child',
         {
           ...user.child,
-          ['secondTitle']: '',
-          ['secondFirstName']: '',
-          ['secondLastName']: '',
-          ['secondBirthDay']: `-/-/${tomorrowDate()[0]}`,
-          ['secondDocNo']: '',
-          ['secondExpireDateFlag']: 'มีวันหมดอายุ',
-          ['secondDocExpDate']: `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
+          'secondTitle': '',
+          'secondFirstName': '',
+          'secondLastName': '',
+          'secondBirthDay': `-/-/${tomorrowDate()[0]}`,
+          'secondDocNo': '',
+          'secondExpireDateFlag': 'มีวันหมดอายุ',
+          'secondDocExpDate': `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
         })
       this.setState({
         fields: fields.map((d) => {
@@ -249,7 +249,7 @@ export default class extends React.Component {
 
   onNext = async () => {
     const { user, updateRoot } = this.props
-    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+    this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
     const {
       firstTitle,

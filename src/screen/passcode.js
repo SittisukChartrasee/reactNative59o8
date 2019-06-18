@@ -20,21 +20,19 @@ export default class extends React.Component {
   }
 
   setNumber = (obj) => {
-    const { navigateAction, updatePasscode } = this.props
     this.setState({ ...obj })
 
     if (obj.number.length === 6) {
-      updatePasscode('passcode', obj.number)
-      navigateAction({
+      this.props.updatePasscode('passcode', obj.number)
+      this.props.navigateAction({
         ...this.props,
         page: 'confirmPasscode'
       })
     }
   }
 
-
   render() {
-    const { dot, number } = this.state
+    const { dot } = this.state
     return (
       <Screen>
         <HeadSpace

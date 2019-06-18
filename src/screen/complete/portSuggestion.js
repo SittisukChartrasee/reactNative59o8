@@ -79,7 +79,6 @@ export default class extends React.Component {
   }
 
   render() {
-    const { navigateAction, navigation } = this.props
     const { risk, descTH, assetClass, fundCodeKAsset, returnText } = this.state
     console.log(this.state)
     return (
@@ -89,7 +88,7 @@ export default class extends React.Component {
           title="ยืนยันผลการประเมินความเสี่ยง"
           navLeft={
             <TouchableOpacity 
-              onPress={() => navigation.goBack()}
+              onPress={() => this.props.navigation.goBack()}
               style={{ paddingRight: 30 }}
             >
               <Image source={images.iconback} />

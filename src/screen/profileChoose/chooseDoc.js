@@ -25,7 +25,7 @@ const fields = [
   }, {
     label: 'ใช้ที่อยู่เดียวกับที่อยู่ปัจจุบัน',
     type: 'buttonCard',
-  }, { 
+  }, {
     label: 'ใช้ที่อยู่อื่น',
     type: 'buttonCard',
   }
@@ -43,14 +43,29 @@ export default class extends React.Component {
   handleInput = async (props) => {
 
     if (props.value === 'ใช้ที่อยู่เดียวกับทะเบียนบ้าน') {
-      const res = await this.props.saveMailingSamePermanent()
-      if (res.data.saveMailingSamePermanent.success) this.props.navigateAction({ ...this.props, page: 'contact' })
+      await this.props.saveMailingSamePermanent()
+        .then(res => {
+          if (res.data.saveMailingSamePermanent.success) this.props.navigateAction({ ...this.props, page: 'contact' })
+        })
+        .catch(err => {
+          console.log(err)
+        })
     } else if (props.value === 'ใช้ที่อยู่เดียวกับสถานที่ทำงาน') {
-      const res = await this.props.saveMailingSameWork()
-      if (res.data.saveMailingSameWork.success) this.props.navigateAction({ ...this.props, page: 'contact' })
+      await this.props.saveMailingSameWork()
+        .then(res => {
+          if (res.data.saveMailingSameWork.success) this.props.navigateAction({ ...this.props, page: 'contact' })
+        })
+        .catch(err => {
+          console.log(err)
+        })
     } else if (props.value === 'ใช้ที่อยู่เดียวกับที่อยู่ปัจจุบัน') {
-      const res = await this.props.saveMailingSameCurrent()
-      if (res.data.saveMailingSameCurrent.success) this.props.navigateAction({ ...this.props, page: 'contact' })
+      await this.props.saveMailingSameCurrent()
+        .then(res => {
+          if (res.data.saveMailingSameCurrent.success) this.props.navigateAction({ ...this.props, page: 'contact' })
+        })
+        .catch(err => {
+          console.log(err)
+        })
     } else {
       this.props.navigateAction({ ...this.props, page: 'addressDoc' })
     }

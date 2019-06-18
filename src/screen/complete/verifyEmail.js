@@ -19,7 +19,7 @@ import { navigateAction } from '../../redux/actions'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
 import setMutation from '../../containers/mutation'
-import { checkVerifiedEmail } from '../../containers/query'
+import { checkVerifiedEmailInterval, checkVerifiedEmail } from '../../containers/query'
 
 const { width: widthView } = Dimensions.get('window')
 
@@ -33,9 +33,25 @@ const dispatchToProps = dispatch => ({
 @lockout
 @setMutation
 @withApollo
+@checkVerifiedEmailInterval
 export default class extends React.Component {
+
+  componentWillReceiveProps = newProps => {
+    if (newProps.root.appState === 'active') {
+      this.props.client.query({ query: checkVerifiedEmail })
+        .then(res => {
+          if (res.data.checkVerifiedEmail) this.props.navigateAction({ ...this.props, page: 'waiting' })
+        })
+        .catch(err => console.log(err))
+    }
+    if (newProps.checkVerifiedEmailInterval.checkVerifiedEmail) {
+      newProps.checkVerifiedEmailInterval.stopPolling()
+      this.props.navigateAction({ ...this.props, page: 'waiting' })
+    }
+  }
+
   onNext = async () => {
-    const { user } = this.props    
+    const { user } = this.props
     const { email } = user.contact
 
     const res = await this.props.acceptTerm()
@@ -50,20 +66,10 @@ export default class extends React.Component {
     }
   }
 
-  componentWillReceiveProps = newProps => {
-    const { navigateAction } = this.props
-    if (newProps.root.appState === 'active') {
-      this.props.client.query({ query: checkVerifiedEmail })
-        .then(res => {
-          if (res.data.checkVerifiedEmail) navigateAction({ ...this.props, page: 'waiting' })
-        })
-        .catch(err => console.log(err))
-    }
-  }
-
   render() {
-    const { user } = this.props    
+    const { user } = this.props
     const { email } = user.contact
+
     return (
       <Screen>
         <NavBar

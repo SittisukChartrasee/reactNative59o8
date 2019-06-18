@@ -22,7 +22,7 @@ const fields = [
   }, {
     label: 'ใช้ที่อยู่เดียวกับสถานที่ทำงาน',
     type: 'buttonCard',
-  }, { 
+  }, {
     label: 'ใช้ที่อยู่อื่น',
     type: 'buttonCard',
   }
@@ -38,13 +38,23 @@ const dispatchToProps = dispatch => ({
 @lockout
 export default class extends React.Component {
   handleInput = async props => {
-    
+
     if (props.value === 'ใช้ที่อยู่เดียวกับสถานที่ทำงาน') {
-      const res = await this.props.saveCurrentSameWork()
-      if (res.data.saveCurrentSameWork.success) this.props.navigateAction({ ...this.props, page: 'chooseDoc' })
+      await this.props.saveCurrentSameWork()
+        .then(res => {
+          if (res.data.saveCurrentSameWork.success) this.props.navigateAction({ ...this.props, page: 'chooseDoc' })
+        })
+        .catch(err => {
+          console.log(err)
+        })
     } else if (props.value === 'ใช้ที่อยู่เดียวกับทะเบียนบ้าน') {
-      const res = await this.props.SaveCurrentSamePermanent()
-      if (res.data.SaveCurrentSamePermanent.success) this.props.navigateAction({ ...this.props, page: 'chooseDoc' })
+      await this.props.SaveCurrentSamePermanent()
+        .then(res => {
+          if (res.data.SaveCurrentSamePermanent.success) this.props.navigateAction({ ...this.props, page: 'chooseDoc' })
+        })
+        .catch(err => {
+          console.log(err)
+        })
     } else {
       this.props.navigateAction({ ...this.props, page: 'addressCurr' })
     }

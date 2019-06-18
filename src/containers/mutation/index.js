@@ -276,6 +276,19 @@ const saveSanction = gql`
   }
 `
 
+const updateRegisterBankStatus = gql`
+  mutation updateRegisterBankStatus {
+    updateRegisterBankStatus{
+      success
+      message
+      details{
+        field
+        description
+      }
+    }
+  }
+`
+
 export default compose(
   graphql(saveSpouse, { name: 'saveSpouse' }),
   graphql(saveCareer, { name: 'saveCareer' }),
@@ -299,4 +312,5 @@ export default compose(
   graphql(acceptTerm, { name: 'acceptTerm' }),
   graphql(registerBank, { name: 'registerBank' }),
   graphql(saveSanction, { name: 'saveSanction' }),
+  graphql(updateRegisterBankStatus, { name: 'updateRegisterBankStatus' }),
 )

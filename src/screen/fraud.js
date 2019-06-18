@@ -90,8 +90,7 @@ export default class extends React.Component {
       }
       return this.props.updateRoot('modal', modal)
     } else {
-      this.props
-        .saveFraud({ variables: { input: data } })
+      this.props.saveFraud({ variables: { input: data } })
         .then(res => {
           console.log(res)
           if (res.data.saveFraud.success) {
@@ -105,13 +104,12 @@ export default class extends React.Component {
   }
 
   render() {
-    const { navigation, navigateAction } = this.props
     return (
       <Screen color='transparent'>
         <NavBar
           title='สถานะที่ถูกกำหนด'
           navLeft={
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
               <Image source={images.iconback} />
             </TouchableOpacity>
           }

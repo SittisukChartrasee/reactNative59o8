@@ -64,7 +64,7 @@ export default class extends React.Component {
     this.props.updateFatca('sumFatca', checkActiveData(obj.choice).IS_SUM)
   }
 
-  onNext = async () => {
+  onNext = () => {
                
 
     const data = {

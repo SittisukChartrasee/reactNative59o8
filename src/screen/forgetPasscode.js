@@ -32,8 +32,6 @@ const dispatchToProps = dispatch => ({
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   render() {
-    const { navigateAction } = this.props
-
     return (
       <Screen color="transparent">
         <NavBar

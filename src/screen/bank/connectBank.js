@@ -18,6 +18,7 @@ import Input from '../../component/input'
 import { navigateAction } from '../../redux/actions'
 import colors from '../../config/colors';
 import { TBold, TMed } from '../../component/texts';
+import setMutation from '../../containers/mutation'
 
 const handleNameBank = key => {
   switch (key) {
@@ -34,6 +35,7 @@ const dispatchToProps = dispatch => ({
 })
 
 @connect(mapToProps, dispatchToProps)
+@setMutation
 export default class extends React.Component {
   static defaultProps = {
     user: {
@@ -57,6 +59,13 @@ export default class extends React.Component {
           break
 
         case 'ความสำเร็จในการลงทะเบียน':
+            this.props.updateRegisterBankStatus()
+            .then(res => {
+              console.log(res) // ให้ทำอะไรหรอ
+            })
+            .catch(err => {
+              console.log(err.toString())
+            })
           this.props.navigation.navigate('statusBank')
           break
 
@@ -67,7 +76,6 @@ export default class extends React.Component {
   }
 
   render() {
-    const { user } = this.props
     const bankName = this.props.navigation.getParam('bankName', '')
     const url = this.props.navigation.getParam('url', 'https://ws06.uatebpp.kasikornbank.com/PGSRegistration.do?reg_id=20190604114131234908234&langLocale=th_TH')
     return (

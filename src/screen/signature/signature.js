@@ -46,7 +46,7 @@ export default class Demo extends Component {
 
 
   saveSign = async () => {
-    this.signature.saveImage()
+    await this.signature.saveImage()
   }
 
   resetSign = () => {
