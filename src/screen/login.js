@@ -28,7 +28,8 @@ export default class extends React.Component {
   }
 
   setNumber = async obj => {
-    const userToken = await AsyncStorage.getItem('user_token')
+    let userToken = await AsyncStorage.getItem('user_token')
+    if (!userToken) userToken = this.props.navigation.getParam('user_token', '')
     const { user } = this.props
     this.setState({
       dot: obj.dot,
@@ -38,9 +39,9 @@ export default class extends React.Component {
     if (obj.number.length === 6) {
       const res = await this.props.requestLogin({ userToken, password: obj.number })
 
-      console.log(res)
       if (res && res.result) {
         AsyncStorage.setItem('access_token', res.result.access_token)
+        AsyncStorage.setItem('user_token', userToken)
 
         this.props.updateUser('profile', {
           ...user.profile,

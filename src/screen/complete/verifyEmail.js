@@ -45,6 +45,7 @@ export default class extends React.Component {
         .catch(err => console.log(err))
     }
     if (newProps.checkVerifiedEmailInterval.checkVerifiedEmail) {
+      newProps.checkVerifiedEmailInterval.stopPolling()
       this.props.navigateAction({ ...this.props, page: 'waiting' })
     }
   }

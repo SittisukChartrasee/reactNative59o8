@@ -216,6 +216,7 @@ export default class extends React.Component {
             label="ดำเนินการต่อ"
             onPress={this.onNext}
           />
+          <View style={{ flex: 0.01, backgroundColor: '#fff' }} />
         </KeyboardAwareScrollView>
       </Screen>
     )

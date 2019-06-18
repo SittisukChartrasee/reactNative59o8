@@ -59,7 +59,7 @@ export default class extends React.Component {
           console.log(res)
           if (res.success) {
             if (res.result.is_register) {
-              this.props.navigateAction({ ...this.props, page: 'login' })
+              this.props.navigateAction({ ...this.props, page: 'login', params: { user_token: res.result.user_token } })
             } else {
               this.props.navigateAction({ ...this.props, page: 'passcode' })
             }
