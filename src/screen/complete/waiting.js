@@ -30,7 +30,10 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
 
   onNext = () => {
-    this.props.client.query({ query: getStatus })
+    this.props.client.query({
+      query: getStatus,
+      fetchPolicy: "no-cache"
+    })
       .then(res => {
         console.log(res)
         switch (res.data.getStatus) {

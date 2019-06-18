@@ -36,17 +36,50 @@ const dispatchToProps = dispatch => ({
 @checkVerifiedEmailInterval
 export default class extends React.Component {
 
-  componentWillReceiveProps = newProps => {
+  componentWillReceiveProps = async newProps => {
     if (newProps.root.appState === 'active') {
       this.props.client.query({ query: checkVerifiedEmail })
         .then(res => {
-          if (res.data.checkVerifiedEmail) this.props.navigateAction({ ...this.props, page: 'waiting' })
+          if (res.data.checkVerifiedEmail) {
+            this.props.saveSanction()
+              .then(res => {
+                if (res.data.saveSanction.success) this.props.navigateAction({ ...this.props, page: 'waiting' })
+                else if (!res.data.saveSanction.success) {
+                  const modal = {
+                    dis: res.data.saveSanction.message,
+                    visible: true,
+                    onPress: () => this.props.updateRoot('modal', { visible: false }),
+                    onPressClose: () => this.props.updateRoot('modal', { visible: false })
+                  }
+                  this.props.updateRoot('modal', modal)
+                }
+              })
+              .catch(err => {
+                console.log(err)
+              })
+          }
         })
         .catch(err => console.log(err))
     }
     if (newProps.checkVerifiedEmailInterval.checkVerifiedEmail) {
       newProps.checkVerifiedEmailInterval.stopPolling()
-      this.props.navigateAction({ ...this.props, page: 'waiting' })
+      await this.props.saveSanction()
+        .then(res => {
+          console.log(res)
+          if (res.data.saveSanction.success) this.props.navigateAction({ ...this.props, page: 'waiting' })
+          else if (!res.data.saveSanction.success) {
+            const modal = {
+              dis: res.data.saveSanction.message,
+              visible: true,
+              onPress: () => this.props.updateRoot('modal', { visible: false }),
+              onPressClose: () => this.props.updateRoot('modal', { visible: false })
+            }
+            this.props.updateRoot('modal', modal)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 

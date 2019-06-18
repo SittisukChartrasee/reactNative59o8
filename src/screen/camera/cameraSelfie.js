@@ -41,7 +41,14 @@ export default class extends React.Component {
       method: 'POST',
       body: data
     }, token)
-    if (res.success) this.props.navigateAction({ ...this.props, page: 'signature' })
+    if (res.success) {
+      const status = this.props.navigation.getParam('status', '')
+      if (status === 'Editing') {
+        this.props.navigateAction({ ...this.props, page: 'softReject' })
+      } else {
+        this.props.navigateAction({ ...this.props, page: 'signature' })
+      }
+    }
   }
 
   render() {
@@ -81,7 +88,7 @@ export default class extends React.Component {
               </View>
             )
         }
-        
+
       </SafeAreaView>
     )
   }

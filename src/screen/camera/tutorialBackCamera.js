@@ -26,6 +26,16 @@ const dispatchToProps = dispatch => ({
 @connect(mapToProps, dispatchToProps)
 @lockout
 export default class extends React.Component {
+
+  onNext = () => {
+    const status = this.props.navigation.getParam('status', '')
+    if (status === 'Editing') {
+      this.props.navigateAction({ ...this.props, page: 'cameraIdcard', params: { status } })
+    } else {
+      this.props.navigateAction({ ...this.props, page: 'cameraIdcard' })
+    }
+  }
+
   render() {
     return (
       <Screen>
@@ -53,7 +63,7 @@ export default class extends React.Component {
         <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
           <View style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
             <TLight fontSize={16} mb="7%" color={colors.white}>{`ถ่ายบัตรประชาชน\nเพื่อใช้ในการยืนยันตัวตนของท่าน`}</TLight>
-            <Image source={images.idCardMockup} style={{ width: widthView * .6 }} resizeMode="contain"  />
+            <Image source={images.idCardMockup} style={{ width: widthView * .6 }} resizeMode="contain" />
 
             <View style={{ marginHorizontal: 24, marginTop: '6%' }}>
               <View style={{ flexDirection: 'row' }}>
@@ -76,7 +86,7 @@ export default class extends React.Component {
             <LongButton
               label="ตกลง"
               style={{ marginHorizontal: 24 }}
-              onPress={() => this.props.navigateAction({ ...this.props, page: 'cameraIdcard' })}
+              onPress={this.onNext}
             />
           </View>
         </View>

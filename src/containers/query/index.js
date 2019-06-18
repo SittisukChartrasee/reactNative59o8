@@ -114,6 +114,17 @@ export const getStatusInProgress = gql`
   }
 `
 
+export const getStatusEditing = gql`
+  query getStatusEditing {
+    getStatusEditing {
+      idCard
+      selfie
+      checkIDCard
+      checkSelfie
+    }
+  }
+`
+
 export const checkVerifiedEmailInterval = graphql(checkVerifiedEmail, {
   name: 'checkVerifiedEmailInterval',
   options: {
