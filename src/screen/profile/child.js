@@ -193,13 +193,13 @@ export default class extends React.Component {
       this.props.updateUser('child',
         {
           ...user.child,
-          ['secondTitle']: '',
-          ['secondFirstName']: '',
-          ['secondLastName']: '',
-          ['secondBirthDay']: `-/-/${tomorrowDate()[0]}`,
-          ['secondDocNo']: '',
-          ['secondExpireDateFlag']: 'มีวันหมดอายุ',
-          ['secondDocExpDate']: `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
+          'secondTitle': '',
+          'secondFirstName': '',
+          'secondLastName': '',
+          'secondBirthDay': `-/-/${tomorrowDate()[0]}`,
+          'secondDocNo': '',
+          'secondExpireDateFlag': 'มีวันหมดอายุ',
+          'secondDocExpDate': `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
         })
       this.setState({
         fields: fields.map((d) => {

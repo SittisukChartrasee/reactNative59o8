@@ -114,6 +114,14 @@ export const getStatusInProgress = gql`
   }
 `
 
+export const checkVerifiedEmailInterval = graphql(checkVerifiedEmail, {
+  name: 'checkVerifiedEmailInterval',
+  options: {
+    pollInterval: 3000,
+    fetchPolicy: "no-cache"
+  }
+})
+
 export default graphql(getRegisterBankStatus, {
   name: 'getRegisterBankStatus',
   options: {

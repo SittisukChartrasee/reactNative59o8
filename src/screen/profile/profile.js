@@ -175,7 +175,7 @@ export default class extends React.Component {
     this.props.updateUser('profile', {
       ...user.profile,
       [props.field]: props.value,
-      ['isNoDocExpDate']: isNoDoc
+      'isNoDocExpDate': isNoDoc
     })
   }
 
