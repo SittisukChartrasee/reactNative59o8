@@ -50,9 +50,9 @@ export default class extends React.Component {
   }
 
   render() {
-    console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
-    console.log(NativeModules)
-    NativeModules.KMyFundOnboarding.isApproved("SUPER")
+    // console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
+    // console.log(NativeModules)
+    // NativeModules.KMyFundOnboarding.isApproved("SUPER")
     return (
       <Screen>
         <NavBar
