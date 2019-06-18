@@ -43,23 +43,20 @@ export default class extends React.Component {
   onNext = async () => {
     // const userToken = await AsyncStorage.getItem('user_token')
     // const accessToken = await AsyncStorage.getItem('access_token')
-
-    // if (userToken) return this.props.navigateAction({ ...this.props, page: 'login', params: { userToken, accessToken } })
-    // return 
     this.props.navigateAction({ ...this.props, page: 'welcome' })
   }
 
   render() {
-    // console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
-    // console.log(NativeModules)
-    // NativeModules.KMyFundOnboarding.isApproved("SUPER")
     return (
       <Screen>
         <NavBar
           color="transparent"
           title="เปิดบัญชี ต้องเตรียมอะไรบ้างนะ"
           navLeft={
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => NativeModules.KMyFundOnboarding.finishActivity()}
+              style={{ paddingRight: 30 }}
+            >
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
@@ -102,8 +99,9 @@ export default class extends React.Component {
         <SafeAreaView style={{ marginHorizontal: 16 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
             <TouchableOpacity
-              onPress={() => {
-                AsyncStorage.clear()
+              onPress={async () => {
+                await AsyncStorage.clear()
+                NativeModules.KMyFundOnboarding.finishActivity()
                 // AsyncStorage.setItem('access_token', 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTkxMTI4ODUsImlkZW50aXR5IjoiWDRvZVUvTUN2NXhuOEtMZXhrS2hPNkM5NVJIU0hwN09Md1QvcDJueXZad0I1RmhRWXp2MkRKaEFHSFNhdTlMNmh3MlgyT2p2b0UyWmNmZ3pSdm1VWlZ4RzZQb2hndGZLVGVnclBTVFcifQ.ePioDlD-myl7JM5mH60ivY-mKBtbu11p_cFEgkxXSrnWkQgEFT-pSY8DbY96q1EWs_MwKZBS2Ku7vwTQ7GaEBDWh6LgaOVih9qKA9owUQ_8lXfMutsc-I1xaUM1rhApImCeux9pUq_BIGaihPpuv76pspGYBaineMirGr8HDEDx30-3SWtjBUlOUoWZJRs_1iXruSu54l8I3sSjoSOvvQdAIcDs_hXAVpftHGOqmZcueLoCg242Tj7Z5eTubW8vqGm2kI7u42ONTGIZzK-oJqLM8e9VEzhND052Vs-MZePSWW8DoXYmwhE0iUEi1H6NAUQPz6P7dQKqKI2LeZVKiYw')
               }}
               style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>

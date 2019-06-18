@@ -5,6 +5,7 @@ import {
   ScrollView,
   Image,
   Linking,
+  NativeModules
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -70,6 +71,11 @@ export default class extends React.Component {
       variables: { point: `${point}` }
     }, val => this.setState({ ...val.data.getInvestment })
     )
+  }
+
+  onNext = () => {
+    NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
+    NativeModules.KMyFundOnboarding.finishActivity()
   }
 
   render() {
@@ -142,7 +148,7 @@ export default class extends React.Component {
           <LongButton
             label="เริ่มต้นใช้งาน"
             style={{ marginHorizontal: 24 }}
-            onPress={() => alert('เข้าใช้งาน KmyFunds ปัจจุบัน')}
+            onPress={this.onNext}
           />
           <LongButton
             label="ทำแบบประเมินความเสี่ยงใหม่"

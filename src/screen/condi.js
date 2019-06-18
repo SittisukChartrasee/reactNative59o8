@@ -39,7 +39,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-
+    
     this.props.acceptTerm()
       .then(res => {
         console.log(res)
