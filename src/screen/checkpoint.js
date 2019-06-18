@@ -52,7 +52,7 @@ export default class extends React.Component {
       },
       {
         point: 'ขั้นตอนที่ 3',
-        check: 'current',    
+        check: 'current',
         text: 'เชื่อมบัญชีธนาคาร'
       },
       {
@@ -71,47 +71,60 @@ export default class extends React.Component {
       if (val.data.getStatusInProgress === 'Assure') {
         this.setState({
           checkPoint: this.state.checkPoint.map(
-            (d, i) => i === 0 
-              ? ({ ...d, check: 'current' }) 
+            (d, i) => i === 0
+              ? ({ ...d, check: 'current' })
               : ({ ...d, check: 'future' })),
           link: 'condi'
         })
       } else if (val.data.getStatusInProgress === 'PersonalInformation') {
-        this.setState({ 
+        this.setState({
           checkPoint: this.state.checkPoint.map(
             (d, i) => i < 1
-              ? ({ ...d, check: 'success' }) 
+              ? ({ ...d, check: 'success' })
               : i === 1
-                ? ({ ...d, check: 'current' }) 
+                ? ({ ...d, check: 'current' })
                 : ({ ...d, check: 'future' })
           ),
           link: 'profile'
         })
       } else if (val.data.getStatusInProgress === 'LinkBank') {
-        this.setState({ 
+        this.setState({
           checkPoint: this.state.checkPoint.map(
             (d, i) => i < 2
-              ? ({ ...d, check: 'success' }) 
+              ? ({ ...d, check: 'success' })
               : i === 2
-                ? ({ ...d, check: 'current' }) 
+                ? ({ ...d, check: 'current' })
                 : ({ ...d, check: 'future' })
           ),
           link: 'tutorialBank'
         })
       } else if (val.data.getStatusInProgress === 'Suittest') {
-        this.setState({ 
+        this.setState({
           checkPoint: this.state.checkPoint.map(
             (d, i) => i < 3
-              ? ({ ...d, check: 'success' }) 
+              ? ({ ...d, check: 'success' })
               : i === 3
-                ? ({ ...d, check: 'current' }) 
+                ? ({ ...d, check: 'current' })
                 : ({ ...d, check: 'future' })
           ),
           link: 'suittest'
         })
+      } else if (val.data.getStatusInProgress === 'Complete') {
+        this.setState({
+          checkPoint: this.state.checkPoint.map(
+            (d, i) => i < 4
+              ? ({ ...d, check: 'success' })
+              : i === 4
+                ? ({ ...d, check: 'current' })
+                : ({ ...d, check: 'future' })
+          ),
+          link: 'complete'
+        })
       }
     })
   }
+
+  onNext = () => this.props.navigateAction({ ...this.props, page: this.state.link })
 
   render() {
     const { checkPoint } = this.state
@@ -201,7 +214,7 @@ export default class extends React.Component {
           </View>
           <LongPositionButton
             label="ดำเนินการต่อ"
-            onPress={navigateAction({ ...this.props, page: this.state.link })}
+            onPress={this.onNext}
           />
         </KeyboardAwareScrollView>
       </Screen>
