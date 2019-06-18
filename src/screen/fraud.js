@@ -74,7 +74,6 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction } = this.props
 
     const data = {
       hasLaunderingRecord: checkActiveData(this.props.user.fraud.choice).IS_TRUE,
@@ -96,7 +95,7 @@ export default class extends React.Component {
         .then(res => {
           console.log(res)
           if (res.data.saveFraud.success) {
-            navigateAction({ ...this.props, page: 'profile' })
+            this.props.navigateAction({ ...this.props, page: 'profile' })
           }
         })
         .catch(err => {

@@ -38,16 +38,15 @@ const dispatchToProps = dispatch => ({
 @lockout
 export default class extends React.Component {
   handleInput = async props => {
-    const { navigateAction } = this.props
     
     if (props.value === 'ใช้ที่อยู่เดียวกับสถานที่ทำงาน') {
       const res = await this.props.saveCurrentSameWork()
-      if (res.data.saveCurrentSameWork.success) navigateAction({ ...this.props, page: 'chooseDoc' })
+      if (res.data.saveCurrentSameWork.success) this.props.navigateAction({ ...this.props, page: 'chooseDoc' })
     } else if (props.value === 'ใช้ที่อยู่เดียวกับทะเบียนบ้าน') {
       const res = await this.props.SaveCurrentSamePermanent()
-      if (res.data.SaveCurrentSamePermanent.success) navigateAction({ ...this.props, page: 'chooseDoc' })
+      if (res.data.SaveCurrentSamePermanent.success) this.props.navigateAction({ ...this.props, page: 'chooseDoc' })
     } else {
-      navigateAction({ ...this.props, page: 'addressCurr' })
+      this.props.navigateAction({ ...this.props, page: 'addressCurr' })
     }
   }
 

@@ -150,7 +150,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction, user, updateRoot } = this.props
+    const { user, updateRoot } = this.props
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       investmentSource,
@@ -185,7 +185,7 @@ export default class extends React.Component {
       this.props.saveSourceOfFund({ variables: { input: data } })
         .then(res => {
           if (res.data.saveSourceOfFund.success) {
-            navigateAction({ ...this.props, page: 'addressHome' })
+            this.props.navigateAction({ ...this.props, page: 'addressHome' })
           } else if (!res.data.saveSourceOfFund.success) {
             switch (res.data.saveSourceOfFund.message) {
               case 'PreconditionRequired':

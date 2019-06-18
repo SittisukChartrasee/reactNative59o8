@@ -158,7 +158,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction, user, updateRoot } = this.props
+    const { user, updateRoot } = this.props
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       countryCode,
@@ -206,7 +206,7 @@ export default class extends React.Component {
         // } else if (res.data.savePermanentAddress.success) {
 
         if (res.data.savePermanentAddress.success) {
-          navigateAction({ ...this.props, page: 'chooseWork' })
+          this.props.navigateAction({ ...this.props, page: 'chooseWork' })
         } else if (!res.data.savePermanentAddress.success) {
           switch (res.data.savePermanentAddress.message) {
             case 'PreconditionRequired':

@@ -83,8 +83,7 @@ export default class extends React.Component {
           {...{
             dot,
             title: 'กรุณากรอกรหัสผ่าน',
-            // onPrevPage: () => this.props.navigation.goBack(),
-            onPrevPage: () => AsyncStorage.clear(),
+            onPrevPage: () => this.props.navigation.goBack(),
             forgetbtn: () => this.props.navigateAction({ ...this.props, page: 'forgetPasscode' })
           }}
         />

@@ -40,12 +40,11 @@ export default class extends React.Component {
   }
 
   setNumber = async (obj) => {
-    const { navigateAction, root } = this.props
     const { defaultDot } = this.state
     const data = {
-      trans_id: root.trans_id,
-      ref_no: root.ref_no,
-      phone_no: root.phone_no,
+      trans_id: this.props.root.trans_id,
+      ref_no: this.props.root.ref_no,
+      phone_no: this.props.root.phone_no,
       secret: obj.number,
     }
 
@@ -59,9 +58,9 @@ export default class extends React.Component {
         .then(res => {
           console.log(res)
           if (res.result.is_register) {
-            navigateAction({ ...this.props, page: 'login' })
+            this.props.navigateAction({ ...this.props, page: 'login' })
           } else if (res.success) {
-            navigateAction({ ...this.props, page: 'passcode' })
+            this.props.navigateAction({ ...this.props, page: 'passcode' })
           } else if (!res.success) {
             if (res.details === 6) {
               this.setState({

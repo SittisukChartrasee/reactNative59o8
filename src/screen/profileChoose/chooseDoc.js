@@ -41,19 +41,18 @@ const dispatchToProps = dispatch => ({
 @lockout
 export default class extends React.Component {
   handleInput = async (props) => {
-    const { navigateAction } = this.props
 
     if (props.value === 'ใช้ที่อยู่เดียวกับทะเบียนบ้าน') {
       const res = await this.props.saveMailingSamePermanent()
-      if (res.data.saveMailingSamePermanent.success) navigateAction({ ...this.props, page: 'contact' })
+      if (res.data.saveMailingSamePermanent.success) this.props.navigateAction({ ...this.props, page: 'contact' })
     } else if (props.value === 'ใช้ที่อยู่เดียวกับสถานที่ทำงาน') {
       const res = await this.props.saveMailingSameWork()
-      if (res.data.saveMailingSameWork.success) navigateAction({ ...this.props, page: 'contact' })
+      if (res.data.saveMailingSameWork.success) this.props.navigateAction({ ...this.props, page: 'contact' })
     } else if (props.value === 'ใช้ที่อยู่เดียวกับที่อยู่ปัจจุบัน') {
       const res = await this.props.saveMailingSameCurrent()
-      if (res.data.saveMailingSameCurrent.success) navigateAction({ ...this.props, page: 'contact' })
+      if (res.data.saveMailingSameCurrent.success) this.props.navigateAction({ ...this.props, page: 'contact' })
     } else {
-      navigateAction({ ...this.props, page: 'addressDoc' })
+      this.props.navigateAction({ ...this.props, page: 'addressDoc' })
     }
   }
 

@@ -105,7 +105,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction, user, updateRoot } = this.props
+    const { user, updateRoot } = this.props
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       isicCode,
@@ -142,7 +142,7 @@ export default class extends React.Component {
           console.log(res)
 
           if (res.data.saveCareer.success) {
-            navigateAction({ ...this.props, page: 'sourceOfFund' })
+            this.props.navigateAction({ ...this.props, page: 'sourceOfFund' })
           } else if (!res.data.saveCareer.success) {
             switch (res.data.saveCareer.message) {
               case 'PreconditionRequired':

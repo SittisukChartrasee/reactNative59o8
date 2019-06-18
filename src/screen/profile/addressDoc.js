@@ -157,7 +157,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction, user, updateRoot } = this.props
+    const { user, updateRoot } = this.props
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       countryCode,
@@ -205,7 +205,7 @@ export default class extends React.Component {
         // } else if (res.data.saveMailingAddress.success) {
 
         if (res.data.saveMailingAddress.success) {
-          navigateAction({ ...this.props, page: 'contact' })
+          this.props.navigateAction({ ...this.props, page: 'contact' })
         } else if (!res.data.saveMailingAddress.success) {
           switch (res.data.saveMailingAddress.message) {
             case 'PreconditionRequired':

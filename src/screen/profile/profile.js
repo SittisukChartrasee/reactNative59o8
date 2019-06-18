@@ -219,7 +219,7 @@ export default class extends React.Component {
 
   onNext = async () => {
     const { expireSatus } = this.state
-    const { navigateAction, user, updateRoot } = this.props
+    const { user, updateRoot } = this.props
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
       idCard,
@@ -266,11 +266,11 @@ export default class extends React.Component {
         console.log(res)
         if (res.data.saveIdentity.success) {
           if (martialStatus === 'สมรส' && isChild === 'มี') {
-            navigateAction({ ...this.props, page: 'marry', params: { redirec: 'child' } })
+            this.props.navigateAction({ ...this.props, page: 'marry', params: { redirec: 'child' } })
           }
-          else if (martialStatus === 'สมรส') navigateAction({ ...this.props, page: 'marry' })
-          else if (isChild === 'ไม่มี') navigateAction({ ...this.props, page: 'career' })
-          else if (isChild === 'มี') navigateAction({ ...this.props, page: 'child' })
+          else if (martialStatus === 'สมรส') this.props.navigateAction({ ...this.props, page: 'marry' })
+          else if (isChild === 'ไม่มี') this.props.navigateAction({ ...this.props, page: 'career' })
+          else if (isChild === 'มี') this.props.navigateAction({ ...this.props, page: 'child' })
 
         } else if (!res.data.saveIdentity.success) {
           switch (res.data.saveIdentity.message) {

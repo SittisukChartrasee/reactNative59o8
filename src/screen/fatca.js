@@ -66,15 +66,13 @@ export default class extends React.Component {
 
   onNext = async () => {
                
-    const { navigateAction, fatcaReducer } = this.props
-    const fatca = fatcaReducer.fatca
 
     const data = {
-      isUSCitizen: checkActiveData(fatca).IS_TRUE,
-      isHoldingUsCard: checkActiveData(fatca).IS_TRUE
+      isUSCitizen: checkActiveData(this.props.fatcaReducer.fatca).IS_TRUE,
+      isHoldingUsCard: checkActiveData(this.props.fatcaReducer.fatca).IS_TRUE
     }
 
-    if (!checkActiveData(fatca).IS_INCORRECT) {
+    if (!checkActiveData(this.props.fatcaReducer.fatca).IS_INCORRECT) {
       const modal = {
         dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
         visible: true,
@@ -86,7 +84,7 @@ export default class extends React.Component {
     } else {
       this.props.saveFatca({ variables: { input: data } })
         .then(res => {
-          if (res.data.saveFatca.success) navigateAction({ ...this.props, page: 'fraud' })
+          if (res.data.saveFatca.success) this.props.navigateAction({ ...this.props, page: 'fraud' })
           else if (!res.data.saveFatca.success) {
             const modal = {
               dis: res.data.saveFatca.message,
@@ -104,8 +102,6 @@ export default class extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
-    const fatca = this.props.fatcaReducer.fatca
     return (
       <Screen color="transparent">
         <NavBar
@@ -135,7 +131,7 @@ export default class extends React.Component {
             paddingBottom: 100
           })
         }
-        <NextButton disabled={checkActiveData(fatca).IS_TRUE} onPress={this.onNext} />
+        <NextButton disabled={checkActiveData(this.props.fatcaReducer.fatca).IS_TRUE} onPress={this.onNext} />
       </Screen>
     )
   }

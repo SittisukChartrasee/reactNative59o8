@@ -77,7 +77,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { navigateAction, user, updateRoot } = this.props
+    const { user, updateRoot } = this.props
     const {
       workPhone,
       homePhone,
@@ -95,7 +95,7 @@ export default class extends React.Component {
     this.props.saveContact({ variables: { input: data } })
       .then(res => {
         if (res.data.saveContact.success) {
-          navigateAction({ ...this.props, page: 'tutorialBank' })
+          this.props.navigateAction({ ...this.props, page: 'tutorialBank' })
         } else if (!res.data.saveContact.success) {
           switch (res.data.saveContact.message) {
             case 'PreconditionRequired':

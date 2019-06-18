@@ -226,7 +226,7 @@ export default class extends React.Component {
 
   onNext = async () => {
     const { expireSatus } = this.state
-    const { navigateAction, user, updateRoot } = this.props
+    const { user, updateRoot } = this.props
     const redirec = this.props.navigation.getParam('redirec', '')
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
@@ -272,8 +272,8 @@ export default class extends React.Component {
         // }
 
         if (res.data.saveSpouse.success) {
-          if (redirec) return navigateAction({ ...this.props, page: redirec })
-          navigateAction({ ...this.props, page: 'career' })
+          if (redirec) return this.props.navigateAction({ ...this.props, page: redirec })
+          this.props.navigateAction({ ...this.props, page: 'career' })
         } else if (!res.data.saveSpouse.success) {
           switch (res.data.saveSpouse.message) {
             case 'PreconditionRequired':

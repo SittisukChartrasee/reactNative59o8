@@ -102,9 +102,9 @@ export default class extends React.Component {
 
   onNext = async () => {
     // this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'fatca' }))
-    const { navigateAction, user } = this.props
+    const { user } = this.props
 
-    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+    this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
     const data = {
       idCard: replaceSpace(user.profile.idCard),
@@ -118,7 +118,7 @@ export default class extends React.Component {
       .then(res => {
         console.log(res)
         if (res.success) {
-          navigateAction({ ...this.props, page: 'otp' })
+          this.props.navigateAction({ ...this.props, page: 'otp' })
         } else if (!res.success) {
           switch (res.message) {
             case 'PreconditionRequired':

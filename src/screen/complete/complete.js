@@ -32,7 +32,7 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
 
   onNext = async () => {
-    const { navigateAction, navigation } = this.props
+    const { navigation } = this.props
     const risk = navigation.getParam('risk', 0) // เตรียมส่งข้อมูล
     this.props.client.query({ query: checkVerifiedEmail })
       .then(res => {
@@ -40,7 +40,7 @@ export default class extends React.Component {
           // ========================== mock Data ตรวจสอบความเสียงสูง ส่ง risk ไป ============================== //
           this.props.saveSanction()
             .then(res => {
-              if (res.data.saveSanction.success) navigateAction({ ...this.props, page: 'waiting' })
+              if (res.data.saveSanction.success) this.props.navigateAction({ ...this.props, page: 'waiting' })
               else if (!res.data.saveSanction.success) {
                 const modal = {
                   dis: res.data.saveSanction.message,
@@ -56,7 +56,7 @@ export default class extends React.Component {
             })
           // console.log(risk) //
         } else {
-          navigateAction({ ...this.props, page: 'verifyEmail' })
+          this.props.navigateAction({ ...this.props, page: 'verifyEmail' })
         }
       })
       .catch(err => console.log(err))
