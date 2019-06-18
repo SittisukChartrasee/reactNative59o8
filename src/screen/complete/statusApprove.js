@@ -2,6 +2,7 @@ import React from 'react'
 import {
   View,
   TouchableOpacity,
+  ScrollView,
   Dimensions,
   Image
 } from 'react-native'
@@ -34,8 +35,9 @@ const renderText = (caseStatus) => {
         header: 'ผลอนุมัติเปิดบัญชี',
         title: 'เปิดบัญชีสำเร็จ',
         dis: 'ท่านสามารถเริ่มลงทุนผ่านแอปพลิเคชั่น\nK-My Fund ได้แล้ว',
+        text: `1. ผู้ขอใช้บริการมีความประสงค์ให้ธนาคารหักเงินจากบัญชีเงินฝากของผู้ขอใช้บริการ เพื่อชำระหนี้ และ หรือ ภาระผูกพันใด ๆให้แก่ผู้รับเงิน ตามจำนวนเงินและวันที่ที่ปรากฏในใบแจ้งหนี้ และ หรือ ข้อมูลที่ผู้รับเงินได้นำส่งให้แก่ธนาคารผ่านช่องทางอิเล็กทรอนิกส์ หรือด้วยวิธีใดที่ธนาคารได้ตกลงกับผู้รับเงิน หรือตามคำสั่งที่ธนาคารได้รับจากผู้รับเงิน ตัวแทนของผู้รับเงิน และ หรือบุคคลอื่นใดที่ได้รับแต่งตั้งหรือมอบหมายจากผู้รับเงินให้กระทำการแทน และ หรือในนามของผู้รับเงิน (ต่อไปนี้จะเรียกว่า ”ข้อมูลที่นำส่ง”) และนำเงินดังกล่าวโอนเข้าบัญชีเงินฝากของผู้รับเงิน และ หรือบุคคลดังกล่าว.   	ผู้ขอใช้บริการมีความประสงค์ให้ธนาคารหักเงินจากบัญชีเงินฝากของผู้ขอใช้บริการ เพื่อชำระหนี้ และ/หรือ ภาระผูกพันใด ๆ ให้แก่ผู้รับเงิน ตามจำนวนเงินและวันที่ที่ปรากฏในใบแจ้งหนี้ และ/หรือ ข้อมูลที่ผู้รับเงินได้นำส่งให้แก่ธนาคารผ่านช่องทางอิเล็กทรอนิกส์ หรือด้วยวิธีใดที่ธนาคารได้ตกลงกับผู้รับเงิน หรือตามคำสั่งที่ธนาคารได้รับจากผู้รับเงิน ตัวแทนของผู้รับเงิน และ/หรือบุคคลอื่นใดที่ได้รับแต่งตั้งหรือมอบหมายจากผู้รับเงินให้กระทำการแทน และ/หรือในนามของผู้รับเงิน (ต่อไปนี้จะเรียกว่า ”ข้อมูลที่นำส่ง”) และนำเงินดังกล่าวโอนเข้าบัญชีเงินฝากของผู้รับเงิน และ/หรือบุคคลดังกล่าว. `,
         titleBtn: 'เริ่มใช้งาน K-My Fund',
-        btnStatus: false,
+        btnStatus: false,                    
       }
 
     default:
@@ -56,11 +58,16 @@ const dispatchToProps = dispatch => ({
 @lockout
 export default class extends React.Component {
   static defaultProps = {
-    status: 'success', // success, reject, nothing
+    status: 'Approved', // SUCCESS, REJECT, nothing
+  }
+
+  state = {
+    agree: false,
   }
 
   render() {
     const { navigateAction, navigation } = this.props
+    const { agree } = this.state
     const status = navigation.getParam('status', '')
     return (
       <Screen>
@@ -78,18 +85,64 @@ export default class extends React.Component {
             ) : null
           }
         />
-
-        <View style={{ flex: 1, alignItems: 'center', paddingTop: 40, paddingHorizontal: 24 }}>
-          <Image source={images.kmyfundLogo} style={{ width: widthView * .6, marginBottom: 53 }} resizeMode="contain" />
-          <TBold color={colors.white} mb={24}>{renderText(status).title}</TBold>
-          <TLight color={colors.white}>{renderText(status).dis}</TLight>
-        </View>
-
+        <ScrollView
+          contentContainerStyle={{ paddingTop: 40, paddingHorizontal: 24 }}
+        >
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <Image source={images.kmyfundLogo} style={{ width: widthView * .6, marginBottom: 19 }} resizeMode="contain" />
+            <TBold color={colors.white} mb={10}>{renderText(status).title}</TBold>
+            <TLight color={colors.white} mb={status === 'Approved' ? 40 : 0}>{renderText(status).dis}</TLight>
+            {
+              status === 'Approved' ? (
+              <View
+              style={{
+                backgroundColor: colors.white,
+                width: '100%',
+                minHeight: 352,
+                paddingVertical: 16,
+                paddingHorizontal: 16,
+                borderTopRightRadius: 16,
+                borderTopLeftRadius: 16,
+                overflow: 'hidden'
+              }}
+            >
+              <View style={{ height: 40, flexDirection: 'row' }}>
+                <TBold fontSize={18} textAlign="left">เงื่อนไขการเปิดบัญชี</TBold>
+              </View>
+              <TLight color={colors.grey} textAlign="left" mb={40}>{renderText(status).text}</TLight>
+              <TouchableOpacity
+              onPress={() => this.setState({ agree: !agree })}
+              activeOpacity={1}
+              style={{
+                backgroundColor: colors.lightgrey,
+                padding: 16,
+                flexDirection: 'row',
+                borderBottomRightRadius: 16,
+                borderBottomLeftRadius: 16,
+              }}
+            >
+              <View style={{ marginRight: 16, marginTop: 5 }}>
+                {
+                  agree
+                    ? <Image source={images.iconCheck} style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: 'red' }} />
+                    : <Image source={{}} style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: colors.white, borderWidth: 1, borderColor: colors.grey }} />
+                }
+              </View>
+              <View style={{ flex: 1 }}>
+                <TLight color={colors.midnight} fontSize={16} textAlign="left">ฉันได้อ่านและทำความเข้าใจในข้อความทั้งหมดโดยที่ฉันได้ยอมรับและเห็นด้วย  </TLight>
+              </View>
+            </TouchableOpacity>
+            </View>
+              ) : null
+            }
+          </View>
+        </ScrollView>
         <View style={{ paddingBottom: 44 }}>
           <LongButton
             label={renderText(status).titleBtn}
             bgTransparent={renderText(status).btnStatus}
             style={{ marginHorizontal: 24 }}
+            disabled={!agree}
             onPress={() => navigateAction({ ...this.props, page: '' })}
           />
         </View>
