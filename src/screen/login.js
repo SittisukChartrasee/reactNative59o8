@@ -1,5 +1,5 @@
 import React from 'react'
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage, NativeModules } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withApollo } from 'react-apollo'
@@ -83,7 +83,7 @@ export default class extends React.Component {
           {...{
             dot,
             title: 'กรุณากรอกรหัสผ่าน',
-            onPrevPage: () => this.props.navigation.goBack(),
+            onPrevPage: () => NativeModules.KMyFundOnboarding.finishActivity(),
             forgetbtn: () => this.props.navigateAction({ ...this.props, page: 'forgetPasscode' })
           }}
         />

@@ -6,6 +6,7 @@ import {
   AsyncStorage,
   TouchableOpacity,
   SafeAreaView,
+  NativeModules
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -39,7 +40,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    
+    // NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
     this.props.acceptTerm()
       .then(res => {
         console.log(res)
