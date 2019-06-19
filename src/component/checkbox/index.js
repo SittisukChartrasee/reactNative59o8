@@ -9,7 +9,7 @@ import colors from '../../config/colors';
 
 export default class extends React.Component {
   static defaultProps = {
-    value: true,
+    value: false,
     onChange: () => alert('neet function onChange!')
   }
   state = {
