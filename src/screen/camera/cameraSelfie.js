@@ -15,12 +15,13 @@ import { Camera } from '../../component/camera'
 import colors from '../../config/colors'
 import { TLight, TBold } from '../../component/texts'
 import images from '../../config/images'
-import { navigateAction } from '../../redux/actions'
+import { navigateAction, navigateReset } from '../../redux/actions'
 import request from '../../utility/requestApi'
 
 const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  navigateReset: bindActionCreators(navigateReset, dispatch),
 })
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
@@ -44,7 +45,7 @@ export default class extends React.Component {
     if (res.success) {
       const status = this.props.navigation.getParam('status', '')
       if (status === 'Editing') {
-        this.props.navigateAction({ ...this.props, page: 'softReject' })
+        this.props.navigateReset({ ...this.props, page: 'softReject' })
       } else {
         this.props.navigateAction({ ...this.props, page: 'signature' })
       }

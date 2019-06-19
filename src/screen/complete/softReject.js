@@ -52,6 +52,7 @@ export default class extends React.Component {
   }
 
   componentDidMount = () => {
+    console.log('eiei')
     containerQuery(
       this.props.client,
       { query: getStatusEditing, fetchPolicy: "no-cache" },
@@ -63,21 +64,15 @@ export default class extends React.Component {
     let status = false
     if (val.data.getStatusEditing.idCard) {
       if (val.data.getStatusEditing.selfie) {
-        if (val.data.getStatusEditing.checkIDCard && val.data.getStatusEditing.selfie) {
-          status = false
-        }
+        if (!val.data.getStatusEditing.checkIDCard ||
+          !val.data.getStatusEditing.checkSelfie) status = true
       } else {
-        if (val.data.getStatusEditing.checkIDCard) {
-          status = false
-        }
+        if (!val.data.getStatusEditing.checkIDCard) status = true
       }
     } else if (val.data.getStatusEditing.selfie) {
-      if (val.data.getStatusEditing.selfie) {
-        status = false
-      }
-    } else {
-      status = true
-    }
+      if (!val.data.getStatusEditing.checkSelfie) status = true
+    } else { status = false }
+
     this.setState({
       statusEdit: status,
       card: this.state.card.map(d => {
@@ -100,11 +95,10 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
-    const status = this.props.navigation.getParam('status', '')
     if (props.value === 'ถ่ายบัตรประชาชน') {
-      this.props.navigateAction({ ...this.props, page: 'tutorialBackCamera', params: { status } })
+      this.props.navigateAction({ ...this.props, page: 'tutorialBackCamera', params: { status: 'Editing' } })
     } else if (props.value === 'ถ่ายบัตรประชาชนคู่ใบหน้า') {
-      this.props.navigateAction({ ...this.props, page: 'tutorialFrontCamera', params: { status } })
+      this.props.navigateAction({ ...this.props, page: 'tutorialFrontCamera', params: { status: 'Editing' } })
     }
   }
 
@@ -131,6 +125,7 @@ export default class extends React.Component {
 
   render() {
     const { statusEdit } = this.state
+    console.log(statusEdit)
     return (
       <Screen>
         <NavBar

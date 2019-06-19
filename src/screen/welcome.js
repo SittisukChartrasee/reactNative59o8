@@ -5,7 +5,6 @@ import {
   Dimensions,
   AsyncStorage,
   Platform,
-  ScrollView,
   TouchableOpacity
 } from 'react-native'
 import { bindActionCreators } from 'redux'
@@ -23,8 +22,7 @@ import { requestOtp } from '../redux/actions/root-active'
 import { updateUser, root } from '../redux/actions/commonAction'
 import lockout from '../containers/hoc/lockout'
 import { NavBar } from '../component/gradient'
-import { NavigationActions } from 'react-navigation'
-import { replaceSpace, fontToLower } from '../utility/helper'
+import { replaceSpace, fontToLower, heightPercentageToDP as hP } from '../utility/helper'
 
 // import * as validate from '../utility/validation'
 
@@ -155,16 +153,15 @@ export default class extends React.Component {
             </TouchableOpacity>
           }
         />
-        <ScrollView contentContainerStyle={{ flex: 1 }}>
-          <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+        <KeyboardAwareScrollView
+          extraScrollHeight={Platform.OS === 'ios' ? -20 : -280}
+          enableOnAndroid
+        >
+          <View style={{ alignItems: 'center', height: Platform.OS === 'ios' ? hP('40%') : hP('42%') }}>
             <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
             <TBold fontSize={20} color={colors.white} mt="24" mb="40">{`กรุณากรอกข้อมูล\nเพื่อเปิดบัญชีกองทุน`}</TBold>
           </View>
-          <KeyboardAwareScrollView
-            extraScrollHeight={Platform.OS === 'ios' ? -50 : 50}
-            enableOnAndroid
-            style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}
-          >
+          <View style={{ backgroundColor: '#fff', height: Platform.OS === 'ios' ? hP('39%') : hP('42%') }}>
             {
               fields.map((setField, key) => Input({
                 ...setField,
@@ -175,10 +172,9 @@ export default class extends React.Component {
                 err: this.onValidation(setField.field)
               }, key))
             }
-
-          </KeyboardAwareScrollView>
+          </View>
           <LongPositionButton label="ถัดไป" onPress={this.onNext} />
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </Screen>
     )
   }

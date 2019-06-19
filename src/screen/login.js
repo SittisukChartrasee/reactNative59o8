@@ -38,7 +38,7 @@ export default class extends React.Component {
 
     if (obj.number.length === 6) {
       const res = await this.props.requestLogin({ userToken, password: obj.number })
-      
+
       if (res && res.result) {
         AsyncStorage.setItem('access_token', res.result.access_token)
         AsyncStorage.setItem('user_token', userToken)
@@ -83,7 +83,7 @@ export default class extends React.Component {
         break
 
       case 'Editing':
-        this.props.navigateAction({ ...this.props, page: 'softReject', params: { status: val.data.getStatus } })
+        this.props.navigateAction({ ...this.props, page: 'softReject' })
         break
 
       default: // Rejected
