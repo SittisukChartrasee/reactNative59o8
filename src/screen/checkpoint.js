@@ -143,12 +143,14 @@ export default class extends React.Component {
             </TouchableOpacity>
           }
         />
-        <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
-          <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 20 }}>
-            <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
-            <TBold fontSize={18} color={colors.white} mt="10" mb="20">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
-          </SafeAreaView>
-          <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'flex-start' }}>
+        <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 20 }}>
+          <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
+          <TBold fontSize={18} color={colors.white} mt="10" mb="20">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
+        </SafeAreaView>
+        <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'flex-start' }}>
+          <KeyboardAwareScrollView
+            enableOnAndroid
+          >
             {checkPoint.map((props, index) => (
               <View
                 key={props.point}
@@ -211,13 +213,12 @@ export default class extends React.Component {
                 </View>
               </View>
             ))}
-          </View>
+          </KeyboardAwareScrollView>
           <LongPositionButton
             label="ดำเนินการต่อ"
             onPress={this.onNext}
           />
-          <View style={{ flex: 0.01, backgroundColor: '#fff' }} />
-        </KeyboardAwareScrollView>
+        </View>
       </Screen>
     )
   }
