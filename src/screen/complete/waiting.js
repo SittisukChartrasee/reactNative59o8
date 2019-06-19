@@ -38,7 +38,7 @@ export default class extends React.Component {
         console.log(res)
         switch (res.data.getStatus) {
           case 'Approved':
-            this.props.navigateAction({ ...this.props, page: 'statusApprove', params: { status: res.data.getStatus } })
+            this.props.navigateAction({ ...this.props, page: 'confirmAccount' })
             break
           case 'Rejected':
             this.props.navigateAction({ ...this.props, page: 'statusApprove', params: { status: res.data.getStatus } })

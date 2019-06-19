@@ -58,7 +58,7 @@ const dispatchToProps = dispatch => ({
 @lockout
 export default class extends React.Component {
   static defaultProps = {
-    status: 'Approved', // SUCCESS, REJECT, nothing
+    status: 'Rejected',
   }
 
   state = {
@@ -90,50 +90,6 @@ export default class extends React.Component {
           <View style={{ flex: 1, alignItems: 'center' }}>
             <Image source={images.kmyfundLogo} style={{ width: widthView * .6, marginBottom: 19 }} resizeMode="contain" />
             <TBold color={colors.white} mb={10}>{renderText(status).title}</TBold>
-            <TLight color={colors.white} mb={status === 'Approved' ? 40 : 0}>{renderText(status).dis}</TLight>
-            {
-              status === 'Approved' ? (
-              <View
-              style={{
-                backgroundColor: colors.white,
-                width: '100%',
-                minHeight: 352,
-                paddingVertical: 16,
-                paddingHorizontal: 16,
-                borderTopRightRadius: 16,
-                borderTopLeftRadius: 16,
-                overflow: 'hidden'
-              }}
-            >
-              <View style={{ height: 40, flexDirection: 'row' }}>
-                <TBold fontSize={18} textAlign="left">เงื่อนไขการเปิดบัญชี</TBold>
-              </View>
-              <TLight color={colors.grey} textAlign="left" mb={40}>{renderText(status).text}</TLight>
-              <TouchableOpacity
-              onPress={() => this.setState({ agree: !agree })}
-              activeOpacity={1}
-              style={{
-                backgroundColor: colors.lightgrey,
-                padding: 16,
-                flexDirection: 'row',
-                borderBottomRightRadius: 16,
-                borderBottomLeftRadius: 16,
-              }}
-            >
-              <View style={{ marginRight: 16, marginTop: 5 }}>
-                {
-                  agree
-                    ? <Image source={images.iconCheck} style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: 'red' }} />
-                    : <Image source={{}} style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: colors.white, borderWidth: 1, borderColor: colors.grey }} />
-                }
-              </View>
-              <View style={{ flex: 1 }}>
-                <TLight color={colors.midnight} fontSize={16} textAlign="left">ฉันได้อ่านและทำความเข้าใจในข้อความทั้งหมดโดยที่ฉันได้ยอมรับและเห็นด้วย  </TLight>
-              </View>
-            </TouchableOpacity>
-            </View>
-              ) : null
-            }
           </View>
         </ScrollView>
         <View style={{ paddingBottom: 44 }}>
