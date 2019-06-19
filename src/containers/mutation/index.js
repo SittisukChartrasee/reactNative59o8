@@ -289,6 +289,19 @@ const updateRegisterBankStatus = gql`
   }
 `
 
+const saveWaitingApprove = gql`
+  mutation saveWaitingApprove {
+    saveWaitingApprove{
+      success
+      message
+      details{
+        field
+        description
+      }
+    }
+  }
+`
+
 export default compose(
   graphql(saveSpouse, { name: 'saveSpouse' }),
   graphql(saveCareer, { name: 'saveCareer' }),
@@ -313,4 +326,5 @@ export default compose(
   graphql(registerBank, { name: 'registerBank' }),
   graphql(saveSanction, { name: 'saveSanction' }),
   graphql(updateRegisterBankStatus, { name: 'updateRegisterBankStatus' }),
+  graphql(saveWaitingApprove, { name: 'saveWaitingApprove' }),
 )

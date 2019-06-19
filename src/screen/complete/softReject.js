@@ -17,18 +17,22 @@ import Input from '../../component/input'
 import { LongButton } from '../../component/button'
 import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
+import { root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
 import { containerQuery, getStatusEditing } from '../../containers/query'
+import setMutation from '../../containers/mutation'
 
 const { width: widthView } = Dimensions.get('window')
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateRoot: bindActionCreators(root, dispatch),
 })
 @connect(mapToProps, dispatchToProps)
 @withApollo
 @lockout
+@setMutation
 export default class extends React.Component {
   state = {
     card: [
@@ -44,6 +48,7 @@ export default class extends React.Component {
         inVisible: true,
       }
     ],
+    statusEdit: true,
   }
 
   componentDidMount = () => {
@@ -55,8 +60,26 @@ export default class extends React.Component {
   }
 
   onHandleCard = val => {
-    console.log(val)
+    let status = false
+    if (val.data.getStatusEditing.idCard) {
+      if (val.data.getStatusEditing.selfie) {
+        if (val.data.getStatusEditing.checkIDCard && val.data.getStatusEditing.selfie) {
+          status = false
+        }
+      } else {
+        if (val.data.getStatusEditing.checkIDCard) {
+          status = false
+        }
+      }
+    } else if (val.data.getStatusEditing.selfie) {
+      if (val.data.getStatusEditing.selfie) {
+        status = false
+      }
+    } else {
+      status = true
+    }
     this.setState({
+      statusEdit: status,
       card: this.state.card.map(d => {
         if (d.label === 'ถ่ายบัตรประชาชน') {
           return {
@@ -85,7 +108,29 @@ export default class extends React.Component {
     }
   }
 
+  onNext = () => {
+    this.props.saveWaitingApprove()
+      .then(res => {
+        console.log(res)
+        if (res.data.saveWaitingApprove.success) {
+          this.props.navigateAction({ ...this.props, page: 'waiting' })
+        } else if (!res.data.saveWaitingApprove.success) {
+          const modal = {
+            dis: res.data.saveWaitingApprove.message,
+            visible: true,
+            onPress: () => this.props.updateRoot('modal', { visible: false }),
+            onPressClose: () => this.props.updateRoot('modal', { visible: false })
+          }
+          return this.props.updateRoot('modal', modal)
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
   render() {
+    const { statusEdit } = this.state
     return (
       <Screen>
         <NavBar
@@ -129,7 +174,8 @@ export default class extends React.Component {
           <LongButton
             label="ส่งข้อมูลอีกครั้ง"
             style={{ marginHorizontal: 24 }}
-            onPress={() => this.props.navigateAction({ ...this.props, page: 'tutorialBackCamera' })}
+            disabled={statusEdit}
+            onPress={this.onNext}
           />
         </View>
       </Screen>
