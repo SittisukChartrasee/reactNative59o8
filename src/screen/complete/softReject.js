@@ -164,7 +164,6 @@ export default class extends React.Component {
           </View>
         </ScrollView>
 
-
         <View style={{ paddingBottom: 44 }}>
           <LongButton
             label="ส่งข้อมูลอีกครั้ง"

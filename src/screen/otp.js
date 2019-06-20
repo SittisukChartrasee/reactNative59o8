@@ -99,6 +99,7 @@ export default class extends React.Component {
 								} else {
 									this.props.navigateAction({...this.props, page: 'passcode'})
 								}
+								this.setState({...defaultDot, defaultKey: true})
 							} else if (!res.success) {
 								if (res.details === 6) {
 									this.setState({

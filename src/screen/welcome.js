@@ -157,11 +157,11 @@ export default class extends React.Component {
           extraScrollHeight={Platform.OS === 'ios' ? -20 : -280}
           enableOnAndroid
         >
-          <View style={{ alignItems: 'center', height: Platform.OS === 'ios' ? hP('40%') : hP('42%') }}>
+          <View style={{ alignItems: 'center', height: Platform.OS === 'ios' ? hP('40%') : hP('40%') }}>
             <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
             <TBold fontSize={20} color={colors.white} mt="24" mb="40">{`กรุณากรอกข้อมูล\nเพื่อเปิดบัญชีกองทุน`}</TBold>
           </View>
-          <View style={{ backgroundColor: '#fff', height: Platform.OS === 'ios' ? hP('39%') : hP('42%') }}>
+          <View style={{ backgroundColor: '#fff', height: Platform.OS === 'ios' ? hP('39%') : hP('40%') }}>
             {
               fields.map((setField, key) => Input({
                 ...setField,

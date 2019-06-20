@@ -54,13 +54,6 @@ export default class extends React.Component {
 					if (res.success) {
 						this.props.navigateAction({...this.props, page: 'otp', params: {accept_term: true, token}})
 					}
-
-					this.props.updateRoot('modal', {
-						dis: res.message,
-						visible: true,
-						onPress: () => this.props.updateRoot('modal', {visible: false}),
-						onPressClose: () => this.props.updateRoot('modal', {visible: false})
-					})
 				})
 				.catch(err => {
 					console.log(err)
