@@ -51,14 +51,13 @@ export default class extends React.Component {
         label: 'รายได้ต่อเดือน (บาท)',
         type: 'dropdown',
         init: [
-          { value: 'ไม่เกิน 10,000 บาท' },
-          { value: '10,001 - 20,000 บาท' },
-          { value: '20,001 - 30,000 บาท' },
+          { value: '< 15,000' },
+          { value: '15,001 - 30,000 บาท' },
           { value: '30,001 - 50,000 บาท' },
           { value: '50,001 - 100,000 บาท' },
-          { value: '100,001 - 200,000 บาท' },
-          { value: 'มากกว่า 200,000 บาท' },
-          { value: 'ไม่มีรายได้' }
+          { value: '100,001 - 500,000 บาท' },
+          { value: '500,001 - 1,000,000 บาท' },
+          { value: '> 1,000,000' }
         ],
         field: 'incomeRangeCode', //incomeRangeCode
         required: true
