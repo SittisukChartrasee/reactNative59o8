@@ -64,8 +64,16 @@ export default class extends React.Component {
 		return (
 				<Screen>
 					<NavBar
-							color="transparent"
-							title={renderText(status).header || null}
+						color="transparent"
+						title={renderText(status).header || null}
+						navLeft={
+              <TouchableOpacity
+                onPress={() => this.props.navigation.goBack()}
+                style={{ paddingRight: 30 }}
+              >
+                <Image source={images.iconback} />
+              </TouchableOpacity>
+            }
 					/>
 
 					<View style={{flex: 1, alignItems: 'center', paddingTop: 40, paddingHorizontal: 24}}>
