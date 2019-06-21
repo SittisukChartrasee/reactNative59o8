@@ -1,9 +1,11 @@
 import { CHANGE_ROOT } from '../../redux/types'
 
+const checkWordTh = text => /[\u0E01-\u0E3A\u0E40-\u0E59]/g.test(text)
+
 export const handleModal = (store) => (next) => action => {
   // console.log(store, next, action)
 
-  if (action.key === 'message') {
+  if (action.key === 'message' && checkWordTh(action.value)) {
     const modal = {
       dis: action.value,
       visible: true,
