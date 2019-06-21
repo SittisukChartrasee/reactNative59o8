@@ -72,19 +72,6 @@ export default class extends React.Component {
 										details: res.details,
 									})
 								}
-								const modal = {
-									dis: res.message,
-									visible: true,
-									onPress: () => {
-										this.setState({...defaultDot, defaultKey: true})
-										this.props.updateRoot('modal', {visible: false})
-									},
-									onPressClose: () => {
-										this.setState({...defaultDot, defaultKey: true})
-										this.props.updateRoot('modal', {visible: false})
-									}
-								}
-								return this.props.updateRoot('modal', modal)
 							}
 						})
 						.catch(err => {
@@ -108,19 +95,6 @@ export default class extends React.Component {
 										details: res.details,
 									})
 								}
-								const modal = {
-									dis: res.message,
-									visible: true,
-									onPress: () => {
-										this.setState({...defaultDot, defaultKey: true})
-										this.props.updateRoot('modal', {visible: false})
-									},
-									onPressClose: () => {
-										this.setState({...defaultDot, defaultKey: true})
-										this.props.updateRoot('modal', {visible: false})
-									}
-								}
-								return this.props.updateRoot('modal', modal)
 							}
 						})
 						.catch(err => {

@@ -44,7 +44,7 @@ export default class extends React.Component {
 		if (obj.number.length === 6) {
 			this.props.requestLogin({userToken, password: obj.number})
 					.then(res => {
-						console.log(res)
+						// console.log(res)
 						if (res.success) {
 							AsyncStorage.setItem('access_token', res.result.access_token)
 							AsyncStorage.setItem('user_token', userToken)

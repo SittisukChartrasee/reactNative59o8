@@ -12,10 +12,13 @@ export const requestOtp = (obj) => async dispatch => {
     }),
   })
 
-  if (res) {
+  if (res && res.result) {
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
   }
+
+  for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  return { ...res }
 }
 
 export const velidateOtp = (obj) => async dispatch => {
@@ -30,10 +33,13 @@ export const velidateOtp = (obj) => async dispatch => {
     }),
   })
 
-  if (res) {
+  if (res && res.result) {
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
   }
+
+  for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  return { ...res }
 }
 
 export const requestRegister = (obj, token) => async dispatch => {
@@ -46,10 +52,13 @@ export const requestRegister = (obj, token) => async dispatch => {
     }),
   }, token)
 
-  if (res) {
+  if (res && res.result) {
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
   }
+  
+  for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  return { ...res }
 }
 
 export const requestLogin = (obj, token) => async dispatch => {
@@ -81,10 +90,13 @@ export const requestOtpAccept = (obj, token) => async dispatch => {
     }),
   }, token)
 
-  if (res) {
+  if (res && res.result) {
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
   }
+
+  for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  return { ...res }
 }
 
 export const velidateOtpAccept = (obj, token) => async dispatch => {
@@ -99,8 +111,11 @@ export const velidateOtpAccept = (obj, token) => async dispatch => {
     }),
   }, token)
 
-  if (res) {
+  if (res && res.result) {
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
   }
+
+  for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  return { ...res }
 }
