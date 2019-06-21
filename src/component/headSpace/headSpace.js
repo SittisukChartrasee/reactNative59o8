@@ -12,7 +12,7 @@ import images from '../../config/images';
 
 export default ({
   title = "Test title",
-  labelBtn = "ลืมรหัส",
+  labelBtn = "ลืมรหัสผ่าน",
   dis,
   dot,
   forgetbtn,

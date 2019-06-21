@@ -42,7 +42,7 @@ const checkTitle = (field = '') => {
   if (field.toLowerCase().search('country') > -1) return 'ค้นหาประเทศ'
   if (field.toLowerCase().search('bustype') > -1) return 'ค้นหาประเภทธุรกิจ'
   if (field.toLowerCase().search('occupation') > -1) return 'ค้นหาอาชีพ'
-  return 'ค้นหาตำบลของคุณ'
+  return 'ระบุตำบล'
 }
 
 const query = debounce((client, obj, setState) => {
