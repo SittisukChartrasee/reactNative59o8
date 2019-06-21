@@ -67,8 +67,8 @@ export const getOccupation = gql`
 `
 
 export const getInvestment = gql`
-  query getInvestment($point: String!) {
-    getInvestment(point: $point) {
+  query getInvestment {
+    getInvestment {
       crrLevel
       riskLevel
       nameTH

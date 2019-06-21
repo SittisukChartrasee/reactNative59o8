@@ -68,8 +68,7 @@ export default class extends React.Component {
     const point = this.props.navigation.getParam('sumSuittest', 0)
 
     query(this.props.client, {
-      query: getInvestment,
-      variables: { point: `${point}` }
+      query: getInvestment
     }, val => {
       const {
         crrLevel,
