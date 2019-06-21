@@ -25,7 +25,7 @@ import { LongPositionButton, NextButton } from '../component/button'
 import { navigateAction } from '../redux/actions'
 import { requestOtp } from '../redux/actions/root-active'
 import { updateUser } from '../redux/actions/commonAction'
-import { containerQuery, getStatusInProgress } from '../containers/query'
+import { containerQuery, getStatusInProgress, getRegisterBankStatus } from '../containers/query'
 
 const { width: widthScreen } = Dimensions.get('window')
 
@@ -58,7 +58,7 @@ export default class extends React.Component {
       {
         point: 'ขั้นตอนที่ 4',
         check: 'future',
-        text: 'ทำแบบระเมินความเสี่ยง'
+        text: 'ทำแบบประเมินความเสี่ยง'
       }
     ],
     link: '',
@@ -124,7 +124,18 @@ export default class extends React.Component {
     })
   }
 
-  onNext = () => this.props.navigateAction({ ...this.props, page: this.state.link })
+  onNext = () => {
+    //
+    // ********** waiting best TODO:// **********
+    //
+    // containerQuery(this.props.client, {
+    //   query: getRegisterBankStatus,
+    // }, val => {
+    //   console.log(val)
+    // })
+    // // this.props.getRegisterBankStatus.getRegisterBankStatus
+    this.props.navigateAction({ ...this.props, page: this.state.link })
+  }
 
   render() {
     const { checkPoint } = this.state
