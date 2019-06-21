@@ -1,18 +1,18 @@
 import React from 'react'
-import {View, Image, TouchableOpacity} from 'react-native'
-import {connect} from 'react-redux'
-import {bindActionCreators} from 'redux'
+import { View, Image, TouchableOpacity } from 'react-native'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
-import {headerotp} from '../component/headSpace'
-import {navigateAction, navigateReset} from '../redux/actions'
+import { headerotp } from '../component/headSpace'
+import { navigateAction, navigateReset } from '../redux/actions'
 import colors from '../config/colors'
-import {TLight, TBold, TMed} from '../component/texts'
+import { TLight, TBold, TMed } from '../component/texts'
 import images from '../config/images'
-import {velidateOtp, velidateOtpAccept, requestOtp, requestOtpAccept} from '../redux/actions/root-active'
-import {root} from '../redux/actions/commonAction'
+import { velidateOtp, velidateOtpAccept, requestOtp, requestOtpAccept } from '../redux/actions/root-active'
+import { root } from '../redux/actions/commonAction'
 
-const mapToProps = ({root, user}) => ({root, user})
+const mapToProps = ({ root, user }) => ({ root, user })
 const dispatchToProps = dispatch => ({
 	navigateAction: bindActionCreators(navigateAction, dispatch),
 	navigateReset: bindActionCreators(navigateReset, dispatch),
@@ -42,7 +42,7 @@ export default class extends React.Component {
 	}
 
 	setNumber = (obj) => {
-		const {defaultDot} = this.state
+		const { defaultDot } = this.state
 		const data = {
 			trans_id: this.props.root.trans_id,
 			ref_no: this.props.root.ref_no,
@@ -50,9 +50,9 @@ export default class extends React.Component {
 			secret: obj.number,
 		}
 
-		this.setState({...obj})
+		this.setState({ ...obj })
 
-		if (obj.key === 'del') this.setState({currentDot: '•'})
+		if (obj.key === 'del') this.setState({ currentDot: '•' })
 		else obj.dot.map(d => d && this.delayDot(d))
 
 		if (obj.number.length === 6) {
@@ -61,96 +61,96 @@ export default class extends React.Component {
 
 			if (accept_term) {
 				this.props.velidateOtpAccept(data, token)
-						.then(res => {
-							if (res.success) {
-								this.props.navigateAction({...this.props, page: 'passcode'})
-							} else if (!res.success) {
-								if (res.details === 6) {
-									this.setState({
-										overRequest: true,
-										overRequestUi: true,
-										details: res.details,
-									})
-								}
+					.then(res => {
+						if (res.success) {
+							this.props.navigateAction({...this.props, page: 'passcode'})
+						} else if (!res.success) {
+							if (res.details === 6) {
+								this.setState({
+									overRequest: true,
+									overRequestUi: true,
+									details: res.details,
+								})
 							}
-						})
-						.catch(err => {
-							console.log(err)
-						})
+						}
+					})
+					.catch(err => {
+						console.log(err)
+					})
 			} else {
 				this.props.velidateOtp(data)
-						.then(res => {
-							if (res.success) {
-								if (res.result.is_register) {
-									this.props.navigateAction({...this.props, page: 'login', params: {user_token: res.result.user_token}})
-								} else {
-									this.props.navigateAction({...this.props, page: 'passcode'})
-								}
-								this.setState({...defaultDot, defaultKey: true})
-							} else if (!res.success) {
-								if (res.details === 6) {
-									this.setState({
-										overRequest: true,
-										overRequestUi: true,
-										details: res.details,
-									})
-								}
+					.then(res => {
+						if (res.success) {
+							if (res.result.is_register) {
+								this.props.navigateAction({...this.props, page: 'login', params: {user_token: res.result.user_token}})
+							} else {
+								this.props.navigateAction({...this.props, page: 'passcode'})
 							}
-						})
-						.catch(err => {
-							console.log(err)
-						})
+							this.setState({...defaultDot, defaultKey: true})
+						} else if (!res.success) {
+							if (res.details === 6) {
+								this.setState({
+									overRequest: true,
+									overRequestUi: true,
+									details: res.details,
+								})
+							}
+						}
+					})
+					.catch(err => {
+						console.log(err)
+					})
 			}
 		}
 	}
 
 	delayDot = (number) => {
-		this.setState({currentDot: number})
+		this.setState({ currentDot: number })
 		setTimeout(() => {
-			this.setState({currentDot: '•'})
+			this.setState({ currentDot: '•' })
 		}, 200)
 	}
 
 	onPress = async setTimeWaiting => {
-		const {user} = this.props
-		const {defaultDot} = this.state
+		const { user } = this.props
+		const { defaultDot } = this.state
 		const accept_term = this.props.navigation.getParam('accept_term', '')
 		const token = this.props.navigation.getParam('token', '')
 
 		if (accept_term) {
 			console.log(accept_term, token)
 
-			const data = {accept_term: false}
+			const data = { accept_term: false }
 
 			this.props.requestOtpAccept(data, token)
-					.then(res => {
-						console.log(res)
-						if (res.success) {
-							setTimeWaiting(res.details)
-							this.setState({
-								ref_no: res.result.ref_no,
-								overRequestUi: false,
-								defaultKey: true,
-								...defaultDot
-							})
-						}
-
-						this.props.updateRoot('modal', {
-							dis: res.message,
-							visible: true,
-							onPress: () => {
-								this.setState({...defaultDot, defaultKey: true})
-								this.props.updateRoot('modal', {visible: false})
-							},
-							onPressClose: () => {
-								this.setState({...defaultDot, defaultKey: true})
-								this.props.updateRoot('modal', {visible: false})
-							}
+				.then(res => {
+					console.log(res)
+					if (res.success) {
+						setTimeWaiting(res.details)
+						this.setState({
+							ref_no: res.result.ref_no,
+							overRequestUi: false,
+							defaultKey: true,
+							...defaultDot
 						})
+					}
+
+					this.props.updateRoot('modal', {
+						dis: res.message,
+						visible: true,
+						onPress: () => {
+							this.setState({ ...defaultDot, defaultKey: true })
+							this.props.updateRoot('modal', { visible: false })
+						},
+						onPressClose: () => {
+							this.setState({ ...defaultDot, defaultKey: true })
+							this.props.updateRoot('modal', { visible: false })
+						}
 					})
-					.catch(err => {
-						console.log(err)
-					})
+				})
+				.catch(err => {
+					console.log(err)
+				})
 		} else {
 
 			const data = {
@@ -160,66 +160,66 @@ export default class extends React.Component {
 			}
 
 			this.props.requestOtp(data)
-					.then(res => {
-						if (res.success) {
-							setTimeWaiting(res.details)
-							this.setState({
-								ref_no: res.result.ref_no,
-								overRequestUi: false,
-								defaultKey: true,
-								...defaultDot
-							})
-						} else if (!res.success) {
-							const modal = {
-								dis: res.message,
-								visible: true,
-								onPress: () => {
-									this.setState({...defaultDot, defaultKey: true})
-									this.props.updateRoot('modal', {visible: false})
-								},
-								onPressClose: () => {
-									this.setState({...defaultDot, defaultKey: true})
-									this.props.updateRoot('modal', {visible: false})
-								}
+				.then(res => {
+					if (res.success) {
+						setTimeWaiting(res.details)
+						this.setState({
+							ref_no: res.result.ref_no,
+							overRequestUi: false,
+							defaultKey: true,
+							...defaultDot
+						})
+					} else if (!res.success) {
+						const modal = {
+							dis: res.message,
+							visible: true,
+							onPress: () => {
+								this.setState({ ...defaultDot, defaultKey: true })
+								this.props.updateRoot('modal', { visible: false })
+							},
+							onPressClose: () => {
+								this.setState({ ...defaultDot, defaultKey: true })
+								this.props.updateRoot('modal', { visible: false })
 							}
-							return this.props.updateRoot('modal', modal)
 						}
-					})
-					.catch(err => {
-						console.log(err)
-					})
+						return this.props.updateRoot('modal', modal)
+					}
+				})
+				.catch(err => {
+					console.log(err)
+				})
 		}
 	}
 
 
 	render() {
-		const {ref_no, defaultKey} = this.state
+		const { ref_no, defaultKey } = this.state
 		return (
-				<Screen>
-					{
-						headerotp({
-							dot: this.state.dot,
-							currentDot: this.state.currentDot,
-							refNo: ref_no || null,
-							overRequest: this.state.overRequest,
-							overRequestUi: this.state.overRequestUi,
-							details: this.state.details,
-							onPress: this.onPress,
-							onPrevPage: () => this.props.navigation.goBack(),
-							setState: () => this.setState({overRequest: false}),
-						})
-					}
+			<Screen>
+				{
+					headerotp({
+						dot: this.state.dot,
+						currentDot: this.state.currentDot,
+						refNo: ref_no || null,
+						overRequest: this.state.overRequest,
+						overRequestUi: this.state.overRequestUi,
+						details: this.state.details,
+						onPress: this.onPress,
+						onPrevPage: () => this.props.navigation.goBack(),
+						setState: () => this.setState({ overRequest: false }),
+					})
+				}
 
-					{
-						this.state.overRequestUi
-								? (
-										<View style={{flex: 1, backgroundColor: colors.white, marginTop: -40}}>
-											<TBold color={colors.softRed}>ท่านกรอกผิดเกินจำนวนครั้งที่กำหนด</TBold>
-										</View>
-								) : <Keyboard setNumber={this.setNumber} defaultKey={defaultKey}/>
-					}
+				{
+					this.state.overRequestUi
+						? (
+							<View style={{ flex: 1, backgroundColor: colors.white, marginTop: -40 }}>
+								<TBold color={colors.softRed}>ท่านกรอกผิดเกินจำนวนครั้งที่กำหนด</TBold>
+							</View>
+						) : <Keyboard setNumber={this.setNumber} defaultKey={defaultKey} />
+				}
 
-				</Screen>
+			</Screen>
 		)
 	}
 }
