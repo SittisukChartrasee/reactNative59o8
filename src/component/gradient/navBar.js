@@ -27,6 +27,7 @@ export default ({
   title,
   color,
   img,
+  fontSize=18,
 }) => (
   <LinearGradient
     colors={color ? [color, color] : [colors.deepTeal, colors.hunterGreen]} 
@@ -51,7 +52,7 @@ export default ({
             { navLeft && navLeft }
           </View>
           <View style={{ flex: 5, alignItems: 'center' }}>
-            { title && <TBold color={colors.white}>{subString(title)}</TBold> }
+            { title && <TBold color={colors.white} fontSize={fontSize}>{subString(title)}</TBold> }
             { img && <Image source={img} /> }
           </View>
           <View style={{ flex: 1, alignItems: 'flex-end' }}>

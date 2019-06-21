@@ -7,6 +7,7 @@ import {
 import colors from '../../config/colors'
 import images from '../../config/images'
 import { TLight, TMed, TBold } from '../texts'
+import { NavBar } from '../gradient'
 
 const secToMinute = ({ minutes, seconds }) => `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
 
@@ -86,14 +87,19 @@ export default class extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 0.8, justifyContent: 'flex-end' }}>
-          {/* <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', paddingBottom: 24 }}> */}
-          {/* <TouchableOpacity onPress={this.props.onPrevPage} >
-              <Image source={images.iconback} />
-            </TouchableOpacity> */}
-          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 24 }}>
-            <TBold fontSize={28} color={colors.white}>ยืนยัน OTP</TBold>
-            <View />
-          </View>
+          <NavBar
+            color="transparent"
+            title="ยืนยัน OTP"
+            fontSize={28}
+            navLeft={
+              <TouchableOpacity
+                onPress={this.props.onPrevPage}
+                style={{ paddingRight: 30 }}
+              >
+                <Image source={images.iconback} />
+              </TouchableOpacity>
+            }
+          />
           <View style={{ backgroundColor: 'transparent', alignItems: 'center' }}>
             <View style={{ backgroundColor: colors.white, height: 60 / 2, width: '100%', position: 'absolute', bottom: 0 }} />
             {
