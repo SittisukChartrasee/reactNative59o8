@@ -53,6 +53,7 @@ export default class extends React.Component {
           style={styles.preview}
           type={this.props.switchCamera ? (this.state.switch ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back) : RNCamera.Constants.Type.back}
           flashMode={RNCamera.Constants.FlashMode.off}
+          captureAudio={false}
           // androidCameraPermissionOptions={{
           //   title: 'Permission to use camera',
           //   message: 'We need your permission to use your camera',
