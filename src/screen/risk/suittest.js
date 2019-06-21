@@ -58,32 +58,34 @@ export default class extends React.Component {
 	}
 
 	onNext = () => {
-		const {suitReducer} = this.props
+		const { suitReducer } = this.props
 
 		const data = {
-			suit01: suitReducer.suittest[0].answer,
-			suit02: suitReducer.suittest[1].answer,
-			suit03: suitReducer.suittest[2].answer,
-			suit04: suitReducer.suittest[3].answer,
+			suit01: suitReducer.suittest[0].answer + 1,
+			suit02: suitReducer.suittest[1].answer + 1,
+			suit03: suitReducer.suittest[2].answer + 1,
+			suit04: suitReducer.suittest[3].answer + 1,
 			suit04Array: getBoolean(suitReducer.suittest[3].choice),
-			suit05: suitReducer.suittest[4].answer,
-			suit06: suitReducer.suittest[5].answer,
-			suit07: suitReducer.suittest[6].answer,
-			suit08: suitReducer.suittest[7].answer,
-			suit09: suitReducer.suittest[8].answer,
-			suit10: suitReducer.suittest[9].answer,
-			suit11: suitReducer.suittest[10].answer,
-			suit12: suitReducer.suittest[11].answer,
+			suit05: suitReducer.suittest[4].answer + 1,
+			suit06: suitReducer.suittest[5].answer + 1,
+			suit07: suitReducer.suittest[6].answer + 1,
+			suit08: suitReducer.suittest[7].answer + 1,
+			suit09: suitReducer.suittest[8].answer + 1,
+			suit10: suitReducer.suittest[9].answer + 1,
+			suit11: suitReducer.suittest[10].answer + 1,
+			suit12: suitReducer.suittest[11].answer + 1,
 		}
 
-		this.props.saveSuittest({variables: {input: data}})
+		console.log(data)
+
+		this.props.saveSuittest({ variables: { input: data }})
 				.then(res => {
 					console.log(res)
 					if (res.data.saveSuittest.success) {
 						this.props.navigateAction({
 							...this.props,
 							page: 'reviewScore',
-							params: {sumSuittest: suitReducer.sumSuittest}
+							params: { sumSuittest: suitReducer.sumSuittest }
 						})
 					}
 				})

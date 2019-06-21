@@ -24,6 +24,18 @@ import {
   getInvestment
 } from '../../containers/query'
 
+const dataImage = [
+  { image: images.iconrisk1 },
+  { image: images.iconrisk1 }, // **start this item
+  { image: images.iconrisk2 },
+  { image: images.iconrisk3 },
+  { image: images.iconrisk4 },
+  { image: images.iconrisk5 },
+  { image: images.iconrisk6 },
+  { image: images.iconrisk7 },
+  { image: images.iconrisk8 },
+]
+
 const query = debounce((client, obj, setState) => {
   client.query({ ...obj })
     .then((val) => setState(val))
@@ -42,43 +54,54 @@ export default class extends React.Component {
   state = {
     risk: 0,
     dataPieChart: [],
-    dataTitle: [
-      { title: 'ความเสี่ยงต่ำ', image: images.iconrisk2 },
-      { title: 'ความเสี่ยงปานกลาง\nค่อนข้างต่ำ', image: images.iconrisk4 },
-      { title: 'ความเสี่ยงปานกลาง\nค่อนข้างสูง', image: images.iconrisk6 },
-      { title: 'ความเสี่ยงสูง', image: images.iconrisk8 },
-    ]
+    crrLevel: '',
+    descEN: '',
+    descTH: '',
+    fundCodeKAsset: '',
+    nameEN: '',
+    nameTH: '',
+    returnText: '',
+    riskLevel: 0,
   }
 
   componentDidMount = () => {
     const point = this.props.navigation.getParam('sumSuittest', 0)
-    if (point <= 15) {
-      this.setState({ risk: 0 })
-    }
-    else if (point <= 21) {
-      this.setState({ risk: 1 })
-    }
-    else if (point <= 29) {
-      this.setState({ risk: 2 })
-    }
-    else if (point > 30) {
-      this.setState({ risk: 3 })
-    }
 
     query(this.props.client, {
       query: getInvestment,
       variables: { point: `${point}` }
-    }, val => this.setState({
-      ...val.data.getInvestment,
-      dataPieChart: val.data.getInvestment.assetClass.map((props) => {
-        return {
-          title: props.nameTH,
-          color: props.color,
-          percent: parseInt(props.weight),
-        }
+    }, val => {
+      const {
+        crrLevel,
+        descEN,
+        descTH,
+        fundCodeKAsset,
+        nameEN,
+        nameTH,
+        returnText,
+        assetClass,
+        riskLevel,
+      } = val.data.getInvestment
+
+      this.setState({
+        crrLevel,
+        descEN,
+        descTH,
+        fundCodeKAsset,
+        nameEN,
+        nameTH,
+        returnText,
+        assetClass,
+        riskLevel,
+        dataPieChart: val.data.getInvestment.assetClass.map((props) => {
+          return {
+            title: props.nameTH,
+            color: props.color,
+            percent: parseInt(props.weight),
+          }
+        })
       })
     })
-    )
   }
 
   onNext = () => {
@@ -88,13 +111,13 @@ export default class extends React.Component {
 
   render() {
     const {
-      risk,
+      nameTH,
       descTH,
       assetClass,
       fundCodeKAsset,
       returnText,
       dataPieChart,
-      dataTitle
+      riskLevel,
     } = this.state
     return (
       <Screen>
@@ -122,15 +145,15 @@ export default class extends React.Component {
         <ScrollView contentContainerStyle={{ paddingTop: 40, paddingHorizontal: 24 }}>
           <View style={{ flex: 1, alignItems: 'center' }}>
             <View style={{ marginBottom: 19 }}>
-              <Image source={dataTitle[risk].image} />
+              <Image source={dataImage[+riskLevel].image} />
             </View>
 
             <View style={{ marginBottom: 10 }}>
-              <TBold fontSize={28} color={colors.white}>{dataTitle[risk].title}</TBold>
+              <TBold fontSize={28} color={colors.white}>{nameTH}</TBold>
               <TBold fontSize={16} color={colors.white}>{`ผลตอบแทนที่คาดหวังโดยเฉลี่ย ${returnText} ต่อปี`}</TBold>
             </View>
 
-            <TLight color={colors.white} mb={40}>{descTH}</TLight>
+            <TLight color={colors.white} mb={40}>{descTH.replace('↵','')}</TLight>
 
             <View style={{ backgroundColor: colors.white, width: '100%', minHeight: 352, paddingVertical: 16, borderRadius: 16, overflow: 'hidden' }}>
               <View style={{ height: 80, flexDirection: 'row' }}>
@@ -149,8 +172,6 @@ export default class extends React.Component {
               <View style={{ flex: 1, paddingHorizontal: 16 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <TBold fontSize={14}>สัดส่วนการลงทุนตามพอร์ตแนะนำ</TBold>
-                  {/* <TLight fontSize={12} color={colors.grey}>{dataTitle[risk].time}</TLight> */}
-                  {/* รอถามเรื่องวันที่ อัปเดท พอร์ต  KA ตอบกลับมาว่า ตัดออก */}
                 </View>
                 {assetClass ? sortBy(assetClass, [(o) => o.sortOrder]).map(RiskList) : null}
               </View>

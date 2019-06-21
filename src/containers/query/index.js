@@ -70,6 +70,7 @@ export const getInvestment = gql`
   query getInvestment($point: String!) {
     getInvestment(point: $point) {
       crrLevel
+      riskLevel
       nameTH
       nameEN
       returnText
