@@ -36,7 +36,12 @@ export default class extends React.Component {
     return (
       <Screen>
         <HeadSpace
-          {...{ dot, title: 'ตั้งรหัสผ่าน', dis: 'เพื่อเข้าใช้งานในครั้งถัดไป' }}
+          {...{ 
+            dot,
+            title: 'ตั้งรหัสผ่าน',
+            dis: 'เพื่อเข้าใช้งานในครั้งถัดไป',
+            onPrevPage: () => this.props.navigation.goBack()
+          }}
         />
         <Keyboard setNumber={this.setNumber} />
       </Screen>

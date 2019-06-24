@@ -68,8 +68,8 @@ export default class extends React.Component {
 						title={renderText(status).header || null}
 						navLeft={
               <TouchableOpacity
-                onPress={() => this.props.navigation.goBack()}
-                style={{ paddingRight: 30 }}
+                onPress={() => this.props.navigation.navigate('chooseBank')}
+                style={{ paddingRight: 30, display: status === 'FAIL' ? 'none' : 'flex' }}
               >
                 <Image source={images.iconback} />
               </TouchableOpacity>

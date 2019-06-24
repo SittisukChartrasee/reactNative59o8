@@ -144,6 +144,14 @@ export default class extends React.Component {
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
+          navRight={
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
+              <Image source={images.iconlogoOff} />
+            </TouchableOpacity>
+          }
         />
         <KeyboardAwareScrollView
           extraScrollHeight={Platform.OS === 'ios' ? -20 : -280}
