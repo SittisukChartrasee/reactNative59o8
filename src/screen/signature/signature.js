@@ -63,9 +63,7 @@ export default class Demo extends Component {
   }
 
   _onSaveEvent = async result => {
-    const { user } = this.props
     const token = await AsyncStorage.getItem("access_token")
-
     this.props.updateUser('signature', `file://${result.pathName}` )
 
     const data = new FormData()
