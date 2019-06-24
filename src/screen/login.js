@@ -106,7 +106,7 @@ export default class extends React.Component {
 			this.props.updateUser('profile', {
 				...this.props.user.profile,
 				'isNoDocExpDate': val.data.getUser.result.identity.isNoDocExpDate,
-				expireDateFlag: val.data.getUser.result.identity.isNoDocExpDate ? 'ไม่มีวันหมดอายุ' : 'มีวันหมดอายุ',
+				'expireDateFlag': val.data.getUser.result.identity.isNoDocExpDate ? 'ไม่มีวันหมดอายุ' : 'มีวันหมดอายุ',
 				'docExpDate': val.data.getUser.result.identity.isNoDocExpDate ? `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}` : convertDate_reverse(identityDocExpDate),
 				'genderCode': val.data.getUser.result.identity.genderCode,
 				'gender': getStatusGender_reverse(val.data.getUser.result.identity.genderCode),
@@ -125,30 +125,27 @@ export default class extends React.Component {
 				'isChild': val.data.getUser.result.identity.isChild ? 'มี' : 'ไม่มี',
 			})
 
-			// const spouseDocExpDate = momentDate(val.data.getUser.result.identity.docExpDate)._a
-			// console.log(val.data.getUser.result.spouse)
+			const spouseDocExpDate = momentDate(val.data.getUser.result.spouse.cardExpiredDate)._a
 
-			// this.props.updateUser('profile', {
-			// 	...this.props.user.profile,
-			// 	'isNoDocExpDate': val.data.getUser.result.spouse.isNoDocExpDate,
-			// 	expireDateFlag: val.data.getUser.result.spouse.isNoDocExpDate ? 'ไม่มีวันหมดอายุ' : 'มีวันหมดอายุ',
-			// 	'docExpDate': val.data.getUser.result.spouse.isNoDocExpDate ? `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}` : convertDate_reverse(identityDocExpDate),
-			// 	'genderCode': val.data.getUser.result.spouse.genderCode,
-			// 	'gender': getStatusGender_reverse(val.data.getUser.result.identity.genderCode),
-			// 	'titleTH': val.data.getUser.result.spouse.titleTH,
-			// 	'firstNameTH': val.data.getUser.result.spouse.firstNameTH,
-			// 	'lastNameTH': val.data.getUser.result.spouse.lastNameTH,
-			// 	'firstNameEN': val.data.getUser.result.spouse.firstNameEN,
-			// 	'lastNameEN': val.data.getUser.result.spouse.lastNameEN,
-			// 	'birthDay': `${val.data.getUser.result.spouse.dayOfBirth}/${month[parseInt(val.data.getUser.result.identity.monthOfBirth) - 1]}/${val.data.getUser.result.identity.yearOfBirth}`,
-			// 	'dayOfBirth': val.data.getUser.result.spouse.dayOfBirth,
-			// 	'monthOfBirth': val.data.getUser.result.spouse.monthOfBirth,
-			// 	'yearOfBirth': val.data.getUser.result.spouse.yearOfBirth,
-			// 	'nationalityCode': val.data.getUser.result.spouse.nationalityCode,
-			// 	'martialStatusCode': val.data.getUser.result.spouse.martialStatusCode,
-			// 	'martialStatus': getStatusMartial_reverse(val.data.getUser.result.spouse.martialStatusCode),
-			// 	'isChild': val.data.getUser.result.spouse.isChild ? 'มี' : 'ไม่มี',
-			// })
+			this.props.updateUser('spouse', {
+				...this.props.user.spouse,
+				'nationFlag': val.data.getUser.result.spouse.nationalityCode === 'TH' ? 'ไทย' : 'ชาวต่างชาติ',
+				'IDCardNo': val.data.getUser.result.spouse.nationalityCode === 'TH' ? formatIdCard(val.data.getUser.result.spouse.IDCardNo) : '',
+				'marryPassport': val.data.getUser.result.spouse.nationalityCode === 'TH' ? '' : val.data.getUser.result.spouse.IDCardNo,
+				'marryCountry': '', // ต้องให้ back ส่งมา
+				'nationalityCode': val.data.getUser.result.spouse.nationalityCode,
+				'isIDCardExpDate': !val.data.getUser.result.spouse.isIDCardExpDate,
+				'cardExpiredDate': val.data.getUser.result.spouse.isIDCardExpDate ? convertDate_reverse(spouseDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
+				'marryExpireDate': val.data.getUser.result.spouse.nationalityCode === 'TH' ? `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}` : convertDate_reverse(spouseDocExpDate),
+				'title': val.data.getUser.result.spouse.title,
+				'fistName': val.data.getUser.result.spouse.fistName,
+				'lastName': val.data.getUser.result.spouse.lastName,
+				'pepFlag': val.data.getUser.result.spouse.pepFlag,
+			})
+
+			const firstChildDocExpDate = momentDate(val.data.getUser.result.firstChild.ChildDocExpDate)._a
+			console.log(val.data.getUser.result.firstChild)
+			console.log(val.data.getUser.result.secondChild)
 		}
 	}
 

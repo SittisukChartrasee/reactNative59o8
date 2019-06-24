@@ -102,7 +102,8 @@ export default class extends React.Component {
         field: 'cardExpiredDate', // ต้อง save ที่ field => cardExpiredDate
         date: reverse(this.props.user.spouse.cardExpiredDate.split('-')),
         required: true,
-        inVisible: this.props.user.spouse.nationFlag === 'ชาวต่างชาติ',
+        inVisible: this.props.user.spouse.nationFlag === 'ชาวต่างชาติ' ||
+          this.props.user.spouse.isIDCardExpDate,
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
         type: 'search',

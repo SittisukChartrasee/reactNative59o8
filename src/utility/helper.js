@@ -34,7 +34,7 @@ export const convertDate = (date) => {
 }
 
 export const convertDate_reverse = (date) => {
-  const convert = `${date[2]}-${month[date[1] + 1]}-${date[0].toString()}`
+  const convert = `${date[2]}-${month[date[1]]}-${date[0].toString()}`
   return convert
 }
 
