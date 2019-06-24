@@ -12,6 +12,11 @@ import { updateUser } from '../redux/actions/commonAction'
 import { containerQuery, getStatus } from '../containers/query'
 import { formatIdCard, formatPhoneNumber } from '../utility/helper'
 
+const defaultPasscode = {
+	dot: ['', '', '', '', '', ''],
+	number: '',
+}
+
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
 	navigateAction: bindActionCreators(navigateAction, dispatch),
@@ -22,10 +27,6 @@ const dispatchToProps = dispatch => ({
 @withApollo
 export default class extends React.Component {
 	state = {
-		defaultPasscode: {
-			dot: ['', '', '', '', '', ''],
-			number: '',
-		},
 		dot: ['', '', '', '', '', ''],
 		number: '',
 		defaultKey: false,
@@ -38,7 +39,6 @@ export default class extends React.Component {
 		let userToken = await AsyncStorage.getItem('user_token')
 		if (!userToken) userToken = this.props.navigation.getParam('user_token', '')
 		const { user } = this.props
-		const { defaultPasscode } = this.state
 		this.setState({ ...obj })
 
 		if (obj.number.length === 6) {
@@ -65,10 +65,14 @@ export default class extends React.Component {
 							this.onHandleChooseScreen
 						)
 					} else if (!res.success) {
-						this.setState({ dot: ['', '', '', '', '', ''], number: '' })
-						return this.setState({ ...defaultPasscode, defaultKey: true, countPassFail: this.state.countPassFail + 1 }, () => {
-							if (this.state.countPassFail > 3) return this.props.navigateAction({ ...this.props, page: 'lockUser' })
-						})
+						this.setState({
+							...defaultPasscode,
+							defaultKey: true,
+							countPassFail: this.state.countPassFail + 1 },
+							() => {
+								if (this.state.countPassFail > 3) return this.props.navigateAction({ ...this.props, page: 'lockUser' })
+							}
+						)
 					}
 				})
 				.catch(err => {
