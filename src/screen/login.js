@@ -125,27 +125,60 @@ export default class extends React.Component {
 				'isChild': val.data.getUser.result.identity.isChild ? 'มี' : 'ไม่มี',
 			})
 
-			const spouseDocExpDate = momentDate(val.data.getUser.result.spouse.cardExpiredDate)._a
+			if (val.data.getUser.result.spouse) {
 
-			this.props.updateUser('spouse', {
-				...this.props.user.spouse,
-				'nationFlag': val.data.getUser.result.spouse.nationalityCode === 'TH' ? 'ไทย' : 'ชาวต่างชาติ',
-				'IDCardNo': val.data.getUser.result.spouse.nationalityCode === 'TH' ? formatIdCard(val.data.getUser.result.spouse.IDCardNo) : '',
-				'marryPassport': val.data.getUser.result.spouse.nationalityCode === 'TH' ? '' : val.data.getUser.result.spouse.IDCardNo,
-				'marryCountry': '', // ต้องให้ back ส่งมา
-				'nationalityCode': val.data.getUser.result.spouse.nationalityCode,
-				'isIDCardExpDate': !val.data.getUser.result.spouse.isIDCardExpDate,
-				'cardExpiredDate': val.data.getUser.result.spouse.isIDCardExpDate ? convertDate_reverse(spouseDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
-				'marryExpireDate': val.data.getUser.result.spouse.nationalityCode === 'TH' ? `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}` : convertDate_reverse(spouseDocExpDate),
-				'title': val.data.getUser.result.spouse.title,
-				'fistName': val.data.getUser.result.spouse.fistName,
-				'lastName': val.data.getUser.result.spouse.lastName,
-				'pepFlag': val.data.getUser.result.spouse.pepFlag,
-			})
+				const spouseDocExpDate = momentDate(val.data.getUser.result.spouse.cardExpiredDate)._a
 
-			const firstChildDocExpDate = momentDate(val.data.getUser.result.firstChild.ChildDocExpDate)._a
-			console.log(val.data.getUser.result.firstChild)
-			console.log(val.data.getUser.result.secondChild)
+				this.props.updateUser('spouse', {
+					...this.props.user.spouse,
+					'nationFlag': val.data.getUser.result.spouse.nationalityCode === 'TH' ? 'ไทย' : 'ชาวต่างชาติ',
+					'IDCardNo': val.data.getUser.result.spouse.nationalityCode === 'TH' ? formatIdCard(val.data.getUser.result.spouse.IDCardNo) : '',
+					'marryPassport': val.data.getUser.result.spouse.nationalityCode === 'TH' ? '' : val.data.getUser.result.spouse.IDCardNo,
+					'marryCountry': '', // ต้องให้ back ส่งมา
+					'nationalityCode': val.data.getUser.result.spouse.nationalityCode,
+					'isIDCardExpDate': !val.data.getUser.result.spouse.isIDCardExpDate,
+					'cardExpiredDate': val.data.getUser.result.spouse.isIDCardExpDate ? convertDate_reverse(spouseDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
+					'marryExpireDate': val.data.getUser.result.spouse.nationalityCode === 'TH' ? `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}` : convertDate_reverse(spouseDocExpDate),
+					'title': val.data.getUser.result.spouse.title,
+					'fistName': val.data.getUser.result.spouse.fistName,
+					'lastName': val.data.getUser.result.spouse.lastName,
+					'pepFlag': val.data.getUser.result.spouse.pepFlag,
+				})
+
+			}
+
+			if (val.data.getUser.result.firstChild) {
+				const firstChildDocExpDate = momentDate(val.data.getUser.result.firstChild.ChildDocExpDate)._a
+				const secondChildDocExpDate = momentDate(val.data.getUser.result.secondChild.ChildDocExpDate)._a
+
+				let secondC = { inVisibleSecond: true, inVisible: false }
+				if (val.data.getUser.result.secondChild) {
+					secondC = {
+						'secondTitle': val.data.getUser.result.secondChild.ChildTitleTH,
+						'secondFirstName': val.data.getUser.result.secondChild.ChildFirstNameTH,
+						'secondLastName': val.data.getUser.result.secondChild.ChildLastNameTH,
+						'secondBirthDay': `${val.data.getUser.result.secondChild.ChildDayOfBirth}/${month[parseInt(val.data.getUser.result.firstChild.ChildMonthOfBirth) - 1]}/${val.data.getUser.result.firstChild.ChildYearOfBirth}`,
+						'secondDocNo': formatIdCard(val.data.getUser.result.secondChild.ChildDocNo),
+						'secondExpireDateFlag': !val.data.getUser.result.secondChild.ChildIsNoDocExpDate ? 'มีวันหมดอายุ' : 'ไม่มีวันหมดอายุ',
+						'secondDocExpDate': !val.data.getUser.result.secondChild.ChildIsNoDocExpDate ? convertDate_reverse(secondChildDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
+						'inVisibleSecond': false,
+						inVisible: true
+					}
+				}
+
+				this.props.updateUser('child', {
+					...this.props.user.child,
+					'firstTitle': val.data.getUser.result.firstChild.ChildTitleTH,
+					'firstFirstName': val.data.getUser.result.firstChild.ChildFirstNameTH,
+					'firstLastName': val.data.getUser.result.firstChild.ChildLastNameTH,
+					'firstBirthDay': `${val.data.getUser.result.firstChild.ChildDayOfBirth}/${month[parseInt(val.data.getUser.result.firstChild.ChildMonthOfBirth) - 1]}/${val.data.getUser.result.firstChild.ChildYearOfBirth}`,
+					'firstDocNo': formatIdCard(val.data.getUser.result.firstChild.ChildDocNo),
+					'firstExpireDateFlag': !val.data.getUser.result.firstChild.ChildIsNoDocExpDate ? 'มีวันหมดอายุ' : 'ไม่มีวันหมดอายุ',
+					'firstDocExpDate': !val.data.getUser.result.firstChild.ChildIsNoDocExpDate ? convertDate_reverse(firstChildDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
+					...secondC
+				})
+			}
+
 		}
 	}
 
