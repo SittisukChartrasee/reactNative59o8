@@ -129,7 +129,7 @@ export default class extends React.Component {
 					isChild: val.data.getUser.result.identity.isChild ? 'มี' : 'ไม่มี',
 				})
 			}
-			
+
 			if (val.data.getUser.result.spouse) {
 				const spouseDocExpDate = momentDate(val.data.getUser.result.spouse.cardExpiredDate)._a
 				this.props.updateUser('spouse', {
@@ -150,11 +150,15 @@ export default class extends React.Component {
 			}
 
 			if (val.data.getUser.result.firstChild) {
+				
 				const firstChildDocExpDate = momentDate(val.data.getUser.result.firstChild.ChildDocExpDate)._a
-				const secondChildDocExpDate = momentDate(val.data.getUser.result.secondChild.ChildDocExpDate)._a
 
 				let secondC = { inVisibleSecond: true, inVisible: false }
+				
 				if (val.data.getUser.result.secondChild) {
+
+					const secondChildDocExpDate = momentDate(val.data.getUser.result.secondChild.ChildDocExpDate)._a
+
 					secondC = {
 						'secondTitle': val.data.getUser.result.secondChild.ChildTitleTH,
 						'secondFirstName': val.data.getUser.result.secondChild.ChildFirstNameTH,
@@ -215,13 +219,13 @@ export default class extends React.Component {
 					}, {
 						...fatca[9],
 						answer: val.data.getUser.result.fatca.isUSPhoneNo ? 0 : 1,
-					}	
+					}
 				]
 				this.props.updateFatca('fatca', data)
 			}
-			
+
 			if (val.data.getUser.result.fraud) {
-				const { fraud } = this.props.user 
+				const { fraud } = this.props.user
 				const data = [
 					{
 						...fraud.choice[0],
@@ -270,11 +274,11 @@ export default class extends React.Component {
 					}, {
 						...suittest[3],
 						choice: [
-							{ ...suittest[3].choice[0], select: val.data.getUser.result.suitability.suit04Array[0]},
-							{ ...suittest[3].choice[1], select: val.data.getUser.result.suitability.suit04Array[1]},
-							{ ...suittest[3].choice[2], select: val.data.getUser.result.suitability.suit04Array[2]},
-							{ ...suittest[3].choice[3], select: val.data.getUser.result.suitability.suit04Array[3]},
-							{ ...suittest[3].choice[4], select: val.data.getUser.result.suitability.suit04Array[4]},
+							{ ...suittest[3].choice[0], select: val.data.getUser.result.suitability.suit04Array[0] },
+							{ ...suittest[3].choice[1], select: val.data.getUser.result.suitability.suit04Array[1] },
+							{ ...suittest[3].choice[2], select: val.data.getUser.result.suitability.suit04Array[2] },
+							{ ...suittest[3].choice[3], select: val.data.getUser.result.suitability.suit04Array[3] },
+							{ ...suittest[3].choice[4], select: val.data.getUser.result.suitability.suit04Array[4] },
 						]
 					}, {
 						...suittest[4],
@@ -300,7 +304,7 @@ export default class extends React.Component {
 					}, {
 						...suittest[11],
 						answer: val.data.getUser.result.suitability.suit12 - 1,
-					} ]
+					}]
 				this.props.updateSuittest('suittest', suitability)
 			}
 
