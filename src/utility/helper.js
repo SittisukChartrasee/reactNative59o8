@@ -1,6 +1,6 @@
 import { Dimensions, PixelRatio, Platform } from 'react-native'
 
-const month = [
+export const month = [
   'มกราคม',
   'กุมภาพันธ์',
   'มีนาคม',
@@ -33,6 +33,11 @@ export const convertDate = (date) => {
   return new Date(convert)
 }
 
+export const convertDate_reverse = (date) => {
+  const convert = `${date[2]}-${month[date[1] + 1]}-${date[0].toString()}`
+  return convert
+}
+
 export const getOfBirth = (date, type) => {
   const splitDate = date.split('/')
   switch (type) {
@@ -47,6 +52,14 @@ export const getStatusGender = (data) => {
   switch (data) {
     case 'ชาย': return 'M'
     case 'หญิง': return 'F'
+    default: return 'O'
+  }
+}
+
+export const getStatusGender_reverse= (data) => {
+  switch (data) {
+    case 'M': return 'ชาย'
+    case 'F': return 'หญิง'
     default: return 'O'
   }
 }
@@ -77,6 +90,14 @@ export const getStatusMartial_reverse = (data) => {
 }
 
 export const getStatusChild = (data) => {
+  switch (data) {
+    case 'มี': return true
+    case 'ไม่มี': return false
+    default: return false
+  }
+}
+
+export const getStatusChild_reverse = (data) => {
   switch (data) {
     case 'มี': return true
     case 'ไม่มี': return false
