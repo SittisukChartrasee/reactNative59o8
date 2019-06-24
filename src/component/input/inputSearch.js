@@ -68,7 +68,7 @@ export default class extends React.Component {
   state = {
     open: false,
     text: '',
-    confirmText: '',
+    confirmText: this.props.value,
     result: [],
   }
 

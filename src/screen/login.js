@@ -364,6 +364,18 @@ export default class extends React.Component {
 				}
 				this.props.updateUser('sourceOfFund', sourceOfFund)
 			}
+
+			if (val.data.getUser.result.career) {
+				const career = {
+					busTypeOther: val.data.getUser.result.career.isicOther,
+					busType: val.data.getUser.result.career.isicCode,
+					occupation_other: val.data.getUser.result.career.occupationOther,
+					occupation: val.data.getUser.result.career.occupationCode,
+					incomeRangeCode: val.data.getUser.result.career.incomeRangeCode,
+					countrySourceOfIncome: val.data.getUser.result.career.countrySourceOfIncome,
+				}
+				this.props.updateUser('career', career)
+			}
 		}
 	}
 
