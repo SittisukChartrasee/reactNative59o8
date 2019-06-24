@@ -189,6 +189,7 @@ export default class extends React.Component {
         }),
         inVisible: !inVisible
       })
+      this.props.updateUser('child', { ...user.child, inVisible: !inVisible })
     } else if (inVisible) {
       this.props.updateUser('child',
         {
@@ -203,11 +204,13 @@ export default class extends React.Component {
         })
       this.setState({
         fields: fields.map((d) => {
-          if (!d.static) return { ...d, inVisible: true }
-          else return d
+          if (!d.static) {
+            return { ...d, inVisible: true }
+          } else return d
         }),
         inVisible: !inVisible
       })
+      this.props.updateUser('child', { ...user.child, inVisible: !inVisible })
     }
   }
 
@@ -364,7 +367,7 @@ export default class extends React.Component {
               err: this.onValidation(d.field)
             }, key))
           }
-          <View style={{ display: this.state.inVisible ? 'none' : 'flex', flex: 1, width: widthView, justifyContent: 'flex-end', padding: 24, backgroundColor: colors.lightgrey }}>
+          <View style={{ display: this.props.user.child.inVisible ? 'none' : 'flex', flex: 1, width: widthView, justifyContent: 'flex-end', padding: 24, backgroundColor: colors.lightgrey }}>
             <TBold fontSize={16} color={colors.midnight} textAlign="left">ท่านมีบุตร หรือบุตรบุญธรรมมากกว่า 1 คนใช่ไหม?</TBold>
             <LongButton
               label="เพิ่มบุตร หรือบุตรบุญธรรม"
