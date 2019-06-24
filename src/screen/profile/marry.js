@@ -102,7 +102,8 @@ export default class extends React.Component {
         field: 'cardExpiredDate', // ต้อง save ที่ field => cardExpiredDate
         date: reverse(this.props.user.spouse.cardExpiredDate.split('-')),
         required: true,
-        inVisible: this.props.user.spouse.nationFlag === 'ชาวต่างชาติ',
+        inVisible: this.props.user.spouse.nationFlag === 'ชาวต่างชาติ' ||
+          this.props.user.spouse.isIDCardExpDate,
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
         type: 'search',
@@ -251,7 +252,7 @@ export default class extends React.Component {
       pepFlag,
       nationalityCode: this.props.user.spouse.nationFlag === 'ไทย' ? 'TH' : nationalityCode,
       IDCardNo: this.props.user.spouse.nationFlag === 'ไทย' ? replaceSpace(IDCardNo) : marryPassport,
-      isIDCardExpDate: this.props.user.spouse.nationFlag === 'ไทย' ? isIDCardExpDate : marryIsIDCardExpDate,
+      isIDCardExpDate: this.props.user.spouse.nationFlag === 'ไทย' ? !isIDCardExpDate : marryIsIDCardExpDate,
       cardExpiredDate: (expireSatus === 'มีวันหมดอายุ')
         ? (this.props.user.spouse.nationFlag === 'ไทย')
           ? convertDate(cardExpiredDate)

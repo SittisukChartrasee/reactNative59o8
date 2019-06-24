@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import find from 'lodash/find'
+import reverse from 'lodash/reverse'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { LongButton } from '../../component/button'
@@ -40,7 +41,7 @@ export default class extends React.Component {
   state = {
     PreconditionRequired: [],
     InvalidArgument: [],
-    inVisible: false,
+    inVisible: this.props.user.child.inVisible,
     fields: [
       {
         label: 'ข้อมูลบุตร หรือบุตรบุญธรรมคนที่ 1',
@@ -81,66 +82,81 @@ export default class extends React.Component {
       }, {
         label: 'วันบัตรหมดอายุ',
         type: 'radio',
-        init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
+        init: [{
+          title: 'มีวันหมดอายุ',
+          active: this.props.user.child.firstExpireDateFlag === 'มีวันหมดอายุ'
+        },
+        {
+          title: 'ไม่มีวันหมดอายุ',
+          active: this.props.user.child.firstExpireDateFlag === 'ไม่มีวันหมดอายุ'
+        }],
         field: 'firstExpireDateFlag',
         static: true
       }, {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'firstDocExpDate',
-        date: tomorrowDate(),
+        date: reverse(this.props.user.child.firstDocExpDate.split('-')),
         required: true,
-        static: true
+        static: true,
+        inVisible: this.props.user.child.firstExpireDateFlag === 'ไม่มีวันหมดอายุ'
       },
       {
         label: 'ข้อมูลบุตร หรือบุตรบุญธรรมคนที่ 2',
         field: 'secondIdcard',
         type: 'titleHead',
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond,
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
         type: 'search',
         field: 'secondTitle',
         required: true,
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond,
       }, {
         label: 'ชื่อ (ภาษาไทย)',
         type: 'textInput',
         field: 'secondFirstName',
         required: true,
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond,
       }, {
         label: 'นามสกุล (ภาษาไทย)',
         type: 'textInput',
         field: 'secondLastName',
         required: true,
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond,
       }, {
         label: 'ปีเกิด,เดือนเกิด,วันเกิด',
         type: 'ymd',
         field: 'secondBirthDay',
         required: true,
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond,
       }, {
         type: 'mask',
         label: 'เลขบัตรประชาชน',
         field: 'secondDocNo',
         option: '9 9999 99999 99 9',
         required: true,
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond,
       }, {
         label: 'วันบัตรหมดอายุ',
         type: 'radio',
-        init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
+        init: [{
+          title: 'มีวันหมดอายุ',
+          active: this.props.user.child.secondExpireDateFlag === 'มีวันหมดอายุ'
+        },
+        {
+          title: 'ไม่มีวันหมดอายุ',
+          active: this.props.user.child.secondExpireDateFlag === 'ไม่มีวันหมดอายุ'
+        }],
         field: 'secondExpireDateFlag',
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond,
       }, {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'secondDocExpDate',
-        date: tomorrowDate(),
+        date: reverse(this.props.user.child.secondDocExpDate.split('-')),
         required: true,
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond || this.props.user.child.secondExpireDateFlag === 'ไม่มีวันหมดอายุ',
       }
     ]
   }
@@ -189,6 +205,7 @@ export default class extends React.Component {
         }),
         inVisible: !inVisible
       })
+      this.props.updateUser('child', { ...user.child, inVisible: !inVisible })
     } else if (inVisible) {
       this.props.updateUser('child',
         {
@@ -203,11 +220,13 @@ export default class extends React.Component {
         })
       this.setState({
         fields: fields.map((d) => {
-          if (!d.static) return { ...d, inVisible: true }
-          else return d
+          if (!d.static) {
+            return { ...d, inVisible: true }
+          } else return d
         }),
         inVisible: !inVisible
       })
+      this.props.updateUser('child', { ...user.child, inVisible: !inVisible })
     }
   }
 
@@ -277,8 +296,8 @@ export default class extends React.Component {
       firstMonthOfBirth: `${getOfBirth(firstBirthDay, 'month')}`,
       firstYearOfBirth: getOfBirth(firstBirthDay, 'year'),
       firstDocNo: replaceSpace(firstDocNo),
-      firstIsNoExpDate: firstExpireDateFlag === 'มีวันหมดอายุ' ? true : false,
-      firstDocExpDate: convertDate(firstDocExpDate),
+      firstIsNoExpDate: firstExpireDateFlag === 'มีวันหมดอายุ' ? false : true,
+      firstDocExpDate: firstExpireDateFlag === 'มีวันหมดอายุ' ? convertDate(firstDocExpDate) : new Date('9999-12-31'),
       secondTitle,
       secondFirstName,
       secondLastName,
@@ -286,8 +305,8 @@ export default class extends React.Component {
       secondMonthOfBirth: `${getOfBirth(secondBirthDay, 'month')}`,
       secondYearOfBirth: getOfBirth(secondBirthDay, 'year'),
       secondDocNo: replaceSpace(secondDocNo),
-      secondIsNoExpDate: secondExpireDateFlag === 'มีวันหมดอายุ' ? true : false,
-      secondDocExpDate: convertDate(secondDocExpDate),
+      secondIsNoExpDate: secondExpireDateFlag === 'มีวันหมดอายุ' ? false : true,
+      secondDocExpDate: secondExpireDateFlag === 'มีวันหมดอายุ' ? convertDate(secondDocExpDate) : new Date('9999-12-31'),
     }
 
     console.log(data)
@@ -364,7 +383,7 @@ export default class extends React.Component {
               err: this.onValidation(d.field)
             }, key))
           }
-          <View style={{ display: this.state.inVisible ? 'none' : 'flex', flex: 1, width: widthView, justifyContent: 'flex-end', padding: 24, backgroundColor: colors.lightgrey }}>
+          <View style={{ display: this.props.user.child.inVisible ? 'none' : 'flex', flex: 1, width: widthView, justifyContent: 'flex-end', padding: 24, backgroundColor: colors.lightgrey }}>
             <TBold fontSize={16} color={colors.midnight} textAlign="left">ท่านมีบุตร หรือบุตรบุญธรรมมากกว่า 1 คนใช่ไหม?</TBold>
             <LongButton
               label="เพิ่มบุตร หรือบุตรบุญธรรม"

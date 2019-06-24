@@ -12,6 +12,11 @@ import { navigateAction, navigateReset } from '../redux/actions'
 import { requestRegister } from '../redux/actions/root-active'
 import { root } from '../redux/actions/commonAction'
 
+const defaultPasscode = {
+  dot: ['', '', '', '', '', ''],
+  number: '',
+}
+
 const mapToProps = ({ root, passcode }) => ({ root, passcode })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
@@ -22,10 +27,6 @@ const dispatchToProps = dispatch => ({
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
   state = {
-    defaultPasscode: {
-      dot: ['', '', '', '', '', ''],
-      number: '',
-    },
     dot: ['', '', '', '', '', ''],
     number: '',
     defaultKey: false,
@@ -33,7 +34,6 @@ export default class extends React.Component {
   }
 
   setNumber = (obj) => {
-    const { defaultPasscode } = this.state
     this.setState({ ...obj })
 
     const data = {

@@ -72,7 +72,7 @@ export default class extends React.Component {
     if (nav.index === 0) {
       return false
     }
-    this.props.handleActionBack()
+    // this.props.handleActionBack()
     return true
   }
 

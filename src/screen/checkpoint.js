@@ -25,7 +25,7 @@ import { LongPositionButton, NextButton } from '../component/button'
 import { navigateAction } from '../redux/actions'
 import { requestOtp } from '../redux/actions/root-active'
 import { updateUser } from '../redux/actions/commonAction'
-import { containerQuery, getStatusInProgress } from '../containers/query'
+import { containerQuery, getStatusInProgress, getRegisterBankStatus } from '../containers/query'
 
 const { width: widthScreen } = Dimensions.get('window')
 
@@ -58,7 +58,7 @@ export default class extends React.Component {
       {
         point: 'ขั้นตอนที่ 4',
         check: 'future',
-        text: 'ทำแบบระเมินความเสี่ยง'
+        text: 'ทำแบบประเมินความเสี่ยง'
       }
     ],
     link: '',
@@ -124,7 +124,18 @@ export default class extends React.Component {
     })
   }
 
-  onNext = () => this.props.navigateAction({ ...this.props, page: this.state.link })
+  onNext = () => {
+    //
+    // ********** waiting best TODO:// **********
+    //
+    // containerQuery(this.props.client, {
+    //   query: getRegisterBankStatus,
+    // }, val => {
+    //   console.log(val)
+    // })
+    // // this.props.getRegisterBankStatus.getRegisterBankStatus
+    this.props.navigateAction({ ...this.props, page: this.state.link })
+  }
 
   render() {
     const { checkPoint } = this.state
@@ -143,12 +154,14 @@ export default class extends React.Component {
             </TouchableOpacity>
           }
         />
-        <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
-          <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 20 }}>
-            <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
-            <TBold fontSize={18} color={colors.white} mt="10" mb="20">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
-          </SafeAreaView>
-          <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'flex-start' }}>
+        <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 20 }}>
+          <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
+          <TBold fontSize={18} color={colors.white} mt="10" mb="20">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
+        </SafeAreaView>
+        <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'flex-start' }}>
+          <KeyboardAwareScrollView
+            enableOnAndroid
+          >
             {checkPoint.map((props, index) => (
               <View
                 key={props.point}
@@ -211,13 +224,12 @@ export default class extends React.Component {
                 </View>
               </View>
             ))}
-          </View>
+          </KeyboardAwareScrollView>
           <LongPositionButton
             label="ดำเนินการต่อ"
             onPress={this.onNext}
           />
-          <View style={{ flex: 0.01, backgroundColor: '#fff' }} />
-        </KeyboardAwareScrollView>
+        </View>
       </Screen>
     )
   }

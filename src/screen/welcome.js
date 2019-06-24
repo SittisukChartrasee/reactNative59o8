@@ -5,7 +5,6 @@ import {
   Dimensions,
   AsyncStorage,
   Platform,
-  ScrollView,
   TouchableOpacity
 } from 'react-native'
 import { bindActionCreators } from 'redux'
@@ -23,8 +22,7 @@ import { requestOtp } from '../redux/actions/root-active'
 import { updateUser, root } from '../redux/actions/commonAction'
 import lockout from '../containers/hoc/lockout'
 import { NavBar } from '../component/gradient'
-import { NavigationActions } from 'react-navigation'
-import { replaceSpace, fontToLower } from '../utility/helper'
+import { replaceSpace, fontToLower, handleSizing } from '../utility/helper'
 
 // import * as validate from '../utility/validation'
 
@@ -107,12 +105,10 @@ export default class extends React.Component {
     this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
     const data = {
-      idCard: replaceSpace(user.profile.idCard),
+      id_card: replaceSpace(user.profile.idCard),
       email: fontToLower(user.contact.email),
-      mobilePhone: replaceSpace(user.contact.mobilePhone),
-    }
-
-    console.log(data)
+      phone_no: replaceSpace(user.contact.mobilePhone),
+    }    
 
     this.props.requestOtp(data)
       .then(res => {
@@ -126,13 +122,7 @@ export default class extends React.Component {
             case 'InvalidArgument':
               return this.setState({ InvalidArgument: res.details })
             default:
-              const modal = {
-                dis: res.message,
-                visible: true,
-                onPress: () => this.props.updateRoot('modal', { visible: false }),
-                onPressClose: () => this.props.updateRoot('modal', { visible: false })
-              }
-              return this.props.updateRoot('modal', modal)
+              return null
           }
         }
       })
@@ -142,7 +132,6 @@ export default class extends React.Component {
   }
 
   render() {
-    const sizing = widthScreen <= 320 || heightScreen <= 690 ? { width: 176, height: 128, } : {}
     return (
       <Screen>
         <NavBar
@@ -156,17 +145,25 @@ export default class extends React.Component {
               <Image source={images.iconback} />
             </TouchableOpacity>
           }
+          navRight={
+            <TouchableOpacity
+              onPress={() => this.props.lockout()}
+              style={{ paddingLeft: 30 }}
+            >
+              <Image source={images.iconlogoOff} />
+            </TouchableOpacity>
+          }
         />
-        <ScrollView contentContainerStyle={{ flex: 1 }}>
-          <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-            <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
+        <KeyboardAwareScrollView
+          extraScrollHeight={Platform.OS === 'ios' ? -20 : -280}
+          enableOnAndroid
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={{ alignItems: 'center', height: handleSizing(heightScreen).top }}>
+            <Image source={images.kmyfundLogo} style={handleSizing(heightScreen).sizing} resizeMode="contain" />
             <TBold fontSize={20} color={colors.white} mt="24" mb="40">{`กรุณากรอกข้อมูล\nเพื่อเปิดบัญชีกองทุน`}</TBold>
           </View>
-          <KeyboardAwareScrollView
-            extraScrollHeight={Platform.OS === 'ios' ? -50 : 50}
-            enableOnAndroid
-            style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 24 }}
-          >
+          <View style={{ backgroundColor: '#fff', height: handleSizing(heightScreen).bottom }}>
             {
               fields.map((setField, key) => Input({
                 ...setField,
@@ -177,10 +174,9 @@ export default class extends React.Component {
                 err: this.onValidation(setField.field)
               }, key))
             }
-
-          </KeyboardAwareScrollView>
+          </View>
           <LongPositionButton label="ถัดไป" onPress={this.onNext} />
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </Screen>
     )
   }

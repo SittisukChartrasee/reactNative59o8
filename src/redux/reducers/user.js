@@ -147,6 +147,7 @@ const init = {
     investmentSourceOther: '',
     investmentSourceCountry: '',
     investmentPurpose: '',
+    investmentPurposeOther: '',
     dividendWithHoldingTax: false,
     nationalityCode: ''
   },

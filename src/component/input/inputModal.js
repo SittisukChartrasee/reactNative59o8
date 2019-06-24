@@ -61,7 +61,7 @@ export default class extends React.Component {
   state = {
     open: false,
     fields: this.props.init,
-    data: '',
+    data: this.props.value.toString(),
     otherField: 'A',
   }
 
@@ -100,7 +100,7 @@ export default class extends React.Component {
         <TouchableOpacity onPress={() => this.setState({ open: true })}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', overflow: 'hidden' }}>
             {data
-              ? <TBold textAlign="left" color={colors.midnight}>{value.toString() || data}</TBold>
+              ? <TBold textAlign="left" color={colors.midnight}>{data}</TBold>
               : <TBold textAlign="left" color={colors.smoky}>กรุณาเลือกข้อมูล</TBold>
             }
             <Image source={images.iconNextPageBlack} />

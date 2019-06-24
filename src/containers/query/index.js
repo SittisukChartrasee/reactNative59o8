@@ -8,6 +8,184 @@ export const containerQuery = debounce((client, obj, setState) => {
     .catch(err => console.error(err))
 }, 300)
 
+export const getUser = gql`
+  query getUser{
+    getUser{
+      success
+      result{
+        identity{
+          docNo
+          isNoDocExpDate
+          docExpDate
+          genderCode
+          titleTH
+          firstNameTH
+          lastNameTH
+          firstNameEN
+          lastNameEN
+          dayOfBirth
+          monthOfBirth
+          yearOfBirth
+          nationalityCode
+          martialStatusCode
+          isChild
+        }
+        spouse{
+          nationalityCode
+          IDCardNo
+          isIDCardExpDate
+          cardExpiredDate
+          title
+          fistName
+          lastName
+          pepFlag
+        }
+        career{
+          isicCode
+          isicOther
+          occupationCode
+          occupationOther
+          incomeRangeCode
+          countrySourceOfIncome
+        }
+        firstChild{
+          ChildTitleTH
+          ChildFirstNameTH
+          ChildLastNameTH
+          ChildDayOfBirth
+          ChildMonthOfBirth
+          ChildYearOfBirth
+          ChildDocNo
+          ChildIsNoDocExpDate
+          ChildDocExpDate
+        }
+        secondChild{
+          ChildTitleTH
+          ChildFirstNameTH
+          ChildLastNameTH
+          ChildDayOfBirth
+          ChildMonthOfBirth
+          ChildYearOfBirth
+          ChildDocNo
+          ChildIsNoDocExpDate
+          ChildDocExpDate
+        }
+        sourceOfFund{
+          investmentSource
+          investmentSourceOther
+          investmentSourceCountry
+          investmentPurpose
+          dividendWithHoldingTax
+        }
+        permanentAddress{
+          CountryCode
+          AddressNoTH
+          Moo
+          AddressVillageTH
+          FloorNo
+          TrokSoiYaek
+          Thanon
+          District
+          DistrictCode
+          SubDistrict
+          SubDistrictCode
+          Province
+          ProvinceCode
+          ZipCode
+          CompanyName
+        }
+        workAddress{
+          CountryCode
+          AddressNoTH
+          Moo
+          AddressVillageTH
+          FloorNo
+          TrokSoiYaek
+          Thanon
+          District
+          DistrictCode
+          SubDistrict
+          SubDistrictCode
+          Province
+          ProvinceCode
+          ZipCode
+          CompanyName
+        }
+        currentAddress{
+          CountryCode
+          AddressNoTH
+          Moo
+          AddressVillageTH
+          FloorNo
+          TrokSoiYaek
+          Thanon
+          District
+          DistrictCode
+          SubDistrict
+          SubDistrictCode
+          Province
+          ProvinceCode
+          ZipCode
+          CompanyName
+        }
+        mailingAddress{
+          CountryCode
+          AddressNoTH
+          Moo
+          AddressVillageTH
+          FloorNo
+          TrokSoiYaek
+          Thanon
+          District
+          DistrictCode
+          SubDistrict
+          SubDistrictCode
+          Province
+          ProvinceCode
+          ZipCode
+          CompanyName
+        }
+        contact{
+          workPhone
+          homePhone
+          mobilePhone
+          email
+        }
+        suitability{
+          suit01
+          suit02
+          suit03
+          suit04
+          suit04Array
+          suit05
+          suit06
+          suit07
+          suit08
+          suit09
+          suit10
+          suit11
+          suit12
+        }
+        fraud{
+          hasLaunderingRecord
+          isPolitician
+        }
+        fatca{
+          isUSCitizen
+          isHoldingUsCard
+          isUSTaxPurposes
+          surrenderedUSCitizenship
+          transferFundsToAccountInUS
+          grantedToPersonWithUSAddress
+          mailOrCareOfAddressAccountOpenedKBank
+          currentOrMailingAddressAccountOpenedKbank
+          isUSPhoneNo
+        }
+      }
+    }
+  }
+`
+
 export const getUserTitle = gql`
   query getUserTitle($text: String!) {
     getUserTitle(text: $text) {
@@ -67,9 +245,10 @@ export const getOccupation = gql`
 `
 
 export const getInvestment = gql`
-  query getInvestment($point: String!) {
-    getInvestment(point: $point) {
+  query getInvestment {
+    getInvestment {
       crrLevel
+      riskLevel
       nameTH
       nameEN
       returnText
@@ -111,6 +290,17 @@ export const getStatus = gql`
 export const getStatusInProgress = gql`
   query getStatusInProgress {
     getStatusInProgress
+  }
+`
+
+export const getStatusEditing = gql`
+  query getStatusEditing {
+    getStatusEditing {
+      idCard
+      selfie
+      checkIDCard
+      checkSelfie
+    }
   }
 `
 

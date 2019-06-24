@@ -48,19 +48,16 @@ export default class extends React.Component {
             label: 'มรดก',
             type: 'select',
           }, {
-            label: 'การขายหลักทรัพย์',
+            label: 'เงินออม',
             type: 'select',
           }, {
-            label: 'ผลตอบแทนจากการลงทุน',
+            label: 'การลงทุน',
             type: 'select',
           }, {
-            label: 'การดำเนินการทางธุรกิจ',
+            label: 'เงินเกษียณ',
             type: 'select',
           }, {
-            label: 'ค่านายหน้า',
-            type: 'select',
-          }, {
-            label: 'ค่าตอบแทนการให้บริการ',
+            label: 'ประกอบธุรกิจ',
             type: 'select',
           }, {
             label: 'อื่นๆ',
@@ -131,7 +128,7 @@ export default class extends React.Component {
     //   updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value, nationalityCode: props.code, nationalityRisk: props.risk })
     // } 
     else if (props.field === 'investmentPurpose') {
-      this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.data })
+      this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.data, investmentPurposeOther: props.otherField })
     } else {
       this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value })
     }
@@ -157,6 +154,7 @@ export default class extends React.Component {
       investmentSourceOther,
       investmentSourceCountry,
       investmentPurpose,
+      investmentPurposeOther,
       nationalityCode,
       dividendWithHoldingTax,
     } = user.sourceOfFund
@@ -166,6 +164,7 @@ export default class extends React.Component {
       investmentSourceOther,
       investmentSourceCountry: nationalityCode,
       investmentPurpose,
+      investmentPurposeOther,
       // dividendWithHoldingTax: !(dividendWithHoldingTax === 'ไม่ต้องการ'), // ทาง KA บอกให้ตัดออก
       dividendWithHoldingTax
     }

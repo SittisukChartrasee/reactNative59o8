@@ -12,7 +12,7 @@ import images from '../../config/images';
 
 export default ({
   title = "Test title",
-  labelBtn = "ลืมรหัส",
+  labelBtn = "ลืมรหัสผ่าน",
   dis,
   dot,
   forgetbtn,
@@ -22,13 +22,14 @@ export default ({
     <View style={{ flex: 1 }}>
       <View style={{ flex: 0.8, justifyContent: 'flex-end' }}>
         <View style={{ alignItems: 'flex-start', paddingTop: 60, marginLeft: 16 }}>
-          { onPrevPage && <TouchableOpacity
-            onPress={onPrevPage}
-            style={{ paddingRight: 30 }}
-          >
-            <Image source={images.iconback} />
-          </TouchableOpacity> }
-          <View />
+          { onPrevPage &&
+            <TouchableOpacity
+              onPress={onPrevPage}
+              style={{ paddingRight: 30 }}
+            >
+              <Image source={images.iconback} />
+            </TouchableOpacity>
+          }
         </View>
         <View
           style={{
