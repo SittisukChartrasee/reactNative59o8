@@ -8,7 +8,7 @@ import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
 import { HeadSpace } from '../component/headSpace'
 import { navigateAction } from '../redux/actions'
-import { fatca } from '../redux/actions/commonAction'
+import { fatca, suittest } from '../redux/actions/commonAction'
 import { requestLogin } from '../redux/actions/root-active'
 import { updateUser } from '../redux/actions/commonAction'
 import { containerQuery, getStatus, getUser } from '../containers/query'
@@ -29,12 +29,13 @@ const defaultPasscode = {
 
 const momentDate = date => moment(date).tz('Asia/Bangkok')
 
-const mapToProps = ({ user, fatcaReducer }) => ({ user, fatcaReducer })
+const mapToProps = ({ user, fatcaReducer, suitReducer }) => ({ user, fatcaReducer, suitReducer })
 const dispatchToProps = dispatch => ({
 	navigateAction: bindActionCreators(navigateAction, dispatch),
 	requestLogin: bindActionCreators(requestLogin, dispatch),
 	updateUser: bindActionCreators(updateUser, dispatch),
-	updateFatca: bindActionCreators(fatca, dispatch)
+	updateFatca: bindActionCreators(fatca, dispatch),
+	updateSuittest: bindActionCreators(suittest, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
 @withApollo
@@ -219,6 +220,56 @@ export default class extends React.Component {
 					email: val.data.getUser.result.contact.email
 				}
 				this.props.updateUser('contact', data)
+			}
+
+
+			if (val.data.getUser.result.suitability) {
+				const { suittest } = this.props.suitReducer
+				const suitability = [
+					{
+						...suittest[0],
+						answer: val.data.getUser.result.suitability.suit01 - 1,
+					}, {
+						...suittest[1],
+						answer: val.data.getUser.result.suitability.suit02 - 1,
+					}, {
+						...suittest[2],
+						answer: val.data.getUser.result.suitability.suit03 - 1,
+					}, {
+						...suittest[3],
+						choice: [
+							{ ...suittest[3].choice[0], select: val.data.getUser.result.suitability.suit04Array[0]},
+							{ ...suittest[3].choice[1], select: val.data.getUser.result.suitability.suit04Array[1]},
+							{ ...suittest[3].choice[2], select: val.data.getUser.result.suitability.suit04Array[2]},
+							{ ...suittest[3].choice[3], select: val.data.getUser.result.suitability.suit04Array[3]},
+							{ ...suittest[3].choice[4], select: val.data.getUser.result.suitability.suit04Array[4]},
+						]
+					}, {
+						...suittest[4],
+						answer: val.data.getUser.result.suitability.suit05 - 1,
+					}, {
+						...suittest[5],
+						answer: val.data.getUser.result.suitability.suit06 - 1,
+					}, {
+						...suittest[6],
+						answer: val.data.getUser.result.suitability.suit07 - 1,
+					}, {
+						...suittest[7],
+						answer: val.data.getUser.result.suitability.suit08 - 1,
+					}, {
+						...suittest[8],
+						answer: val.data.getUser.result.suitability.suit09 - 1,
+					}, {
+						...suittest[9],
+						answer: val.data.getUser.result.suitability.suit10 - 1,
+					}, {
+						...suittest[10],
+						answer: val.data.getUser.result.suitability.suit11 - 1,
+					}, {
+						...suittest[11],
+						answer: val.data.getUser.result.suitability.suit12 - 1,
+					} ]
+				this.props.updateSuittest('suittest', suitability)
 			}
 		}
 	}
