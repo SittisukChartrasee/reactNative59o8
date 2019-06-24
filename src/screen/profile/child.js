@@ -277,8 +277,8 @@ export default class extends React.Component {
       firstMonthOfBirth: `${getOfBirth(firstBirthDay, 'month')}`,
       firstYearOfBirth: getOfBirth(firstBirthDay, 'year'),
       firstDocNo: replaceSpace(firstDocNo),
-      firstIsNoExpDate: firstExpireDateFlag === 'มีวันหมดอายุ' ? true : false,
-      firstDocExpDate: convertDate(firstDocExpDate),
+      firstIsNoExpDate: firstExpireDateFlag === 'มีวันหมดอายุ' ? false : true,
+      firstDocExpDate: firstExpireDateFlag === 'มีวันหมดอายุ' ? convertDate(firstDocExpDate) : new Date('9999-12-31'),
       secondTitle,
       secondFirstName,
       secondLastName,
@@ -286,11 +286,11 @@ export default class extends React.Component {
       secondMonthOfBirth: `${getOfBirth(secondBirthDay, 'month')}`,
       secondYearOfBirth: getOfBirth(secondBirthDay, 'year'),
       secondDocNo: replaceSpace(secondDocNo),
-      secondIsNoExpDate: secondExpireDateFlag === 'มีวันหมดอายุ' ? true : false,
-      secondDocExpDate: convertDate(secondDocExpDate),
+      secondIsNoExpDate: secondExpireDateFlag === 'มีวันหมดอายุ' ? false : true,
+      secondDocExpDate: secondExpireDateFlag === 'มีวันหมดอายุ' ? convertDate(secondDocExpDate) : new Date('9999-12-31'),
     }
 
-    console.log(data)
+      console.log(data)
 
     this.props.saveChild({ variables: { input: data } })
       .then(res => {
