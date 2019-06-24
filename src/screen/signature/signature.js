@@ -22,10 +22,12 @@ import { TLight, TBold } from '../../component/texts';
 import colors from '../../config/colors';
 import request from '../../utility/requestApi'
 import lockout from '../../containers/hoc/lockout'
+import { updateUser } from '../../redux/actions/commonAction'
 
-const mapToProps = () => ({})
+const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  updateUser: bindActionCreators(updateUser, dispatch),
+  navigateAction: bindActionCreators(navigateAction, dispatch),
 })
 @connect(mapToProps, dispatchToProps)
 @lockout
@@ -47,15 +49,24 @@ export default class Demo extends Component {
 
   saveSign = async () => {
     await this.signature.saveImage()
-  }
-
-  resetSign = () => {
-    this.signature.resetImage()
     this.setState({ dragged: null })
   }
 
+  resetSign = () => {
+    if (this.state.dragged) {
+      this.signature.resetImage()
+      this.setState({ dragged: null })
+      this.props.updateUser('signature', '' )
+  } else {
+      this.props.updateUser('signature', '' )
+    }
+  }
+
   _onSaveEvent = async result => {
+    const { user } = this.props
     const token = await AsyncStorage.getItem("access_token")
+
+    this.props.updateUser('signature', `file://${result.pathName}` )
 
     const data = new FormData()
     data.append('file', {
@@ -69,13 +80,9 @@ export default class Demo extends Component {
       body: data
     }, token)
 
-    if (res.success && this.state.dragged) {
+    if (res.success && this.props.user.signature) {
       this.props.navigateAction({ ...this.props, page: 'fatca' })
     }
-  }
-  _onDragEvent() {
-    // This callback will be called when the user enters signature
-    console.log("dragged");
   }
 
   render = () => {
@@ -123,47 +130,54 @@ export default class Demo extends Component {
           }
         />
 
-        <Image source={{ uri: '/storage/emulated/0/saved_signature/signature.png' }} />
 
         <SafeAreaView style={{ flex: 1 }}>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-            <View style={{ position: 'absolute', width: '70%' }}>
-              <View style={{ alignItems: 'center', opacity: this.state.dragged === null ? 1 : 0 }}>
-                <Image source={images.iconsign} />
-                <TLight color={colors.smoky} fontSize={14} mt={15}>เซ็นลายเซ็นของคุณที่นี่</TLight>
-              </View>
-              <View style={{ justifyContent: 'center' }}>
-                <Image source={images.iconlinepath} style={{ width: '100%' }} resizeMode="contain" />
-              </View>
-            </View>
+          {
+            this.props.user.signature ?
+              <Image style={{ flex: 1, transform: [{ rotateX: '180deg' }] }} source={this.props.user.signature ? { uri: this.props.user.signature } : {}} />
+            : (
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{ position: 'absolute', width: '70%' }}>
+                  <View style={{ alignItems: 'center', opacity: this.state.dragged === null ? 1 : 0 }}>
+                    <Image source={images.iconsign} />
+                    <TLight color={colors.smoky} fontSize={14} mt={15}>เซ็นลายเซ็นของคุณที่นี่</TLight>
+                  </View>
+                  <View style={{ justifyContent: 'center' }}>
+                    <Image source={images.iconlinepath} style={{ width: '100%' }} resizeMode="contain" />
+                  </View>
+                </View>
 
-            <SignatureCapture
-              onTouchStart={e => this.setState({ dragged: !!e.nativeEvent })}
-              style={{
-                width: '100%',
-                height: '80%',
-                opacity: .5,
-                transform: [{ rotateX: '180deg' }]
-              }}
-              ref={(ref) => { this.signature = ref }}
-              showBorder={false}
-              saveImageFileInExtStorage
-              onSaveEvent={this._onSaveEvent}
-              showNativeButtons={false}
-              showTitleLabel={false}
-              viewMode="portrait"
-            />
-          </View>
+
+                <SignatureCapture
+                  onTouchStart={e => this.setState({ dragged: !!e.nativeEvent })}
+                  style={{
+                    width: '100%',
+                    height: '80%',
+                    opacity: .5,
+                    transform: [{ rotateX: '180deg' }]
+                  }}
+                  ref={(ref) => { this.signature = ref }}
+                  showBorder={false}
+                  saveImageFileInExtStorage
+                  onSaveEvent={this._onSaveEvent}
+                  showNativeButtons={false}
+                  showTitleLabel={false}
+                  viewMode="portrait"
+                />
+              </View>
+            )
+          }
+          
 
 
           <View style={{ flexDirection: "row", marginHorizontal: 20 }}>
-            <TouchableHighlight style={styles.buttonCancelStyle} onPress={() => this.resetSign()}>
+            <TouchableOpacity style={styles.buttonCancelStyle} onPress={() => this.resetSign()}>
               <TBold fontSize={16} color={colors.grey}>ล้าง</TBold>
-            </TouchableHighlight>
+            </TouchableOpacity>
 
-            <TouchableHighlight style={[styles.buttonStyle, this.state.dragged && { backgroundColor: colors.emerald }]} onPress={() => this.saveSign()}>
+            <TouchableOpacity disabled={!this.state.dragged} style={[styles.buttonStyle, this.state.dragged && { backgroundColor: colors.emerald }]} onPress={() => this.saveSign()}>
               <TBold fontSize={16} color={colors.white}>ยืนยัน</TBold>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </SafeAreaView>
       </Screen>
