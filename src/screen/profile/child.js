@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import find from 'lodash/find'
+import reverse from 'lodash/reverse'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { LongButton } from '../../component/button'
@@ -40,7 +41,7 @@ export default class extends React.Component {
   state = {
     PreconditionRequired: [],
     InvalidArgument: [],
-    inVisible: false,
+    inVisible: this.props.user.child.inVisible,
     fields: [
       {
         label: 'ข้อมูลบุตร หรือบุตรบุญธรรมคนที่ 1',
@@ -81,66 +82,81 @@ export default class extends React.Component {
       }, {
         label: 'วันบัตรหมดอายุ',
         type: 'radio',
-        init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
+        init: [{
+          title: 'มีวันหมดอายุ',
+          active: this.props.user.child.firstExpireDateFlag === 'มีวันหมดอายุ'
+        },
+        {
+          title: 'ไม่มีวันหมดอายุ',
+          active: this.props.user.child.firstExpireDateFlag === 'ไม่มีวันหมดอายุ'
+        }],
         field: 'firstExpireDateFlag',
         static: true
       }, {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'firstDocExpDate',
-        date: tomorrowDate(),
+        date: reverse(this.props.user.child.firstDocExpDate.split('-')),
         required: true,
-        static: true
+        static: true,
+        inVisible: this.props.user.child.firstExpireDateFlag === 'ไม่มีวันหมดอายุ'
       },
       {
         label: 'ข้อมูลบุตร หรือบุตรบุญธรรมคนที่ 2',
         field: 'secondIdcard',
         type: 'titleHead',
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond,
       }, {
         label: 'คำนำหน้า (ตัวย่อ)',
         type: 'search',
         field: 'secondTitle',
         required: true,
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond,
       }, {
         label: 'ชื่อ (ภาษาไทย)',
         type: 'textInput',
         field: 'secondFirstName',
         required: true,
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond,
       }, {
         label: 'นามสกุล (ภาษาไทย)',
         type: 'textInput',
         field: 'secondLastName',
         required: true,
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond,
       }, {
         label: 'ปีเกิด,เดือนเกิด,วันเกิด',
         type: 'ymd',
         field: 'secondBirthDay',
         required: true,
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond,
       }, {
         type: 'mask',
         label: 'เลขบัตรประชาชน',
         field: 'secondDocNo',
         option: '9 9999 99999 99 9',
         required: true,
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond,
       }, {
         label: 'วันบัตรหมดอายุ',
         type: 'radio',
-        init: [{ title: 'มีวันหมดอายุ', active: true }, { title: 'ไม่มีวันหมดอายุ' }],
+        init: [{
+          title: 'มีวันหมดอายุ',
+          active: this.props.user.child.secondExpireDateFlag === 'มีวันหมดอายุ'
+        },
+        {
+          title: 'ไม่มีวันหมดอายุ',
+          active: this.props.user.child.secondExpireDateFlag === 'ไม่มีวันหมดอายุ'
+        }],
         field: 'secondExpireDateFlag',
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond,
       }, {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'secondDocExpDate',
-        date: tomorrowDate(),
+        date: reverse(this.props.user.child.secondDocExpDate.split('-')),
         required: true,
-        inVisible: true,
+        inVisible: this.props.user.child.inVisibleSecond || this.props.user.child.secondExpireDateFlag === 'ไม่มีวันหมดอายุ',
       }
     ]
   }
@@ -293,7 +309,7 @@ export default class extends React.Component {
       secondDocExpDate: secondExpireDateFlag === 'มีวันหมดอายุ' ? convertDate(secondDocExpDate) : new Date('9999-12-31'),
     }
 
-      console.log(data)
+    console.log(data)
 
     this.props.saveChild({ variables: { input: data } })
       .then(res => {
