@@ -12,6 +12,12 @@ import images from '../config/images'
 import { velidateOtp, requestOtp } from '../redux/actions/root-active'
 import { root } from '../redux/actions/commonAction'
 
+const defaultDot = {
+	dot: [false, false, false, false, false, false],
+	number: '',
+	currentDot: '',
+}
+
 const mapToProps = ({ root, user }) => ({ root, user })
 const dispatchToProps = dispatch => ({
 	navigateAction: bindActionCreators(navigateAction, dispatch),
@@ -31,16 +37,10 @@ export default class extends React.Component {
 		overRequestUi: false,
 		ref_no: this.props.root.ref_no,
 		details: 3,
-		defaultDot: {
-			dot: [false, false, false, false, false, false],
-			number: '',
-			currentDot: '',
-		},
 		defaultKey: false,
 	}
 
 	setNumber = async (obj) => {
-		const { defaultDot } = this.state
 		const data = {
 			trans_id: this.props.root.trans_id,
 			ref_no: this.props.root.ref_no,
@@ -91,7 +91,6 @@ export default class extends React.Component {
 
 	onPress = async setTimeWaiting => {
 		const { user } = this.props
-		const { defaultDot } = this.state
 		const accept_term = this.props.navigation.getParam('accept_term', '')
 		const token = await AsyncStorage.getItem("access_token")
 
