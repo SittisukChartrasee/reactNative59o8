@@ -3,6 +3,7 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
+  Linking,
   Image
 } from 'react-native'
 import { bindActionCreators } from 'redux'
@@ -35,7 +36,7 @@ export default class extends React.Component {
             label="ติดต่อ 02-673-3999"
             style={{ marginHorizontal: 24 }}
             bgTransparent
-            onPress={() => this.props.navigateAction({ ...this.props, page: 'tutorialBackCamera' })}
+            onPress={() => Linking.openURL(`tel://02-673-3999`)}
           />
         </View>
       </Screen>
