@@ -7,7 +7,6 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import debounce from 'lodash/debounce'
 import sortBy from 'lodash/sortBy'
 import { withApollo } from 'react-apollo'
 import { PieChart } from '../../component/chart'
@@ -20,27 +19,19 @@ import images from '../../config/images'
 import { RiskList } from '../../component/lists'
 import { navigateAction } from '../../redux/actions'
 import lockout from '../../containers/hoc/lockout'
-import {
-  getInvestment
-} from '../../containers/query'
+import { containerQuery, getInvestment } from '../../containers/query'
 
 const dataImage = [
-  { image: images.iconrisk1 },
-  { image: images.iconrisk1 }, // **start this item
-  { image: images.iconrisk2 },
-  { image: images.iconrisk3 },
-  { image: images.iconrisk4 },
-  { image: images.iconrisk5 },
-  { image: images.iconrisk6 },
-  { image: images.iconrisk7 },
-  { image: images.iconrisk8 },
+  null,
+  images.iconrisk1, // **start this item
+  images.iconrisk2,
+  images.iconrisk3,
+  images.iconrisk4,
+  images.iconrisk5,
+  images.iconrisk6,
+  images.iconrisk7,
+  images.iconrisk8,
 ]
-
-const query = debounce((client, obj, setState) => {
-  client.query({ ...obj })
-    .then((val) => setState(val))
-    .catch(err => console.error(err))
-}, 300)
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
@@ -65,40 +56,31 @@ export default class extends React.Component {
   }
 
   componentDidMount = () => {
-    const point = this.props.navigation.getParam('sumSuittest', 0)
 
-    query(this.props.client, {
-      query: getInvestment
-    }, val => {
-      const {
-        crrLevel,
-        descEN,
-        descTH,
-        fundCodeKAsset,
-        nameEN,
-        nameTH,
-        returnText,
-        assetClass,
-        riskLevel,
-      } = val.data.getInvestment
+    containerQuery(
+      this.props.client,
+      { query: getInvestment, fetchPolicy: "no-cache" },
+      this.onHandleRisk
+    )
+  }
 
-      this.setState({
-        crrLevel,
-        descEN,
-        descTH,
-        fundCodeKAsset,
-        nameEN,
-        nameTH,
-        returnText,
-        assetClass,
-        riskLevel,
-        dataPieChart: val.data.getInvestment.assetClass.map((props) => {
-          return {
-            title: props.nameTH,
-            color: props.color,
-            percent: parseInt(props.weight),
-          }
-        })
+  onHandleRisk = val => {
+    this.setState({
+      crrLevel: val.data.getInvestment.crrLevel,
+      descEN: val.data.getInvestment.descEN,
+      descTH: val.data.getInvestment.descTH,
+      fundCodeKAsset: val.data.getInvestment.fundCodeKAsset,
+      nameEN: val.data.getInvestment.nameEN,
+      nameTH: val.data.getInvestment.nameTH,
+      returnText: val.data.getInvestment.returnText,
+      assetClass: val.data.getInvestment.assetClass,
+      riskLevel: val.data.getInvestment.riskLevel,
+      dataPieChart: val.data.getInvestment.assetClass.map((props) => {
+        return {
+          title: props.nameTH,
+          color: props.color,
+          percent: parseInt(props.weight),
+        }
       })
     })
   }
@@ -144,7 +126,7 @@ export default class extends React.Component {
         <ScrollView contentContainerStyle={{ paddingTop: 40, paddingHorizontal: 24 }}>
           <View style={{ flex: 1, alignItems: 'center' }}>
             <View style={{ marginBottom: 19 }}>
-              <Image source={dataImage[+riskLevel].image} />
+              <Image source={dataImage[+riskLevel]} />
             </View>
 
             <View style={{ marginBottom: 10 }}>
@@ -152,7 +134,7 @@ export default class extends React.Component {
               <TBold fontSize={16} color={colors.white}>{`ผลตอบแทนที่คาดหวังโดยเฉลี่ย ${returnText} ต่อปี`}</TBold>
             </View>
 
-            <TLight color={colors.white} mb={40}>{descTH.replace('↵','')}</TLight>
+            <TLight color={colors.white} mb={40}>{descTH.replace('↵', '')}</TLight>
 
             <View style={{ backgroundColor: colors.white, width: '100%', minHeight: 352, paddingVertical: 16, borderRadius: 16, overflow: 'hidden' }}>
               <View style={{ height: 80, flexDirection: 'row' }}>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Image, TouchableOpacity } from 'react-native'
+import { View, Image, TouchableOpacity, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Keyboard from '../component/keyboard'
@@ -9,7 +9,7 @@ import { navigateAction, navigateReset } from '../redux/actions'
 import colors from '../config/colors'
 import { TLight, TBold, TMed } from '../component/texts'
 import images from '../config/images'
-import { velidateOtp, velidateOtpAccept, requestOtp, requestOtpAccept } from '../redux/actions/root-active'
+import { velidateOtp, requestOtp } from '../redux/actions/root-active'
 import { root } from '../redux/actions/commonAction'
 
 const mapToProps = ({ root, user }) => ({ root, user })
@@ -18,8 +18,6 @@ const dispatchToProps = dispatch => ({
 	navigateReset: bindActionCreators(navigateReset, dispatch),
 	requestOtp: bindActionCreators(requestOtp, dispatch),
 	velidateOtp: bindActionCreators(velidateOtp, dispatch),
-	velidateOtpAccept: bindActionCreators(velidateOtpAccept, dispatch),
-	requestOtpAccept: bindActionCreators(requestOtpAccept, dispatch),
 	updateRoot: bindActionCreators(root, dispatch),
 })
 
@@ -41,7 +39,7 @@ export default class extends React.Component {
 		defaultKey: false,
 	}
 
-	setNumber = (obj) => {
+	setNumber = async (obj) => {
 		const { defaultDot } = this.state
 		const data = {
 			trans_id: this.props.root.trans_id,
@@ -56,51 +54,31 @@ export default class extends React.Component {
 		else obj.dot.map(d => d && this.delayDot(d))
 
 		if (obj.number.length === 6) {
-			const accept_term = this.props.navigation.getParam('accept_term', '')
-			const token = this.props.navigation.getParam('token', '')
+			const token = await AsyncStorage.getItem("access_token")
 
-			if (accept_term) {
-				this.props.velidateOtpAccept(data, token)
-					.then(res => {
-						if (res.success) {
-							this.props.navigateAction({...this.props, page: 'passcode'})
-						} else if (!res.success) {
-							if (res.details === 6) {
-								this.setState({
-									overRequest: true,
-									overRequestUi: true,
-									details: res.details,
-								})
-							}
+			this.props.velidateOtp(data, token) // Api ใช้สำหรับ OTP register และ accept
+				.then(res => {
+					if (res.success) {
+						if (res.result.is_register) {
+							this.props.navigateAction({ ...this.props, page: 'login', params: { user_token: res.result.user_token } })
+						} else {
+							this.props.navigateAction({ ...this.props, page: 'passcode' })
 						}
-					})
-					.catch(err => {
-						console.log(err)
-					})
-			} else {
-				this.props.velidateOtp(data)
-					.then(res => {
-						if (res.success) {
-							if (res.result.is_register) {
-								this.props.navigateAction({...this.props, page: 'login', params: {user_token: res.result.user_token}})
-							} else {
-								this.props.navigateAction({...this.props, page: 'passcode'})
-							}
-							this.setState({...defaultDot, defaultKey: true})
-						} else if (!res.success) {
-							if (res.details === 6) {
-								this.setState({
-									overRequest: true,
-									overRequestUi: true,
-									details: res.details,
-								})
-							}
+						this.setState({ ...defaultDot, defaultKey: true })
+					} else if (!res.success) {
+						if (res.details == 6) {
+							this.setState({
+								overRequest: true,
+								overRequestUi: true,
+								details: res.details,
+							})
 						}
-					})
-					.catch(err => {
-						console.log(err)
-					})
-			}
+						this.setState({ ...defaultDot, defaultKey: true })
+					}
+				})
+				.catch(err => {
+					console.log(err)
+				})
 		}
 	}
 
@@ -115,82 +93,30 @@ export default class extends React.Component {
 		const { user } = this.props
 		const { defaultDot } = this.state
 		const accept_term = this.props.navigation.getParam('accept_term', '')
-		const token = this.props.navigation.getParam('token', '')
+		const token = await AsyncStorage.getItem("access_token")
 
-		if (accept_term) {
-			console.log(accept_term, token)
-
-			const data = { accept_term: false }
-
-			this.props.requestOtpAccept(data, token)
-				.then(res => {
-					console.log(res)
-					if (res.success) {
-						setTimeWaiting(res.details)
-						this.setState({
-							ref_no: res.result.ref_no,
-							overRequestUi: false,
-							defaultKey: true,
-							...defaultDot
-						})
-					}
-
-					this.props.updateRoot('modal', {
-						dis: res.message,
-						visible: true,
-						onPress: () => {
-							this.setState({ ...defaultDot, defaultKey: true })
-							this.props.updateRoot('modal', { visible: false })
-						},
-						onPressClose: () => {
-							this.setState({ ...defaultDot, defaultKey: true })
-							this.props.updateRoot('modal', { visible: false })
-						}
-					})
-				})
-				.catch(err => {
-					console.log(err)
-				})
-		} else {
-
-			const data = {
-				idCard: user.profile.idCard.replace(/ /g, ''),
-				email: (user.contact.email).trim().toLowerCase(),
-				mobilePhone: user.contact.mobilePhone.replace(/ /g, ''),
-			}
-
-			this.props.requestOtp(data)
-				.then(res => {
-					if (res.success) {
-						setTimeWaiting(res.details)
-						this.setState({
-							ref_no: res.result.ref_no,
-							overRequestUi: false,
-							defaultKey: true,
-							...defaultDot
-						})
-					} else if (!res.success) {
-						const modal = {
-							dis: res.message,
-							visible: true,
-							onPress: () => {
-								this.setState({ ...defaultDot, defaultKey: true })
-								this.props.updateRoot('modal', { visible: false })
-							},
-							onPressClose: () => {
-								this.setState({ ...defaultDot, defaultKey: true })
-								this.props.updateRoot('modal', { visible: false })
-							}
-						}
-						return this.props.updateRoot('modal', modal)
-					}
-				})
-				.catch(err => {
-					console.log(err)
-				})
+		const data = {
+			id_card: user.profile.idCard.replace(/ /g, ''),
+			email: (user.contact.email).trim().toLowerCase(),
+			phone_no: user.contact.mobilePhone.replace(/ /g, ''),
 		}
-	}
 
+		this.props.requestOtp(data, token, { accept_term: accept_term ? false : null }) // Api ใช้สำหรับ OTP register และ accept
+			.then(res => {
+				if (res.success) {
+					setTimeWaiting(res.details)
+					this.setState({
+						ref_no: res.result.ref_no,
+						overRequestUi: false,
+						defaultKey: true,
+						...defaultDot
+					})
+				}
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	}
 
 	render() {
 		const { ref_no, defaultKey } = this.state

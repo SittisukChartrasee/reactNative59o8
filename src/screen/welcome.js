@@ -22,7 +22,7 @@ import { requestOtp } from '../redux/actions/root-active'
 import { updateUser, root } from '../redux/actions/commonAction'
 import lockout from '../containers/hoc/lockout'
 import { NavBar } from '../component/gradient'
-import { replaceSpace, fontToLower, heightPercentageToDP as hP } from '../utility/helper'
+import { replaceSpace, fontToLower, handleSizing } from '../utility/helper'
 
 // import * as validate from '../utility/validation'
 
@@ -99,13 +99,14 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
+    
     const { user } = this.props
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
     const data = {
-      idCard: replaceSpace(user.profile.idCard),
+      id_card: replaceSpace(user.profile.idCard),
       email: fontToLower(user.contact.email),
-      mobilePhone: replaceSpace(user.contact.mobilePhone),
+      phone_no: replaceSpace(user.contact.mobilePhone),
     }
 
     console.log(data)
@@ -138,7 +139,6 @@ export default class extends React.Component {
   }
 
   render() {
-    const sizing = widthScreen <= 320 || heightScreen <= 690 ? { width: 176, height: 128, } : {}
     return (
       <Screen>
         <NavBar
@@ -156,12 +156,13 @@ export default class extends React.Component {
         <KeyboardAwareScrollView
           extraScrollHeight={Platform.OS === 'ios' ? -20 : -280}
           enableOnAndroid
+          showsVerticalScrollIndicator={false}
         >
-          <View style={{ alignItems: 'center', height: Platform.OS === 'ios' ? hP('40%') : hP('40%') }}>
-            <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
+          <View style={{ alignItems: 'center', height: handleSizing(heightScreen).top }}>
+            <Image source={images.kmyfundLogo} style={handleSizing(heightScreen).sizing} resizeMode="contain" />
             <TBold fontSize={20} color={colors.white} mt="24" mb="40">{`กรุณากรอกข้อมูล\nเพื่อเปิดบัญชีกองทุน`}</TBold>
           </View>
-          <View style={{ backgroundColor: '#fff', height: Platform.OS === 'ios' ? hP('39%') : hP('40%') }}>
+          <View style={{ backgroundColor: '#fff', height: handleSizing(heightScreen).bottom }}>
             {
               fields.map((setField, key) => Input({
                 ...setField,
