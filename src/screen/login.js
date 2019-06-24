@@ -271,6 +271,99 @@ export default class extends React.Component {
 					} ]
 				this.props.updateSuittest('suittest', suitability)
 			}
+
+			if (val.data.getUser.result.mailingAddress) {
+				const mailingAddress = {
+					countryCode: val.data.getUser.result.mailingAddress.CountryCode,
+					addressNoTH: val.data.getUser.result.mailingAddress.AddressNoTH,
+					moo: val.data.getUser.result.mailingAddress.Moo,
+					addressVillageTH: val.data.getUser.result.mailingAddress.AddressVillageTH,
+					floorNo: val.data.getUser.result.mailingAddress.FloorNo,
+					trokSoiYaek: val.data.getUser.result.mailingAddress.TrokSoiYaek,
+					thanon: val.data.getUser.result.mailingAddress.Thanon,
+					districtNameTH: val.data.getUser.result.mailingAddress.District,
+					districtCode: val.data.getUser.result.mailingAddress.DistrictCode,
+					subDistrict: val.data.getUser.result.mailingAddress.SubDistrict,
+					subDistrictCode: val.data.getUser.result.mailingAddress.SubDistrictCode,
+					provinceNameTH: val.data.getUser.result.mailingAddress.Province,
+					provinceCode: val.data.getUser.result.mailingAddress.ProvinceCode,
+					zipCode: val.data.getUser.result.mailingAddress.ZipCode,
+				}
+				this.props.updateUser('addressDoc', mailingAddress)
+			}
+
+			if (val.data.getUser.result.currentAddress) {
+				const currentAddress = {
+					countryCode: val.data.getUser.result.currentAddress.CountryCode,
+					addressNoTH: val.data.getUser.result.currentAddress.AddressNoTH,
+					moo: val.data.getUser.result.currentAddress.Moo,
+					addressVillageTH: val.data.getUser.result.currentAddress.AddressVillageTH,
+					floorNo: val.data.getUser.result.currentAddress.FloorNo,
+					trokSoiYaek: val.data.getUser.result.currentAddress.TrokSoiYaek,
+					thanon: val.data.getUser.result.currentAddress.Thanon,
+					districtNameTH: val.data.getUser.result.currentAddress.District,
+					districtCode: val.data.getUser.result.currentAddress.DistrictCode,
+					subDistrict: val.data.getUser.result.currentAddress.SubDistrict,
+					subDistrictCode: val.data.getUser.result.currentAddress.SubDistrictCode,
+					provinceNameTH: val.data.getUser.result.currentAddress.Province,
+					provinceCode: val.data.getUser.result.currentAddress.ProvinceCode,
+					zipCode: val.data.getUser.result.currentAddress.ZipCode,
+				}
+				this.props.updateUser('addressCurr', currentAddress)
+			}
+
+			if (val.data.getUser.result.workAddress) {
+				const workAddress = {
+					countryCode: val.data.getUser.result.workAddress.CountryCode,
+					addressNoTH: val.data.getUser.result.workAddress.AddressNoTH,
+					moo: val.data.getUser.result.workAddress.Moo,
+					addressVillageTH: val.data.getUser.result.workAddress.AddressVillageTH,
+					floorNo: val.data.getUser.result.workAddress.FloorNo,
+					trokSoiYaek: val.data.getUser.result.workAddress.TrokSoiYaek,
+					thanon: val.data.getUser.result.workAddress.Thanon,
+					districtNameTH: val.data.getUser.result.workAddress.District,
+					districtCode: val.data.getUser.result.workAddress.DistrictCode,
+					subDistrict: val.data.getUser.result.workAddress.SubDistrict,
+					subDistrictCode: val.data.getUser.result.workAddress.SubDistrictCode,
+					provinceNameTH: val.data.getUser.result.workAddress.Province,
+					provinceCode: val.data.getUser.result.workAddress.ProvinceCode,
+					zipCode: val.data.getUser.result.workAddress.ZipCode,
+					companyName: val.data.getUser.result.workAddress.CompanyName,
+				}
+				this.props.updateUser('addressWork', workAddress)
+			}
+
+			if (val.data.getUser.result.permanentAddress) {
+				const permanentAddress = {
+					countryCode: val.data.getUser.result.permanentAddress.CountryCode,
+					addressNoTH: val.data.getUser.result.permanentAddress.AddressNoTH,
+					moo: val.data.getUser.result.permanentAddress.Moo,
+					addressVillageTH: val.data.getUser.result.permanentAddress.AddressVillageTH,
+					floorNo: val.data.getUser.result.permanentAddress.FloorNo,
+					trokSoiYaek: val.data.getUser.result.permanentAddress.TrokSoiYaek,
+					thanon: val.data.getUser.result.permanentAddress.Thanon,
+					districtNameTH: val.data.getUser.result.permanentAddress.District,
+					districtCode: val.data.getUser.result.permanentAddress.DistrictCode,
+					subDistrict: val.data.getUser.result.permanentAddress.SubDistrict,
+					subDistrictCode: val.data.getUser.result.permanentAddress.SubDistrictCode,
+					provinceNameTH: val.data.getUser.result.permanentAddress.Province,
+					provinceCode: val.data.getUser.result.permanentAddress.ProvinceCode,
+					zipCode: val.data.getUser.result.permanentAddress.ZipCode,
+				}
+				this.props.updateUser('addressHome', permanentAddress)
+			}
+
+			if (val.data.getUser.result.sourceOfFund) {
+				const sourceOfFund = {
+					investmentSource: val.data.getUser.result.sourceOfFund.investmentSource,
+					investmentSourceOther: val.data.getUser.result.sourceOfFund.investmentSourceOther,
+					investmentSourceCountry: val.data.getUser.result.sourceOfFund.investmentSourceCountry,
+					investmentPurpose: val.data.getUser.result.sourceOfFund.investmentPurpose,
+					investmentPurposeOther: val.data.getUser.result.sourceOfFund.investmentPurposeOther,
+					dividendWithHoldingTax: val.data.getUser.result.sourceOfFund.dividendWithHoldingTax,
+				}
+				this.props.updateUser('sourceOfFund', sourceOfFund)
+			}
 		}
 	}
 
