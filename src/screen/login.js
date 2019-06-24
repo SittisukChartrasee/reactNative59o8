@@ -65,6 +65,7 @@ export default class extends React.Component {
 							this.onHandleChooseScreen
 						)
 					} else if (!res.success) {
+						this.setState({ dot: ['', '', '', '', '', ''], number: '' })
 						return this.setState({ ...defaultPasscode, defaultKey: true, countPassFail: this.state.countPassFail + 1 }, () => {
 							if (this.state.countPassFail > 3) return this.props.navigateAction({ ...this.props, page: 'lockUser' })
 						})
@@ -102,6 +103,11 @@ export default class extends React.Component {
 
 	render() {
 		const { dot, defaultKey } = this.state
+
+		// console.log(
+		// 	AsyncStorage.getItem('access_token'),
+		// 	AsyncStorage.getItem('user_token')
+		// )
 		return (
 			<Screen>
 				<HeadSpace
