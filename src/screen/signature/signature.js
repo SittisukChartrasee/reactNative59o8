@@ -66,8 +66,6 @@ export default class Demo extends Component {
     const token = await AsyncStorage.getItem("access_token")
     this.props.updateUser('signature', `data:image/png;base64,${result.encoded}` )
 
-    // this.setState({ base64: `data:image/png;base64,${result.encoded}` })
-
     const data = new FormData()
     data.append('file', {
       uri: `file://${result.pathName}`,
@@ -158,7 +156,7 @@ export default class Demo extends Component {
                   }}
                   ref={(ref) => { this.signature = ref }}
                   showBorder={false}
-                  saveImageFileInExtStorage={false}
+                  saveImageFileInExtStorage
                   onSaveEvent={this._onSaveEvent}
                   showNativeButtons={false}
                   showTitleLabel={false}
