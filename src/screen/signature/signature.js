@@ -78,7 +78,7 @@ export default class Demo extends Component {
       body: data
     }, token)
 
-    if (res.success && this.props.user.signature) {
+    if (this.props.user.signature) {
       this.props.navigateAction({ ...this.props, page: 'fatca' })
     }
   }
