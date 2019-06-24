@@ -66,7 +66,7 @@ export default class extends React.Component {
 						}
 						this.setState({ ...defaultDot, defaultKey: true })
 					} else if (!res.success) {
-						if (res.details == 6) {
+						if (res.details === 6) {
 							this.setState({
 								overRequest: true,
 								overRequestUi: true,
@@ -127,6 +127,7 @@ export default class extends React.Component {
 						dot: this.state.dot,
 						currentDot: this.state.currentDot,
 						refNo: ref_no || null,
+						start: this.props.root.time || (Date.now() / 1000),
 						overRequest: this.state.overRequest,
 						overRequestUi: this.state.overRequestUi,
 						details: this.state.details,

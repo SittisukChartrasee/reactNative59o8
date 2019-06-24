@@ -19,13 +19,13 @@ export default class extends React.Component {
     overRequest: false,
     details: 3,
     onPress: () => { },
+    start: Date.now()
   }
 
   timerCount = ''
 
   state = {
     endState: 0,
-    start: Date.now(),
     diff: 0,
     minutes: 0,
     seconds: 0,
@@ -59,31 +59,34 @@ export default class extends React.Component {
   }
 
   timer() {
-    const { duration } = this.state
     let diff = this.state.diff
     let minutes = this.state.minutes
     let seconds = this.state.seconds
-    // diff = this.state.duration - (((Date.now() - this.state.start) / 1000) | 0) // เปรียบเทียบโดยใช้เวลาเริ่มต้นและเวลาปัจจุบัน
-    diff = duration - 1 // เปรียบเทียบโดย ลบ เวลาที่ละ 1 sec
+
+    diff = this.state.duration - (((Date.now() - (this.props.start * 1000)) / 1000) | 0) // เปรียบเทียบโดยใช้เวลาเริ่มต้นและเวลาปัจจุบัน
+    // diff = this.state.duration - 1 // เปรียบเทียบโดย ลบ เวลาที่ละ 1 sec
     minutes = (diff / 60) | 0
     seconds = (diff % 60) | 0
     minutes = minutes < 10 ? "0" + minutes : minutes
     seconds = seconds < 10 ? "0" + seconds : seconds
-    this.setState({ minutes: minutes, seconds: seconds, duration: duration - 1 })
-    if (diff <= 0) {
+    if (diff <= 0) { // ดักก่อน setState
       clearInterval(this.timerCount)
+      this.setState({ minutes: '00', seconds: '00' })
+    } else {
+      this.setState({ minutes: minutes, seconds: seconds }) // เปรียบเทียบโดยใช้เวลาเริ่มต้นและเวลาปัจจุบัน
     }
+    // this.setState({ minutes: minutes, seconds: seconds, duration: this.state.duration - 1 }) // เปรียบเทียบโดย ลบ เวลาที่ละ 1 sec
   }
 
   resendOTP = (minutes) => {
-    this.setState({ start: Date.now(), minutes, seconds: 0, duration: 60 * minutes })
+    this.setState({ minutes, seconds: 0, duration: 60 * minutes })
     this.starttimer()
   }
 
   render() {
     const { minutes, seconds } = this.state
     const { dot, refNo, overRequestUi } = this.props
-    
+
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 0.8, justifyContent: 'flex-end' }}>

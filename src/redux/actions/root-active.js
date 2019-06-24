@@ -8,7 +8,6 @@ export const requestOtp = (obj, token = null, accept = null) => async dispatch =
     method: 'POST',
     body: JSON.stringify(data),
   }, token)
-  console.log(res)
 
   if (res && res.result) {
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })

@@ -49,10 +49,10 @@ export default class extends React.Component {
       }
     ],
     statusEdit: true,
+    statusText: ''
   }
 
   componentDidMount = () => {
-    console.log('eiei')
     containerQuery(
       this.props.client,
       { query: getStatusEditing, fetchPolicy: "no-cache" },
@@ -62,18 +62,23 @@ export default class extends React.Component {
 
   onHandleCard = val => {
     let status = false
+    let statusText = ''
     if (val.data.getStatusEditing.idCard) {
       if (val.data.getStatusEditing.selfie) {
+        statusText = `ถ่ายรูปบัตรประชาชน และรูปคู่กับใบหน้าไม่ชัด\nกรุณาถ่ายใหม่ด้วยนะคะ`
         if (!val.data.getStatusEditing.checkIDCard ||
           !val.data.getStatusEditing.checkSelfie) status = true
       } else {
+        statusText = `ถ่ายรูปบัตรประชาชนไม่ชัด\nกรุณาถ่ายใหม่ด้วยนะคะ`
         if (!val.data.getStatusEditing.checkIDCard) status = true
       }
     } else if (val.data.getStatusEditing.selfie) {
+      statusText = `ถ่ายรูปคู่กับใบหน้าไม่ชัด\nกรุณาถ่ายใหม่ด้วยนะคะ`
       if (!val.data.getStatusEditing.checkSelfie) status = true
     } else { status = false }
 
     this.setState({
+      statusText,
       statusEdit: status,
       card: this.state.card.map(d => {
         if (d.label === 'ถ่ายบัตรประชาชน') {
@@ -124,7 +129,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { statusEdit } = this.state
+    const { statusEdit, statusText } = this.state
     console.log(statusEdit)
     return (
       <Screen>
@@ -147,7 +152,7 @@ export default class extends React.Component {
           <View style={{ paddingTop: 40 }}>
             <View style={{ alignItems: 'center' }}>
               <Image source={images.iconEdit} style={{ width: widthView * .6, marginBottom: 53 }} resizeMode="contain" />
-              <TLight color={colors.white}>{`ถ่ายรูปบัตรประชาชน และรูปคู่กับใบหน้าไม่ชัด\nกรุณาถ่ายใหม่ด้วยนะคะ`}</TLight>
+              <TLight color={colors.white}>{statusText}</TLight>
             </View>
             {
               this.state.card.map((d, key) => Input({

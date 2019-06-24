@@ -99,7 +99,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    
+
     const { user } = this.props
     await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
@@ -107,9 +107,7 @@ export default class extends React.Component {
       id_card: replaceSpace(user.profile.idCard),
       email: fontToLower(user.contact.email),
       phone_no: replaceSpace(user.contact.mobilePhone),
-    }
-
-    console.log(data)
+    }    
 
     this.props.requestOtp(data)
       .then(res => {
@@ -123,13 +121,7 @@ export default class extends React.Component {
             case 'InvalidArgument':
               return this.setState({ InvalidArgument: res.details })
             default:
-              const modal = {
-                dis: res.message,
-                visible: true,
-                onPress: () => this.props.updateRoot('modal', { visible: false }),
-                onPressClose: () => this.props.updateRoot('modal', { visible: false })
-              }
-              return this.props.updateRoot('modal', modal)
+              return null
           }
         }
       })

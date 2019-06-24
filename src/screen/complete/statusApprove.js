@@ -4,7 +4,8 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
-  Image
+  Image,
+  Linking
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -27,17 +28,8 @@ const renderText = (caseStatus) => {
         title: 'ขออภัยท่านไม่สามารถเปิดบัญชีกองทุนได้',
         dis: 'กรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1',
         titleBtn: 'ติดต่อ 02 673 3888',
+        phone: '026733888',
         btnStatus: true,
-      }
-
-    case 'Approved':
-      return {
-        header: 'ผลอนุมัติเปิดบัญชี',
-        title: 'เปิดบัญชีสำเร็จ',
-        dis: 'ท่านสามารถเริ่มลงทุนผ่านแอปพลิเคชั่น\nK-My Fund ได้แล้ว',
-        text: `1. ผู้ขอใช้บริการมีความประสงค์ให้ธนาคารหักเงินจากบัญชีเงินฝากของผู้ขอใช้บริการ เพื่อชำระหนี้ และ หรือ ภาระผูกพันใด ๆให้แก่ผู้รับเงิน ตามจำนวนเงินและวันที่ที่ปรากฏในใบแจ้งหนี้ และ หรือ ข้อมูลที่ผู้รับเงินได้นำส่งให้แก่ธนาคารผ่านช่องทางอิเล็กทรอนิกส์ หรือด้วยวิธีใดที่ธนาคารได้ตกลงกับผู้รับเงิน หรือตามคำสั่งที่ธนาคารได้รับจากผู้รับเงิน ตัวแทนของผู้รับเงิน และ หรือบุคคลอื่นใดที่ได้รับแต่งตั้งหรือมอบหมายจากผู้รับเงินให้กระทำการแทน และ หรือในนามของผู้รับเงิน (ต่อไปนี้จะเรียกว่า ”ข้อมูลที่นำส่ง”) และนำเงินดังกล่าวโอนเข้าบัญชีเงินฝากของผู้รับเงิน และ หรือบุคคลดังกล่าว.   	ผู้ขอใช้บริการมีความประสงค์ให้ธนาคารหักเงินจากบัญชีเงินฝากของผู้ขอใช้บริการ เพื่อชำระหนี้ และ/หรือ ภาระผูกพันใด ๆ ให้แก่ผู้รับเงิน ตามจำนวนเงินและวันที่ที่ปรากฏในใบแจ้งหนี้ และ/หรือ ข้อมูลที่ผู้รับเงินได้นำส่งให้แก่ธนาคารผ่านช่องทางอิเล็กทรอนิกส์ หรือด้วยวิธีใดที่ธนาคารได้ตกลงกับผู้รับเงิน หรือตามคำสั่งที่ธนาคารได้รับจากผู้รับเงิน ตัวแทนของผู้รับเงิน และ/หรือบุคคลอื่นใดที่ได้รับแต่งตั้งหรือมอบหมายจากผู้รับเงินให้กระทำการแทน และ/หรือในนามของผู้รับเงิน (ต่อไปนี้จะเรียกว่า ”ข้อมูลที่นำส่ง”) และนำเงินดังกล่าวโอนเข้าบัญชีเงินฝากของผู้รับเงิน และ/หรือบุคคลดังกล่าว. `,
-        titleBtn: 'เริ่มใช้งาน K-My Fund',
-        btnStatus: false,                    
       }
 
     default:
@@ -45,6 +37,7 @@ const renderText = (caseStatus) => {
         title: 'เกิดข้อผิดพลาด',
         dis: 'กรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1',
         titleBtn: 'ติดต่อ 02 673 3888',
+        phone: '026733888',
         btnStatus: true,
       }
   }
@@ -61,12 +54,7 @@ export default class extends React.Component {
     status: 'Rejected',
   }
 
-  state = {
-    agree: false,
-  }
-
   render() {
-    const { agree } = this.state
     const status = this.props.navigation.getParam('status', '')
     return (
       <Screen>
@@ -89,7 +77,8 @@ export default class extends React.Component {
         >
           <View style={{ flex: 1, alignItems: 'center' }}>
             <Image source={images.kmyfundLogo} style={{ width: widthView * .6, marginBottom: 19 }} resizeMode="contain" />
-            <TBold color={colors.white} mb={10}>{renderText(status).title}</TBold>
+            <TBold color={colors.white} mb={24}>{renderText(status).title}</TBold>
+            <TLight color={colors.white}>{renderText(status).dis}</TLight>
           </View>
         </ScrollView>
         <View style={{ paddingBottom: 44 }}>
@@ -97,8 +86,7 @@ export default class extends React.Component {
             label={renderText(status).titleBtn}
             bgTransparent={renderText(status).btnStatus}
             style={{ marginHorizontal: 24 }}
-            disabled={!agree}
-            onPress={() => this.props.navigateAction({ ...this.props, page: '' })}
+            onPress={() => Linking.openURL(`tel://${renderText(status).phone}`)}
           />
         </View>
       </Screen>
