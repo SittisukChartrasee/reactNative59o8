@@ -8,6 +8,7 @@ import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
 import { HeadSpace } from '../component/headSpace'
 import { navigateAction } from '../redux/actions'
+import { fatca } from '../redux/actions/commonAction'
 import { requestLogin } from '../redux/actions/root-active'
 import { updateUser } from '../redux/actions/commonAction'
 import { containerQuery, getStatus, getUser } from '../containers/query'
@@ -28,11 +29,12 @@ const defaultPasscode = {
 
 const momentDate = date => moment(date).tz('Asia/Bangkok')
 
-const mapToProps = ({ user }) => ({ user })
+const mapToProps = ({ user, fatcaReducer }) => ({ user, fatcaReducer })
 const dispatchToProps = dispatch => ({
 	navigateAction: bindActionCreators(navigateAction, dispatch),
 	requestLogin: bindActionCreators(requestLogin, dispatch),
 	updateUser: bindActionCreators(updateUser, dispatch),
+	updateFatca: bindActionCreators(fatca, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
 @withApollo
@@ -99,53 +101,125 @@ export default class extends React.Component {
 	}
 
 	onHandletesttest = val => {
+		console.log(val.data.getUser.result)
 		if (val.data.getUser.success) {
 
-			const identityDocExpDate = momentDate(val.data.getUser.result.identity.docExpDate)._a
+			if (val.data.getUser.result.identity) {
+				const identityDocExpDate = momentDate(val.data.getUser.result.identity.docExpDate)._a
+				this.props.updateUser('profile', {
+					...this.props.user.profile,
+					isNoDocExpDate: val.data.getUser.result.identity.isNoDocExpDate,
+					expireDateFlag: val.data.getUser.result.identity.isNoDocExpDate ? 'ไม่มีวันหมดอายุ' : 'มีวันหมดอายุ',
+					docExpDate: val.data.getUser.result.identity.isNoDocExpDate ? `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}` : convertDate_reverse(identityDocExpDate),
+					genderCode: val.data.getUser.result.identity.genderCode,
+					gender: getStatusGender_reverse(val.data.getUser.result.identity.genderCode),
+					titleTH: val.data.getUser.result.identity.titleTH,
+					firstNameTH: val.data.getUser.result.identity.firstNameTH,
+					lastNameTH: val.data.getUser.result.identity.lastNameTH,
+					firstNameEN: val.data.getUser.result.identity.firstNameEN,
+					lastNameEN: val.data.getUser.result.identity.lastNameEN,
+					birthDay: `${val.data.getUser.result.identity.dayOfBirth}/${month[parseInt(val.data.getUser.result.identity.monthOfBirth) - 1]}/${val.data.getUser.result.identity.yearOfBirth}`,
+					dayOfBirth: val.data.getUser.result.identity.dayOfBirth,
+					monthOfBirth: val.data.getUser.result.identity.monthOfBirth,
+					yearOfBirth: val.data.getUser.result.identity.yearOfBirth,
+					nationalityCode: val.data.getUser.result.identity.nationalityCode,
+					martialStatusCode: val.data.getUser.result.identity.martialStatusCode,
+					martialStatus: getStatusMartial_reverse(val.data.getUser.result.identity.martialStatusCode),
+					isChild: val.data.getUser.result.identity.isChild ? 'มี' : 'ไม่มี',
+				})
+			}
+			
+			if (val.data.getUser.result.spouse) {
+				const spouseDocExpDate = momentDate(val.data.getUser.result.spouse.cardExpiredDate)._a
+				this.props.updateUser('spouse', {
+					...this.props.user.spouse,
+					nationFlag: val.data.getUser.result.spouse.nationalityCode === 'TH' ? 'ไทย' : 'ชาวต่างชาติ',
+					IDCardNo: val.data.getUser.result.spouse.nationalityCode === 'TH' ? formatIdCard(val.data.getUser.result.spouse.IDCardNo) : '',
+					marryPassport: val.data.getUser.result.spouse.nationalityCode === 'TH' ? '' : val.data.getUser.result.spouse.IDCardNo,
+					marryCountry: '', // ต้องให้ back ส่งมา
+					nationalityCode: val.data.getUser.result.spouse.nationalityCode,
+					isIDCardExpDate: !val.data.getUser.result.spouse.isIDCardExpDate,
+					cardExpiredDate: val.data.getUser.result.spouse.isIDCardExpDate ? convertDate_reverse(spouseDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
+					marryExpireDate: val.data.getUser.result.spouse.nationalityCode === 'TH' ? `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}` : convertDate_reverse(spouseDocExpDate),
+					title: val.data.getUser.result.spouse.title,
+					fistName: val.data.getUser.result.spouse.fistName,
+					lastName: val.data.getUser.result.spouse.lastName,
+					pepFlag: val.data.getUser.result.spouse.pepFlag,
+				})
+			}
 
-			this.props.updateUser('profile', {
-				...this.props.user.profile,
-				'isNoDocExpDate': val.data.getUser.result.identity.isNoDocExpDate,
-				'expireDateFlag': val.data.getUser.result.identity.isNoDocExpDate ? 'ไม่มีวันหมดอายุ' : 'มีวันหมดอายุ',
-				'docExpDate': val.data.getUser.result.identity.isNoDocExpDate ? `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}` : convertDate_reverse(identityDocExpDate),
-				'genderCode': val.data.getUser.result.identity.genderCode,
-				'gender': getStatusGender_reverse(val.data.getUser.result.identity.genderCode),
-				'titleTH': val.data.getUser.result.identity.titleTH,
-				'firstNameTH': val.data.getUser.result.identity.firstNameTH,
-				'lastNameTH': val.data.getUser.result.identity.lastNameTH,
-				'firstNameEN': val.data.getUser.result.identity.firstNameEN,
-				'lastNameEN': val.data.getUser.result.identity.lastNameEN,
-				'birthDay': `${val.data.getUser.result.identity.dayOfBirth}/${month[parseInt(val.data.getUser.result.identity.monthOfBirth) - 1]}/${val.data.getUser.result.identity.yearOfBirth}`,
-				'dayOfBirth': val.data.getUser.result.identity.dayOfBirth,
-				'monthOfBirth': val.data.getUser.result.identity.monthOfBirth,
-				'yearOfBirth': val.data.getUser.result.identity.yearOfBirth,
-				'nationalityCode': val.data.getUser.result.identity.nationalityCode,
-				'martialStatusCode': val.data.getUser.result.identity.martialStatusCode,
-				'martialStatus': getStatusMartial_reverse(val.data.getUser.result.identity.martialStatusCode),
-				'isChild': val.data.getUser.result.identity.isChild ? 'มี' : 'ไม่มี',
-			})
 
-			const spouseDocExpDate = momentDate(val.data.getUser.result.spouse.cardExpiredDate)._a
+			if (val.data.getUser.result.fatca) {
+				const { fatca } = this.props.fatcaReducer
+				const data = [
+					{
+						...fatca[0],
+						answer: val.data.getUser.result.fatca.isUSCitizen ? 0 : 1
+					}, {
+						...fatca[1],
+						answer: val.data.getUser.result.fatca.isUSCitizen ? 0 : 1,
+					}, {
+						...fatca[2],
+						answer: val.data.getUser.result.fatca.isHoldingUsCard ? 0 : 1,
+					}, {
+						...fatca[3],
+						answer: val.data.getUser.result.fatca.isUSTaxPurposes ? 0 : 1,
+					}, {
+						...fatca[4],
+						answer: val.data.getUser.result.fatca.surrenderedUSCitizenship ? 0 : 1,
+					}, {
+						...fatca[5],
+						answer: val.data.getUser.result.fatca.transferFundsToAccountInUS ? 0 : 1,
+					}, {
+						...fatca[6],
+						answer: val.data.getUser.result.fatca.grantedToPersonWithUSAddress ? 0 : 1,
+					}, {
+						...fatca[7],
+						answer: val.data.getUser.result.fatca.mailOrCareOfAddressAccountOpenedKBank ? 0 : 1,
+					}, {
+						...fatca[8],
+						answer: val.data.getUser.result.fatca.currentOrMailingAddressAccountOpenedKbank ? 0 : 1,
+					}, {
+						...fatca[9],
+						answer: val.data.getUser.result.fatca.isUSPhoneNo ? 0 : 1,
+					}	
+				]
+				this.props.updateFatca('fatca', data)
+			}
+			
+			if (val.data.getUser.result.fraud) {
+				const { fraud } = this.props.user 
+				const data = [
+					{
+						...fraud.choice[0],
+						answer: val.data.getUser.result.fraud.hasLaunderingRecord ? 0 : 1,
+					}, {
+						...fraud.choice[1],
+						answer: val.data.getUser.result.fraud.isPolitician ? 0 : 1,
+					},
+				]
+				this.props.updateUser('fraud', { choice: data })
+			}
 
-			this.props.updateUser('spouse', {
-				...this.props.user.spouse,
-				'nationFlag': val.data.getUser.result.spouse.nationalityCode === 'TH' ? 'ไทย' : 'ชาวต่างชาติ',
-				'IDCardNo': val.data.getUser.result.spouse.nationalityCode === 'TH' ? formatIdCard(val.data.getUser.result.spouse.IDCardNo) : '',
-				'marryPassport': val.data.getUser.result.spouse.nationalityCode === 'TH' ? '' : val.data.getUser.result.spouse.IDCardNo,
-				'marryCountry': '', // ต้องให้ back ส่งมา
-				'nationalityCode': val.data.getUser.result.spouse.nationalityCode,
-				'isIDCardExpDate': !val.data.getUser.result.spouse.isIDCardExpDate,
-				'cardExpiredDate': val.data.getUser.result.spouse.isIDCardExpDate ? convertDate_reverse(spouseDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
-				'marryExpireDate': val.data.getUser.result.spouse.nationalityCode === 'TH' ? `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}` : convertDate_reverse(spouseDocExpDate),
-				'title': val.data.getUser.result.spouse.title,
-				'fistName': val.data.getUser.result.spouse.fistName,
-				'lastName': val.data.getUser.result.spouse.lastName,
-				'pepFlag': val.data.getUser.result.spouse.pepFlag,
-			})
+			if (val.data.getUser.result.contact) {
+				const data = {
+					workPhone: val.data.getUser.result.contact.workPhone,
+					homePhone: val.data.getUser.result.contact.homePhone,
+					mobilePhone: val.data.getUser.result.contact.mobilePhone,
+					email: val.data.getUser.result.contact.email
+				}
+				this.props.updateUser('contact', data)
+			}
 
-			const firstChildDocExpDate = momentDate(val.data.getUser.result.firstChild.ChildDocExpDate)._a
-			console.log(val.data.getUser.result.firstChild)
-			console.log(val.data.getUser.result.secondChild)
+			if (val.data.getUser.result.contact) {
+				const data = {
+					workPhone: val.data.getUser.result.contact.workPhone,
+					homePhone: val.data.getUser.result.contact.homePhone,
+					mobilePhone: val.data.getUser.result.contact.mobilePhone,
+					email: val.data.getUser.result.contact.email
+				}
+				this.props.updateUser('contact', data)
+			}
 		}
 	}
 
