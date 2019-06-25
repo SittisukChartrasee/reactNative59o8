@@ -219,6 +219,8 @@ export default class extends React.Component {
           'secondDocNo': '',
           'secondExpireDateFlag': 'มีวันหมดอายุ',
           'secondDocExpDate': `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
+          inVisible: !this.props.user.child.inVisible,
+          inVisibleSecond: true
         })
       this.setState({
         fields: fields.map((d) => {
@@ -226,11 +228,6 @@ export default class extends React.Component {
             return { ...d, inVisible: true }
           } else return d
         }),
-      })
-      this.props.updateUser('child', {
-        ...user.child,
-        inVisible: !this.props.user.child.inVisible,
-        inVisibleSecond: true
       })
     }
   }
