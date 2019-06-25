@@ -156,7 +156,7 @@ export default class extends React.Component {
         />
         <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 20 }}>
           <Image source={images.kmyfundLogo} style={sizing} resizeMode="contain" />
-          <TBold fontSize={18} color={colors.white} mt="10" mb="20">{`ลงทะเบียนเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
+          <TBold fontSize={18} color={colors.white} mt="10" mb="20">{`ขั้นตอนการเปิดบัญชีลงทุน\nผ่านแอปพลิเคชั่น`}</TBold>
         </SafeAreaView>
         <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'flex-start' }}>
           <KeyboardAwareScrollView
