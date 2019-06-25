@@ -47,7 +47,7 @@ export default class extends React.Component {
             dot,
             title: 'ตั้งรหัสผ่าน',
             dis: 'เพื่อเข้าใช้งานในครั้งถัดไป',
-            onPrevPage: () => this.props.navigation.goBack()
+            // onPrevPage: () => this.props.navigation.goBack()
           }}
         />
         <Keyboard setNumber={this.setNumber} defaultKey={defaultKey} />
