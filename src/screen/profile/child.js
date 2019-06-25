@@ -41,7 +41,6 @@ export default class extends React.Component {
   state = {
     PreconditionRequired: [],
     InvalidArgument: [],
-    inVisible: this.props.user.child.inVisible,
     fields: [
       {
         label: 'ข้อมูลบุตร หรือบุตรบุญธรรมคนที่ 1',
@@ -196,17 +195,20 @@ export default class extends React.Component {
   }
 
   onPressNewChild = () => {
-    const { inVisible, fields } = this.state
+    const { fields } = this.state
     const { user } = this.props
-    if (!inVisible) {
+    if (!this.props.user.child.inVisible) {
       this.setState({
         fields: fields.map((d) => {
           return { ...d, inVisible: false }
-        }),
-        inVisible: !inVisible
+        })
       })
-      this.props.updateUser('child', { ...user.child, inVisible: !inVisible })
-    } else if (inVisible) {
+      this.props.updateUser('child', {
+        ...user.child,
+        inVisible: !this.props.user.child.inVisible,
+        inVisibleSecond: false
+      })
+    } else if (this.props.user.child.inVisible) {
       this.props.updateUser('child',
         {
           ...user.child,
@@ -224,9 +226,12 @@ export default class extends React.Component {
             return { ...d, inVisible: true }
           } else return d
         }),
-        inVisible: !inVisible
       })
-      this.props.updateUser('child', { ...user.child, inVisible: !inVisible })
+      this.props.updateUser('child', {
+        ...user.child,
+        inVisible: !this.props.user.child.inVisible,
+        inVisibleSecond: true
+      })
     }
   }
 

@@ -141,6 +141,8 @@ const init = {
     secondDocNo: '',
     secondExpireDateFlag: 'มีวันหมดอายุ',
     secondDocExpDate: `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
+    inVisibleSecond: true,
+    inVisible: false,
   },
   sourceOfFund: {
     investmentSource: [],

@@ -56,7 +56,7 @@ export const getStatusGender = (data) => {
   }
 }
 
-export const getStatusGender_reverse= (data) => {
+export const getStatusGender_reverse = (data) => {
   switch (data) {
     case 'M': return 'ชาย'
     case 'F': return 'หญิง'
