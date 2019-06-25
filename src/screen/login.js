@@ -119,7 +119,7 @@ export default class extends React.Component {
 					lastNameTH: val.data.getUser.result.identity.lastNameTH,
 					firstNameEN: val.data.getUser.result.identity.firstNameEN,
 					lastNameEN: val.data.getUser.result.identity.lastNameEN,
-					birthDay: `${val.data.getUser.result.identity.dayOfBirth}/${month[parseInt(val.data.getUser.result.identity.monthOfBirth) - 1]}/${val.data.getUser.result.identity.yearOfBirth}`,
+					birthDay: `${val.data.getUser.result.identity.dayOfBirth}/${val.data.getUser.result.identity.monthOfBirth !== '-' ? month[parseInt(val.data.getUser.result.identity.monthOfBirth) - 1] : '-'}/${val.data.getUser.result.identity.yearOfBirth}`,
 					dayOfBirth: val.data.getUser.result.identity.dayOfBirth,
 					monthOfBirth: val.data.getUser.result.identity.monthOfBirth,
 					yearOfBirth: val.data.getUser.result.identity.yearOfBirth,
@@ -150,11 +150,11 @@ export default class extends React.Component {
 			}
 
 			if (val.data.getUser.result.firstChild) {
-				
+
 				const firstChildDocExpDate = momentDate(val.data.getUser.result.firstChild.ChildDocExpDate)._a
 
 				let secondC = { inVisibleSecond: true, inVisible: false }
-				
+
 				if (val.data.getUser.result.secondChild) {
 
 					const secondChildDocExpDate = momentDate(val.data.getUser.result.secondChild.ChildDocExpDate)._a
@@ -163,7 +163,7 @@ export default class extends React.Component {
 						'secondTitle': val.data.getUser.result.secondChild.ChildTitleTH,
 						'secondFirstName': val.data.getUser.result.secondChild.ChildFirstNameTH,
 						'secondLastName': val.data.getUser.result.secondChild.ChildLastNameTH,
-						'secondBirthDay': `${val.data.getUser.result.secondChild.ChildDayOfBirth}/${month[parseInt(val.data.getUser.result.firstChild.ChildMonthOfBirth) - 1]}/${val.data.getUser.result.firstChild.ChildYearOfBirth}`,
+						'secondBirthDay': `${val.data.getUser.result.secondChild.ChildDayOfBirth}/${val.data.getUser.result.firstChild.ChildMonthOfBirth !== '-' ? month[parseInt(val.data.getUser.result.firstChild.ChildMonthOfBirth) - 1] : '-'}/${val.data.getUser.result.firstChild.ChildYearOfBirth}`,
 						'secondDocNo': formatIdCard(val.data.getUser.result.secondChild.ChildDocNo),
 						'secondExpireDateFlag': !val.data.getUser.result.secondChild.ChildIsNoDocExpDate ? 'มีวันหมดอายุ' : 'ไม่มีวันหมดอายุ',
 						'secondDocExpDate': !val.data.getUser.result.secondChild.ChildIsNoDocExpDate ? convertDate_reverse(secondChildDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
@@ -177,7 +177,7 @@ export default class extends React.Component {
 					'firstTitle': val.data.getUser.result.firstChild.ChildTitleTH,
 					'firstFirstName': val.data.getUser.result.firstChild.ChildFirstNameTH,
 					'firstLastName': val.data.getUser.result.firstChild.ChildLastNameTH,
-					'firstBirthDay': `${val.data.getUser.result.firstChild.ChildDayOfBirth}/${month[parseInt(val.data.getUser.result.firstChild.ChildMonthOfBirth) - 1]}/${val.data.getUser.result.firstChild.ChildYearOfBirth}`,
+					'firstBirthDay': `${val.data.getUser.result.firstChild.ChildDayOfBirth}/${val.data.getUser.result.firstChild.ChildMonthOfBirth !== '-' ? month[parseInt(val.data.getUser.result.firstChild.ChildMonthOfBirth) - 1] : '-'}/${val.data.getUser.result.firstChild.ChildYearOfBirth}`,
 					'firstDocNo': formatIdCard(val.data.getUser.result.firstChild.ChildDocNo),
 					'firstExpireDateFlag': !val.data.getUser.result.firstChild.ChildIsNoDocExpDate ? 'มีวันหมดอายุ' : 'ไม่มีวันหมดอายุ',
 					'firstDocExpDate': !val.data.getUser.result.firstChild.ChildIsNoDocExpDate ? convertDate_reverse(firstChildDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
