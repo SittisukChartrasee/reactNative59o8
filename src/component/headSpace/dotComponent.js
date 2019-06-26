@@ -13,7 +13,7 @@ import images from '../../config/images';
 export default ({
   dot=['','','','','','']
 }) => (
-  <View style={{ marginTop: 32, flexDirection: 'row', justifyContent: 'space-around' }}>
+  <View style={{ marginTop: 0, flexDirection: 'row', justifyContent: 'space-around' }}>
     {
       dot.map((d, key) => (
         <View key={key}>
