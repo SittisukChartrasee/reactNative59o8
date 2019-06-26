@@ -2,20 +2,21 @@ package com.kbankonboarding;
 
 import android.app.Application;
 
-import com.codefin3.myapplication.onboarding.OnboardPackage;
-import com.facebook.react.ReactApplication;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.beefe.picker.PickerViewPackage;
 import com.rssignaturecapture.RSSignatureCapturePackage;
 import org.reactnative.camera.RNCameraPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
+import com.jimmydaddy.imagemarker.ImageMarkerPackage;
+import fr.bamlab.rnimageresizer.ImageResizerPackage;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
+import com.codefin3.myapplication.onboarding.OnboardPackage;
+import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.jimmydaddy.imagemarker.ImageMarkerPackage;
-import fr.bamlab.rnimageresizer.ImageResizerPackage;
-import com.reactnativecommunity.webview.RNCWebViewPackage;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+          new OnboardPackage(),
           new LinearGradientPackage(),
           new RNGestureHandlerPackage(),
           new PickerViewPackage(),
@@ -39,8 +41,7 @@ public class MainApplication extends Application implements ReactApplication {
           new RNCameraPackage(),
           new ImageMarkerPackage(),
           new ImageResizerPackage(),
-          new RNCWebViewPackage(),
-          new OnboardPackage()
+          new RNCWebViewPackage()
       );
     }
 
