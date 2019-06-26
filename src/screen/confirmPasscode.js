@@ -1,6 +1,7 @@
 import React from 'react'
 import {
   AsyncStorage,
+  NativeModules,
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -33,21 +34,21 @@ export default class extends React.Component {
   }
 
   setNumber = (obj) => {
-    const { passcode } = this.props
     this.setState({ ...obj })
 
     const data = {
       password: obj.number,
     }
     if (obj.number.length === 6) {
-      if (passcode.passcode === data.password) {
+      if (this.props.passcode.passcode === data.password) {
         this.props.requestRegister(data, this.props.root.access_token)
           .then(res => {
-            console.log(res)
             if (res.success) {
               this.props.navigateAction({ ...this.props, page: 'condi' })
               AsyncStorage.setItem('access_token', res.result.access_token)
               AsyncStorage.setItem('user_token', res.result.user_token)
+              NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
+              NativeModules.KMyFundOnboarding.saveUserToken(res.result.access_token)
             } else if (!res.success) {
               const modal = {
                 dis: res.message,
@@ -61,7 +62,7 @@ export default class extends React.Component {
           .catch(err => {
             console.log(err)
           })
-      } else if (passcode.passcode !== data.password) {
+      } else if (this.props.passcode.passcode !== data.password) {
         const modal = {
           dis: `รหัสผ่าน (PIN) ไม่ตรงกับที่ตั้งไว้\nกรุณากรอกใหม่อีกครั้ง`,
           visible: true,

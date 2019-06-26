@@ -80,7 +80,7 @@ export default class extends React.Component {
       isUSPhoneNo: checkActiveData(fatca).IS_TRUE,
     }
 
-    if (!checkActiveData(fatca).IS_INCORRECT) {
+    if (!checkActiveData(this.props.fatcaReducer.fatca).IS_INCORRECT) {
       const modal = {
         dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
         visible: true,
@@ -110,7 +110,6 @@ export default class extends React.Component {
   }
 
   render() {
-    const fatca = this.props.fatcaReducer.fatca
     return (
       <Screen color="transparent">
         <NavBar
@@ -140,7 +139,7 @@ export default class extends React.Component {
             paddingBottom: 100
           })
         }
-        <NextButton disabled={checkActiveData(fatca).IS_TRUE} onPress={this.onNext} />
+        <NextButton disabled={checkActiveData(this.props.fatcaReducer.fatca).IS_TRUE} onPress={this.onNext} />
       </Screen>
     )
   }

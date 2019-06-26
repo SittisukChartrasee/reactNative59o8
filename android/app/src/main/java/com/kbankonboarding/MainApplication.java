@@ -2,6 +2,7 @@ package com.kbankonboarding;
 
 import android.app.Application;
 
+import com.codefin3.myapplication.onboarding.OnboardPackage;
 import com.facebook.react.ReactApplication;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.beefe.picker.PickerViewPackage;
@@ -38,7 +39,8 @@ public class MainApplication extends Application implements ReactApplication {
           new RNCameraPackage(),
           new ImageMarkerPackage(),
           new ImageResizerPackage(),
-          new RNCWebViewPackage()
+          new RNCWebViewPackage(),
+          new OnboardPackage()
       );
     }
 

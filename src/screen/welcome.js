@@ -99,9 +99,10 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-
+    // this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'fatca' }))
     const { user } = this.props
-    await this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+
+    this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
     const data = {
       id_card: replaceSpace(user.profile.idCard),

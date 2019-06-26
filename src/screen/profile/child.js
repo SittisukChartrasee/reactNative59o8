@@ -268,8 +268,8 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = () => {
-    const { navigateAction, user, updateRoot } = this.props
+  onNext = async () => {
+    const { user, updateRoot } = this.props
     this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
     const {
@@ -317,7 +317,7 @@ export default class extends React.Component {
       .then(res => {
         console.log(res)
         if (res.data.saveChild.success) {
-          navigateAction({ ...this.props, page: 'career' })
+          this.props.navigateAction({ ...this.props, page: 'career' })
         } else if (!res.data.saveChild.success) {
           switch (res.data.saveChild.message) {
             case 'PreconditionRequired':

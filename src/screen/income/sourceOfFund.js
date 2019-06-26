@@ -78,19 +78,22 @@ export default class extends React.Component {
         required: true,
         init: [
           {
-            label: "เพื่อการลงทุนระยะสั้น",
+            label: "เงินเดือน",
             type: 'select',
           }, {
-            label: "เพื่อการลงทุนระยะยาว",
+            label: "เงินออม",
             type: 'select',
           }, {
-            label: "เพื่อการเกษียณ",
+            label: "เงินเกษียณ",
             type: 'select',
           }, {
-            label: "เพื่อเก็บออม",
+            label: "มรดก",
             type: 'select',
           }, {
-            label: "เพื่อสิทธิประโยชน์ทางภาษี",
+            label: "การลงทุน",
+            type: 'select',
+          }, {
+            label: "ประกอบธุรกิจ",
             type: 'select',
           }, {
             label: "อื่นๆ",
@@ -99,6 +102,7 @@ export default class extends React.Component {
           }
         ]
       },
+
       // ทาง KA บอกให้ตัดออก
       // {
       //   label: 'คุณต้องการหักภาษี ณ ที่จ่ายสำหรับเงินปันผลและค่าขายคืน หรือไม่ ?',

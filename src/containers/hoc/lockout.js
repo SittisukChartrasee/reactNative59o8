@@ -1,4 +1,5 @@
 import React from 'react'
+import { NativeModules } from 'react-native'
 import noneStatic from 'hoist-non-react-statics'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -12,8 +13,9 @@ export default WrapperComponent => {
       dis: 'คุณต้องการออกไปหน้า Login ใช่หรือไม่',
       visible: true,
       swap: true,
-      onChange: val => alert(val),
+      onChange: val => console.log(val),
       onPress: () => props.updateRoot('modal', { visible: false }),
+      onConfirm: () => NativeModules.KMyFundOnboarding.finishActivity(),
       onPressClose: () => props.updateRoot('modal', { visible: false })
     }
     return <WrapperComponent lockout={() => props.updateRoot('modal', modal)} {...props}/>

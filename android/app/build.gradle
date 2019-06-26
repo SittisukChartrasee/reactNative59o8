@@ -1,4 +1,6 @@
 apply plugin: "com.android.application"
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 import com.android.build.OutputFile
 
@@ -169,4 +171,7 @@ dependencies {
 task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
+}
+repositories {
+    mavenCentral()
 }
