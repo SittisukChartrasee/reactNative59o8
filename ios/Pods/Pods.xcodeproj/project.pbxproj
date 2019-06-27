@@ -1915,33 +1915,6 @@
 			name = jsinspector;
 			sourceTree = "<group>";
 		};
-		EFDAA3C9EA57F52C25A610468913517F /* RN */ = {
-			isa = PBXGroup;
-			children = (
-				B6C4CFB926097835EF8D7E819EF58991 /* BarcodeDetectorManagerMlkit.h */,
-				8DE99184B238C88518A32C700A3FB3FE /* BarcodeDetectorManagerMlkit.m */,
-				145CC898F8D17C1643812C77C5A3239E /* FaceDetectorManagerMlkit.h */,
-				6518ECBA53661060F1290E3A323FB852 /* FaceDetectorManagerMlkit.m */,
-				53A41D6A35141F235E90FAADC96973D3 /* RNCamera.h */,
-				1AF8B0D29D2707530554CF77AD163497 /* RNCamera.m */,
-				F34C4E827B44E61B838CB9FA30E6D4AB /* RNCameraManager.h */,
-				28A04A2C1AE089FF8D6F14A592530C57 /* RNCameraManager.m */,
-				BDE8965312F68F7B2E47E52B33CF6AD3 /* RNCameraUtils.h */,
-				6E2030C88C0753FB0AB63473650AD7F2 /* RNCameraUtils.m */,
-				75F07C34575DC58686ACBFE35AACA030 /* RNFaceDetectorModuleMLKit.h */,
-				4B035394264BCB0E81C115A337E94132 /* RNFaceDetectorModuleMLKit.m */,
-				776160D632BB157D8B67EEE60D432DCF /* RNFileSystem.h */,
-				6BA46E2468A2EB3D2FEE6DAE0A481ECB /* RNFileSystem.m */,
-				4D59630B38C6707826F2D230EB79D1A7 /* RNImageUtils.h */,
-				EC47DBA8B5A401D9C074EECB3CEBD175 /* RNImageUtils.m */,
-				48CF812FBA4F315C560023B617A5B690 /* RNSensorOrientationChecker.h */,
-				9B07677B27E1332269A359ABBCF70224 /* RNSensorOrientationChecker.m */,
-				AE6737F5745C331EF0BC025C0331970F /* TextDetectorManager.h */,
-				3E5C9FA9560B9FA93A60C51B5613A893 /* TextDetectorManager.m */,
-			);
-			name = RN;
-			sourceTree = "<group>";
-		};
 		F94EC1D398AE271DD1D21BA2ADBC4090 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (

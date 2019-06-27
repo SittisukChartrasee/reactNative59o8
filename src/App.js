@@ -32,18 +32,18 @@ export default class extends React.Component {
       appState: AppState.currentState,
       loading: false,
     }
-    // AsyncStorage.getItem('user_token')
-    //   .then(async d => {
-    //     const a = await AsyncStorage.getItem('userToken')
-    //     console.log(a, d)
-    //     if (d) {
-    //       this.setState({ loading: true })
-    //       this.props.handleScreen('login')
-    //     } else {
-    //       this.setState({ loading: true })
-    //       this.props.handleScreen('firstTerm')
-    //     }
-    //   })
+    AsyncStorage.getItem('user_token')
+      .then(async d => {
+        const a = await AsyncStorage.getItem('userToken')
+        console.log(a, d)
+        if (d) {
+          this.setState({ loading: true })
+          this.props.handleScreen('login')
+        } else {
+          this.setState({ loading: true })
+          this.props.handleScreen('firstTerm')
+        }
+      })
   }
   
 
@@ -91,14 +91,14 @@ export default class extends React.Component {
     const { modal } = this.props.root
     return (
       <View style={{ flex: 1 }}>
-        {/* { 
+        { 
           this.state.loading 
             ? <ReactWithState /> 
             : <View style={{ flex: 1, backgroundColor: colors.white, justifyContent: 'center', alignItems: 'center' }}>
                 <TBold>Loading...</TBold>
               </View> 
-        } */}
-        <ReactWithState />
+        }
+        {/* <ReactWithState /> */}
         <Modal {...modal} />
       </View>
     )
