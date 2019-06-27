@@ -72,14 +72,17 @@ export default class extends React.Component {
 
 				<ScrollView
 					showsVerticalScrollIndicator={false}
+					contentContainerStyle={{ flexGrow: 1 }}
 				>
-					<View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
-						<Image source={images.iconTransfer} style={{ width: widthView * .6 }} resizeMode="contain" />
-						<View>
+					<View style={{ flex: 1, alignItems: 'center', paddingTop: '12%', paddingHorizontal: 24 }}>
+						<Image source={images.iconTransfer} style={{ width: widthView * .6, marginBottom: 53 }} resizeMode="contain" />
+						<View style={{ flex: 1 }}>
 							<TBold color={colors.white} mb={24}>{`เราได้รับข้อมูลการเปิดบัญชีกองทุน\nของท่านแล้ว`}</TBold>
-							<TLight color={colors.white}>{`กรุณารอผลการอนุมัติภายใน 3 วันทำการ\nผ่านระบบแจ้งเตือน`}</TLight>
+							<TLight color={colors.white} mb={24}>{`กรุณารอผลการอนุมัติภายใน 3 วันทำการ\nผ่านระบบแจ้งเตือน`}</TLight>
 						</View>
-						<TLight color={colors.white}>{`หากมีข้อสงสัยกรุณาติดต่อ\n02 673 3888 กด 1 และ กด 1`}</TLight>
+						<View style={{ flex: 1, justifyContent: 'flex-end', paddingBottom: 12 }}>
+							<TLight color={colors.white}>{`หากมีข้อสงสัยกรุณาติดต่อ\n02 673 3888 กด 1 และ กด 1`}</TLight>
+						</View>
 					</View>
 				</ScrollView>
 

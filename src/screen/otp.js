@@ -58,6 +58,7 @@ export default class extends React.Component {
 
 			this.props.velidateOtp(data, token) // Api ใช้สำหรับ OTP register และ accept
 				.then(res => {
+					console.log(res)
 					if (res.success) {
 						if (res.result.is_register) {
 							this.props.navigateAction({ ...this.props, page: 'login', params: { user_token: res.result.user_token } })

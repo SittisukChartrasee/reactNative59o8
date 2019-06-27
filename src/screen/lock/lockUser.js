@@ -4,7 +4,8 @@ import {
   TouchableOpacity,
   Dimensions,
   Linking,
-  Image
+  Image,
+  ScrollView
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -26,12 +27,21 @@ export default class extends React.Component {
   render() {
     return (
       <Screen>
-        <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center', paddingTop: 40 }}>
-          <TBold fontSize={28} color={colors.white} mb="5%">{`บัญชีของคุณถูกล็อค\nเพื่อความปลอดภัย`}</TBold>
-          <Image source={images.iconLock} style={{ width: widthView * .6 }} resizeMode="contain"  />
-          <TLight color={colors.smoky} fontSize={16} mt="5%">{`คุณใส่รหัสผิดเกิน 4 ครั้ง\nกรุณาติดต่อเจ้าหน้าที่เพื่อทำการปลดล็อค`}</TLight>
-        </View>
-        <View style={{ flex: 1, width: widthView, justifyContent: 'flex-end', paddingBottom: 44 }}>
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          <View style={{ flex: 1, alignItems: 'center', paddingTop: '24%' }}>
+            <TBold fontSize={28} color={colors.white} mb="8%">{`บัญชีของคุณถูกล็อค\nเพื่อความปลอดภัย`}</TBold>
+            <Image source={images.iconLock} style={{ width: widthView * .6, marginBottom: '8%' }} resizeMode="contain" />
+            <TLight color={colors.smoky} fontSize={16} mt="5%">
+              {`ท่านใส่รหัสผ่านผิดเกินจำนวนครั้งที่กำหนด\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1  `}
+            </TLight>
+          </View>
+        </ScrollView>
+
+        <View style={{ width: widthView, justifyContent: 'flex-end', paddingBottom: 44 }}>
           <LongButton
             label="ติดต่อ 02-673-3999"
             style={{ marginHorizontal: 24 }}

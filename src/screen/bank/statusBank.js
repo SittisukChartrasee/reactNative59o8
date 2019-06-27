@@ -3,20 +3,21 @@ import {
 	View,
 	TouchableOpacity,
 	Dimensions,
-	Image
+	Image,
+	ScrollView
 } from 'react-native'
-import {bindActionCreators} from 'redux'
-import {connect} from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import Screen from '../../component/screenComponent'
-import {NavBar} from '../../component/gradient'
-import {TText, TBold, TSemiBold, TLight} from '../../component/texts'
+import { NavBar } from '../../component/gradient'
+import { TText, TBold, TSemiBold, TLight } from '../../component/texts'
 import colors from '../../config/colors'
-import {LongButton} from '../../component/button'
+import { LongButton } from '../../component/button'
 import images from '../../config/images'
-import {navigateAction} from '../../redux/actions'
-import queryStatus, {checkVerifiedEmail} from '../../containers/query'
+import { navigateAction } from '../../redux/actions'
+import queryStatus, { checkVerifiedEmail } from '../../containers/query'
 
-const {width: widthView} = Dimensions.get('window')
+const { width: widthView } = Dimensions.get('window')
 
 const renderText = (caseStatus) => {
 	switch (caseStatus) {
@@ -62,38 +63,47 @@ export default class extends React.Component {
 	render() {
 		const status = this.props.getRegisterBankStatus.getRegisterBankStatus && this.props.getRegisterBankStatus.getRegisterBankStatus.status
 		return (
-				<Screen>
-					<NavBar
-						color="transparent"
-						title={renderText(status).header || null}
-						navLeft={
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('chooseBank')}
-                style={{ paddingRight: 30, display: status === 'FAIL' ? 'none' : 'flex' }}
-              >
-                <Image source={images.iconback} />
-              </TouchableOpacity>
-            }
-					/>
+			<Screen>
+				<NavBar
+					color="transparent"
+					title={renderText(status).header || null}
+					navLeft={
+						<TouchableOpacity
+							onPress={() => this.props.navigation.navigate('chooseBank')}
+							style={{ paddingRight: 30, display: status === 'FAIL' ? 'none' : 'flex' }}
+						>
+							<Image source={images.iconback} />
+						</TouchableOpacity>
+					}
+				/>
 
-					<View style={{flex: 1, alignItems: 'center', paddingTop: 40, paddingHorizontal: 24}}>
-						<Image source={renderText(status).image} style={{width: widthView * .6, marginBottom: 53}}
-						       resizeMode="contain"/>
+				<ScrollView
+					showsVerticalScrollIndicator={false}
+					contentContainerStyle={{ flexGrow: 1 }}
+				>
+					<View
+						style={{
+							alignItems: 'center',
+							paddingTop: '12%',
+							paddingHorizontal: 24,
+							marginBottom: 24
+						}}
+					>
+						<Image source={renderText(status).image} style={{ width: widthView * .6, marginBottom: 53 }}
+							resizeMode="contain" />
 						<TBold color={colors.white} mb={24}>{renderText(status).title}</TBold>
 						<TLight color={colors.smoky}>{renderText(status).des}</TLight>
 					</View>
-
-					<View style={{flex: 1, width: widthView, justifyContent: 'flex-end', paddingBottom: 44}}>
-						{
-							renderText(status).titleBtn !== undefined &&
-							<LongButton
-									label={renderText(status).titleBtn}
-									style={{marginHorizontal: 24}}
-									onPress={() => this.props.navigateAction({...this.props, page: renderText(status).page})}
-							/>
-						}
-					</View>
-				</Screen>
+				</ScrollView>
+				{
+					renderText(status).titleBtn !== undefined &&
+					<LongButton
+						label={renderText(status).titleBtn}
+						style={{ marginHorizontal: 24, marginBottom: 24 }}
+						onPress={() => this.props.navigateAction({ ...this.props, page: renderText(status).page })}
+					/>
+				}
+			</Screen>
 		)
 	}
 }

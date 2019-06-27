@@ -31,6 +31,7 @@ export const getUser = gql`
           isChild
         }
         spouse{
+          nationality
           nationalityCode
           IDCardNo
           isIDCardExpDate
@@ -41,12 +42,15 @@ export const getUser = gql`
           pepFlag
         }
         career{
+          isic
           isicCode
           isicOther
+          occupation
           occupationCode
           occupationOther
           incomeRangeCode
           countrySourceOfIncome
+          countrySourceOfIncomeDetail
         }
         firstChild{
           ChildTitleTH
@@ -75,9 +79,12 @@ export const getUser = gql`
           investmentSourceOther
           investmentSourceCountry
           investmentPurpose
+          investmentPurposeOther
           dividendWithHoldingTax
+          investmentSourceCountryDetail
         }
         permanentAddress{
+          Country
           CountryCode
           AddressNoTH
           Moo
@@ -95,6 +102,7 @@ export const getUser = gql`
           CompanyName
         }
         workAddress{
+          Country
           CountryCode
           AddressNoTH
           Moo
@@ -112,6 +120,7 @@ export const getUser = gql`
           CompanyName
         }
         currentAddress{
+          Country
           CountryCode
           AddressNoTH
           Moo
@@ -129,6 +138,7 @@ export const getUser = gql`
           CompanyName
         }
         mailingAddress{
+          Country
           CountryCode
           AddressNoTH
           Moo
