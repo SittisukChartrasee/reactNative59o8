@@ -76,8 +76,8 @@ export default class extends React.Component {
   onNext = async () => {
 
     const data = {
-      hasLaunderingRecord: checkActiveData(this.props.user.fraud.choice).IS_TRUE,
-      isPolitician: checkActiveData(this.props.user.fraud.choice).IS_TRUE
+      hasLaunderingRecord: this.props.user.fraud.choice[0].answer === 0,
+      isPolitician: this.props.user.fraud.choice[0].answer === 0
     }
 
     if (!checkActiveData(this.props.user.fraud.choice).IS_INCORRECT) {
