@@ -132,7 +132,7 @@ export default class Demo extends Component {
         <SafeAreaView style={{ flex: 1 }}>
           {
             this.props.user.signature ?
-              <Image style={{ flex: 1, transform: [{ rotateX: '180deg' }] }} source={this.props.user.signature ? { uri: this.props.user.signature } : {}} />
+              <Image style={{ flex: 1 }} source={this.props.user.signature ? { uri: this.props.user.signature } : {}} />
             : (
               <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                 <View style={{ position: 'absolute', width: '70%' }}>
@@ -152,7 +152,6 @@ export default class Demo extends Component {
                     width: '100%',
                     height: '80%',
                     opacity: .5,
-                    transform: [{ rotateX: '180deg' }]
                   }}
                   ref={(ref) => { this.signature = ref }}
                   showBorder={false}
