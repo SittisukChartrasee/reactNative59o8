@@ -69,15 +69,15 @@ export default class extends React.Component {
     const fatca = this.props.fatcaReducer.fatca
 
     const data = {
-      isUSCitizen: checkActiveData(fatca).IS_TRUE,
-      isHoldingUsCard: checkActiveData(fatca).IS_TRUE,
-      isUSTaxPurposes: checkActiveData(fatca).IS_TRUE,
-      surrenderedUSCitizenship: checkActiveData(fatca).IS_TRUE,
-      transferFundsToAccountInUS: checkActiveData(fatca).IS_TRUE,
-      grantedToPersonWithUSAddress: checkActiveData(fatca).IS_TRUE,
-      mailOrCareOfAddressAccountOpenedKBank: checkActiveData(fatca).IS_TRUE,
-      currentOrMailingAddressAccountOpenedKbank: checkActiveData(fatca).IS_TRUE,
-      isUSPhoneNo: checkActiveData(fatca).IS_TRUE,
+      isUSCitizen: fatca[0].answer === 0,
+      isHoldingUsCard: fatca[1].answer === 0,
+      isUSTaxPurposes: fatca[2].answer === 0,
+      surrenderedUSCitizenship: fatca[3].answer === 0,
+      transferFundsToAccountInUS: fatca[4].answer === 0,
+      grantedToPersonWithUSAddress: fatca[5].answer === 0,
+      mailOrCareOfAddressAccountOpenedKBank: fatca[6].answer === 0,
+      currentOrMailingAddressAccountOpenedKbank: fatca[7].answer === 0,
+      isUSPhoneNo: fatca[8].answer === 0,
     }
 
     if (!checkActiveData(fatca).IS_INCORRECT) {
