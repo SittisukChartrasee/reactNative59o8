@@ -3,6 +3,7 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
+  ScrollView,
   Image
 } from 'react-native'
 import { bindActionCreators } from 'redux'
@@ -49,14 +50,17 @@ export default class extends React.Component {
           }
         />
 
-        <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
-          <View style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
-            <Image source={images.group3} style={{ height: heightView * .2 }} resizeMode="contain"  />
-            <TSemiBold fontSize={16} mt="5%" color={colors.white}>{`กรุณาเลือกธนาคารที่ท่าน\nต้องการใช้เป็นบัญชี`}</TSemiBold>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          <View style={{ alignItems: 'center', paddingTop: '12%', marginBottom: 24 }}>
+            <Image source={images.group3} style={{ height: heightView * .2 }} resizeMode="contain" />
+            <TSemiBold fontSize={16} mt="7%" mb="5%" color={colors.white}>{`กรุณาเลือกธนาคารที่ท่าน\nต้องการใช้เป็นบัญชี`}</TSemiBold>
 
-            <View style={{ marginHorizontal: 24, marginTop: '6%' }}>
+            <View style={{}}>
               <View style={{ flexDirection: 'row' }}>
-                <Image source={images.stroke1} style={{ marginTop: '3%' }} />
+                <Image source={images.stroke1} style={{ marginTop: '2%' }} />
                 <View style={{ paddingHorizontal: 16 }}>
                   <TLight fontSize={16} color={colors.smoky} textAlign="left">ชำระค่าซื้อกองทุนผ่าน K-My Funds</TLight>
                 </View>
@@ -75,18 +79,18 @@ export default class extends React.Component {
                   <TLight fontSize={16} color={colors.smoky} textAlign="left">รับเงินค่าขายคืนกองทุน</TLight>
                 </View>
               </View>
+
             </View>
           </View>
+        </ScrollView>
 
-
-          <View style={widthView <= 320 ? { width: widthView, marginBottom: 24 } : { width: widthView }}>
-            <TSemiBold fontSize={16} color={colors.sunflower} mt="9%">{`โดยชื่อบัญชีธนาคารจะต้องตรงกับ\nชื่อผู้ขอเปิดบัญชีกองทุนเท่านั้น`}</TSemiBold>
-            <LongButton
-              label="ตกลง"
-              style={{ marginHorizontal: 24 }}
-              onPress={() => this.props.navigateAction({ ...this.props, page: 'chooseBank' })}
-            />
-          </View>
+        <View style={{ width: widthView, marginBottom: 24 }}>
+          <TSemiBold fontSize={16} color={colors.sunflower} mt="2%">{`โดยชื่อบัญชีธนาคารจะต้องตรงกับ\nชื่อผู้ขอเปิดบัญชีกองทุนเท่านั้น`}</TSemiBold>
+          <LongButton
+            label="ตกลง"
+            style={{ marginHorizontal: 24 }}
+            onPress={() => this.props.navigateAction({ ...this.props, page: 'chooseBank' })}
+          />
         </View>
       </Screen>
     )

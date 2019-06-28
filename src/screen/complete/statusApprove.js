@@ -55,7 +55,8 @@ export default class extends React.Component {
   }
 
   render() {
-    const status = this.props.navigation.getParam('status', '')
+    // const status = this.props.navigation.getParam('status', '')
+    const status = this.props.status
     return (
       <Screen>
         <NavBar

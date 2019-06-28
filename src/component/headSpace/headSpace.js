@@ -15,14 +15,14 @@ export default ({
   labelBtn = "ลืมรหัสผ่าน",
   dis,
   dot,
-  forgetbtn,
-  onPrevPage=undefined,
+  forgetbtn = null,
+  onPrevPage = undefined,
   component = ({ dot }) => dotComponent({ dot })
 }) => (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 0.8, justifyContent: 'flex-end' }}>
         <View style={{ alignItems: 'flex-start', paddingTop: 60, marginLeft: 16 }}>
-          { onPrevPage &&
+          {onPrevPage &&
             <TouchableOpacity
               onPress={onPrevPage}
               style={{ paddingRight: 30 }}
@@ -34,24 +34,27 @@ export default ({
         <View
           style={{
             flex: 1,
-            justifyContent: 'center',
+            flexDirection: (forgetbtn ? 'column' : null),
+            justifyContent: (forgetbtn ? 'space-between' : 'center'),
             alignItems: 'center',
             borderBottomRightRadius: 8,
             borderBottomLeftRadius: 8,
           }}
         >
           <TSemiBold color={colors.white} fontSize={28}>{title}</TSemiBold>
-          {dis && <TLight color={colors.smoky} fontSize={16}>{dis}</TLight>}
+          {dis && <TLight
+            color={colors.smoky}
+            fontSize={16}
+            mb={32}
+          >
+            {dis}
+          </TLight>}
           {component({ dot })}
 
           {
             forgetbtn && typeof forgetbtn === 'function' && (
               <TouchableOpacity
                 onPress={forgetbtn}
-                style={{
-                  position: 'absolute',
-                  bottom: '5%',
-                }}
               >
                 <TSemiBold
                   style={{ textDecorationLine: 'underline', textDecorationColor: 'white' }}

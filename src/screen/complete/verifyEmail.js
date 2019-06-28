@@ -108,15 +108,26 @@ export default class extends React.Component {
 
 				<ScrollView
 					showsVerticalScrollIndicator={false}
+					contentContainerStyle={{ flexGrow: 1 }}
 				>
-					<View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
-						<Image source={images.iconVerifyEmail} style={{ width: widthView * .6 }} resizeMode="contain" />
-						<View>
+					<View style={{ flex: 1, alignItems: 'center', paddingTop: '12%', paddingHorizontal: 24 }}>
+						<Image source={images.iconVerifyEmail} style={{ width: widthView * .6, marginBottom: 53 }} resizeMode="contain" />
+						<View style={{ flex: 1 }}>
 							<TBold color={colors.white} mb={24}>กรุณายืนยันที่อยู่อีเมล</TBold>
 							<TLight
-								color={colors.white}>{`ระบบได้จัดส่งลิงก์ (Link) สำหรับยืนยันตัวตน\nไปยัง Email ของท่าน\n${email}\nกรุณาคลิกลิงก์ (Link) เพื่อดำเนินการต่อ`}</TLight>
+								mb={24}
+								color={colors.white}
+							>
+								{
+									widthView <= 320 ?
+										`ระบบได้จัดส่งลิงก์ (Link) สำหรับยืนยันตัวตนไปยัง Email ของท่าน\n${email}\nกรุณาคลิกลิงก์ (Link) เพื่อดำเนินการต่อ` :
+										`ระบบได้จัดส่งลิงก์ (Link) สำหรับยืนยันตัวตน\nไปยัง Email ของท่าน\n${email}\nกรุณาคลิกลิงก์ (Link) เพื่อดำเนินการต่อ`
+								}
+							</TLight>
+							<View style={{ flex: 1, justifyContent: 'flex-end', paddingBottom: 12 }}>
+								<TLight color={colors.white}>{`หากมีข้อสงสัยกรุณาติดต่อ\n02 673 3888 กด 1 และ กด 1`}</TLight>
+							</View>
 						</View>
-						<TLight color={colors.white}>{`หากมีข้อสงสัยกรุณาติดต่อ\n02 673 3888 กด 1 และ กด 1`}</TLight>
 					</View>
 				</ScrollView>
 

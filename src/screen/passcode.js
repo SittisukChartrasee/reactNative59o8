@@ -34,7 +34,9 @@ export default class extends React.Component {
         ...this.props,
         page: 'confirmPasscode'
       })
-      this.setState({ ...defaultPasscode, defaultKey: true })
+      setTimeout(() => {
+        this.setState({ ...defaultPasscode, defaultKey: true })
+      }, 300)
     }
   }
 

@@ -5,8 +5,10 @@ import {
   Dimensions,
   AsyncStorage,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  StyleSheet
 } from 'react-native'
+import LinearGradient from 'react-native-linear-gradient'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
@@ -22,7 +24,7 @@ import { requestOtp } from '../redux/actions/root-active'
 import { updateUser, root } from '../redux/actions/commonAction'
 import lockout from '../containers/hoc/lockout'
 import { NavBar } from '../component/gradient'
-import { replaceSpace, fontToLower, handleSizing } from '../utility/helper'
+import { replaceSpace, fontToLower, handleSizing, heightPercentageToDP } from '../utility/helper'
 
 // import * as validate from '../utility/validation'
 
@@ -108,7 +110,7 @@ export default class extends React.Component {
       id_card: replaceSpace(user.profile.idCard),
       email: fontToLower(user.contact.email),
       phone_no: replaceSpace(user.contact.mobilePhone),
-    }    
+    }
 
     this.props.requestOtp(data)
       .then(res => {
@@ -155,31 +157,42 @@ export default class extends React.Component {
           }
         />
         <KeyboardAwareScrollView
-          extraScrollHeight={Platform.OS === 'ios' ? -20 : -280}
-          enableOnAndroid
+          extraScrollHeight={Platform.OS === 'ios' ? -86 : -280}
           showsVerticalScrollIndicator={false}
+          enableAutomaticScroll
+          contentContainerStyle={{ flexGrow: 1 }}
         >
-          <View style={{ alignItems: 'center', height: handleSizing(heightScreen).top }}>
-            <Image source={images.kmyfundLogo} style={handleSizing(heightScreen).sizing} resizeMode="contain" />
-            <TBold fontSize={20} color={colors.white} mt="24" mb="40">{`กรุณากรอกข้อมูล\nเพื่อเปิดบัญชีกองทุน`}</TBold>
+          <View style={{ flex: 1 }}>
+            <View style={{ alignItems: 'center' }}>
+              <Image source={images.kmyfundLogo} style={handleSizing(heightScreen)} resizeMode="contain" />
+              <TBold fontSize={20} color={colors.white} mt="24" mb="40">{`กรุณากรอกข้อมูล\nเพื่อเปิดบัญชีกองทุน`}</TBold>
+            </View>
+            <View
+              style={{
+                flexGrow: 1,
+                justifyContent: 'flex-start',
+                backgroundColor: '#fff',
+                paddingBottom: 24,
+              }}>
+              {
+                fields.map((setField, key) => Input({
+                  ...setField,
+                  value: (setField.field === 'idCard')
+                    ? this.props.user.profile.idCard
+                    : this.props.user.contact[setField.field],
+                  handleInput: value => this.handleInput(value),
+                  err: this.onValidation(setField.field)
+                }, key))
+              }
+            </View>
           </View>
-          <View style={{ backgroundColor: '#fff', height: handleSizing(heightScreen).bottom }}>
-            {
-              fields.map((setField, key) => Input({
-                ...setField,
-                value: (setField.field === 'idCard')
-                  ? this.props.user.profile.idCard
-                  : this.props.user.contact[setField.field],
-                handleInput: value => this.handleInput(value),
-                err: this.onValidation(setField.field)
-              }, key))
-            }
-          </View>
-          <LongPositionButton label="ถัดไป" onPress={this.onNext} />
         </KeyboardAwareScrollView>
+        <LongPositionButton
+          label="ถัดไป"
+          onPress={this.onNext}
+        />
       </Screen>
     )
   }
 }
-
 

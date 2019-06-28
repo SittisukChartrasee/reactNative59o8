@@ -137,7 +137,7 @@ export default class extends React.Component {
 					nationFlag: val.data.getUser.result.spouse.nationalityCode === 'TH' ? 'ไทย' : 'ชาวต่างชาติ',
 					IDCardNo: val.data.getUser.result.spouse.nationalityCode === 'TH' ? formatIdCard(val.data.getUser.result.spouse.IDCardNo) : '',
 					marryPassport: val.data.getUser.result.spouse.nationalityCode === 'TH' ? '' : val.data.getUser.result.spouse.IDCardNo,
-					marryCountry: '', // ต้องให้ back ส่งมา
+					marryCountry: val.data.getUser.result.spouse.nationality,
 					nationalityCode: val.data.getUser.result.spouse.nationalityCode,
 					isIDCardExpDate: !val.data.getUser.result.spouse.isIDCardExpDate,
 					cardExpiredDate: val.data.getUser.result.spouse.isIDCardExpDate ? convertDate_reverse(spouseDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
@@ -194,30 +194,27 @@ export default class extends React.Component {
 						answer: val.data.getUser.result.fatca.isUSCitizen ? 0 : 1
 					}, {
 						...fatca[1],
-						answer: val.data.getUser.result.fatca.isUSCitizen ? 0 : 1,
-					}, {
-						...fatca[2],
 						answer: val.data.getUser.result.fatca.isHoldingUsCard ? 0 : 1,
 					}, {
-						...fatca[3],
+						...fatca[2],
 						answer: val.data.getUser.result.fatca.isUSTaxPurposes ? 0 : 1,
 					}, {
-						...fatca[4],
+						...fatca[3],
 						answer: val.data.getUser.result.fatca.surrenderedUSCitizenship ? 0 : 1,
 					}, {
-						...fatca[5],
+						...fatca[4],
 						answer: val.data.getUser.result.fatca.transferFundsToAccountInUS ? 0 : 1,
 					}, {
-						...fatca[6],
+						...fatca[5],
 						answer: val.data.getUser.result.fatca.grantedToPersonWithUSAddress ? 0 : 1,
 					}, {
-						...fatca[7],
+						...fatca[6],
 						answer: val.data.getUser.result.fatca.mailOrCareOfAddressAccountOpenedKBank ? 0 : 1,
 					}, {
-						...fatca[8],
+						...fatca[7],
 						answer: val.data.getUser.result.fatca.currentOrMailingAddressAccountOpenedKbank ? 0 : 1,
 					}, {
-						...fatca[9],
+						...fatca[8],
 						answer: val.data.getUser.result.fatca.isUSPhoneNo ? 0 : 1,
 					}
 				]
@@ -247,17 +244,6 @@ export default class extends React.Component {
 				}
 				this.props.updateUser('contact', data)
 			}
-
-			if (val.data.getUser.result.contact) {
-				const data = {
-					workPhone: val.data.getUser.result.contact.workPhone,
-					homePhone: val.data.getUser.result.contact.homePhone,
-					mobilePhone: val.data.getUser.result.contact.mobilePhone,
-					email: val.data.getUser.result.contact.email
-				}
-				this.props.updateUser('contact', data)
-			}
-
 
 			if (val.data.getUser.result.suitability) {
 				const { suittest } = this.props.suitReducer
@@ -310,6 +296,7 @@ export default class extends React.Component {
 
 			if (val.data.getUser.result.mailingAddress) {
 				const mailingAddress = {
+					country: val.data.getUser.result.mailingAddress.Country,
 					countryCode: val.data.getUser.result.mailingAddress.CountryCode,
 					addressNoTH: val.data.getUser.result.mailingAddress.AddressNoTH,
 					moo: val.data.getUser.result.mailingAddress.Moo,
@@ -330,6 +317,7 @@ export default class extends React.Component {
 
 			if (val.data.getUser.result.currentAddress) {
 				const currentAddress = {
+					country: val.data.getUser.result.currentAddress.Country,
 					countryCode: val.data.getUser.result.currentAddress.CountryCode,
 					addressNoTH: val.data.getUser.result.currentAddress.AddressNoTH,
 					moo: val.data.getUser.result.currentAddress.Moo,
@@ -350,6 +338,7 @@ export default class extends React.Component {
 
 			if (val.data.getUser.result.workAddress) {
 				const workAddress = {
+					country: val.data.getUser.result.workAddress.Country,
 					countryCode: val.data.getUser.result.workAddress.CountryCode,
 					addressNoTH: val.data.getUser.result.workAddress.AddressNoTH,
 					moo: val.data.getUser.result.workAddress.Moo,
@@ -371,6 +360,7 @@ export default class extends React.Component {
 
 			if (val.data.getUser.result.permanentAddress) {
 				const permanentAddress = {
+					country: val.data.getUser.result.permanentAddress.Country,
 					countryCode: val.data.getUser.result.permanentAddress.CountryCode,
 					addressNoTH: val.data.getUser.result.permanentAddress.AddressNoTH,
 					moo: val.data.getUser.result.permanentAddress.Moo,
@@ -393,22 +383,26 @@ export default class extends React.Component {
 				const sourceOfFund = {
 					investmentSource: val.data.getUser.result.sourceOfFund.investmentSource,
 					investmentSourceOther: val.data.getUser.result.sourceOfFund.investmentSourceOther,
-					investmentSourceCountry: val.data.getUser.result.sourceOfFund.investmentSourceCountry,
+					investmentSourceCountry: val.data.getUser.result.sourceOfFund.investmentSourceCountryDetail,
 					investmentPurpose: val.data.getUser.result.sourceOfFund.investmentPurpose,
 					investmentPurposeOther: val.data.getUser.result.sourceOfFund.investmentPurposeOther,
 					dividendWithHoldingTax: val.data.getUser.result.sourceOfFund.dividendWithHoldingTax,
+					nationalityCode: val.data.getUser.result.sourceOfFund.investmentSourceCountry
 				}
 				this.props.updateUser('sourceOfFund', sourceOfFund)
 			}
 
 			if (val.data.getUser.result.career) {
 				const career = {
+					busType: val.data.getUser.result.career.isic,
 					busTypeOther: val.data.getUser.result.career.isicOther,
-					busType: val.data.getUser.result.career.isicCode,
+					isicCode: val.data.getUser.result.career.isicCode,
+					occupation: val.data.getUser.result.career.occupation,
 					occupation_other: val.data.getUser.result.career.occupationOther,
-					occupation: val.data.getUser.result.career.occupationCode,
+					occupationCode: val.data.getUser.result.career.occupationCode,
 					incomeRangeCode: val.data.getUser.result.career.incomeRangeCode,
-					countrySourceOfIncome: val.data.getUser.result.career.countrySourceOfIncome,
+					countrySourceOfIncome: val.data.getUser.result.career.countrySourceOfIncomeDetail,
+					countyCode: val.data.getUser.result.career.countrySourceOfIncome,
 				}
 				this.props.updateUser('career', career)
 			}

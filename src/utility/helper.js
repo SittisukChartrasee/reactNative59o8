@@ -135,36 +135,24 @@ export const heightPercentageToDP = heightPercent => {
   return PixelRatio.roundToNearestPixel(screenHeight * elemHeight / 100)
 }
 
-const { width: widthScreen } = Dimensions.get('window')
-const { height: heightScreen } = Dimensions.get('window')
-
-export const handleSizing = () => {
+export const handleSizing = heightScreen => {
   let sizing = {}
-  let top = heightPercentageToDP('40%')
-  let bottom = heightPercentageToDP('40%')
   if (heightScreen <= 568) {
     sizing = { width: 128, height: 93 }
-    top = heightPercentageToDP('36%')
-    bottom = heightPercentageToDP('50%')
-  } else if (heightScreen <= 667 && Platform.OS === 'ios') { // iphone 6, 6s, 7, 7s
+  } else if (heightScreen <= 667) { // iphone 6, 6s, 7, 7s
     sizing = { width: 176, height: 128 }
-    top = heightPercentageToDP('38%')
-    bottom = heightPercentageToDP('42%')
-  } else if (heightScreen <= 736 && Platform.OS === 'ios') { // iphone 6 Plus, 6s Plus, 7 Plus, 7s Plus
-    top = heightPercentageToDP('38%')
-    bottom = heightPercentageToDP('43%')
-  } else if (heightScreen <= 726 && Platform.OS === 'android') {
-    top = heightPercentageToDP('37%')
-    bottom = heightPercentageToDP('47%')
-  } else if (heightScreen <= 799 && Platform.OS === 'android') {
-    top = heightPercentageToDP('35%')
-    bottom = heightPercentageToDP('46%')
-  } else if (heightScreen <= 812 && Platform.OS === 'ios') {
-    top = heightPercentageToDP('35%')
-    bottom = heightPercentageToDP('44%')
-  } else {
-    top = heightPercentageToDP('31%')
-    bottom = heightPercentageToDP('50%')
   }
-  return { sizing, top, bottom }
+  return sizing
+}
+
+export const handleFontSize = heightScreen => {
+  let sizeFont = { TLight: 16, TBold: 16, navBar: 28, margin: 16, }
+  if (heightScreen <= 568) {
+    sizeFont = { TLight: 12, TBold: 12, navBar: 20, margin: 6, }
+  } else if (heightScreen <= 667) {
+    sizeFont = { TLight: 14, TBold: 14, navBar: 24, margin: 10, }
+  } else {
+    sizeFont = { TLight: 16, TBold: 16, navBar: 28, margin: 16, }
+  }
+  return sizeFont
 }
