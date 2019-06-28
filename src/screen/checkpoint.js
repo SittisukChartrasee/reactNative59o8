@@ -42,17 +42,17 @@ export default class extends React.Component {
     checkPoint: [
       {
         point: 'ขั้นตอนที่ 1',
-        check: 'success',
+        check: 'current', //success
         text: 'ยืนยันตัวตน'
       },
       {
         point: 'ขั้นตอนที่ 2',
-        check: 'success',
+        check: 'future',
         text: 'กรอกข้อมูลส่วนตัว'
       },
       {
         point: 'ขั้นตอนที่ 3',
-        check: 'current',
+        check: 'future',
         text: 'เชื่อมบัญชีธนาคาร'
       },
       {

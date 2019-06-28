@@ -30,7 +30,7 @@ export default class extends React.Component {
         {
           this.state.value
             ? <Image source={images.iconCheck} style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: 'black' }} />
-            : <Image source={{}} style={{ width: 16, height: 16, borderRadius: 5, borderWidth: 1, borderColor: colors.smoky }} />
+            : <View style={{ width: 16, height: 16, borderRadius: 5, borderWidth: 1, borderColor: colors.smoky }} />
         }
       </TouchableOpacity>
     )

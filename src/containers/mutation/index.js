@@ -323,7 +323,9 @@ export default compose(
   graphql(saveMailingAddress, { name: 'saveMailingAddress' }),
   graphql(saveSuittest, { name: 'saveSuittest' }),
   graphql(acceptTerm, { name: 'acceptTerm' }),
-  graphql(registerBank, { name: 'registerBank' }),
+  graphql(registerBank, { name: 'registerBank' }, {
+    options: { fetchPolicy: 'no-cache' },
+  }),
   graphql(saveSanction, { name: 'saveSanction' }),
   graphql(updateRegisterBankStatus, { name: 'updateRegisterBankStatus' }),
   graphql(saveWaitingApprove, { name: 'saveWaitingApprove' }),

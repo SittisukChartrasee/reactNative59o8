@@ -82,7 +82,7 @@ const checkBox = (onHandleOnpress, inx, answer, disabledChoice) => (title, key) 
     {
       title.select
         ? <Image source={images.iconCheck} style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: 'red', marginRight: 24 }} />
-        : <Image source={{}} style={{ width: 16, height: 16, borderRadius: 5, borderWidth: 1, borderColor: colors.grey, marginRight: 24 }} />
+        : <View style={{ width: 16, height: 16, borderRadius: 5, borderWidth: 1, borderColor: colors.grey, marginRight: 24 }} />
     }
     <View style={{ flex: 1, marginVertical: 15 }}>
       <TLight fontSize={16} textAlign="left">{title.label}</TLight>
