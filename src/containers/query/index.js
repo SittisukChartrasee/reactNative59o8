@@ -315,6 +315,6 @@ export const checkVerifiedEmailInterval = graphql(checkVerifiedEmail, {
 export default graphql(getRegisterBankStatus, {
   name: 'getRegisterBankStatus',
   options: {
-    pollInterval: 5000,
+    pollInterval: 3000,
   }
 })
