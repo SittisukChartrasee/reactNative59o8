@@ -194,30 +194,27 @@ export default class extends React.Component {
 						answer: val.data.getUser.result.fatca.isUSCitizen ? 0 : 1
 					}, {
 						...fatca[1],
-						answer: val.data.getUser.result.fatca.isUSCitizen ? 0 : 1,
-					}, {
-						...fatca[2],
 						answer: val.data.getUser.result.fatca.isHoldingUsCard ? 0 : 1,
 					}, {
-						...fatca[3],
+						...fatca[2],
 						answer: val.data.getUser.result.fatca.isUSTaxPurposes ? 0 : 1,
 					}, {
-						...fatca[4],
+						...fatca[3],
 						answer: val.data.getUser.result.fatca.surrenderedUSCitizenship ? 0 : 1,
 					}, {
-						...fatca[5],
+						...fatca[4],
 						answer: val.data.getUser.result.fatca.transferFundsToAccountInUS ? 0 : 1,
 					}, {
-						...fatca[6],
+						...fatca[5],
 						answer: val.data.getUser.result.fatca.grantedToPersonWithUSAddress ? 0 : 1,
 					}, {
-						...fatca[7],
+						...fatca[6],
 						answer: val.data.getUser.result.fatca.mailOrCareOfAddressAccountOpenedKBank ? 0 : 1,
 					}, {
-						...fatca[8],
+						...fatca[7],
 						answer: val.data.getUser.result.fatca.currentOrMailingAddressAccountOpenedKbank ? 0 : 1,
 					}, {
-						...fatca[9],
+						...fatca[8],
 						answer: val.data.getUser.result.fatca.isUSPhoneNo ? 0 : 1,
 					}
 				]
