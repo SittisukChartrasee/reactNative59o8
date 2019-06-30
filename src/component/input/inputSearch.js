@@ -116,7 +116,7 @@ export default class extends React.Component {
   onHandleOnPress = async data => {
     const { field, user, onHandleDistrict } = this.props
     this.setState({ open: false, confirmText: data.nameTH, text: data.nameTH })
-    
+
     await this.props.handleInput && this.props.handleInput({
       type: 'SEARCH',
       field,
@@ -133,7 +133,7 @@ export default class extends React.Component {
       )
     }
 
-    if (data.nameTH.indexOf('อื่นๆ') > 0) { // check ผิดรึปล่าว
+    if (data.nameTH.indexOf('อื่นๆ') > -1) { // check ผิดรึปล่าว
       this.props.handleInput && this.props.handleInput({
         type: 'textInput',
         field: `${field}_other`,
@@ -167,12 +167,14 @@ export default class extends React.Component {
         </TouchableOpacity>
 
         {
-          this.state.text.indexOf('อื่นๆ') > -1 &&
+          (value.indexOf('อื่นๆ') > -1 || this.state.text.indexOf('อื่นๆ') > -1) &&
           Input({
             label: 'อื่นๆ (โปรดระบุ)',
             type: 'textInput',
             field: `${field}_other`,
+            value: this.props.valueOther,
             handleInput: value => handleInput({ value, type: 'textInput', field: `${field}_other` }),
+            err: this.props.err,
             style: { paddingHorizontal: 0, marginTop: -20 },
           })
         }

@@ -395,7 +395,7 @@ export default class extends React.Component {
 			if (val.data.getUser.result.career) {
 				const career = {
 					busType: val.data.getUser.result.career.isic,
-					busTypeOther: val.data.getUser.result.career.isicOther,
+					busType_other: val.data.getUser.result.career.isicOther,
 					isicCode: val.data.getUser.result.career.isicCode,
 					occupation: val.data.getUser.result.career.occupation,
 					occupation_other: val.data.getUser.result.career.occupationOther,
