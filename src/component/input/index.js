@@ -30,14 +30,14 @@ export default (props, key) => {
   switch (props.type) {
     case 'mask':
       return (
-        <View key={key} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
+        <View key={key} onLayout={val => props.onSetLayout(val.nativeEvent)} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
           <Imask key={key} {...props} />
           {props.required ? <Star /> : null}
         </View>
       )
     case 'dropdown':
       return (
-        <View key={key} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
+        <View key={key} onLayout={val => props.onSetLayout(val.nativeEvent)} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
           <Idown {...props} />
           {props.required ? <Star /> : null}
         </View>
@@ -45,7 +45,7 @@ export default (props, key) => {
 
     case 'textInput':
       return (
-        <View key={key} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex', ...props.style }}>
+        <View key={key} onLayout={val => props.onSetLayout(val.nativeEvent)} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex', ...props.style }}>
           <Imaterial {...props} />
           {props.required ? <Star /> : null}
         </View>
@@ -53,7 +53,7 @@ export default (props, key) => {
 
     case 'Icustom':
       return (
-        <View key={key} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
+        <View key={key} onLayout={val => props.onSetLayout(val.nativeEvent)} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
           <Input {...props} />
           {props.required ? <Star /> : null}
         </View>
@@ -61,7 +61,7 @@ export default (props, key) => {
 
     case 'radio':
       return (
-        <View key={key} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
+        <View key={key} onLayout={val => props.onSetLayout(val.nativeEvent)} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
           <Iradio key={key} {...props} />
           {props.required ? <Star /> : null}
         </View>
@@ -69,7 +69,7 @@ export default (props, key) => {
 
     case 'radioColumn':
       return (
-        <View key={key} style={{ marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
+        <View key={key} onLayout={val => props.onSetLayout(val.nativeEvent)} style={{ marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
           <IradioColumn {...props} />
           {props.required ? <Star /> : null}
         </View>
@@ -77,7 +77,7 @@ export default (props, key) => {
 
     case 'search':
       return (
-        <View key={key} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
+        <View key={key} onLayout={val => props.onSetLayout(val.nativeEvent)} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
           <TLight fontSize="14" mt="13" textAlign="left" color={props.err ? 'rgb(213, 0, 0)' : colors.grey}>{props.label}</TLight>
           <InputSearch {...props} />
           {props.required ? <Star top={8} /> : null}
@@ -87,7 +87,7 @@ export default (props, key) => {
 
     case 'dateExpire':
       return (
-        <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
+        <View key={key} onLayout={val => props.onSetLayout(val.nativeEvent)} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
           <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={props.err ? 'rgb(213, 0, 0)' : colors.grey}>{props.label}</TLight>
           <InputPickerExpire {...props} />
           {props.required ? <Star top={8} /> : null}
@@ -96,7 +96,7 @@ export default (props, key) => {
 
     case 'ymd':
       return (
-        <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
+        <View key={key} onLayout={val => props.onSetLayout(val.nativeEvent)} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
           <InputPicker label={props.label} {...props} />
           {props.required ? <Star /> : null}
         </View>
@@ -104,28 +104,28 @@ export default (props, key) => {
 
     case 'buttonCard':
       return (
-        <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
+        <View key={key} onLayout={val => props.onSetLayout(val.nativeEvent)} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
           <ButtonCard {...props} />
         </View>
       )
 
     case 'selectCard':
       return (
-        <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
+        <View key={key} onLayout={val => props.onSetLayout(val.nativeEvent)} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
           <SelectCard {...props} />
         </View>
       )
 
     case 'linkCard':
       return (
-        <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
+        <View key={key} onLayout={val => props.onSetLayout(val.nativeEvent)} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
           <LinkCard {...props} />
         </View>
       )
 
     case 'titleHead':
       return (
-        <View key={key} style={{ marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
+        <View key={key} onLayout={val => props.onSetLayout(val.nativeEvent)} style={{ marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
           <View style={{ backgroundColor: colors.lightgrey, paddingHorizontal: 24, paddingVertical: 16, flexDirection: 'row', justifyContent: 'space-between' }}>
             <TBold textAlign="left">{props.label}</TBold>
             <TouchableOpacity
@@ -140,7 +140,7 @@ export default (props, key) => {
 
     case 'modal':
       return (
-        <View key={key} style={{ paddingHorizontal: 24, marginTop: 10, display: props.inVisible ? 'none' : 'flex' }}>
+        <View key={key} onLayout={val => props.onSetLayout(val.nativeEvent)} style={{ paddingHorizontal: 24, marginTop: 10, display: props.inVisible ? 'none' : 'flex' }}>
           <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={props.err ? 'rgb(213, 0, 0)' : colors.grey}>{props.label}</TLight>
           <InputModal {...props} />
           {props.required ? <Star /> : null}
@@ -150,7 +150,7 @@ export default (props, key) => {
 
     default:
       return (
-        <View key={key} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
+        <View key={key} onLayout={val => props.onSetLayout(val.nativeEvent)} style={{ paddingHorizontal: 24, marginTop: 16, display: props.inVisible ? 'none' : 'flex' }}>
           <TLight fontSize="14" mb="10" mt="10" textAlign="left" color={colors.grey}>{props.label}</TLight>
           <TBold textAlign="left" color={colors.midnight}>{props.value || ''}</TBold>
           {props.required ? <Star /> : null}

@@ -43,6 +43,7 @@ export default class extends React.Component {
     expireSatus: 'มีวันหมดอายุ',
     PreconditionRequired: [],
     InvalidArgument: [],
+    layout: [],
     fields: [
       {
         label: 'เลขบัตรประชาชน',
@@ -238,7 +239,7 @@ export default class extends React.Component {
       martialStatus,
     } = user.profile
 
-    console.log(birthDay)
+    // console.log(PreconditionRequired, InvalidArgument)
 
     const data = {
       docNo: replaceSpace(idCard),
@@ -259,11 +260,11 @@ export default class extends React.Component {
       martialStatusCode: getStatusMartial(martialStatus),
     }
 
-    console.log(data)
+    // console.log(data)
 
     this.props.saveIdentity({ variables: { input: data } })
       .then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.data.saveIdentity.success) {
           if (martialStatus === 'สมรส' && isChild === 'มี') {
             this.props.navigateAction({ ...this.props, page: 'marry', params: { redirec: 'child' } })
@@ -273,6 +274,7 @@ export default class extends React.Component {
           else if (isChild === 'มี') this.props.navigateAction({ ...this.props, page: 'child' })
 
         } else if (!res.data.saveIdentity.success) {
+          this.onHandleScrollToErrorField(res.data.saveIdentity.details)
           switch (res.data.saveIdentity.message) {
             case 'PreconditionRequired':
               return this.setState({ PreconditionRequired: res.data.saveIdentity.details })
@@ -292,6 +294,22 @@ export default class extends React.Component {
       .catch(err => {
         console.log(err.toString())
       })
+  }
+
+  onHandleScrollToErrorField = (field) => {
+    const errField = field.map(d => d.field)
+    this.state.fields.map((d, index) => {
+      if (errField.indexOf(d.field) > -1) {
+        this.refScrollView.scrollToPosition(0, this.state.layout[index], true)
+      }
+    })
+  }
+
+  onSetLayout = (layoutY, index) => {
+    const { layout } = this.state
+    const newArray = layout
+    newArray[index] = layoutY
+    this.setState({ layout: [...newArray] })
   }
 
   render() {
@@ -323,6 +341,7 @@ export default class extends React.Component {
           enableOnAndroid
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
+          ref={ref => { this.refScrollView = ref }}
         >
           {
             this.state.fields.map((d, key) => Input({
@@ -335,6 +354,7 @@ export default class extends React.Component {
               inVisible: d.inVisible,
               date: d.date,
               option: d.option,
+              onSetLayout: val => this.onSetLayout(val.layout.y, key),
               handleInput: (props) => this.handleInput(props),
               err: this.onValidation(d.field)
             }, key))
