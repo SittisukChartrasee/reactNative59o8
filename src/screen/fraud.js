@@ -77,7 +77,7 @@ export default class extends React.Component {
 
     const data = {
       hasLaunderingRecord: this.props.user.fraud.choice[0].answer === 0,
-      isPolitician: this.props.user.fraud.choice[0].answer === 0
+      isPolitician: this.props.user.fraud.choice[1].answer === 0
     }
 
     if (!checkActiveData(this.props.user.fraud.choice).IS_INCORRECT) {
