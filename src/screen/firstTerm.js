@@ -48,9 +48,9 @@ export default class extends React.Component {
   }
 
   render() {
-    console.log(NativeModules)
-    console.log(NativeModules.PlatformConstants.getConstants())
-    console.log(DeviceInfo.getDeviceId(), DeviceInfo.getSystemVersion())
+    // console.log(NativeModules)
+    // console.log(NativeModules.PlatformConstants.getConstants())
+    // console.log(DeviceInfo.getDeviceId(), DeviceInfo.getSystemVersion())
     return (
       <Screen>
         <NavBar

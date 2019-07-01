@@ -133,6 +133,11 @@ export default class extends React.Component {
       })
   }
 
+  onSubmitFirstName = (field) => {
+    const arr = ['idCard', 'email', 'mobilePhone']
+    if (this[arr[arr.indexOf(field) + 1]]) this[arr[arr.indexOf(field) + 1]].focus()
+  }
+
   render() {
     return (
       <Screen>
@@ -157,7 +162,8 @@ export default class extends React.Component {
           }
         />
         <KeyboardAwareScrollView
-          extraScrollHeight={Platform.OS === 'ios' ? -86 : -280}
+          // extraScrollHeight={Platform.OS === 'ios' ? -86 : -280}
+          extraHeight={100}
           showsVerticalScrollIndicator={false}
           enableAutomaticScroll
           contentContainerStyle={{ flexGrow: 1 }}
@@ -175,14 +181,19 @@ export default class extends React.Component {
                 paddingBottom: 24,
               }}>
               {
-                fields.map((setField, key) => Input({
-                  ...setField,
-                  value: (setField.field === 'idCard')
-                    ? this.props.user.profile.idCard
-                    : this.props.user.contact[setField.field],
-                  handleInput: value => this.handleInput(value),
-                  err: this.onValidation(setField.field)
-                }, key))
+                fields.map((setField, key) =>
+                  Input({
+                    ...setField,
+                    refFunc: ref => { this[setField.field] = ref }, 
+                    value: (setField.field === 'idCard')
+                      ? this.props.user.profile.idCard
+                      : this.props.user.contact[setField.field],
+                    handleInput: value => this.handleInput(value),
+                    err: this.onValidation(setField.field),
+                    returnKeyType: setField.field === 'mobilePhone' ? 'done' : 'next',
+                    onSubmitEditing: () => this.onSubmitFirstName(setField.field),
+                  }, key)
+                )
               }
             </View>
           </View>

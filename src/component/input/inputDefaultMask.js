@@ -61,6 +61,9 @@ export default class extends React.Component {
         }}
         customTextInput={TextField}
         customTextInputProps={{
+          ref: ref => ref && this.props.refFunc && this.props.refFunc(ref),
+          returnKeyType: this.props.returnKeyType,
+          onSubmitEditing: this.props.onSubmitEditing,
           label,
           error: err,
           value,
@@ -92,26 +95,3 @@ export default class extends React.Component {
     )
   }
 }
-
-// const {
-//   value, maskingOptions, type, fs, editable, placeholder, valifie,
-// } = this.props
-// const extendedMaskingOptions = {
-//   precision: 0, delimiter: ',', separator: '.', ...maskingOptions,
-// }
-
-// fs={fs}
-// style={Platform.OS === 'android' && { borderBottomColor: 'white' }}
-// innerRef={(ref) => { this.myDateText = ref }}
-// editable={editable}
-// type={type}
-// value={value}
-// checkField={valifie ? (value.length === 13 && value.length > 13) : true}
-// options={extendedMaskingOptions}
-// value={value}
-// onChangeText={this.handleInputInput}
-// placeholder={placeholder}
-// autoCorrect={false}
-// autoComplete="off"
-// autoCapitalize="none"
-// {...this.props}
