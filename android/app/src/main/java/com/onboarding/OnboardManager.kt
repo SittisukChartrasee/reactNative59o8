@@ -16,20 +16,19 @@ import java.util.HashMap
 class OnboardManager(private val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
     companion object {
         private const val prefKey = "APP_SHARE_PREFERENCE"
-        const val KEY_USER_FLAG = "ob_flag"
         private const val STATUS_APPROVE_KEY = "STATUS_APPROVE"
         private const val STATUS_NEW_CUSTOMER_KEY = "STATUS_NEW_CUSTOMER"
+
         const val STATUS_APPROVE = "approve"
         const val STATUS_NEW_CUSTOMER = "new_customer"
+        const val KEY_USER_FLAG = "ob_flag"
+        const val KEY_ACCESS_TOKEN = "ob_access_token"
+        const val KEY_FCM = "ob_FCM"
+        const val KEY_VERSION = "ob_version"
     }
 
     private val sharedPref: SharedPreferences by lazy {
         reactContext.getSharedPreferences(prefKey, Context.MODE_PRIVATE)
-    }
-
-    @ReactMethod
-    fun show(message: String, duration: Int) {
-        Toast.makeText(reactApplicationContext, message, duration).show()
     }
 
     override fun getConstants(): MutableMap<String, Any> {
@@ -37,6 +36,11 @@ class OnboardManager(private val reactContext: ReactApplicationContext) : ReactC
         constants[STATUS_APPROVE_KEY] = STATUS_APPROVE
         constants[STATUS_NEW_CUSTOMER_KEY] = STATUS_NEW_CUSTOMER
         return constants
+    }
+
+    @ReactMethod
+    fun show(message: String, duration: Int) {
+        Toast.makeText(reactApplicationContext, message, duration).show()
     }
 
     @ReactMethod
@@ -53,14 +57,36 @@ class OnboardManager(private val reactContext: ReactApplicationContext) : ReactC
 
     @ReactMethod
     fun saveUserToken(token: String) {
-        saveStringToPref("tokenKey", token)
+        saveStringToPref(KEY_ACCESS_TOKEN, token)
 //        TokenManager.saveStringToken(token)
     }
 
     @ReactMethod
     fun getUserToken(callback: Callback) {
-        val stringFromPref = getStringFromPref("tokenKey")
+        val stringFromPref = getStringFromPref(KEY_ACCESS_TOKEN)
+        callback.invoke(stringFromPref ?: "")
 //        val stringFromPref = TokenManager.getStringToken()
+    }
+
+    @ReactMethod
+    fun saveVersionAppKMyFunds(version: String) {
+        saveStringToPref(KEY_VERSION, version)
+    }
+    
+    @ReactMethod
+    fun getVersionAppKMyFunds(callback: Callback) {
+        val stringFromPref = getStringFromPref(KEY_VERSION)
+        callback.invoke(stringFromPref ?: "")
+    }
+
+    @ReactMethod
+    fun saveFCMToken(token: String) {
+        saveStringToPref(KEY_FCM, token)
+    }
+
+    @ReactMethod
+    fun getFCMToken(callback: Callback) {
+        val stringFromPref = getStringFromPref(KEY_FCM)
         callback.invoke(stringFromPref ?: "")
     }
 
