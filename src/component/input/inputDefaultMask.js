@@ -64,6 +64,7 @@ export default class extends React.Component {
           ref: ref => ref && this.props.refFunc && this.props.refFunc(ref),
           returnKeyType: this.props.returnKeyType,
           onSubmitEditing: this.props.onSubmitEditing,
+          keyboardType: this.props.keyboardType || 'default',
           label,
           error: err,
           value,
