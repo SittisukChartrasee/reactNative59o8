@@ -56,15 +56,15 @@ export default class Demo extends Component {
     if (this.state.dragged) {
       this.signature.resetImage()
       this.setState({ dragged: null })
-      this.props.updateUser('signature', '' )
-  } else {
-      this.props.updateUser('signature', '' )
+      this.props.updateUser('signature', '')
+    } else {
+      this.props.updateUser('signature', '')
     }
   }
 
   _onSaveEvent = async result => {
     const token = await AsyncStorage.getItem("access_token")
-    this.props.updateUser('signature', `data:image/png;base64,${result.encoded}` )
+    this.props.updateUser('signature', `data:image/png;base64,${result.encoded}`)
 
     const data = new FormData()
     data.append('file', {
@@ -133,38 +133,38 @@ export default class Demo extends Component {
           {
             this.props.user.signature ?
               <Image style={{ flex: 1 }} source={this.props.user.signature ? { uri: this.props.user.signature } : {}} />
-            : (
-              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                <View style={{ position: 'absolute', width: '70%' }}>
-                  <View style={{ alignItems: 'center', opacity: this.state.dragged === null ? 1 : 0 }}>
-                    <Image source={images.iconsign} />
-                    <TLight color={colors.smoky} fontSize={14} mt={15}>เซ็นลายเซ็นของคุณที่นี่</TLight>
+              : (
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                  <View style={{ position: 'absolute', width: '70%' }}>
+                    <View style={{ alignItems: 'center', opacity: this.state.dragged === null ? 1 : 0 }}>
+                      <Image source={images.iconsign} />
+                      <TLight color={colors.smoky} fontSize={14} mt={15}>เซ็นลายเซ็นของคุณที่นี่</TLight>
+                    </View>
+                    <View style={{ justifyContent: 'center' }}>
+                      <Image source={images.iconlinepath} style={{ width: '100%' }} resizeMode="contain" />
+                    </View>
                   </View>
-                  <View style={{ justifyContent: 'center' }}>
-                    <Image source={images.iconlinepath} style={{ width: '100%' }} resizeMode="contain" />
-                  </View>
+
+
+                  <SignatureCapture
+                    onTouchStart={e => this.setState({ dragged: !!e.nativeEvent })}
+                    style={{
+                      width: '100%',
+                      height: '80%',
+                      opacity: .5,
+                    }}
+                    ref={(ref) => { this.signature = ref }}
+                    showBorder={false}
+                    saveImageFileInExtStorage
+                    onSaveEvent={this._onSaveEvent}
+                    showNativeButtons={false}
+                    showTitleLabel={false}
+                    viewMode="portrait"
+                  />
                 </View>
-
-
-                <SignatureCapture
-                  onTouchStart={e => this.setState({ dragged: !!e.nativeEvent })}
-                  style={{
-                    width: '100%',
-                    height: '80%',
-                    opacity: .5,
-                  }}
-                  ref={(ref) => { this.signature = ref }}
-                  showBorder={false}
-                  saveImageFileInExtStorage
-                  onSaveEvent={this._onSaveEvent}
-                  showNativeButtons={false}
-                  showTitleLabel={false}
-                  viewMode="portrait"
-                />
-              </View>
-            )
+              )
           }
-          
+
 
 
           <View style={{ flexDirection: "row", marginHorizontal: 20 }}>
@@ -172,9 +172,18 @@ export default class Demo extends Component {
               <TBold fontSize={16} color={colors.grey}>ล้าง</TBold>
             </TouchableOpacity>
 
-            <TouchableOpacity disabled={!this.state.dragged} style={[styles.buttonStyle, this.state.dragged && { backgroundColor: colors.emerald }]} onPress={() => this.saveSign()}>
-              <TBold fontSize={16} color={colors.white}>ยืนยัน</TBold>
-            </TouchableOpacity>
+            {
+              this.props.user.signature ? (
+                <TouchableOpacity style={[styles.buttonStyle, this.props.user.signature && { backgroundColor: colors.emerald }]} onPress={() => this.props.navigateAction({ ...this.props, page: 'fatca' })}>
+                  <TBold fontSize={16} color={colors.white}>ยืนยัน</TBold>
+                </TouchableOpacity>
+              ) : (
+                  <TouchableOpacity disabled={!this.state.dragged} style={[styles.buttonStyle, this.state.dragged && { backgroundColor: colors.emerald }]} onPress={() => this.saveSign()}>
+                    <TBold fontSize={16} color={colors.white}>ยืนยัน</TBold>
+                  </TouchableOpacity>
+                )
+            }
+
           </View>
         </SafeAreaView>
       </Screen>

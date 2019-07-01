@@ -15,14 +15,14 @@ const secToMinute = ({ minutes, seconds }) => `${minutes.toString().padStart(2, 
 const { height: heightScreen } = Dimensions.get('window')
 
 
-  let sizeFont = { TLight: 16, TBold: 16, navBar: 28, margin: 16, }
-  if (heightScreen <= 568) {
-    sizeFont = { TLight: 12, TBold: 12, navBar: 20, margin: 6, }
-  } else if (heightScreen <= 667) {
-    sizeFont = { TLight: 14, TBold: 14, navBar: 24, margin: 10, }
-  } else {
-    sizeFont = { TLight: 16, TBold: 16, navBar: 28, margin: 16, }
-  }
+let sizeFont = { TLight: 16, TBold: 16, navBar: 28, margin: 16, }
+if (heightScreen <= 568) {
+  sizeFont = { TLight: 12, TBold: 12, navBar: 20, margin: 6, }
+} else if (heightScreen <= 667) {
+  sizeFont = { TLight: 14, TBold: 14, navBar: 24, margin: 10, }
+} else {
+  sizeFont = { TLight: 16, TBold: 16, navBar: 28, margin: 16, }
+}
 
 export default class extends React.Component {
   static defaultProps = {
@@ -165,7 +165,7 @@ export default class extends React.Component {
         </View>
 
         <View style={{ flex: 1, paddingHorizontal: 24, paddingTop: 5, backgroundColor: colors.white }}>
-          <TLight fontSize={sizeFont.TLight} color={colors.grey}>{`กรุณากรอกรหัสผ่านแบบใช้ครั้งเดียว ( SMS OTP)\nที่ได้รับทาง SMS บนมือถือของท่าน\n(รหัส OTP มีอายุการใช้งาน 3 นาที)`}</TLight>
+          <TLight fontSize={sizeFont.TLight} color={colors.grey}>{`กรุณากรอกรหัสผ่านแบบใช้ครั้งเดียว ( SMS OTP)\nที่ได้รับทาง SMS บนมือถือของท่าน\n(รหัส OTP มีอายุการใช้งาน ${this.props.details} นาที)`}</TLight>
           <TBold color={colors.emerald} fontSize={sizeFont.TBold} mt={sizeFont.margin}>รหัสอ้างอิง : {refNo}</TBold>
 
           <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 10 }}>

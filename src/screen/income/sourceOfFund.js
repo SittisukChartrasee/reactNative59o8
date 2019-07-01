@@ -44,24 +44,31 @@ export default class extends React.Component {
           {
             label: 'เงินเดือน',
             type: 'select',
+            active: false,
           }, {
             label: 'มรดก',
             type: 'select',
+            active: false,
           }, {
             label: 'เงินออม',
             type: 'select',
+            active: false,
           }, {
             label: 'การลงทุน',
             type: 'select',
+            active: false,
           }, {
             label: 'เงินเกษียณ',
             type: 'select',
+            active: false,
           }, {
             label: 'ประกอบธุรกิจ',
             type: 'select',
+            active: false,
           }, {
             label: 'อื่นๆ',
             type: 'select',
+            active: false,
             field: 'investmentSourceOther',
           }
         ]
@@ -80,24 +87,30 @@ export default class extends React.Component {
           {
             label: "เงินเดือน",
             type: 'select',
+            active: false,
           }, {
             label: "เงินออม",
             type: 'select',
+            active: false,
           }, {
             label: "เงินเกษียณ",
             type: 'select',
+            active: false,
           }, {
             label: "มรดก",
             type: 'select',
+            active: false,
           }, {
             label: "การลงทุน",
             type: 'select',
           }, {
             label: "ประกอบธุรกิจ",
             type: 'select',
+            active: false,
           }, {
             label: "อื่นๆ",
             type: 'select',
+            active: false,
             field: 'investmentPurposeOther',
           }
         ]
@@ -113,12 +126,32 @@ export default class extends React.Component {
       // },
     ]
   }
+  componentDidMount = () => {
+    this.setState({
+      fields: this.state.fields.map(d => {
+        if (d.field === 'investmentSource') {
+          const init = d.init.map(k => { return { ...k, active: this.props.user.sourceOfFund.investmentSource.indexOf(k.label) !== -1 ? true : false } })
+          return { ...d, init: init }
+        } else if (d.field === 'investmentPurpose') {
+          const init = d.init.map(k => { return { ...k, active: this.props.user.sourceOfFund.investmentPurpose.includes(k.label) } })
+          return { ...d, init: init }
+        } else return { ...d }
+      })
+    })
+  }
 
   handleInput = (props) => {
     const { user } = this.props
     if (props.field === 'investmentSource') {
       const arr = props.data.split(',')
       this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: arr, investmentSourceOther: props.otherField })
+      this.setState({
+        fields: this.state.fields.map(d => {
+          if (d.field === 'investmentSource') {
+            return { ...d, init: props.result }
+          } else return { ...d }
+        })
+      })
     } else if (props.field === 'investmentSourceCountry') {
       this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value, nationalityCode: props.code })
     }
@@ -129,6 +162,13 @@ export default class extends React.Component {
     // } 
     else if (props.field === 'investmentPurpose') {
       this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.data, investmentPurposeOther: props.otherField })
+      this.setState({
+        fields: this.state.fields.map(d => {
+          if (d.field === 'investmentPurpose') {
+            return { ...d, init: props.result }
+          } else return { ...d }
+        })
+      })
     } else {
       this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value })
     }
@@ -244,6 +284,10 @@ export default class extends React.Component {
               required: d.required,
               init: d.init,
               value: user.sourceOfFund[d.field],
+              otherField: (user.sourceOfFund[`${d.field}Other`])
+                ? user.sourceOfFund[`${d.field}Other`]
+                : null
+              ,
               inVisible: d.inVisible,
               handleInput: (props) => this.handleInput(props),
               err: this.onValidation(d.field),

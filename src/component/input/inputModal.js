@@ -28,6 +28,7 @@ import { Select } from '../../component/cardSelect'
 export default class extends React.Component {
   static defaultProps = {
     value: '',
+    otherField: '',
     init: [
       {
         label: 'เงินเดือน',
@@ -62,7 +63,7 @@ export default class extends React.Component {
     open: false,
     fields: this.props.init,
     data: this.props.value.toString(),
-    otherField: 'A',
+    otherField: this.props.otherField,
   }
 
   handleOnpress = (val) => {
@@ -70,7 +71,7 @@ export default class extends React.Component {
     const { handleInput, field } = this.props
     if (val.label === 'อื่นๆ') this.setState({ otherField: val.value })
 
-    const result = fields.map((d) => {
+    const result = this.props.init.map((d) => {
       if (d.label === val.label && !val.active) {
         return { ...d, active: true }
       } else if (d.label === val.label && val.active) {
@@ -86,6 +87,7 @@ export default class extends React.Component {
 
     handleInput({
       field,
+      result,
       otherField: val.label === 'อื่นๆ' && val.value ? val.value : '',
       data: data.toString(),
       type: 'MODAL'
@@ -131,12 +133,12 @@ export default class extends React.Component {
               >
                 <View style={{ flex: 1, backgroundColor: colors.white }}>
                   {
-                    this.state.fields.map(
+                    this.props.init.map(
                       (d, k) => Select({
                         ...d,
                         handleInput: this.handleOnpress,
-                        value: this.state.otherField,
-                        labelOther
+                        value: this.props.otherField,
+                        labelOther: this.props.labelOther
                       }, k)
                     )
                   }

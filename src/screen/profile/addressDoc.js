@@ -122,6 +122,26 @@ export default class extends React.Component {
     this.props.updateUser('addressDoc', { ...user.addressDoc, ...mapData })
   }
 
+  handleValidation = data => {
+    if (data.addressVillageTH.length > 50) {
+      const Required = find(this.state.PreconditionRequired, (o) => o.field === 'addressVillageTH')
+      if (Required) {
+        this.setState({
+          InvalidArgument: this.state.InvalidArgument.map(d => {
+            if (d.field === 'addressVillageTH') return { ...d, description: 'ท่านสามารถระบุได้ไม่เกิน 50 ตัวอักษร' }
+            else return { ...d }
+          })
+        })
+      } else {
+        this.setState({
+          InvalidArgument: [...this.state.InvalidArgument, { description: 'ท่านสามารถระบุได้ไม่เกิน 50 ตัวอักษร', field: 'addressVillageTH' }]
+        })
+      }
+      return false
+    }
+    return true
+  }
+
   onValidation = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
     const Required = find(PreconditionRequired, (o) => {
@@ -194,6 +214,8 @@ export default class extends React.Component {
       zipCode,
     }
 
+    const checkValadation = this.handleValidation(data)
+
     this.props.saveMailingAddress({ variables: { input: data } })
       .then(res => {
         console.log(res)
@@ -204,7 +226,7 @@ export default class extends React.Component {
 
         // } else if (res.data.saveMailingAddress.success) {
 
-        if (res.data.saveMailingAddress.success) {
+        if (res.data.saveMailingAddress.success && checkValadation) {
           this.props.navigateAction({ ...this.props, page: 'contact' })
         } else if (!res.data.saveMailingAddress.success) {
           switch (res.data.saveMailingAddress.message) {

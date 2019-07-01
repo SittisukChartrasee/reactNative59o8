@@ -9,8 +9,14 @@ export const handleModal = (store) => (next) => action => {
     const modal = {
       dis: action.value,
       visible: true,
-      onPress: () => store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false, dis: action.value } }),
-      onPressClose: () => store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false, dis: action.value } }),
+      onPress: () => {
+        store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false, dis: action.value } })
+        store.dispatch({ type: CHANGE_ROOT, key: 'modalVisible', value: false })
+      },
+      onPressClose: () => {
+        store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false, dis: action.value } })
+        store.dispatch({ type: CHANGE_ROOT, key: 'modalVisible', value: false })
+      },
     }
     return store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: modal })
   }

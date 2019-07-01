@@ -127,6 +127,26 @@ export default class extends React.Component {
     this.props.updateUser('addressWork', { ...user.addressWork, ...mapData })
   }
 
+  handleValidation = data => {
+    if (data.addressVillageTH.length > 50) {
+      const Required = find(this.state.PreconditionRequired, (o) => o.field === 'addressVillageTH')
+      if (Required) {
+        this.setState({
+          InvalidArgument: this.state.InvalidArgument.map(d => {
+            if (d.field === 'addressVillageTH') return { ...d, description: 'ท่านสามารถระบุได้ไม่เกิน 50 ตัวอักษร' }
+            else return { ...d }
+          })
+        })
+      } else {
+        this.setState({
+          InvalidArgument: [...this.state.InvalidArgument, { description: 'ท่านสามารถระบุได้ไม่เกิน 50 ตัวอักษร', field: 'addressVillageTH' }]
+        })
+      }
+      return false
+    }
+    return true
+  }
+
   onValidation = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
     const Required = find(PreconditionRequired, (o) => {
@@ -201,6 +221,8 @@ export default class extends React.Component {
       zipCode
     }
 
+    const checkValadation = this.handleValidation(data)
+
     this.props.saveWorkplaceAddress({ variables: { input: data } })
       .then(res => {
         console.log(res)
@@ -211,7 +233,7 @@ export default class extends React.Component {
 
         // } else if (res.data.saveWorkplaceAddress.success) {
 
-        if (res.data.saveWorkplaceAddress.success) {
+        if (res.data.saveWorkplaceAddress.success && checkValadation) {
           this.props.navigateAction({ ...this.props, page: 'chooseCurr' })
         } else if (!res.data.saveWorkplaceAddress.success) {
           switch (res.data.saveWorkplaceAddress.message) {

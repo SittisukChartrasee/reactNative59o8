@@ -35,12 +35,12 @@ export default class extends React.Component {
         field: 'busType', // isicCode
         required: true
       },
-      {
-        label: 'อื่นๆ (โปรดระบุ)',
-        type: 'textInput',
-        field: 'busTypeOther',
-        inVisible: true,
-      },
+      // {
+      //   label: 'อื่นๆ (โปรดระบุ)',
+      //   type: 'textInput',
+      //   field: 'busType_other',
+      //   inVisible: this.props.user.career.busType_other ? false : true
+      // },
       {
         label: 'อาชีพ',
         type: 'search',
@@ -72,6 +72,8 @@ export default class extends React.Component {
   }
 
   handleInput = props => {
+    console.log(props)
+
     const { user } = this.props
     if (props.field === 'occupation') {
       this.props.updateUser('career', { ...user.career, [props.field]: props.value, occupationCode: props.code })
@@ -89,12 +91,12 @@ export default class extends React.Component {
   onValidation = field => {
     const { PreconditionRequired, InvalidArgument } = this.state
     const Required = find(PreconditionRequired, o => {
-      if (o.field === 'isicCode' && field === 'busType') return o
+      if (o.field === 'isicCode' && (field === 'busType' || field === 'busType_other')) return o
       if (o.field === 'occupationCode' && field === 'occupation') return o
       return o.field === field
     })
     const Invalid = find(InvalidArgument, o => {
-      if (o.field === 'isicCode' && field === 'busType') return o
+      if (o.field === 'isicCode' && (field === 'busType' || field === 'busType_other')) return o
       if (o.field === 'occupationCode' && field === 'occupation') return o
       return o.field === field
     })
@@ -208,6 +210,9 @@ export default class extends React.Component {
                 required: d.required,
                 init: d.init,
                 value: user.career[d.field],
+                valueOther: (user.career[`${d.field}_other`])
+                  ? user.career[`${d.field}_other`]
+                  : null,
                 inVisible: d.inVisible,
                 handleInput: props => this.handleInput(props),
                 err: this.onValidation(d.field)
