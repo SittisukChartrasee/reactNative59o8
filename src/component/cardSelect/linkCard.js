@@ -17,7 +17,7 @@ export default ({
 }) => (
   <TouchableOpacity
     onPress={() => handleInput({ value: label, type })}
-    disabled={active}
+    // disabled={active} // ให้ถ่ายใหม่ได้เรื่อยๆ
     style={{
       borderRadius: 10,
       backgroundColor: active ? colors.emerald : colors.white,

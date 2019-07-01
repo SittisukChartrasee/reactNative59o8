@@ -35,7 +35,8 @@ const dispatchToProps = dispatch => ({
 	requestLogin: bindActionCreators(requestLogin, dispatch),
 	updateUser: bindActionCreators(updateUser, dispatch),
 	updateFatca: bindActionCreators(fatca, dispatch),
-	updateSuittest: bindActionCreators(suittest, dispatch)
+	updateSuittest: bindActionCreators(suittest, dispatch),
+	toggleModal: value => dispatch({ type: 'modal', value })
 })
 @connect(mapToProps, dispatchToProps)
 @withApollo
@@ -58,6 +59,8 @@ export default class extends React.Component {
 		if (obj.number.length === 6) {
 			this.props.requestLogin({ userToken, password: obj.number })
 				.then(async res => {
+					console.log(res)
+
 					if (res.success) {
 						AsyncStorage.setItem('access_token', res.result.access_token)
 						AsyncStorage.setItem('user_token', userToken)
@@ -91,6 +94,19 @@ export default class extends React.Component {
 						},
 							() => {
 								if (this.state.countPassFail > 3) return this.props.navigateAction({ ...this.props, page: 'lockUser' })
+								else {
+									this.props.toggleModal({
+										dis: res.message,
+										visible: true,
+										labelBtn: 'ลองใหม่',
+										onPress: () => this.props.toggleModal({ visible: false }),
+										onConfirm: async () => {
+											await this.props.toggleModal({ visible: false })
+											await this.props.navigation.navigate('chooseBank')
+										},
+										onPressClose: () => this.props.toggleModal({ visible: false }),
+									})
+								}
 							}
 						)
 					}
