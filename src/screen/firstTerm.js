@@ -48,6 +48,7 @@ export default class extends React.Component {
 
   render() {
     console.log(NativeModules)
+    console.log(NativeModules.PlatformConstants.getConstants())
     return (
       <Screen>
         <NavBar
