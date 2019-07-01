@@ -23,6 +23,7 @@ target 'KbankOnboarding' do
   pod 'react-native-camera', path: '../node_modules/react-native-camera'
   pod 'RNImageMarker', :path => '../node_modules/react-native-image-marker'
   pod 'react-native-image-resizer', :path => '../node_modules/react-native-image-resizer'
+  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
   
   target 'KbankOnboarding-tvOSTests' do
     inherit! :search_paths

@@ -16,6 +16,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 
 
 import java.util.Arrays;
@@ -41,7 +42,8 @@ public class MainApplication extends Application implements ReactApplication {
           new RNCameraPackage(),
           new ImageMarkerPackage(),
           new ImageResizerPackage(),
-          new RNCWebViewPackage()
+          new RNCWebViewPackage(),
+          new RNDeviceInfo()
       );
     }
 

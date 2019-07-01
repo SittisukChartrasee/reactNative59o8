@@ -55,6 +55,8 @@ PODS:
     - React/Core
   - React/RCTNetwork (0.59.8):
     - React/Core
+  - RNDeviceInfo (2.1.3):
+    - React
   - RNImageMarker (0.4.4):
     - React
   - yoga (0.59.8.React)
@@ -71,6 +73,7 @@ DEPENDENCIES:
   - React/CxxBridge (from `../node_modules/react-native`)
   - React/RCTImage (from `../node_modules/react-native`)
   - React/RCTLinkingIOS (from `../node_modules/react-native`)
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNImageMarker (from `../node_modules/react-native-image-marker`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -95,6 +98,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-camera"
   react-native-image-resizer:
     :path: "../node_modules/react-native-image-resizer"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNImageMarker:
     :path: "../node_modules/react-native-image-marker"
   yoga:
@@ -110,9 +115,10 @@ SPEC CHECKSUMS:
   React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
   react-native-camera: 9c50d7def800895e7991ccda6203929553ceec9c
   react-native-image-resizer: 04a3409e7d4ad646c4468671c69dec490def139c
+  RNDeviceInfo: 5b5b42b12587207b6bd686441ac42d19d8e07933
   RNImageMarker: 27846f9d089b804ca6ca35ab1e6d00df41e9bab1
   yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
 
-PODFILE CHECKSUM: 93ab874eaa5cabd0efa9033bda448169db90df35
+PODFILE CHECKSUM: ede01c25a023fe13cdfbec3eb59c6a601ab05ddb
 
 COCOAPODS: 1.5.3

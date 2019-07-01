@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import DeviceInfo from 'react-native-device-info'
 import Screen from '../component/screenComponent'
 import { NavBar } from '../component/gradient'
 import { TText, TBold, TSemiBold, TLight } from '../component/texts'
@@ -49,6 +50,7 @@ export default class extends React.Component {
   render() {
     console.log(NativeModules)
     console.log(NativeModules.PlatformConstants.getConstants())
+    console.log(DeviceInfo.getDeviceId(), DeviceInfo.getSystemVersion())
     return (
       <Screen>
         <NavBar
