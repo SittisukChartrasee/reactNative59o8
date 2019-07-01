@@ -41,6 +41,7 @@ export default class extends React.Component {
   state = {
     PreconditionRequired: [],
     InvalidArgument: [],
+    layout: [],
     fields: [
       {
         label: 'ข้อมูลบุตร หรือบุตรบุญธรรมคนที่ 1',
@@ -319,6 +320,7 @@ export default class extends React.Component {
         if (res.data.saveChild.success) {
           this.props.navigateAction({ ...this.props, page: 'career' })
         } else if (!res.data.saveChild.success) {
+          this.onHandleScrollToErrorField(res.data.saveChild.details)
           switch (res.data.saveChild.message) {
             case 'PreconditionRequired':
               return this.setState({ PreconditionRequired: res.data.saveChild.details })
@@ -338,6 +340,22 @@ export default class extends React.Component {
       .catch(err => {
         console.log(err)
       })
+  }
+
+  onHandleScrollToErrorField = (field) => {
+    const errField = field.map(d => d.field)
+    this.state.fields.map((d, index) => {
+      if (errField.indexOf(d.field) > -1) {
+        this.refScrollView.scrollToPosition(0, this.state.layout[index], true)
+      }
+    })
+  }
+
+  onSetLayout = (layoutY, index) => {
+    const { layout } = this.state
+    const newArray = layout
+    newArray[index] = layoutY
+    this.setState({ layout: [...newArray] })
   }
 
   render() {
@@ -369,6 +387,7 @@ export default class extends React.Component {
           enableOnAndroid
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
+          ref={ref => { this.refScrollView = ref }}
         >
           {
             this.state.fields.map((d, key) => Input({
@@ -381,6 +400,7 @@ export default class extends React.Component {
               value: user.child[d.field],
               inVisible: d.inVisible,
               date: d.date,
+              onSetLayout: val => this.onSetLayout(val.layout.y, key),
               handleInput: (props) => this.handleInput(props),
               err: this.onValidation(d.field)
             }, key))

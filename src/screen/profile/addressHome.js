@@ -88,6 +88,7 @@ export default class extends React.Component {
   state = {
     PreconditionRequired: [],
     InvalidArgument: [],
+    layout: [],
   }
 
 
@@ -230,6 +231,7 @@ export default class extends React.Component {
         if (res.data.savePermanentAddress.success && checkValadation) {
           this.props.navigateAction({ ...this.props, page: 'chooseWork' })
         } else if (!res.data.savePermanentAddress.success) {
+          this.onHandleScrollToErrorField(res.data.savePermanentAddress.details)
           switch (res.data.savePermanentAddress.message) {
             case 'PreconditionRequired':
               return this.setState({ PreconditionRequired: res.data.savePermanentAddress.details })
@@ -246,6 +248,22 @@ export default class extends React.Component {
           }
         }
       })
+  }
+
+  onHandleScrollToErrorField = (field) => {
+    const errField = field.map(d => d.field)
+    fields.map((d, index) => {
+      if (errField.indexOf(d.field) > -1) {
+        this.refScrollView.scrollToPosition(0, this.state.layout[index], true)
+      }
+    })
+  }
+
+  onSetLayout = (layoutY, index) => {
+    const { layout } = this.state
+    const newArray = layout
+    newArray[index] = layoutY
+    this.setState({ layout: [...newArray] })
   }
 
   render() {
@@ -277,6 +295,7 @@ export default class extends React.Component {
           enableOnAndroid
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
+          ref={ref => { this.refScrollView = ref }}
         >
           {
             fields.map((d, key) => Input({
@@ -287,6 +306,7 @@ export default class extends React.Component {
               init: d.init,
               onHandleDistrict: this.onHandleDistrict,
               value: user.addressHome[d.field],
+              onSetLayout: val => this.onSetLayout(val.layout.y, key),
               handleInput: (props) => this.handleInput(props),
               err: this.onValidation(d.field)
             }, key))

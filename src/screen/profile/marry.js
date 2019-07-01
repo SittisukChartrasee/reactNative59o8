@@ -37,6 +37,7 @@ export default class extends React.Component {
     code: this.props.user.spouse.nationalityCode,
     PreconditionRequired: [],
     InvalidArgument: [],
+    layout: [],
     disabledPepFlag: this.props.user.spouse.pepFlag === null,
     fields: [
       {
@@ -276,6 +277,7 @@ export default class extends React.Component {
           if (redirec) return this.props.navigateAction({ ...this.props, page: redirec })
           this.props.navigateAction({ ...this.props, page: 'career' })
         } else if (!res.data.saveSpouse.success) {
+          this.onHandleScrollToErrorField(res.data.saveSpouse.details)
           switch (res.data.saveSpouse.message) {
             case 'PreconditionRequired':
               return this.setState({ PreconditionRequired: res.data.saveSpouse.details })
@@ -295,6 +297,22 @@ export default class extends React.Component {
       .catch(err => {
         console.log(err)
       })
+  }
+
+  onHandleScrollToErrorField = (field) => {
+    const errField = field.map(d => d.field)
+    this.state.fields.map((d, index) => {
+      if (errField.indexOf(d.field) > -1) {
+        this.refScrollView.scrollToPosition(0, this.state.layout[index], true)
+      }
+    })
+  }
+
+  onSetLayout = (layoutY, index) => {
+    const { layout } = this.state
+    const newArray = layout
+    newArray[index] = layoutY
+    this.setState({ layout: [...newArray] })
   }
 
   render() {
@@ -327,6 +345,7 @@ export default class extends React.Component {
           enableOnAndroid
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
+          ref={ref => { this.refScrollView = ref }}
         >
           {
             fields.map((d, key) => Input({
@@ -339,6 +358,7 @@ export default class extends React.Component {
               value: user.spouse[d.field],
               inVisible: d.inVisible,
               date: d.date,
+              onSetLayout: val => this.onSetLayout(val.layout.y, key),
               handleInput: (props) => this.handleInput(props),
               err: this.onValidation(d.field)
             }, key))
