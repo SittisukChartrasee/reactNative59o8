@@ -12,19 +12,16 @@ export default (ComponentWrapper) => {
       version: '',
     }
     componentDidMount = () => {
-      const {
-        getFCMToken,
-        getVersionAppKMyFunds
-      } = NativeModules.KMyFundOnboarding
-
-      getFCMToken(fcm => {
-        getVersionAppKMyFunds(version => {
-          this.setState({
-            fcm,
-            version
+      if (NativeModules.KMyFundOnboarding) {
+        NativeModules.KMyFundOnboarding.getFCMToken(fcm => {
+          NativeModules.KMyFundOnboarding.getVersionAppKMyFunds(version => {
+            this.setState({
+              fcm,
+              version
+            })
           })
         })
-      })
+      }
     }
 
     render() {
