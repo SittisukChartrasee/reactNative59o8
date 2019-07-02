@@ -26,19 +26,16 @@ const fields = [
     type: 'textInput',
     field: 'workPhone',
     required: false,
-    keyboardType: 'number-pad',
   }, {
     label: 'โทรศัพท์บ้าน',
     type: 'textInput',
     field: 'homePhone',
     required: false,
-    keyboardType: 'number-pad',
   }, {
     label: 'หมายเลขโทรศัพท์มือถืิอ',
     // type: 'textInput',
     field: 'mobilePhone',
     required: false,
-    keyboardType: 'number-pad',
   }, {
     label: 'อีเมล',
     field: 'email',
@@ -160,7 +157,6 @@ export default class extends React.Component {
               init: d.init,
               value: user.contact[d.field],
               inVisible: d.inVisible,
-              keyboardType: d.keyboardType,
               handleInput: (props) => this.handleInput(props),
               err: this.onValidation(d.field)
             }, key))
