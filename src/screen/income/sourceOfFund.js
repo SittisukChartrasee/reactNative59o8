@@ -85,28 +85,24 @@ export default class extends React.Component {
         required: true,
         init: [
           {
-            label: "เงินเดือน",
+            label: "เพื่อการลงทุนระยะสั้น",
             type: 'select',
             active: false,
           }, {
-            label: "เงินออม",
+            label: "เพื่อการลงทุนระยะยาว",
             type: 'select',
             active: false,
           }, {
-            label: "เงินเกษียณ",
+            label: "เพื่อการกษียณ",
             type: 'select',
             active: false,
           }, {
-            label: "มรดก",
+            label: "เพื่อเก็บออม",
             type: 'select',
             active: false,
           }, {
-            label: "การลงทุน",
+            label: "เพื่อสิทธิประโยชน์ทางภาษี",
             type: 'select',
-          }, {
-            label: "ประกอบธุรกิจ",
-            type: 'select',
-            active: false,
           }, {
             label: "อื่นๆ",
             type: 'select',

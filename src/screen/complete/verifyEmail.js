@@ -75,8 +75,8 @@ export default class extends React.Component {
 		const { user } = this.props
 		const { email } = user.contact
 
-		const res = await this.props.acceptTerm()
-		if (res.data.acceptTerm.success) {
+		const res = await this.props.resendEmail()
+		if (res.data.resendEmail.success) {
 			const modal = {
 				dis: `ระบบได้จัดส่งลิงก์ (Link) สำหรับยืนยันตัวตน\nไปยัง Email ของท่านแล้วกรุณาตรวจสอบ\n${email}`,
 				visible: true,

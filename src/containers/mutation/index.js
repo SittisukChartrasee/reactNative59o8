@@ -257,6 +257,20 @@ const acceptTerm = gql`
   }
 `
 
+const resendEmail = gql`
+  mutation resendEmail {
+    resendEmail {
+      success
+      message
+      code
+      details{
+        field
+        description
+      }
+    }
+  }
+`
+
 const registerBank = gql`
   mutation registerBank($input: NewRegisterBank!) {
     registerBank(input: $input) {
@@ -329,4 +343,5 @@ export default compose(
   graphql(saveSanction, { name: 'saveSanction' }),
   graphql(updateRegisterBankStatus, { name: 'updateRegisterBankStatus' }),
   graphql(saveWaitingApprove, { name: 'saveWaitingApprove' }),
+  graphql(resendEmail, { name: 'resendEmail' }),
 )
