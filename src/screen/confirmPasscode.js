@@ -5,12 +5,14 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import DeviceInfo from 'react-native-device-info'
 import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
 import { HeadSpace } from '../component/headSpace'
 import { navigateAction, navigateReset } from '../redux/actions'
 import { requestRegister } from '../redux/actions/root-active'
 import { root } from '../redux/actions/commonAction'
+import getnativeModules from '../containers/hoc/infoAppNativeModules'
 
 const defaultPasscode = {
   dot: ['', '', '', '', '', ''],
@@ -25,6 +27,7 @@ const dispatchToProps = dispatch => ({
   updateRoot: bindActionCreators(root, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
+@getnativeModules
 export default class extends React.Component {
   state = {
     dot: ['', '', '', '', '', ''],
@@ -38,6 +41,10 @@ export default class extends React.Component {
 
     const data = {
       password: obj.number,
+      fcm_token: this.props.fcm,
+      version: this.props.version,
+      system_version: DeviceInfo.getSystemVersion(),
+      device_id: DeviceInfo.getDeviceId()
     }
     if (obj.number.length === 6) {
       if (this.props.passcode.passcode === data.password) {

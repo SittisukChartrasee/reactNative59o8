@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import moment from 'moment-timezone'
 import { withApollo } from 'react-apollo'
+import DeviceInfo from 'react-native-device-info'
 import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
 import { HeadSpace } from '../component/headSpace'
@@ -12,6 +13,7 @@ import { fatca, suittest } from '../redux/actions/commonAction'
 import { requestLogin } from '../redux/actions/root-active'
 import { updateUser } from '../redux/actions/commonAction'
 import { containerQuery, getStatus, getUser } from '../containers/query'
+import getnativeModules from '../containers/hoc/infoAppNativeModules'
 import {
 	formatIdCard,
 	formatPhoneNumber,
@@ -39,6 +41,7 @@ const dispatchToProps = dispatch => ({
 	toggleModal: value => dispatch({ type: 'modal', value })
 })
 @connect(mapToProps, dispatchToProps)
+@getnativeModules
 @withApollo
 export default class extends React.Component {
 	state = {
@@ -55,9 +58,15 @@ export default class extends React.Component {
 		if (!userToken) userToken = this.props.navigation.getParam('user_token', '')
 		const { user } = this.props
 		this.setState({ ...obj })
-
 		if (obj.number.length === 6) {
-			this.props.requestLogin({ userToken, password: obj.number })
+			this.props.requestLogin({
+				userToken,
+				password: obj.number,
+				fcm_token: this.props.fcm,
+				version: this.props.version,
+				system_version: DeviceInfo.getSystemVersion(),
+				device_id: DeviceInfo.getDeviceId()
+			})
 				.then(async res => {
 					console.log(res)
 
@@ -118,7 +127,6 @@ export default class extends React.Component {
 	}
 
 	onHandletesttest = val => {
-		console.log(val.data.getUser.result)
 		if (val.data.getUser.success) {
 
 			if (val.data.getUser.result.identity) {
