@@ -28,6 +28,7 @@ export default class extends React.Component {
   state = {
     PreconditionRequired: [],
     InvalidArgument: [],
+    layout: [],
     fields: [
       {
         label: 'ประเภทธุรกิจ',
@@ -145,6 +146,7 @@ export default class extends React.Component {
           if (res.data.saveCareer.success) {
             this.props.navigateAction({ ...this.props, page: 'sourceOfFund' })
           } else if (!res.data.saveCareer.success) {
+            this.onHandleScrollToErrorField(res.data.saveCareer.details)
             switch (res.data.saveCareer.message) {
               case 'PreconditionRequired':
                 return this.setState({
@@ -169,6 +171,22 @@ export default class extends React.Component {
           console.log(err)
         })
     }
+  }
+
+  onHandleScrollToErrorField = (field) => {
+    const errField = field.map(d => d.field)
+    this.state.fields.map((d, index) => {
+      if (errField.indexOf(d.field) > -1) {
+        this.refScrollView.scrollToPosition(0, this.state.layout[index], true)
+      }
+    })
+  }
+
+  onSetLayout = (layoutY, index) => {
+    const { layout } = this.state
+    const newArray = layout
+    newArray[index] = layoutY
+    this.setState({ layout: [...newArray] })
   }
 
   render() {
@@ -200,6 +218,7 @@ export default class extends React.Component {
           enableOnAndroid
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
+          ref={ref => { this.refScrollView = ref }}
         >
           {this.state.fields.map((d, key) =>
             Input(
@@ -214,6 +233,7 @@ export default class extends React.Component {
                   ? user.career[`${d.field}_other`]
                   : null,
                 inVisible: d.inVisible,
+                onSetLayout: val => this.onSetLayout(val.layout.y, key),
                 handleInput: props => this.handleInput(props),
                 err: this.onValidation(d.field)
               },
