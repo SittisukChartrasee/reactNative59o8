@@ -156,7 +156,8 @@ export default class extends React.Component {
         field: 'secondDocExpDate',
         date: reverse(this.props.user.child.secondDocExpDate.split('-')),
         required: true,
-        inVisible: this.props.user.child.inVisibleSecond || this.props.user.child.secondExpireDateFlag === 'ไม่มีวันหมดอายุ',
+        inVisible: this.props.user.child.inVisibleSecond ||
+          this.props.user.child.secondExpireDateFlag === 'ไม่มีวันหมดอายุ',
       }
     ]
   }
@@ -201,7 +202,13 @@ export default class extends React.Component {
     if (!this.props.user.child.inVisible) {
       this.setState({
         fields: fields.map((d) => {
-          return { ...d, inVisible: false }
+          if (!d.static) {
+            if (d.field === 'secondDocExpDate' && this.props.user.child.secondExpireDateFlag === 'ไม่มีวันหมดอายุ') {
+              return d
+            } else {
+              return { ...d, inVisible: false }
+            }
+          } else return d
         })
       })
       this.props.updateUser('child', {
@@ -218,7 +225,7 @@ export default class extends React.Component {
           'secondLastName': '',
           'secondBirthDay': `-/-/${tomorrowDate()[0]}`,
           'secondDocNo': '',
-          'secondExpireDateFlag': 'มีวันหมดอายุ',
+          'secondExpireDateFlag': this.props.user.child.secondExpireDateFlag,
           'secondDocExpDate': `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
           inVisible: !this.props.user.child.inVisible,
           inVisibleSecond: true

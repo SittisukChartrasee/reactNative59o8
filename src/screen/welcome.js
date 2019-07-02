@@ -38,7 +38,6 @@ const fields = [
     field: 'idCard',
     option: '9 9999 99999 99 9',
     required: true,
-    keyboardType: 'number-pad',
   },
   {
     type: 'textInput',
