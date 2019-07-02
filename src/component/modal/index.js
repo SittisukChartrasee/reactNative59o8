@@ -66,7 +66,7 @@ export default class extends React.Component {
           >
             { image && <Image source={image} style={{ alignSelf: 'center', marginBottom: 24 }} /> }
             <TLight>{dis}</TLight>
-            { onChange && (
+            {/* { onChange && (
               <View 
                 style={{
                   flexDirection: 'row',
@@ -80,7 +80,7 @@ export default class extends React.Component {
                 <CheckBox onChange={val => onChange(val)} />
                 <TLight>ไม่ต้องการบันทึกข้อมูล</TLight>
               </View>
-            )}
+            )} */}
 
             {
               type

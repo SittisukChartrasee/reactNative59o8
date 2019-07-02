@@ -50,6 +50,7 @@ const fields = [
     label: 'หมายเลขโทรศัพท์มือถือ',
     field: 'mobilePhone',
     option: '099 999 9999',
+    keyboardType: 'number-pad',
     required: true,
   }
 ]
@@ -190,6 +191,7 @@ export default class extends React.Component {
                       : this.props.user.contact[setField.field],
                     handleInput: value => this.handleInput(value),
                     err: this.onValidation(setField.field),
+                    keyboardType: setField.keyboardType,
                     returnKeyType: setField.field === 'mobilePhone' ? 'done' : 'next',
                     onSubmitEditing: () => this.onSubmitFirstName(setField.field),
                   }, key)

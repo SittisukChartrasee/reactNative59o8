@@ -46,6 +46,7 @@ export const requestRegister = (obj, token) => async dispatch => {
     method: 'POST',
     body: JSON.stringify({
       password: obj.password,
+      ...obj,
     }),
   }, token)
 
@@ -66,6 +67,7 @@ export const requestLogin = (obj, token) => async dispatch => {
     body: JSON.stringify({
       token: obj.userToken,
       passcode: obj.password,
+      ...obj,
     }),
   }, token)
 
