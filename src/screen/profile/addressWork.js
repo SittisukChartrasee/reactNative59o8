@@ -272,6 +272,19 @@ export default class extends React.Component {
     this.setState({ layout: [...newArray] })
   }
 
+  onSubmitFirstName = (field) => {
+    const arr = [
+      'companyName',
+      'addressNoTH',
+      'moo',
+      'addressVillageTH',
+      'floorNo',
+      'trokSoiYaek',
+      'thanon',
+    ]
+    if (this[arr[arr.indexOf(field) + 1]]) this[arr[arr.indexOf(field) + 1]].focus()
+  }
+
 
   render() {
     const { user } = this.props
@@ -315,6 +328,9 @@ export default class extends React.Component {
               value: user.addressWork[d.field],
               onSetLayout: val => this.onSetLayout(val.layout.y, key),
               handleInput: (props) => this.handleInput(props),
+              onSubmitEditing: () => this.onSubmitFirstName(d.field),
+              refFunc: ref => { this[d.field] = ref }, 
+              returnKeyType: d.field === 'thanon' ? 'done' : 'next',
               err: this.onValidation(d.field)
             }, key))
           }
