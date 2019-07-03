@@ -90,7 +90,6 @@ export default class extends React.Component {
   // onPrevPage = () => this.props.navigateReset({ ...this.props, page: 'passcode' })
   onPrevPage = () => this.props.navigation.goBack()
 
-
   render() {
     const { dot, defaultKey } = this.state
     return (
