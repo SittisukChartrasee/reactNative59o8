@@ -25,8 +25,7 @@ import { updateUser, root } from '../redux/actions/commonAction'
 import lockout from '../containers/hoc/lockout'
 import { NavBar } from '../component/gradient'
 import { replaceSpace, fontToLower, handleSizing, heightPercentageToDP } from '../utility/helper'
-
-// import * as validate from '../utility/validation'
+import { validateEmail, validateIdentityCard, validatePhoneNumber, RequiredFields } from '../utility/validation'
 
 const { width: widthScreen } = Dimensions.get('window')
 const { height: heightScreen } = Dimensions.get('window')
@@ -79,13 +78,27 @@ export default class extends React.Component {
 
   handleInput = (obj) => {
     const { user } = this.props
-    const { details } = this.state
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => o.field === obj.field)
+    const Invalid = find(InvalidArgument, (o) => o.field === obj.field)
     if (obj.field === 'idCard') {
       this.props.updateUser('profile', { ...user.profile, [obj.field]: obj.value })
+      if (Invalid && validateIdentityCard(replaceSpace(obj.value))) {
+        this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== obj.field) })
+      }
     } else if (obj.field === 'email') {
       this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value })
+      if (Invalid && validateEmail(fontToLower(obj.value))) {
+        this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== obj.field) })
+      }
     } else if (obj.field === 'mobilePhone') {
       this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value })
+      if (Invalid && validatePhoneNumber(replaceSpace(obj.value))) {
+        this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== obj.field) })
+      }
+    }
+    if (Required && RequiredFields(obj.value)) {
+      this.setState({ PreconditionRequired: PreconditionRequired.filter(o => o.field !== obj.field) })
     }
   }
 
@@ -185,7 +198,7 @@ export default class extends React.Component {
                 fields.map((setField, key) =>
                   Input({
                     ...setField,
-                    refFunc: ref => { this[setField.field] = ref }, 
+                    refFunc: ref => { this[setField.field] = ref },
                     value: (setField.field === 'idCard')
                       ? this.props.user.profile.idCard
                       : this.props.user.contact[setField.field],
