@@ -255,6 +255,8 @@ export default class extends React.Component {
     fields.map((d, index) => {
       if (errField.indexOf(d.field) > -1) {
         this.refScrollView.scrollToPosition(0, this.state.layout[index], true)
+      } else if (errField.indexOf('countryCode') > -1) {
+        this.refScrollView.scrollToPosition(0, this.state.layout[0], true)
       }
     })
   }
