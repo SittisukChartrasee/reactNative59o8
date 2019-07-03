@@ -18,62 +18,6 @@ import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
 import setMutation from '../../containers/mutation'
 
-const fields = [
-  {
-    label: 'ประเทศ',
-    type: 'search',
-    field: 'country', // countryCode
-    required: true,
-  }, {
-    label: 'เลขที่',
-    type: 'textInput',
-    field: 'addressNoTH',
-    required: true,
-  }, {
-    label: 'หมู่ที่',
-    type: 'textInput',
-    field: 'moo',
-    required: false,
-  }, {
-    label: 'อาคาร/หมู่บ้าน',
-    type: 'textInput',
-    field: 'addressVillageTH',
-    required: false,
-  }, {
-    label: 'ชั้น',
-    type: 'textInput',
-    field: 'floorNo',
-    required: false,
-  }, {
-    label: 'ตรอก/ซอย/แยก',
-    type: 'textInput',
-    field: 'trokSoiYaek',
-    required: true,
-  }, {
-    label: 'ถนน',
-    type: 'textInput',
-    field: 'thanon',
-    required: true,
-  }, {
-    label: 'แขวง/ตำบล',
-    type: 'search',
-    field: 'subDistrict', //subDistrictCode
-    required: true,
-  }, {
-    label: 'เขต/อำเภอ',
-    field: 'districtNameTH', // districtCode
-    required: false,
-  }, {
-    label: 'จังหวัด',
-    field: 'provinceNameTH', // provinceCode
-    required: false,
-  }, {
-    label: 'รหัสไปรษณีย์',
-    field: 'zipCode',
-    required: false,
-  }
-]
-
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
@@ -89,23 +33,97 @@ export default class extends React.Component {
     PreconditionRequired: [],
     InvalidArgument: [],
     layout: [],
+    doneFlat: 'thanon',
+    fields: [
+      {
+        label: 'ประเทศ',
+        type: 'search',
+        field: 'country', // countryCode
+        required: true,
+      }, {
+        label: 'เลขที่',
+        type: 'textInput',
+        field: 'addressNoTH',
+        required: true,
+      }, {
+        label: 'หมู่ที่',
+        type: 'textInput',
+        field: 'moo',
+        required: false,
+      }, {
+        label: 'อาคาร/หมู่บ้าน',
+        type: 'textInput',
+        field: 'addressVillageTH',
+        required: false,
+      }, {
+        label: 'ชั้น',
+        type: 'textInput',
+        field: 'floorNo',
+        required: false,
+      }, {
+        label: 'ตรอก/ซอย/แยก',
+        type: 'textInput',
+        field: 'trokSoiYaek',
+        required: true,
+      }, {
+        label: 'ถนน',
+        type: 'textInput',
+        field: 'thanon',
+        required: true,
+      }, {
+        label: 'แขวง/ตำบล',
+        type: 'search',
+        field: 'subDistrict', //subDistrictCode
+        required: true,
+      }, {
+        label: 'เขต/อำเภอ',
+        field: 'districtNameTH', // districtCode
+        required: false,
+      }, {
+        label: 'จังหวัด',
+        field: 'provinceNameTH', // provinceCode
+        required: false,
+      }, {
+        label: 'รหัสไปรษณีย์',
+        field: 'zipCode',
+        required: false,
+      }
+    ]
   }
+
+
   handleInput = (props) => {
-
     const { user } = this.props
-
-    // ตรวจสอบความเสี่ยงของประเทศ
-
-    // if (props.field === 'country') {
-    //   updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value, countryCode: props.code, countryRisk: props.risk }) 
-    // } else {
-    //   updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value })
-    // }
-
     if (props.field === 'country') {
-      this.props.updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value, countryCode: props.code })
+      this.props.updateUser('addressCurr', { 
+        ...user.addressCurr,
+        [props.field]: props.value,
+        countryCode: props.code
+      })
+      if (props.code !== 'TH') {
+        const result = this.state.fields.map(d => {
+          if (d.field === 'subDistrict') return { ...d, type: 'textInput' }
+          else if (d.field === 'districtNameTH') return { ...d, type: 'textInput' }
+          else if (d.field === 'provinceNameTH') return { ...d, type: 'textInput' }
+          else if (d.field === 'zipCode') return { ...d, type: 'textInput' }
+          else return d
+        })
+        this.setState({ fields: result, doneFlat: 'zipCode' })
+      } else {
+        const result = this.state.fields.map(d => {
+          if (d.field === 'subDistrict') return { ...d, type: 'search' }
+          else if (d.field === 'districtNameTH') return { ...d, type: '' }
+          else if (d.field === 'provinceNameTH') return { ...d, type: '' }
+          else if (d.field === 'zipCode') return { ...d, type: '' }
+          else return d
+        })
+        this.setState({ fields: result, doneFlat: 'thanon' })
+      }
     } else {
-      this.props.updateUser('addressCurr', { ...user.addressCurr, [props.field]: props.value })
+      this.props.updateUser('addressCurr', {
+        ...user.addressCurr,
+        [props.field]: props.value
+      })
     }
   }
 
@@ -219,14 +237,6 @@ export default class extends React.Component {
 
     this.props.saveCurrentAddress({ variables: { input: data } })
       .then(res => {
-        console.log(res)
-
-        // ตรวจสอบความเสี่ยงของประเทศ
-
-        // if (user.addressCurr.countryRisk) {
-
-        // } else if (res.data.saveCurrentAddress.success) {
-
         if (res.data.saveCurrentAddress.success && checkValadation) {
           this.props.navigateAction({ ...this.props, page: 'chooseDoc' })
         } else if (!res.data.saveCurrentAddress.success) {
@@ -251,7 +261,7 @@ export default class extends React.Component {
 
   onHandleScrollToErrorField = (field) => {
     const errField = field.map(d => d.field)
-    fields.map((d, index) => {
+    this.state.fields.map((d, index) => {
       if (errField.indexOf(d.field) > -1) {
         this.refScrollView.scrollToPosition(0, this.state.layout[index], true)
       } else if (errField.indexOf('countryCode') > -1) {
@@ -275,6 +285,10 @@ export default class extends React.Component {
       'floorNo',
       'trokSoiYaek',
       'thanon',
+      'subDistrict',
+      'districtNameTH',
+      'provinceNameTH',
+      'zipCode',
     ]
     if (this[arr[arr.indexOf(field) + 1]]) this[arr[arr.indexOf(field) + 1]].focus()
   }
@@ -312,7 +326,7 @@ export default class extends React.Component {
           ref={ref => { this.refScrollView = ref }}
         >
           {
-            fields.map((d, key) => Input({
+            this.state.fields.map((d, key) => Input({
               field: d.field,
               label: d.label,
               type: d.type,
@@ -325,7 +339,7 @@ export default class extends React.Component {
               handleInput: (props) => this.handleInput(props),
               onSubmitEditing: () => this.onSubmitFirstName(d.field),
               refFunc: ref => { this[d.field] = ref }, 
-              returnKeyType: d.field === 'thanon' ? 'done' : 'next',
+              returnKeyType: d.field === this.state.doneFlat ? 'done' : 'next',
               err: this.onValidation(d.field)
             }, key))
           }
