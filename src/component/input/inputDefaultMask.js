@@ -30,7 +30,7 @@ export default class extends React.Component {
 
     option: "999 AAA SSS ***",
     label: 'label',
-    value: '',
+    value: null,
   }
 
   state = {
@@ -90,7 +90,7 @@ export default class extends React.Component {
           autoComplete: "off",
           autoCapitalize: "none"
         }}
-        value={value}
+        value={this.props.value === '' || this.props.value ? this.props.value : value}
         onChangeText={this.handleInput}
       />
     )
