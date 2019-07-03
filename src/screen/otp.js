@@ -92,7 +92,9 @@ export default class extends React.Component {
 
 	onPress = async setTimeWaiting => {
 		const { user } = this.props
-		const accept_term = this.props.navigation.getParam('accept_term', '')
+		// const accept_term = this.props.navigation.getParam('accept_term', '')
+		const accept_term = this.props.root.accept_term
+		console.log(accept_term)
 		const token = await AsyncStorage.getItem("access_token")
 
 		const data = {

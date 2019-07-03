@@ -27,7 +27,7 @@ const text = ` 1. บริษัทจัดการมีสิทธิท�
  3. การเปิดบัญชีกองทุนผ่าน K-My Funds จะครอบคลุมถึงการสมัครใช้บริการ SMS Fund Alert บริการ K-Mutual Fund Reports และบริการ K-Cyber Invest  อย่างไรก็ตาม บริษัทอาจเปลี่ยนแปลงหรือยกเลิกการให้บริการดังกล่าวได้ โดยเป็นดุลยพินิจของบริษัทจัดการ
 				`
 
-const mapToProps = () => ({})            
+const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
 	requestOtp: bindActionCreators(requestOtp, dispatch),
 	navigateAction: bindActionCreators(navigateAction, dispatch),
@@ -55,7 +55,8 @@ export default class extends React.Component {
 			.then(res => {
 				console.log(res)
 				if (res.success) {
-					this.props.navigateAction({ ...this.props, page: 'otp', params: { accept_term: true } })
+					this.props.updateRoot('accept_term', true)
+					this.props.navigateAction({ ...this.props, page: 'otp' })
 				}
 			})
 			.catch(err => {
@@ -88,7 +89,7 @@ export default class extends React.Component {
 							mb={40}>{`ท่านสามารถเริ่มลงทุนผ่านแอปพลิเคชั่น \nK-My Funds ได้แล้ว`}</TLight>
 
 						<View
-							style={{    
+							style={{
 								backgroundColor: colors.white,
 								width: '100%',
 								minHeight: 352,

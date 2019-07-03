@@ -93,7 +93,7 @@ export default class extends React.Component {
             type: 'select',
             active: false,
           }, {
-            label: "เพื่อการกษียณ",
+            label: "เพื่อการเกษียณ",
             type: 'select',
             active: false,
           }, {
