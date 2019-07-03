@@ -1,6 +1,6 @@
 PODS:
   - boost-for-react-native (1.63.0)
-  - BVLinearGradient (2.5.4):
+  - BVLinearGradient (2.5.3):
     - React
   - DoubleConversion (1.1.6)
   - Folly (2018.10.22.00):
@@ -107,18 +107,18 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  BVLinearGradient: 8cbc5155c978f2e43098818c91d206d07aae6d30
+  BVLinearGradient: b0b70acf63ee888829b7c2ebbf6b50e227396e55
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
-  Picker: 37554355aef82a532ea95b71b6eeba66bc86182b
-  React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
-  react-native-camera: 0d18706a9fd6d30ece4fa7c9c50fe36f484c54fa
-  react-native-image-resizer: 48eb06a18a6d0a632ffa162a51ca61a68fb5322f
-  RNDeviceInfo: a67eef80ee1e68e1824f3ed3dc0ccf9e2d4fdc59
-  RNImageMarker: 2b9e0230c485abcb3a20a725c11095db8306bf8f
-  yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
+  Picker: 67a2566d9ff6b141d505d88b9177f905aaa5f1a6
+  React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
+  react-native-camera: 9c50d7def800895e7991ccda6203929553ceec9c
+  react-native-image-resizer: 04a3409e7d4ad646c4468671c69dec490def139c
+  RNDeviceInfo: 5b5b42b12587207b6bd686441ac42d19d8e07933
+  RNImageMarker: 27846f9d089b804ca6ca35ab1e6d00df41e9bab1
+  yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
 
 PODFILE CHECKSUM: ede01c25a023fe13cdfbec3eb59c6a601ab05ddb
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.5.3
