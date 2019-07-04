@@ -2,6 +2,7 @@ import React from 'react'
 import {
   View,
   Image,
+  Platform,
   SafeAreaView,
   TouchableHighlight,
   AsyncStorage,
@@ -71,7 +72,7 @@ export default class extends React.Component {
                 </View>
               </View>
             ) : (
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 1, paddingTop: Platform.OS === 'android' ? 35 : 0 }}>
                 <View style={{ height: 56, flexDirection: 'row' }}>
                   <TouchableHighlight onPress={() => this.props.navigation.goBack()} style={{ flex: .2, justifyContent: 'center', alignItems: 'center', paddingRight: 10 }}>
                     <Image source={images.iconback} />
