@@ -23,6 +23,7 @@ import setMutation from '../../containers/mutation'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
 import colors from '../../config/colors'
+import { validateIdentityCard, validateIdentityThaiLanguage, RequiredFields } from '../../utility/validation'
 import { convertDate, getOfBirth, replaceSpace, tomorrowDate } from '../../utility/helper'
 
 const { width: widthView } = Dimensions.get('window')
@@ -191,9 +192,8 @@ export default class extends React.Component {
           }
         })
       })
-    } else if (props.field === 'secondIdcard') {
-      this.onPressNewChild()
-    }
+    } else if (props.field === 'secondIdcard') this.onPressNewChild()
+    this.handleValidation({ field: props.field, value: props.value })
   }
 
   onPressNewChild = () => {
@@ -240,32 +240,44 @@ export default class extends React.Component {
     }
   }
 
-  onValidation = (field) => {
+  handleValidation = ({ field, value }) => {
     const { PreconditionRequired, InvalidArgument } = this.state
     const Required = find(PreconditionRequired, (o) => {
-      if ((o.field === 'firstDayOfBirth ' ||
-        o.field === 'firstMonthOfBirth' ||
-        o.field === 'firstYearOfBirth') && field === 'firstBirthDay') {
-        return o
-      }
-      if ((o.field === 'secondDayOfBirth ' ||
-        o.field === 'secondMonthOfBirth' ||
-        o.field === 'secondYearOfBirth') && field === 'secondBirthDay') {
-        return o
-      }
+      if ((o.field === 'firstDayOfBirth ' || o.field === 'firstMonthOfBirth' || o.field === 'firstYearOfBirth') && field === 'firstBirthDay') return o
+      if ((o.field === 'secondDayOfBirth ' || o.field === 'secondMonthOfBirth' || o.field === 'secondYearOfBirth') && field === 'secondBirthDay') return o
       return o.field === field
     })
     const Invalid = find(InvalidArgument, (o) => {
-      if ((o.field === 'firstDayOfBirth ' ||
-        o.field === 'firstMonthOfBirth' ||
-        o.field === 'firstYearOfBirth') && field === 'firstBirthDay') {
-        return o
-      }
-      if ((o.field === 'secondDayOfBirth ' ||
-        o.field === 'secondMonthOfBirth' ||
-        o.field === 'secondYearOfBirth') && field === 'secondBirthDay') {
-        return o
-      }
+      if ((o.field === 'firstDayOfBirth ' || o.field === 'firstMonthOfBirth' || o.field === 'firstYearOfBirth') && field === 'firstBirthDay') return o
+      if ((o.field === 'secondDayOfBirth ' || o.field === 'secondMonthOfBirth' || o.field === 'secondYearOfBirth') && field === 'secondBirthDay') return o
+      return o.field === field
+    })
+    if ((field === 'firstDocNo' || field === 'secondDocNo') && Invalid && validateIdentityCard(replaceSpace(value))) {
+      this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
+    } else if ((field === 'firstFirstName' ||
+      field === 'firstLastName' ||
+      field === 'secondFirstName' ||
+      field === 'secondLastName') && validateIdentityThaiLanguage(value)) {
+      this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
+    }
+
+    if (Required && RequiredFields(value)) {
+      this.setState({
+        PreconditionRequired: PreconditionRequired.filter(o => o.field !== field)
+      })
+    }
+  }
+
+  onValidation = (field) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => {
+      if ((o.field === 'firstDayOfBirth ' || o.field === 'firstMonthOfBirth' || o.field === 'firstYearOfBirth') && field === 'firstBirthDay') return o
+      if ((o.field === 'secondDayOfBirth ' || o.field === 'secondMonthOfBirth' || o.field === 'secondYearOfBirth') && field === 'secondBirthDay') return o
+      return o.field === field
+    })
+    const Invalid = find(InvalidArgument, (o) => {
+      if ((o.field === 'firstDayOfBirth ' || o.field === 'firstMonthOfBirth' || o.field === 'firstYearOfBirth') && field === 'firstBirthDay') return o
+      if ((o.field === 'secondDayOfBirth ' || o.field === 'secondMonthOfBirth' || o.field === 'secondYearOfBirth') && field === 'secondBirthDay') return o
       return o.field === field
     })
     if (Required) {
@@ -352,9 +364,11 @@ export default class extends React.Component {
 
   onHandleScrollToErrorField = (field) => {
     const errField = field.map(d => d.field)
+    let k = true
     this.state.fields.map((d, index) => {
-      if (errField.indexOf(d.field) > -1) {
+      if (errField.indexOf(d.field) > -1 && k) {
         this.refScrollView.scrollToPosition(0, this.state.layout[index], true)
+        k = false
       }
     })
   }

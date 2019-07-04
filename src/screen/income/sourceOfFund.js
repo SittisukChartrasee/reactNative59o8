@@ -18,6 +18,7 @@ import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
+import { RequiredFields } from '../../utility/validation'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -167,6 +168,23 @@ export default class extends React.Component {
       })
     } else {
       this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: props.value })
+    }
+    this.handleValidation({ field: props.field, value: (props.value || props.data) })
+  }
+
+  handleValidation = ({ field, value }) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => o.field === field)
+    const Invalid = find(InvalidArgument, (o) => o.field === field)
+
+    if (Required && RequiredFields(value)) {
+      this.setState({
+        PreconditionRequired: PreconditionRequired.filter(o => {
+          if (!(o.field === 'investmentSourceCountry' && field === 'nationalityCode') &&
+            o.field !== field)
+            return o
+        })
+      })
     }
   }
 

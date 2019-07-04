@@ -13,6 +13,7 @@ import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
+import { RequiredFields } from '../../utility/validation'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -73,8 +74,6 @@ export default class extends React.Component {
   }
 
   handleInput = props => {
-    console.log(props)
-
     const { user } = this.props
     if (props.field === 'occupation') {
       this.props.updateUser('career', { ...user.career, [props.field]: props.value, occupationCode: props.code })
@@ -86,6 +85,32 @@ export default class extends React.Component {
       this.props.updateUser('career', { ...user.career, [props.field]: props.value })
     } else {
       this.props.updateUser('career', { ...user.career, [props.field]: props.value.value })
+    }
+    this.handleValidation({ field: props.field, val: props.value })
+  }
+
+  handleValidation = ({ field, value }) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => {
+      if (o.field === 'isicCode' && (field === 'busType' || field === 'busType_other')) return o
+      if (o.field === 'occupationCode' && field === 'occupation') return o
+      return o.field === field
+    })
+    const Invalid = find(InvalidArgument, (o) => {
+      if (o.field === 'isicCode' && (field === 'busType' || field === 'busType_other')) return o
+      if (o.field === 'occupationCode' && field === 'occupation') return o
+      return o.field === field
+    })
+    
+    if (Required && RequiredFields(value)) {
+      this.setState({
+        PreconditionRequired: PreconditionRequired.filter(o => {
+          if (!(o.field === 'isicCode' && field === 'busType') &&
+            !(o.field === 'occupationCode' && field === 'occupation') &&
+            o.field !== field)
+            return o
+        })
+      })
     }
   }
 
@@ -176,9 +201,11 @@ export default class extends React.Component {
 
   onHandleScrollToErrorField = (field) => {
     const errField = field.map(d => d.field)
+    let k = true
     this.state.fields.map((d, index) => {
       if (errField.indexOf(d.field) > -1) {
         this.refScrollView.scrollToPosition(0, this.state.layout[index], true)
+        k = false
       }
     })
   }

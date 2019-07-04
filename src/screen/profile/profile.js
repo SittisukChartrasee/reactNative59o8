@@ -19,6 +19,13 @@ import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
 import {
+  validateIdentityCard,
+  validateIdentityJcNumber,
+  validateIdentityEngLanguage,
+  validateIdentityThaiLanguage,
+  RequiredFields
+} from '../../utility/validation'
+import {
   convertDate,
   getOfBirth,
   getStatusGender,
@@ -178,36 +185,59 @@ export default class extends React.Component {
       [props.field]: props.value,
       'isNoDocExpDate': isNoDoc
     })
+
+    this.handleValidation({ field: props.field, value: props.value })
+  }
+
+  handleValidation = ({ field, value }) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => {
+      if (o.field === 'genderCode' && field === 'gender') return o
+      if (o.field === 'martialStatusCode' && field === 'martialStatus') return o
+      if ((o.field === 'yearOfBirth ' || o.field === 'monthOfBirth' || o.field === 'dayOfBirth') && field === 'birthDay') return o
+      return o.field === field
+    })
+    const Invalid = find(InvalidArgument, (o) => {
+      if (o.field === 'genderCode' && field === 'gender') return o
+      if (o.field === 'martialStatusCode' && field === 'martialStatus') return o
+      if ((o.field === 'yearOfBirth ' || o.field === 'monthOfBirth' || o.field === 'dayOfBirth') && field === 'birthDay') return o
+      return o.field === field
+    })
+    if (field === 'idCard' && Invalid && validateIdentityCard(replaceSpace(value))) {
+      this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
+    } else if (field === 'jcNumber' && Invalid && validateIdentityJcNumber(replaceJsCard(value))) {
+      this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
+    } else if ((field === 'firstNameTH' || field === 'lastNameTH') && Invalid && validateIdentityThaiLanguage(value)) {
+      this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
+    } else if ((field === 'firstNameEN' || field === 'lastNameEN') && Invalid && validateIdentityEngLanguage(value)) {
+      this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
+    }
+
+    if (Required && RequiredFields(value)) {
+      this.setState({
+        PreconditionRequired: PreconditionRequired.filter(o => {
+          if (!(o.field === 'genderCode' && field === 'gender') &&
+            !(o.field === 'martialStatusCode' && field === 'martialStatus') &&
+            !((o.field === 'yearOfBirth ' || o.field === 'monthOfBirth' || o.field === 'dayOfBirth') && field === 'birthDay') &&
+            o.field !== field)
+            return o
+        })
+      })
+    }
   }
 
   onValidation = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
     const Required = find(PreconditionRequired, (o) => {
-      if (o.field === 'genderCode' && field === 'gender') {
-        return o
-      }
-      if (o.field === 'martialStatusCode' && field === 'martialStatus') {
-        return o
-      }
-      if ((o.field === 'yearOfBirth ' ||
-        o.field === 'monthOfBirth' ||
-        o.field === 'dayOfBirth') && field === 'birthDay') {
-        return o
-      }
+      if (o.field === 'genderCode' && field === 'gender') return o
+      if (o.field === 'martialStatusCode' && field === 'martialStatus') return o
+      if ((o.field === 'yearOfBirth ' || o.field === 'monthOfBirth' || o.field === 'dayOfBirth') && field === 'birthDay') return o
       return o.field === field
     })
     const Invalid = find(InvalidArgument, (o) => {
-      if (o.field === 'genderCode' && field === 'gender') {
-        return o
-      }
-      if (o.field === 'martialStatusCode' && field === 'martialStatus') {
-        return o
-      }
-      if ((o.field === 'yearOfBirth ' ||
-        o.field === 'monthOfBirth' ||
-        o.field === 'dayOfBirth') && field === 'birthDay') {
-        return o
-      }
+      if (o.field === 'genderCode' && field === 'gender') return o
+      if (o.field === 'martialStatusCode' && field === 'martialStatus') return o
+      if ((o.field === 'yearOfBirth ' || o.field === 'monthOfBirth' || o.field === 'dayOfBirth') && field === 'birthDay') return o
       return o.field === field
     })
     if (Required) {
@@ -299,9 +329,11 @@ export default class extends React.Component {
 
   onHandleScrollToErrorField = (field) => {
     const errField = field.map(d => d.field)
+    let k = true
     this.state.fields.map((d, index) => {
-      if (errField.indexOf(d.field) > -1) {
+      if (errField.indexOf(d.field) > -1 && k) {
         this.refScrollView.scrollToPosition(0, this.state.layout[index], true)
+        k = false
       }
     })
   }

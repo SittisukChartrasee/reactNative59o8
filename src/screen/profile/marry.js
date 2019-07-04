@@ -20,6 +20,13 @@ import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
 import { convertDate, replaceSpace } from '../../utility/helper'
+import {
+  validateIdentityCard,
+  validateIdentityJcNumber,
+  validateIdentityEngLanguage,
+  validateIdentityThaiLanguage,
+  RequiredFields
+} from '../../utility/validation'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -139,6 +146,7 @@ export default class extends React.Component {
       },
     ]
   }
+
   handleInput = (props) => {
     const { fields } = this.state
     const { user } = this.props
@@ -190,32 +198,50 @@ export default class extends React.Component {
     } else {
       this.props.updateUser('spouse', { ...user.spouse, [props.field]: props.value })
     }
+    this.handleValidation({ field: props.field, value: props.value })
+  }
+
+  handleValidation = ({ field, value }) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => {
+      if (o.field === 'nationalityCode' && field === 'marryCountry') return o
+      if (o.field === 'IDCardNo' && field === 'marryPassport') return o
+      if (o.field === 'cardExpiredDate' && field === 'marryExpireDate') return o
+      return o.field === field
+    })
+    const Invalid = find(InvalidArgument, (o) => {
+      if (o.field === 'nationalityCode' && field === 'marryCountry') return o
+      if (o.field === 'IDCardNo' && field === 'marryPassport') return o
+      if (o.field === 'cardExpiredDate' && field === 'marryExpireDate') return o
+      return o.field === field
+    })
+    if (field === 'IDCardNo' && Invalid && validateIdentityCard(replaceSpace(value))) {
+      this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
+    }
+
+    if (Required && RequiredFields(value)) {
+      this.setState({
+        PreconditionRequired: PreconditionRequired.filter(o => {
+          if (!(o.field === 'IDCardNo' && field === 'marryPassport') &&
+            o.field !== field)
+            return o
+        })
+      })
+    }
   }
 
   onValidation = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
     const Required = find(PreconditionRequired, (o) => {
-      if (o.field === 'nationalityCode' && field === 'marryCountry') {
-        return o
-      }
-      if (o.field === 'IDCardNo' && field === 'marryPassport') {
-        return o
-      }
-      if (o.field === 'cardExpiredDate' && field === 'marryExpireDate') {
-        return o
-      }
+      if (o.field === 'nationalityCode' && field === 'marryCountry') return o
+      if (o.field === 'IDCardNo' && field === 'marryPassport') return o
+      if (o.field === 'cardExpiredDate' && field === 'marryExpireDate') return o
       return o.field === field
     })
     const Invalid = find(InvalidArgument, (o) => {
-      if (o.field === 'nationalityCode' && field === 'marryCountry') {
-        return o
-      }
-      if (o.field === 'IDCardNo' && field === 'marryPassport') {
-        return o
-      }
-      if (o.field === 'cardExpiredDate' && field === 'marryExpireDate') {
-        return o
-      }
+      if (o.field === 'nationalityCode' && field === 'marryCountry') return o
+      if (o.field === 'IDCardNo' && field === 'marryPassport') return o
+      if (o.field === 'cardExpiredDate' && field === 'marryExpireDate') return o
       return o.field === field
     })
     if (Required) {
@@ -302,9 +328,11 @@ export default class extends React.Component {
 
   onHandleScrollToErrorField = (field) => {
     const errField = field.map(d => d.field)
+    let k = true
     this.state.fields.map((d, index) => {
-      if (errField.indexOf(d.field) > -1) {
+      if (errField.indexOf(d.field) > -1 && k) {
         this.refScrollView.scrollToPosition(0, this.state.layout[index], true)
+        k = false
       }
     })
   }

@@ -85,29 +85,23 @@ export default class extends React.Component {
     } else if (obj.field === 'mobilePhone') {
       this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value })
     }
-    this.handleValidation({ field: obj.field, val: obj.value })
+    this.handleValidation({ field: obj.field, value: obj.value })
   }
 
-  handleValidation = ({ field, val }) => {
+  handleValidation = ({ field, value }) => {
     const { PreconditionRequired, InvalidArgument } = this.state
     const Required = find(PreconditionRequired, (o) => o.field === field)
     const Invalid = find(InvalidArgument, (o) => o.field === field)
 
-    if (field === 'idCard') {
-      if (Invalid && validateIdentityCard(replaceSpace(val))) {
-        this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
-      }
-    } else if (field === 'email') {
-      if (Invalid && validateEmail(fontToLower(val))) {
-        this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
-      }
-    } else if (field === 'mobilePhone') {
-      if (Invalid && validatePhoneNumber(replaceSpace(val))) {
-        this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
-      }
+    if (field === 'idCard' && Invalid && validateIdentityCard(replaceSpace(value))) {
+      this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
+    } else if (field === 'email' && Invalid && validateEmail(fontToLower(value))) {
+      this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
+    } else if (field === 'mobilePhone' && Invalid && validatePhoneNumber(replaceSpace(value))) {
+      this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
     }
 
-    if (Required && RequiredFields(val)) {
+    if (Required && RequiredFields(value)) {
       this.setState({ PreconditionRequired: PreconditionRequired.filter(o => o.field !== field) })
     }
   }
