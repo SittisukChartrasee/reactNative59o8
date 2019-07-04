@@ -107,10 +107,7 @@ export default class extends React.Component {
 										visible: true,
 										labelBtn: 'ลองใหม่',
 										onPress: () => this.props.toggleModal({ visible: false }),
-										onConfirm: async () => {
-											await this.props.toggleModal({ visible: false })
-											await this.props.navigation.navigate('chooseBank')
-										},
+										onConfirm: () => this.props.toggleModal({ visible: false }),
 										onPressClose: () => this.props.toggleModal({ visible: false }),
 									})
 								}
