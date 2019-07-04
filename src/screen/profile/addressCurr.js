@@ -17,6 +17,7 @@ import { navigateAction, } from '../../redux/actions'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
 import setMutation from '../../containers/mutation'
+import { RequiredFields } from '../../utility/validation'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -125,6 +126,7 @@ export default class extends React.Component {
         [props.field]: props.value
       })
     }
+    this.handleValidation({ field: props.field, value: props.value })
   }
 
   onHandleDistrict = ({ data, val }) => {
@@ -139,52 +141,57 @@ export default class extends React.Component {
       provinceNameTH: val.data.getAddressCode.provinceNameTH
     }
     this.props.updateUser('addressCurr', { ...user.addressCurr, ...mapData })
+    this.handleValidation({ field: data.__typename, value: data.code })
   }
 
-  handleValidation = data => {
-    if (data.addressVillageTH.length > 50) {
-      const Required = find(this.state.PreconditionRequired, (o) => o.field === 'addressVillageTH')
-      if (Required) {
-        this.setState({
-          InvalidArgument: this.state.InvalidArgument.map(d => {
-            if (d.field === 'addressVillageTH') return { ...d, description: 'ท่านสามารถระบุได้ไม่เกิน 50 ตัวอักษร' }
-            else return { ...d }
-          })
+  handleValidation = ({ field, value }) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => {
+      if (o.field === 'countryCode' && field === 'country') return o
+      if (o.field === 'subDistrictCode' && field === 'subDistrict') return o
+      if (o.field === 'districtCode' && field === 'districtNameTH') return o
+      if (o.field === 'provinceCode' && field === 'provinceNameTH') return o
+      return o.field === field
+    })
+    const Invalid = find(InvalidArgument, (o) => {
+      if (o.field === 'countryCode' && field === 'country') return o
+      if (o.field === 'subDistrictCode' && field === 'subDistrict') return o
+      if (o.field === 'districtCode' && field === 'districtNameTH') return o
+      if (o.field === 'provinceCode' && field === 'provinceNameTH') return o
+      return o.field === field
+    })
+
+    if (Required && RequiredFields(value)) {
+      this.setState({
+        PreconditionRequired: PreconditionRequired.filter(o => {
+          if (!(o.field === 'countryCode' && field === 'country') &&
+            !((o.field === 'subDistrictCode' || o.field === 'districtCode' || o.field === 'provinceCode') && field === 'subDistrict') &&
+            o.field !== field)
+            return o
         })
-      } else {
-        this.setState({
-          InvalidArgument: [...this.state.InvalidArgument, { description: 'ท่านสามารถระบุได้ไม่เกิน 50 ตัวอักษร', field: 'addressVillageTH' }]
-        })
-      }
-      return false
+      })
     }
-    return true
   }
 
   onValidation = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
+
+    if (field === 'addressVillageTH' && this.props.user.addressCurr.addressVillageTH.length > 50) {
+      return 'กรุณาระบุไม่เกิน 50 ตัวอักษร'
+    }
+
     const Required = find(PreconditionRequired, (o) => {
-      if (o.field === 'countryCode' && field === 'country') {
-        return o
-      }
-      if ((o.field === 'subDistrictCode' ||
-        o.field === 'districtCode' ||
-        o.field === 'provinceCode' ||
-        o.field === 'zipCode') && field === 'subDistrict') {
-        return o
-      }
+      if (o.field === 'countryCode' && field === 'country') return o
+      if (o.field === 'subDistrictCode' && field === 'subDistrict') return o
+      if (o.field === 'districtCode' && field === 'districtNameTH') return o
+      if (o.field === 'provinceCode' && field === 'provinceNameTH') return o
       return o.field === field
     })
     const Invalid = find(InvalidArgument, (o) => {
-      if (o.field === 'countryCode' && field === 'country') {
-        return o
-      }
-      if ((o.field === 'subDistrictCode' ||
-        o.field === 'districtCode' ||
-        o.field === 'provinceCode' ||
-        o.field === 'zipCode') && field === 'subDistrict') {
-        return o
-      }
+      if (o.field === 'countryCode' && field === 'country') return o
+      if (o.field === 'subDistrictCode' && field === 'subDistrict') return o
+      if (o.field === 'districtCode' && field === 'districtNameTH') return o
+      if (o.field === 'provinceCode' && field === 'provinceNameTH') return o
       return o.field === field
     })
     if (Required) {
@@ -233,11 +240,9 @@ export default class extends React.Component {
       zipCode,
     }
 
-    const checkValadation = this.handleValidation(data)
-
     this.props.saveCurrentAddress({ variables: { input: data } })
       .then(res => {
-        if (res.data.saveCurrentAddress.success && checkValadation) {
+        if (res.data.saveCurrentAddress.success) {
           this.props.navigateAction({ ...this.props, page: 'chooseDoc' })
         } else if (!res.data.saveCurrentAddress.success) {
           switch (res.data.saveCurrentAddress.message) {

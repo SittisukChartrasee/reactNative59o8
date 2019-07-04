@@ -144,26 +144,6 @@ export default class extends React.Component {
     this.handleValidation({ field: data.__typename, value: data.code })
   }
 
-  // handleValidation = data => {
-  //   if (data.addressVillageTH.length > 50) {
-  //     const Required = find(this.state.PreconditionRequired, (o) => o.field === 'addressVillageTH')
-  //     if (Required) {
-  //       this.setState({
-  //         InvalidArgument: this.state.InvalidArgument.map(d => {
-  //           if (d.field === 'addressVillageTH') return { ...d, description: 'ท่านสามารถระบุได้ไม่เกิน 50 ตัวอักษร' }
-  //           else return { ...d }
-  //         })
-  //       })
-  //     } else {
-  //       this.setState({
-  //         InvalidArgument: [...this.state.InvalidArgument, { description: 'ท่านสามารถระบุได้ไม่เกิน 50 ตัวอักษร', field: 'addressVillageTH' }]
-  //       })
-  //     }
-  //     return false
-  //   }
-  //   return true
-  // }
-
   handleValidation = ({ field, value }) => {
     const { PreconditionRequired, InvalidArgument } = this.state
     const Required = find(PreconditionRequired, (o) => {
@@ -195,6 +175,11 @@ export default class extends React.Component {
 
   onValidation = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
+
+    if (field === 'addressVillageTH' && this.props.user.addressHome.addressVillageTH.length > 50) {
+      return 'กรุณาระบุไม่เกิน 50 ตัวอักษร'
+    }
+
     const Required = find(PreconditionRequired, (o) => {
       if (o.field === 'countryCode' && field === 'country') return o
       if (o.field === 'subDistrictCode' && field === 'subDistrict') return o
@@ -255,9 +240,7 @@ export default class extends React.Component {
       zipCode
     }
 
-    console.log(data)
-
-    // const checkValadation = this.handleValidation(data)
+    // console.log(data)
 
     this.props.savePermanentAddress({ variables: { input: data } })
       .then(res => {

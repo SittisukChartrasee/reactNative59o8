@@ -101,7 +101,7 @@ export default class extends React.Component {
       if (o.field === 'occupationCode' && field === 'occupation') return o
       return o.field === field
     })
-    
+
     if (Required && RequiredFields(value)) {
       this.setState({
         PreconditionRequired: PreconditionRequired.filter(o => {
@@ -203,7 +203,7 @@ export default class extends React.Component {
     const errField = field.map(d => d.field)
     let k = true
     this.state.fields.map((d, index) => {
-      if (errField.indexOf(d.field) > -1) {
+      if (errField.indexOf(d.field) > -1 && k) {
         this.refScrollView.scrollToPosition(0, this.state.layout[index], true)
         k = false
       }
