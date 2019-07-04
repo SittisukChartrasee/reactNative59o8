@@ -146,13 +146,14 @@ export default class extends React.Component {
           if (res.data.saveCareer.success) {
             this.props.navigateAction({ ...this.props, page: 'sourceOfFund' })
           } else if (!res.data.saveCareer.success) {
-            this.onHandleScrollToErrorField(res.data.saveCareer.details)
             switch (res.data.saveCareer.message) {
               case 'PreconditionRequired':
+                this.onHandleScrollToErrorField(res.data.saveCareer.details)
                 return this.setState({
                   PreconditionRequired: res.data.saveCareer.details
                 })
               case 'InvalidArgument':
+                this.onHandleScrollToErrorField(res.data.saveCareer.details)
                 return this.setState({
                   InvalidArgument: res.data.saveCareer.details
                 })

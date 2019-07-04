@@ -327,11 +327,12 @@ export default class extends React.Component {
         if (res.data.saveChild.success) {
           this.props.navigateAction({ ...this.props, page: 'career' })
         } else if (!res.data.saveChild.success) {
-          this.onHandleScrollToErrorField(res.data.saveChild.details)
           switch (res.data.saveChild.message) {
             case 'PreconditionRequired':
+              this.onHandleScrollToErrorField(res.data.saveChild.details)
               return this.setState({ PreconditionRequired: res.data.saveChild.details })
             case 'InvalidArgument':
+              this.onHandleScrollToErrorField(res.data.saveChild.details)
               return this.setState({ InvalidArgument: res.data.saveChild.details })
             default:
               const modal = {

@@ -78,27 +78,37 @@ export default class extends React.Component {
 
   handleInput = (obj) => {
     const { user } = this.props
-    const { PreconditionRequired, InvalidArgument } = this.state
-    const Required = find(PreconditionRequired, (o) => o.field === obj.field)
-    const Invalid = find(InvalidArgument, (o) => o.field === obj.field)
     if (obj.field === 'idCard') {
       this.props.updateUser('profile', { ...user.profile, [obj.field]: obj.value })
-      if (Invalid && validateIdentityCard(replaceSpace(obj.value))) {
-        this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== obj.field) })
-      }
     } else if (obj.field === 'email') {
       this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value })
-      if (Invalid && validateEmail(fontToLower(obj.value))) {
-        this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== obj.field) })
-      }
     } else if (obj.field === 'mobilePhone') {
       this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value })
-      if (Invalid && validatePhoneNumber(replaceSpace(obj.value))) {
-        this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== obj.field) })
+    }
+    this.handleValidation({ field: obj.field, val: obj.value })
+  }
+
+  handleValidation = ({ field, val }) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => o.field === field)
+    const Invalid = find(InvalidArgument, (o) => o.field === field)
+
+    if (field === 'idCard') {
+      if (Invalid && validateIdentityCard(replaceSpace(val))) {
+        this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
+      }
+    } else if (field === 'email') {
+      if (Invalid && validateEmail(fontToLower(val))) {
+        this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
+      }
+    } else if (field === 'mobilePhone') {
+      if (Invalid && validatePhoneNumber(replaceSpace(val))) {
+        this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
       }
     }
-    if (Required && RequiredFields(obj.value)) {
-      this.setState({ PreconditionRequired: PreconditionRequired.filter(o => o.field !== obj.field) })
+
+    if (Required && RequiredFields(val)) {
+      this.setState({ PreconditionRequired: PreconditionRequired.filter(o => o.field !== field) })
     }
   }
 
