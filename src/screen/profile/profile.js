@@ -274,11 +274,12 @@ export default class extends React.Component {
           else if (isChild === 'มี') this.props.navigateAction({ ...this.props, page: 'child' })
 
         } else if (!res.data.saveIdentity.success) {
-          this.onHandleScrollToErrorField(res.data.saveIdentity.details)
           switch (res.data.saveIdentity.message) {
             case 'PreconditionRequired':
+              this.onHandleScrollToErrorField(res.data.saveIdentity.details)
               return this.setState({ PreconditionRequired: res.data.saveIdentity.details })
             case 'InvalidArgument':
+              this.onHandleScrollToErrorField(res.data.saveIdentity.details)
               return this.setState({ InvalidArgument: res.data.saveIdentity.details })
             default:
               const modal = {

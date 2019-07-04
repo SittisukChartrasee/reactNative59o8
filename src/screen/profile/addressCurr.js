@@ -95,7 +95,7 @@ export default class extends React.Component {
   handleInput = (props) => {
     const { user } = this.props
     if (props.field === 'country') {
-      this.props.updateUser('addressCurr', { 
+      this.props.updateUser('addressCurr', {
         ...user.addressCurr,
         [props.field]: props.value,
         countryCode: props.code
@@ -240,11 +240,12 @@ export default class extends React.Component {
         if (res.data.saveCurrentAddress.success && checkValadation) {
           this.props.navigateAction({ ...this.props, page: 'chooseDoc' })
         } else if (!res.data.saveCurrentAddress.success) {
-          this.onHandleScrollToErrorField(res.data.saveCurrentAddress.details)
           switch (res.data.saveCurrentAddress.message) {
             case 'PreconditionRequired':
+              this.onHandleScrollToErrorField(res.data.saveCurrentAddress.details)
               return this.setState({ PreconditionRequired: res.data.saveCurrentAddress.details })
             case 'InvalidArgument':
+              this.onHandleScrollToErrorField(res.data.saveCurrentAddress.details)
               return this.setState({ InvalidArgument: res.data.saveCurrentAddress.details })
             default:
               const modal = {
@@ -335,7 +336,7 @@ export default class extends React.Component {
               onSetLayout: val => this.onSetLayout(val.layout.y, key),
               handleInput: (props) => this.handleInput(props),
               onSubmitEditing: () => this.onSubmitFirstName(d.field),
-              refFunc: ref => { this[d.field] = ref }, 
+              refFunc: ref => { this[d.field] = ref },
               returnKeyType: d.field === this.state.doneFlat ? 'done' : 'next',
               err: this.onValidation(d.field)
             }, key))

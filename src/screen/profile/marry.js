@@ -277,11 +277,12 @@ export default class extends React.Component {
           if (redirec) return this.props.navigateAction({ ...this.props, page: redirec })
           this.props.navigateAction({ ...this.props, page: 'career' })
         } else if (!res.data.saveSpouse.success) {
-          this.onHandleScrollToErrorField(res.data.saveSpouse.details)
           switch (res.data.saveSpouse.message) {
             case 'PreconditionRequired':
+              this.onHandleScrollToErrorField(res.data.saveSpouse.details)
               return this.setState({ PreconditionRequired: res.data.saveSpouse.details })
             case 'InvalidArgument':
+              this.onHandleScrollToErrorField(res.data.saveSpouse.details)
               return this.setState({ InvalidArgument: res.data.saveSpouse.details })
             default:
               const modal = {

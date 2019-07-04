@@ -240,11 +240,12 @@ export default class extends React.Component {
         if (res.data.saveMailingAddress.success && checkValadation) {
           this.props.navigateAction({ ...this.props, page: 'contact' })
         } else if (!res.data.saveMailingAddress.success) {
-          this.onHandleScrollToErrorField(res.data.saveMailingAddress.details)
           switch (res.data.saveMailingAddress.message) {
             case 'PreconditionRequired':
+              this.onHandleScrollToErrorField(res.data.saveMailingAddress.details)
               return this.setState({ PreconditionRequired: res.data.saveMailingAddress.details })
             case 'InvalidArgument':
+              this.onHandleScrollToErrorField(res.data.saveMailingAddress.details)
               return this.setState({ InvalidArgument: res.data.saveMailingAddress.details })
             default:
               const modal = {
@@ -333,7 +334,7 @@ export default class extends React.Component {
               onSetLayout: val => this.onSetLayout(val.layout.y, key),
               handleInput: (props) => this.handleInput(props),
               onSubmitEditing: () => this.onSubmitFirstName(d.field),
-              refFunc: ref => { this[d.field] = ref }, 
+              refFunc: ref => { this[d.field] = ref },
               returnKeyType: d.field === this.state.doneFlat ? 'done' : 'next',
               err: this.onValidation(d.field)
             }, key))

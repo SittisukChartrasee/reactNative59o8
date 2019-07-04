@@ -25,8 +25,7 @@ import { updateUser, root } from '../redux/actions/commonAction'
 import lockout from '../containers/hoc/lockout'
 import { NavBar } from '../component/gradient'
 import { replaceSpace, fontToLower, handleSizing, heightPercentageToDP } from '../utility/helper'
-
-// import * as validate from '../utility/validation'
+import { validateEmail, validateIdentityCard, validatePhoneNumber, RequiredFields } from '../utility/validation'
 
 const { width: widthScreen } = Dimensions.get('window')
 const { height: heightScreen } = Dimensions.get('window')
@@ -79,13 +78,37 @@ export default class extends React.Component {
 
   handleInput = (obj) => {
     const { user } = this.props
-    const { details } = this.state
     if (obj.field === 'idCard') {
       this.props.updateUser('profile', { ...user.profile, [obj.field]: obj.value })
     } else if (obj.field === 'email') {
       this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value })
     } else if (obj.field === 'mobilePhone') {
       this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value })
+    }
+    this.handleValidation({ field: obj.field, val: obj.value })
+  }
+
+  handleValidation = ({ field, val }) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => o.field === field)
+    const Invalid = find(InvalidArgument, (o) => o.field === field)
+
+    if (field === 'idCard') {
+      if (Invalid && validateIdentityCard(replaceSpace(val))) {
+        this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
+      }
+    } else if (field === 'email') {
+      if (Invalid && validateEmail(fontToLower(val))) {
+        this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
+      }
+    } else if (field === 'mobilePhone') {
+      if (Invalid && validatePhoneNumber(replaceSpace(val))) {
+        this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
+      }
+    }
+
+    if (Required && RequiredFields(val)) {
+      this.setState({ PreconditionRequired: PreconditionRequired.filter(o => o.field !== field) })
     }
   }
 
@@ -185,7 +208,7 @@ export default class extends React.Component {
                 fields.map((setField, key) =>
                   Input({
                     ...setField,
-                    refFunc: ref => { this[setField.field] = ref }, 
+                    refFunc: ref => { this[setField.field] = ref },
                     value: (setField.field === 'idCard')
                       ? this.props.user.profile.idCard
                       : this.props.user.contact[setField.field],
