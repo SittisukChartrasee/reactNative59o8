@@ -72,7 +72,7 @@ export default class extends React.Component {
           autoCapitalize: "none",
           style:
             [
-              { fontFamily: fonts.sukhumvitBold, color: colors.hunterGreen },
+              { fontFamily: fonts.sukhumvitBold, color: colors.hunterGreen, ...(pf => pf.OS === 'android' && { fontWeight: '400' })(Platform) },
               this.props.label === '' && { fontSize: this.props.fs, textAlign: 'center' },
               { ...this.props.styled },
             ],

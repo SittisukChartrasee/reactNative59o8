@@ -49,7 +49,6 @@ export default class extends React.Component {
 		number: '',
 		defaultKey: false,
 		dis: '',
-		countPassFail: 0
 	}
 
 
@@ -99,10 +98,9 @@ export default class extends React.Component {
 						this.setState({
 							...defaultPasscode,
 							defaultKey: true,
-							countPassFail: this.state.countPassFail + 1
 						},
 							() => {
-								if (this.state.countPassFail > 3) return this.props.navigateAction({ ...this.props, page: 'lockUser' })
+								if (res.code === "1000") return this.props.navigateAction({ ...this.props, page: 'lockUser' })
 								else {
 									this.props.toggleModal({
 										dis: res.message,
