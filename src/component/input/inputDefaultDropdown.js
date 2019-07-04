@@ -1,4 +1,5 @@
 import React from 'react'
+import { Platform } from 'react-native'
 import { Dropdown } from 'react-native-material-dropdown'
 import colors from '../../config/colors'
 import fonts from '../../config/fonts'
@@ -20,7 +21,7 @@ const Drop = props => (
     textColor={colors.darkSage}
     itemColor={colors.darkSage}
     selectedItemColor={colors.darkSage}
-    style={{ fontFamily: fonts.sukhumvitBold }}
+    style={{ fontFamily: fonts.sukhumvitBold, ...(pf => pf.OS === 'android' && { fontWeight: '400' })(Platform)  }}
     labelTextStyle={{ fontFamily: fonts.sukhumvitText }}
     titleTextStyle={{ fontFamily: fonts.sukhumvitLight }}
     itemTextStyle={{ fontFamily: fonts.sukhumvitBold }}

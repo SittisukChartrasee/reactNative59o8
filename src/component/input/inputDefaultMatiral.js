@@ -1,4 +1,5 @@
 import React from 'react'
+import { Platform } from 'react-native'
 import PropsType from 'prop-types'
 import { TextField } from 'react-native-material-textfield'
 import colors from '../../config/colors'
@@ -37,7 +38,7 @@ export default class extends React.PureComponent {
         returnKeyType={this.props.returnKeyType}
         label={this.props.label}
         style={[
-          { fontFamily: fonts.sukhumvitBold, color: colors.hunterGreen },
+          { fontFamily: fonts.sukhumvitBold, color: colors.hunterGreen, ...(pf => pf.OS === 'android' && { fontWeight: '400' })(Platform) },
           this.props.label === '' && { fontSize: this.props.fs, textAlign: 'center' },
           { ...this.props.styled },
         ]}
