@@ -232,11 +232,11 @@ export default class extends React.Component {
       trokSoiYaek,
       thanon,
       district: districtNameTH,
-      districtCode: countryCode === 'TH' || countryCode === '' ? districtCode : (districtCode || '-'),
+      districtCode: districtCode || '-',
       subDistrict,
-      subDistrictCode: countryCode === 'TH' || countryCode === '' ? subDistrictCode : (subDistrictCode || '-'),
+      subDistrictCode: subDistrictCode || '-',
       province: provinceNameTH,
-      provinceCode: countryCode === 'TH' || countryCode === '' ? provinceCode : (provinceCode || '-'),
+      provinceCode: provinceCode || '-',
       zipCode
     }
 
