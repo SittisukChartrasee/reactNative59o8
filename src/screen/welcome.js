@@ -88,10 +88,16 @@ export default class extends React.Component {
     this.handleValidation({ field: obj.field, value: obj.value })
   }
 
-  handleValidation = ({ field, value }) => {
+  getRequiredInvalid = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
     const Required = find(PreconditionRequired, (o) => o.field === field)
     const Invalid = find(InvalidArgument, (o) => o.field === field)
+    return { Required, Invalid }
+  }
+
+  handleValidation = ({ field, value }) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const { Required, Invalid } = this.getRequiredInvalid(field)
 
     if (field === 'idCard' && Invalid && validateIdentityCard(replaceSpace(value))) {
       this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
@@ -101,20 +107,16 @@ export default class extends React.Component {
       this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
     }
 
-    if (Required && RequiredFields(value)) {
+    if (Required && RequiredFields(value))
       this.setState({ PreconditionRequired: PreconditionRequired.filter(o => o.field !== field) })
-    }
   }
 
   onValidation = (field) => {
-    const { PreconditionRequired, InvalidArgument } = this.state
-    const Required = find(PreconditionRequired, (o) => o.field === field)
-    const Invalid = find(InvalidArgument, (o) => o.field === field)
-    if (Required) {
+    const { Required, Invalid } = this.getRequiredInvalid(field)
+    if (Required)
       return Required.description
-    } else if (Invalid) {
+    else if (Invalid)
       return Invalid.description
-    }
     return null
   }
 

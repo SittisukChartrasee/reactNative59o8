@@ -73,7 +73,7 @@ export default class extends React.Component {
     ]
   }
 
-  handleInput = props => {
+  handleInput = props => {    
     const { user } = this.props
     if (props.field === 'occupation') {
       this.props.updateUser('career', { ...user.career, [props.field]: props.value, occupationCode: props.code })
@@ -86,10 +86,10 @@ export default class extends React.Component {
     } else {
       this.props.updateUser('career', { ...user.career, [props.field]: props.value.value })
     }
-    this.handleValidation({ field: props.field, val: props.value })
+    this.handleValidation({ field: props.field, value: props.value })
   }
 
-  handleValidation = ({ field, value }) => {
+  getRequiredInvalid = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
     const Required = find(PreconditionRequired, (o) => {
       if (o.field === 'isicCode' && (field === 'busType' || field === 'busType_other')) return o
@@ -101,6 +101,12 @@ export default class extends React.Component {
       if (o.field === 'occupationCode' && field === 'occupation') return o
       return o.field === field
     })
+    return { Required, Invalid }
+  }
+
+  handleValidation = ({ field, value }) => {
+    const { PreconditionRequired } = this.state
+    const { Required } = this.getRequiredInvalid(field)
 
     if (Required && RequiredFields(value)) {
       this.setState({
@@ -115,17 +121,8 @@ export default class extends React.Component {
   }
 
   onValidation = field => {
-    const { PreconditionRequired, InvalidArgument } = this.state
-    const Required = find(PreconditionRequired, o => {
-      if (o.field === 'isicCode' && (field === 'busType' || field === 'busType_other')) return o
-      if (o.field === 'occupationCode' && field === 'occupation') return o
-      return o.field === field
-    })
-    const Invalid = find(InvalidArgument, o => {
-      if (o.field === 'isicCode' && (field === 'busType' || field === 'busType_other')) return o
-      if (o.field === 'occupationCode' && field === 'occupation') return o
-      return o.field === field
-    })
+    const { Required, Invalid } = this.getRequiredInvalid(field)
+
     if (Required) return Required.description
     else if (Invalid) return Invalid.description
     return null

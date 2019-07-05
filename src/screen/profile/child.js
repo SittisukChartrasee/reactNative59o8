@@ -240,7 +240,7 @@ export default class extends React.Component {
     }
   }
 
-  handleValidation = ({ field, value }) => {
+  getRequiredInvalid = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
     const Required = find(PreconditionRequired, (o) => {
       if ((o.field === 'firstDayOfBirth ' || o.field === 'firstMonthOfBirth' || o.field === 'firstYearOfBirth') && field === 'firstBirthDay') return o
@@ -252,6 +252,13 @@ export default class extends React.Component {
       if ((o.field === 'secondDayOfBirth ' || o.field === 'secondMonthOfBirth' || o.field === 'secondYearOfBirth') && field === 'secondBirthDay') return o
       return o.field === field
     })
+    return { Required, Invalid }
+  }
+
+  handleValidation = ({ field, value }) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const { Required, Invalid } = this.getRequiredInvalid(field)
+
     if ((field === 'firstDocNo' || field === 'secondDocNo') && Invalid && validateIdentityCard(replaceSpace(value))) {
       this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
     } else if ((field === 'firstFirstName' ||
@@ -269,22 +276,11 @@ export default class extends React.Component {
   }
 
   onValidation = (field) => {
-    const { PreconditionRequired, InvalidArgument } = this.state
-    const Required = find(PreconditionRequired, (o) => {
-      if ((o.field === 'firstDayOfBirth ' || o.field === 'firstMonthOfBirth' || o.field === 'firstYearOfBirth') && field === 'firstBirthDay') return o
-      if ((o.field === 'secondDayOfBirth ' || o.field === 'secondMonthOfBirth' || o.field === 'secondYearOfBirth') && field === 'secondBirthDay') return o
-      return o.field === field
-    })
-    const Invalid = find(InvalidArgument, (o) => {
-      if ((o.field === 'firstDayOfBirth ' || o.field === 'firstMonthOfBirth' || o.field === 'firstYearOfBirth') && field === 'firstBirthDay') return o
-      if ((o.field === 'secondDayOfBirth ' || o.field === 'secondMonthOfBirth' || o.field === 'secondYearOfBirth') && field === 'secondBirthDay') return o
-      return o.field === field
-    })
-    if (Required) {
+    const { Required, Invalid } = this.getRequiredInvalid(field)
+    if (Required)
       return Required.description
-    } else if (Invalid) {
+    else if (Invalid)
       return Invalid.description
-    }
     return null
   }
 

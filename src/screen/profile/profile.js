@@ -189,7 +189,7 @@ export default class extends React.Component {
     this.handleValidation({ field: props.field, value: props.value })
   }
 
-  handleValidation = ({ field, value }) => {
+  getRequiredInvalid = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
     const Required = find(PreconditionRequired, (o) => {
       if (o.field === 'genderCode' && field === 'gender') return o
@@ -203,6 +203,13 @@ export default class extends React.Component {
       if ((o.field === 'yearOfBirth ' || o.field === 'monthOfBirth' || o.field === 'dayOfBirth') && field === 'birthDay') return o
       return o.field === field
     })
+    return { Required, Invalid }
+  }
+
+  handleValidation = ({ field, value }) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const { Required, Invalid } = this.getRequiredInvalid(field)
+
     if (field === 'idCard' && Invalid && validateIdentityCard(replaceSpace(value))) {
       this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
     } else if (field === 'jcNumber' && Invalid && validateIdentityJcNumber(replaceJsCard(value))) {
@@ -227,24 +234,11 @@ export default class extends React.Component {
   }
 
   onValidation = (field) => {
-    const { PreconditionRequired, InvalidArgument } = this.state
-    const Required = find(PreconditionRequired, (o) => {
-      if (o.field === 'genderCode' && field === 'gender') return o
-      if (o.field === 'martialStatusCode' && field === 'martialStatus') return o
-      if ((o.field === 'yearOfBirth ' || o.field === 'monthOfBirth' || o.field === 'dayOfBirth') && field === 'birthDay') return o
-      return o.field === field
-    })
-    const Invalid = find(InvalidArgument, (o) => {
-      if (o.field === 'genderCode' && field === 'gender') return o
-      if (o.field === 'martialStatusCode' && field === 'martialStatus') return o
-      if ((o.field === 'yearOfBirth ' || o.field === 'monthOfBirth' || o.field === 'dayOfBirth') && field === 'birthDay') return o
-      return o.field === field
-    })
-    if (Required) {
+    const { Required, Invalid } = this.getRequiredInvalid(field)
+    if (Required)
       return Required.description
-    } else if (Invalid) {
+    else if (Invalid)
       return Invalid.description
-    }
     return null
   }
 
@@ -329,7 +323,7 @@ export default class extends React.Component {
 
   onHandleScrollToErrorField = (field) => {
     const errField = field.map(d => d.field)
-    let k = true
+    let k = true // ต้องคิดใหม่
     this.state.fields.map((d, index) => {
       if (errField.indexOf(d.field) > -1 && k) {
         this.refScrollView.scrollToPosition(0, this.state.layout[index], true)
