@@ -160,6 +160,7 @@ export default class extends React.Component {
               type: 'row',
               onPress: () => this.props.toggleModal({ visible: false }),
               onConfirm: async () => {
+                NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
                 this.props.toggleModal({ visible: false })
                 setTimeout(() => Linking.openURL('https://google.com'), 100)
               },

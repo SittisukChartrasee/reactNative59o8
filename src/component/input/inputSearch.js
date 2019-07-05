@@ -156,9 +156,10 @@ export default class extends React.Component {
           }}
         >
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            {confirmText || value
-              ? <TBold textAlign="left" color={colors.midnight}>{value || confirmText}</TBold>
-              : <TBold textAlign="left" color={colors.smoky}>กรุณาเลือกข้อมูล</TBold>
+            {
+              (value === '' || value)
+                ? <TBold textAlign="left" color={value === '' ? colors.smoky : colors.midnight}>{value === '' ? 'กรุณาเลือกข้อมูล' : value}</TBold>
+                : <TBold textAlign="left" color={colors.midnight}>{confirmText}</TBold>
             }
             <Image source={images.iconNextPageBlack} />
           </View>
