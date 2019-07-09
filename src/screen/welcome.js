@@ -121,7 +121,6 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    // this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'fatca' }))
     const { user } = this.props
 
     this.setState({ PreconditionRequired: [], InvalidArgument: [] })
@@ -135,9 +134,10 @@ export default class extends React.Component {
     this.props.requestOtp(data)
       .then(res => {
         console.log(res)
-        if (res.success) {
+        if (res.success && validateEmail(data.email)) {
           this.props.navigateAction({ ...this.props, page: 'otp' })
         } else if (!res.success) {
+          if (!validateEmail(data.email)) this.setState({ InvalidArgument: [...this.state.InvalidArgument, { field: 'email', description: 'อีเมลไม่ถูกต้อง' }] })
           switch (res.message) {
             case 'PreconditionRequired':
               return this.setState({ PreconditionRequired: res.details })
@@ -146,7 +146,7 @@ export default class extends React.Component {
             default:
               return null
           }
-        }
+        } else if (!validateEmail(data.email)) return this.setState({ InvalidArgument: [...this.state.InvalidArgument, { field: 'email', description: 'อีเมลไม่ถูกต้อง' }] })
       })
       .catch(err => {
         console.log(err)

@@ -144,7 +144,7 @@ export default class extends React.Component {
     this.handleValidation({ field: data.__typename, value: data.code })
   }
 
-  handleValidation = ({ field, value }) => {
+  getRequiredInvalid = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
     const Required = find(PreconditionRequired, (o) => {
       if (o.field === 'countryCode' && field === 'country') return o
@@ -160,6 +160,16 @@ export default class extends React.Component {
       if (o.field === 'provinceCode' && field === 'provinceNameTH') return o
       return o.field === field
     })
+    return { Required, Invalid }
+  }
+
+  handleValidation = ({ field, value }) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const { Required, Invalid } = this.getRequiredInvalid(field)
+
+    if (field === 'addressVillageTH' && this.props.user.addressWork.addressVillageTH.length > 50) {
+      return 'กรุณาระบุไม่เกิน 50 ตัวอักษร'
+    }
 
     if (Required && RequiredFields(value)) {
       this.setState({
@@ -174,31 +184,16 @@ export default class extends React.Component {
   }
 
   onValidation = (field) => {
-    const { PreconditionRequired, InvalidArgument } = this.state
+    const { Required, Invalid } = this.getRequiredInvalid(field)
 
     if (field === 'addressVillageTH' && this.props.user.addressHome.addressVillageTH.length > 50) {
       return 'กรุณาระบุไม่เกิน 50 ตัวอักษร'
     }
 
-    const Required = find(PreconditionRequired, (o) => {
-      if (o.field === 'countryCode' && field === 'country') return o
-      if (o.field === 'subDistrictCode' && field === 'subDistrict') return o
-      if (o.field === 'districtCode' && field === 'districtNameTH') return o
-      if (o.field === 'provinceCode' && field === 'provinceNameTH') return o
-      return o.field === field
-    })
-    const Invalid = find(InvalidArgument, (o) => {
-      if (o.field === 'countryCode' && field === 'country') return o
-      if (o.field === 'subDistrictCode' && field === 'subDistrict') return o
-      if (o.field === 'districtCode' && field === 'districtNameTH') return o
-      if (o.field === 'provinceCode' && field === 'provinceNameTH') return o
-      return o.field === field
-    })
-    if (Required) {
+    if (Required)
       return Required.description
-    } else if (Invalid) {
+    else if (Invalid)
       return Invalid.description
-    }
     return null
   }
 
@@ -222,7 +217,6 @@ export default class extends React.Component {
       zipCode
     } = user.addressHome
 
-
     const data = {
       countryCode,
       addressNoTH,
@@ -232,15 +226,15 @@ export default class extends React.Component {
       trokSoiYaek,
       thanon,
       district: districtNameTH,
-      districtCode: districtCode || '-',
+      districtCode: !countryCode || countryCode === 'TH' ? districtCode : '-',
       subDistrict,
-      subDistrictCode: subDistrictCode || '-',
+      subDistrictCode: !countryCode || countryCode === 'TH' ? subDistrictCode : '-',
       province: provinceNameTH,
-      provinceCode: provinceCode || '-',
+      provinceCode: !countryCode || countryCode === 'TH' ? provinceCode : '-',
       zipCode
     }
 
-    // console.log(data)
+    console.log(data)
 
     this.props.savePermanentAddress({ variables: { input: data } })
       .then(res => {

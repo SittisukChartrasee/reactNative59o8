@@ -323,13 +323,10 @@ export default class extends React.Component {
 
   onHandleScrollToErrorField = (field) => {
     const errField = field.map(d => d.field)
-    let k = true // ต้องคิดใหม่
-    this.state.fields.map((d, index) => {
-      if (errField.indexOf(d.field) > -1 && k) {
-        this.refScrollView.scrollToPosition(0, this.state.layout[index], true)
-        k = false
-      }
-    })
+    const layoutY = this.state.fields
+      .map((d, index) => errField.indexOf(d.field) > -1 && index)
+      .filter(d => d !== false)
+    this.refScrollView.scrollToPosition(0, this.state.layout[layoutY[0]], true)
   }
 
   onSetLayout = (layoutY, index) => {

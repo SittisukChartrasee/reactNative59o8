@@ -104,18 +104,18 @@ export default class extends React.Component {
       if (props.code !== 'TH') {
         const result = this.state.fields.map(d => {
           if (d.field === 'subDistrict') return { ...d, type: 'textInput' }
-          else if (d.field === 'districtNameTH') return { ...d, type: 'textInput' }
-          else if (d.field === 'provinceNameTH') return { ...d, type: 'textInput' }
-          else if (d.field === 'zipCode') return { ...d, type: 'textInput' }
+          else if (d.field === 'districtNameTH') return { ...d, type: 'textInput', required: true }
+          else if (d.field === 'provinceNameTH') return { ...d, type: 'textInput', required: true }
+          else if (d.field === 'zipCode') return { ...d, type: 'textInput', required: true }
           else return d
         })
         this.setState({ fields: result, doneFlat: 'zipCode' })
       } else {
         const result = this.state.fields.map(d => {
           if (d.field === 'subDistrict') return { ...d, type: 'search' }
-          else if (d.field === 'districtNameTH') return { ...d, type: '' }
-          else if (d.field === 'provinceNameTH') return { ...d, type: '' }
-          else if (d.field === 'zipCode') return { ...d, type: '' }
+          else if (d.field === 'districtNameTH') return { ...d, type: '', required: false }
+          else if (d.field === 'provinceNameTH') return { ...d, type: '', required: false }
+          else if (d.field === 'zipCode') return { ...d, type: '', required: false }
           else return d
         })
         this.setState({ fields: result, doneFlat: 'thanon' })
@@ -141,13 +141,8 @@ export default class extends React.Component {
     this.handleValidation({ field: data.__typename, value: data.code })
   }
 
-  handleValidation = ({ field, value }) => {
+  getRequiredInvalid = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
-
-    if (field === 'addressVillageTH' && this.props.user.addressWork.addressVillageTH.length > 50) {
-      return 'กรุณาระบุไม่เกิน 50 ตัวอักษร'
-    }
-
     const Required = find(PreconditionRequired, (o) => {
       if (o.field === 'countryCode' && field === 'country') return o
       if (o.field === 'subDistrictCode' && field === 'subDistrict') return o
@@ -162,6 +157,16 @@ export default class extends React.Component {
       if (o.field === 'provinceCode' && field === 'provinceNameTH') return o
       return o.field === field
     })
+    return { Required, Invalid }
+  }
+
+  handleValidation = ({ field, value }) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const { Required, Invalid } = this.getRequiredInvalid(field)
+
+    if (field === 'addressVillageTH' && this.props.user.addressWork.addressVillageTH.length > 50) {
+      return 'กรุณาระบุไม่เกิน 50 ตัวอักษร'
+    }
 
     if (Required && RequiredFields(value)) {
       this.setState({
@@ -176,31 +181,16 @@ export default class extends React.Component {
   }
 
   onValidation = (field) => {
-    const { PreconditionRequired, InvalidArgument } = this.state
+    const { Required, Invalid } = this.getRequiredInvalid(field)
 
     if (field === 'addressVillageTH' && this.props.user.addressHome.addressVillageTH.length > 50) {
       return 'กรุณาระบุไม่เกิน 50 ตัวอักษร'
     }
 
-    const Required = find(PreconditionRequired, (o) => {
-      if (o.field === 'countryCode' && field === 'country') return o
-      if (o.field === 'subDistrictCode' && field === 'subDistrict') return o
-      if (o.field === 'districtCode' && field === 'districtNameTH') return o
-      if (o.field === 'provinceCode' && field === 'provinceNameTH') return o
-      return o.field === field
-    })
-    const Invalid = find(InvalidArgument, (o) => {
-      if (o.field === 'countryCode' && field === 'country') return o
-      if (o.field === 'subDistrictCode' && field === 'subDistrict') return o
-      if (o.field === 'districtCode' && field === 'districtNameTH') return o
-      if (o.field === 'provinceCode' && field === 'provinceNameTH') return o
-      return o.field === field
-    })
-    if (Required) {
+    if (Required)
       return Required.description
-    } else if (Invalid) {
+    else if (Invalid)
       return Invalid.description
-    }
     return null
   }
 
