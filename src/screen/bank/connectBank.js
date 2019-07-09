@@ -107,15 +107,18 @@ export default class extends React.Component {
             <WKWebView
               source={{ uri: url }}
               onProgress={(progress) => console.log(progress)}
-              // injectedJavaScript={`(function(){
-              //   document.querySelector("#emailAdd").value = '${user.contact.email}'
-              //   document.querySelector("#mobileNo").value = '${user.contact.mobilePhone}'
-              //   document.querySelector("#nationalID").value = '${user.profile.idCard}'
-              //   return false
-              // }())`}
+              injectedJavaScript={`(function(){
+                document.querySelector("#emailAdd").disabled = true;
+                document.querySelector("#mobileNo").disabled = true;
+                document.querySelector("#nationalID").disabled = true;               
+                return false
+              }())`}
               onNavigationResponse={(e) => console.log(e.nativeEvent)}
               onNavigationStateChange={this.onHandleWebView}
             />
+            {/* document.querySelector("#emailAdd").value = '${user.contact.email}'
+                document.querySelector("#mobileNo").value = '${user.contact.mobilePhone}'
+                document.querySelector("#nationalID").value = '${user.profile.idCard}' */}
             {/* <WebView
             // this.props.user.bank.urlbank
               source={{ uri: url }}
