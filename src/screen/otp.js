@@ -92,9 +92,6 @@ export default class extends React.Component {
 
 	onPress = async setTimeWaiting => {
 		const { user } = this.props
-		// const accept_term = this.props.navigation.getParam('accept_term', '')
-		const accept_term = this.props.root.accept_term
-		console.log(accept_term)
 		const token = await AsyncStorage.getItem("access_token")
 
 		const data = {
@@ -103,7 +100,7 @@ export default class extends React.Component {
 			phone_no: user.contact.mobilePhone.replace(/ /g, ''),
 		}
 
-		this.props.requestOtp(data, token, { accept_term: accept_term ? false : null }) // Api ใช้สำหรับ OTP register และ accept
+		this.props.requestOtp(data, token) // Api ใช้สำหรับ OTP register และ accept
 			.then(res => {
 				if (res.success) {
 					setTimeWaiting(res.details)

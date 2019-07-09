@@ -18,7 +18,7 @@ import images from '../../config/images'
 import { RiskList } from '../../component/lists'
 import { navigateAction } from '../../redux/actions'
 import { root } from '../../redux/actions/commonAction'
-import { requestOtp } from '../../redux/actions/root-active'
+import { requestOtp, acceptTerm } from '../../redux/actions/root-active'
 
 const text = ` 1. บริษัทจัดการมีสิทธิที่จะไม่อนุมัติหรือปฏิเสธคำขอเปิดบัญชีกองทุนรวม หรือการทำธุรกรรมกับผู้ลงทุนทั้งหมดหรือบางส่วน ได้โดยไม่จำเป็นต้องชี้แจงแสดงเหตุผลใดๆแก่ผู้ลงทุน และการตัดสินใจของบริษัทจัดการให้ถือเป็นที่สุด ทั้งนี้ ให้รวมถึงสิทธิที่จะดำเนินการใดๆให้เป็นไปตามข้อกำหนดสิทธิและหน้าที่ของบริษัทจัดการที่ระบุไว้ในหนังสือชี้ชวน ตลอดจนเงื่อนไขและข้อกำหนดอื่นใดที่บริษัทจัดการได้กำหนดไว้ นอกจากนี้บริษัทจัดการจะไม่รับเปิดบัญชีกองทุนในกรณีดังต่อไปนี้
  - พลเมืองสหรัฐอเมริกาหรือผู้ที่มีถิ่นฐานอยู่ในสหรัฐอเมริกา หรือบุคคลซึ่งโดยปกติมีถิ่นที่อยู่ในสหรัฐอเมริกา
@@ -30,6 +30,7 @@ const text = ` 1. บริษัทจัดการมีสิทธิท�
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
 	requestOtp: bindActionCreators(requestOtp, dispatch),
+	acceptTerm: bindActionCreators(acceptTerm, dispatch),
 	navigateAction: bindActionCreators(navigateAction, dispatch),
 	updateRoot: bindActionCreators(root, dispatch)
 })
@@ -48,16 +49,25 @@ export default class extends React.Component {
 		else if (sumSuittest > 30) this.setState({ risk: 3 })
 	}
 
+	onRequestOtp = token => {
+		this.props.requestOtp(null, token)
+			.then(res => {
+				if (res.success) {
+					this.props.navigateAction({ ...this.props, page: 'otp' })
+				}
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	}
+
 	onNext = async () => {
 		const token = await AsyncStorage.getItem("access_token")
 
-		this.props.requestOtp(null, token, { accept_term: true })
+		this.props.acceptTerm(token)
 			.then(res => {
 				console.log(res)
-				if (res.success) {
-					this.props.updateRoot('accept_term', true)
-					this.props.navigateAction({ ...this.props, page: 'otp' })
-				}
+				if (res.success) this.onRequestOtp(res.result.access_token)
 			})
 			.catch(err => {
 				console.log(err)

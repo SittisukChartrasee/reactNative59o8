@@ -1,14 +1,28 @@
 import request from '../../utility/requestApi'
 import { CHANGE_ROOT } from '../types'
 
-export const requestOtp = (obj, token = null, accept = null) => async dispatch => { // Api ใช้สำหรับ OTP register และ accept
-  const url = token ? 'user/accept-term' : 'auth/otp'
-  const data = accept && accept.accept_term !== null ? accept : obj
+export const requestOtp = (obj, token = null) => async dispatch => {  // Api ใช้สำหรับ OTP register และ accept  
+  const url = token ? 'user/accept-term/request-otp' : 'auth/otp'
   const res = await request(url, {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: token ? null : JSON.stringify(obj),
   }, token)
 
+  if (res && res.result) {
+    for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    return { ...res }
+  }
+
+  for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  return { ...res }
+}
+
+export const acceptTerm = token => async dispatch => { // Api ใช้สำหรับ accept ก่อน OTP
+  const url = 'user/accept-term'
+  const res = await request(url, {
+    method: 'POST',
+  }, token)
+  
   if (res && res.result) {
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
