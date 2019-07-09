@@ -30,19 +30,17 @@ export default class extends React.Component {
     currentDot: '',
     refNo: null,
     overRequest: false,
-    details: 3,
     onPress: () => { },
-    start: Date.now()
+    timer: Date.now()
   }
 
   timerCount = ''
 
   state = {
-    endState: 0,
     diff: 0,
     minutes: 0,
     seconds: 0,
-    duration: 60 * this.props.details,
+    timer: this.props.timer
   }
 
   componentDidMount = () => {
@@ -58,6 +56,7 @@ export default class extends React.Component {
       this.resendOTP(nextProps.details)
       this.props.setState()
     }
+    if (nextProps.timer) this.starttimer()
   }
 
   componentWillUnmount = () => {
@@ -76,8 +75,7 @@ export default class extends React.Component {
     let minutes = this.state.minutes
     let seconds = this.state.seconds
 
-    diff = this.state.duration - (((Date.now() - (this.props.start * 1000)) / 1000) | 0) // เปรียบเทียบโดยใช้เวลาเริ่มต้นและเวลาปัจจุบัน
-    // diff = this.state.duration - 1 // เปรียบเทียบโดย ลบ เวลาที่ละ 1 sec
+    diff = ((((this.props.timer * 1000) - Date.now()) / 1000) | 0) // เปรียบเทียบโดยใช้เวลาหมดอายุลบด้วยเวลาปัจจุบัน
     minutes = (diff / 60) | 0
     seconds = (diff % 60) | 0
     minutes = minutes < 10 ? "0" + minutes : minutes
@@ -88,13 +86,9 @@ export default class extends React.Component {
     } else {
       this.setState({ minutes: minutes, seconds: seconds }) // เปรียบเทียบโดยใช้เวลาเริ่มต้นและเวลาปัจจุบัน
     }
-    // this.setState({ minutes: minutes, seconds: seconds, duration: this.state.duration - 1 }) // เปรียบเทียบโดย ลบ เวลาที่ละ 1 sec
   }
 
-  resendOTP = (minutes) => {
-    this.setState({ minutes, seconds: 0, duration: 60 * minutes })
-    this.starttimer()
-  }
+  resendOTP = () => this.starttimer()
 
   render() {
     const { minutes, seconds } = this.state
@@ -144,8 +138,8 @@ export default class extends React.Component {
                   <TouchableOpacity
                     onPress={
                       async () => {
-                        await this.props.onPress(async (time = 3) => {
-                          await this.resendOTP(time)
+                        await this.props.onPress(async () => {
+                          await this.resendOTP()
                         })
                       }}
                     style={{
@@ -165,7 +159,7 @@ export default class extends React.Component {
         </View>
 
         <View style={{ flex: 1, paddingHorizontal: 24, paddingTop: 5, backgroundColor: colors.white }}>
-          <TLight fontSize={sizeFont.TLight} color={colors.grey}>{`กรุณากรอกรหัสผ่านแบบใช้ครั้งเดียว ( SMS OTP)\nที่ได้รับทาง SMS บนมือถือของท่าน\n(รหัส OTP มีอายุการใช้งาน ${this.props.details} นาที)`}</TLight>
+          <TLight fontSize={sizeFont.TLight} color={colors.grey}>{`กรุณากรอกรหัสผ่านแบบใช้ครั้งเดียว ( SMS OTP)\nที่ได้รับทาง SMS บนมือถือของท่าน\n(รหัส OTP มีอายุการใช้งาน ${this.props.text} นาที)`}</TLight>
           <TBold color={colors.emerald} fontSize={sizeFont.TBold} mt={sizeFont.margin}>รหัสอ้างอิง : {refNo}</TBold>
 
           <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 10 }}>
