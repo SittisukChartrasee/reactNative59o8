@@ -34,7 +34,6 @@ export default class extends React.Component {
 		number: '',
 		currentDot: '',
 		ref_no: this.props.root.ref_no,
-		text: '3',
 		defaultKey: false,
 	}
 
@@ -68,7 +67,6 @@ export default class extends React.Component {
 							this.props.updateRoot('time', res.details.time)
 							this.props.updateRoot('overRequest', true)
 							this.props.updateRoot('overRequestUi', true)
-							this.setState({ text: '6' })
 						}
 						this.setState({ ...defaultDot, defaultKey: true })
 					}
@@ -104,7 +102,6 @@ export default class extends React.Component {
 					this.setState({
 						ref_no: res.result.ref_no,
 						defaultKey: true,
-						text: '3',
 						...defaultDot
 					})
 				}
@@ -124,7 +121,7 @@ export default class extends React.Component {
 						currentDot: this.state.currentDot,
 						refNo: ref_no || null,
 						timer: this.props.root.time || (Date.now() / 1000),
-						text: this.state.text,
+						text: this.props.root.overRequestUi ? '6' : '3',
 						overRequest: this.props.root.overRequest,
 						overRequestUi: this.props.root.overRequestUi,
 						onPress: this.onPress,

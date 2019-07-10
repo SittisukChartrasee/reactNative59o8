@@ -9,11 +9,21 @@ export const requestOtp = (obj, token = null) => async dispatch => {  // Api ใ
   }, token)
 
   if (res && res.result) {
-    for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    for (const key in res.result) {
+      if (key === 'code')
+        dispatch({ type: CHANGE_ROOT, key, value: res.result })
+      else
+        dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    }
     return { ...res }
   }
 
-  for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  for (const key in res) {
+    if (key === 'code')
+      dispatch({ type: CHANGE_ROOT, key, value: res })
+    else
+      dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  }
   return { ...res }
 }
 
@@ -22,7 +32,7 @@ export const acceptTerm = token => async dispatch => { // Api ใช้สำห
   const res = await request(url, {
     method: 'POST',
   }, token)
-  
+
   if (res && res.result) {
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
@@ -45,11 +55,21 @@ export const velidateOtp = (obj, token = null) => async dispatch => { // Api ใ
   }, token)
 
   if (res && res.result) {
-    for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    for (const key in res.result) {
+      if (key === 'code')
+        dispatch({ type: CHANGE_ROOT, key, value: res.result })
+      else
+        dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    }
     return { ...res }
   }
 
-  for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  for (const key in res) {
+    if (key === 'code')
+      dispatch({ type: CHANGE_ROOT, key, value: res })
+    else
+      dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  }
   return { ...res }
 }
 
