@@ -321,10 +321,12 @@ export default class extends React.Component {
       })
   }
 
-  onHandleScrollToErrorField = (field) => {
-    const errField = field.map(d => d.field)
+  onHandleScrollToErrorField = async (field) => {
+    const errField = await field.map(d => d.field)
     const layoutY = this.state.fields
-      .map((d, index) => errField.indexOf(d.field) > -1 && index)
+      .map((d, index) => (errField.indexOf(d.field) > -1 ||
+        (d.field === 'gender' && errField.indexOf('genderCode') > -1) ||
+        (d.field === 'martialStatus' && errField.indexOf('martialStatusCode') > -1)) && index)
       .filter(d => d !== false)
     this.refScrollView.scrollToPosition(0, this.state.layout[layoutY[0]], true)
   }
