@@ -78,30 +78,31 @@ export default class extends React.Component {
         required: true,
       }, {
         label: 'แขวง/ตำบล',
-        type: 'search',
+        type: this.props.user.addressWork.countryCode !== 'TH' && this.props.user.addressWork.countryCode ? 'textInput' : 'search',
         field: 'subDistrict', // subDistrictCode
         required: true,
       }, {
         label: 'เขต/อำเภอ',
+        type: this.props.user.addressWork.countryCode !== 'TH' && this.props.user.addressWork.countryCode ? 'textInput' : null,
         field: 'districtNameTH', // districtCode
-        required: false,
+        required: this.props.user.addressWork.countryCode !== 'TH' && this.props.user.addressWork.countryCode,
       }, {
         label: 'จังหวัด',
+        type: this.props.user.addressWork.countryCode !== 'TH' && this.props.user.addressWork.countryCode ? 'textInput' : null,
         field: 'provinceNameTH', // provinceCode
-        required: false,
+        required: this.props.user.addressWork.countryCode !== 'TH' && this.props.user.addressWork.countryCode,
       }, {
         label: 'รหัสไปรษณีย์',
+        type: this.props.user.addressWork.countryCode !== 'TH' && this.props.user.addressWork.countryCode ? 'textInput' : null,
         field: 'zipCode',
-        required: false,
+        required: this.props.user.addressWork.countryCode !== 'TH' && this.props.user.addressWork.countryCode,
       }
     ]
   }
 
-  handleInput = (props) => {
-    const { updateUser, user } = this.props
-    if (props.field === 'country') {
-      updateUser('addressWork', { ...user.addressWork, [props.field]: props.value, countryCode: props.code })
-      if (props.code !== 'TH') {
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.user.addressWork) {
+      if (nextProps.user.addressWork.countryCode !== 'TH' && nextProps.user.addressWork.countryCode) {
         const result = this.state.fields.map(d => {
           if (d.field === 'subDistrict') return { ...d, type: 'textInput' }
           else if (d.field === 'districtNameTH') return { ...d, type: 'textInput', required: true }
@@ -120,6 +121,32 @@ export default class extends React.Component {
         })
         this.setState({ fields: result, doneFlat: 'thanon' })
       }
+    }
+  }
+
+  handleInput = (props) => {
+    const { updateUser, user } = this.props
+    if (props.field === 'country') {
+      if ((props.code !== 'TH' && user.addressWork.countryCode === 'TH') ||
+        (user.addressWork.countryCode !== 'TH' && user.addressWork.countryCode))
+        this.props.updateUser('addressWork', {
+          ...user.addressWork,
+          [props.field]: props.value,
+          countryCode: props.code,
+          subDistrictCode: '',
+          subDistrict: '',
+          zipCode: '',
+          districtNameTH: '',
+          districtCode: '',
+          provinceCode: '',
+          provinceNameTH: '',
+        })
+      else
+        this.props.updateUser('addressWork', {
+          ...user.addressWork,
+          [props.field]: props.value,
+          countryCode: props.code,
+        })
     } else {
       updateUser('addressWork', { ...user.addressWork, [props.field]: props.value })
     }
@@ -171,10 +198,19 @@ export default class extends React.Component {
     if (Required && RequiredFields(value)) {
       this.setState({
         PreconditionRequired: PreconditionRequired.filter(o => {
-          if (!(o.field === 'countryCode' && field === 'country') &&
-            !((o.field === 'subDistrictCode' || o.field === 'districtCode' || o.field === 'provinceCode') && field === 'subDistrict') &&
-            o.field !== field)
-            return o
+          if (this.props.user.addressWork.countryCode === 'TH') {
+            if (!(o.field === 'countryCode' && field === 'country') &&
+              !((o.field === 'subDistrictCode' || o.field === 'districtCode' || o.field === 'provinceCode') && field === 'subDistrict') &&
+              o.field !== field)
+              return o
+          } else {
+            if (!(o.field === 'countryCode' && field === 'country') &&
+              !(o.field === 'subDistrictCode' && field === 'subDistrict') &&
+              !(o.field === 'districtCode' && field === 'districtNameTH') &&
+              !(o.field === 'provinceCode' && field === 'provinceNameTH') &&
+              o.field !== field)
+              return o
+          }
         })
       })
     }
