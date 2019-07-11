@@ -66,7 +66,8 @@ export default class extends React.Component {
 		this.props.requestOtp(null, token)
 			.then(res => {
 				if (res.success) {
-					this.props.navigateAction({ ...this.props, page: 'otp' })
+					this.props.updateRoot('currFlowUP', 'updatePasscode')
+					this.props.navigation.navigate({ routeName: 'otp', key: 'otpUpdatePasscode'})
 				}
 			})
 			.catch(err => {

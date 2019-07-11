@@ -3,6 +3,7 @@ import { CHANGE_ROOT } from '../types'
 const init = {
   root: 'TEST',
   appState: '',
+  currFlowUP: '',
   modal: {
     visible: false
   }

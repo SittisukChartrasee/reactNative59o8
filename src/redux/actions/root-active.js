@@ -44,7 +44,6 @@ export const acceptTerm = token => async dispatch => { // Api ใช้สำห
 
 export const velidateOtp = (obj, token = null) => async dispatch => { // Api ใช้สำหรับ OTP register และ accept
   const url = token ? 'user/accept-term/verify-otp' : 'auth/token'
-  console.log(url)
   const res = await request(url, {
     method: 'POST',
     body: JSON.stringify({
@@ -74,10 +73,16 @@ export const velidateOtp = (obj, token = null) => async dispatch => { // Api ใ
   return { ...res }
 }
 
-export const requestRegister = (obj, token) => async dispatch => {
-  const url = 'user/register'
+export const confirmPasscode = (obj, { token, currFlowUP }) => async dispatch => {
+  const handleEndPoint = currFlow => {
+    switch (currFlow) {
+      case 'updatePasscode': return 'user/accept-term/update-passcode'
+      case 'forgetPasscode': return 'user/forgot-password/reset-passcode'
+      default: return 'user/register'
+    }
+  }
 
-  const res = await request(url, {
+  const res = await request(handleEndPoint(currFlowUP), {
     method: 'POST',
     body: JSON.stringify({
       password: obj.password,

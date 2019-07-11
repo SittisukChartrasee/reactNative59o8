@@ -12,7 +12,7 @@ import { NavBar } from '../component/gradient'
 import { LongPositionButton } from '../component/button'
 import images from '../config/images'
 import Input from '../component/input'
-import { navigateAction } from '../redux/actions'
+import { navigateAction, updateRoot } from '../redux/actions'
 import colors from '../config/colors';
 import { TBold } from '../component/texts';
 
@@ -26,11 +26,15 @@ const card = [
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateRoot: bindActionCreators(updateRoot, dispatch)
 })
 
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
+  componentDidMount = () => {
+    this.props.updateRoot('currFlowUP', 'forgetPasscode')
+  }
   render() {
     return (
       <Screen color="transparent">
