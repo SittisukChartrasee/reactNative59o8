@@ -133,11 +133,18 @@ export default class extends React.Component {
 
     this.props.requestOtp(data)
       .then(res => {
-        console.log(res)
-        if (res.success && validateEmail(data.email)) {
+        if (res.success || res.code === '1001') {
+          if (res.code === '1001') {
+            this.props.updateRoot('time', res.details.time)
+            this.props.updateRoot('ref_no', res.details.ref_no)
+            this.props.updateRoot('overRequest', true)
+            this.props.updateRoot('overRequestUi', true)
+          } else {
+            this.props.updateRoot('overRequest', false)
+            this.props.updateRoot('overRequestUi', false)
+          }
           this.props.navigateAction({ ...this.props, page: 'otp' })
         } else if (!res.success) {
-          if (!validateEmail(data.email)) this.setState({ InvalidArgument: [...this.state.InvalidArgument, { field: 'email', description: 'อีเมลไม่ถูกต้อง' }] })
           switch (res.message) {
             case 'PreconditionRequired':
               return this.setState({ PreconditionRequired: res.details })
@@ -146,7 +153,7 @@ export default class extends React.Component {
             default:
               return null
           }
-        } else if (!validateEmail(data.email)) return this.setState({ InvalidArgument: [...this.state.InvalidArgument, { field: 'email', description: 'อีเมลไม่ถูกต้อง' }] })
+        }
       })
       .catch(err => {
         console.log(err)

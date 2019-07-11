@@ -9,11 +9,21 @@ export const requestOtp = (obj, token = null) => async dispatch => {  // Api ใ
   }, token)
 
   if (res && res.result) {
-    for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    for (const key in res.result) {
+      if (key === 'code')
+        dispatch({ type: CHANGE_ROOT, key, value: { code: res.result.code, message: res.result.message } })
+      else
+        dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    }
     return { ...res }
   }
 
-  for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  for (const key in res) {
+    if (key === 'code')
+      dispatch({ type: CHANGE_ROOT, key, value: { code: res.code, message: res.message } })
+    else
+      dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  }
   return { ...res }
 }
 
@@ -22,7 +32,7 @@ export const acceptTerm = token => async dispatch => { // Api ใช้สำห
   const res = await request(url, {
     method: 'POST',
   }, token)
-  
+
   if (res && res.result) {
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
@@ -34,6 +44,7 @@ export const acceptTerm = token => async dispatch => { // Api ใช้สำห
 
 export const velidateOtp = (obj, token = null) => async dispatch => { // Api ใช้สำหรับ OTP register และ accept
   const url = token ? 'user/accept-term/verify-otp' : 'auth/token'
+  console.log(url)
   const res = await request(url, {
     method: 'POST',
     body: JSON.stringify({
@@ -45,11 +56,21 @@ export const velidateOtp = (obj, token = null) => async dispatch => { // Api ใ
   }, token)
 
   if (res && res.result) {
-    for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    for (const key in res.result) {
+      if (key === 'code')
+        dispatch({ type: CHANGE_ROOT, key, value: { code: res.result.code, message: res.result.message } })
+      else
+        dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    }
     return { ...res }
   }
 
-  for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  for (const key in res) {
+    if (key === 'code')
+      dispatch({ type: CHANGE_ROOT, key, value: { code: res.code, message: res.message } })
+    else
+      dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  }
   return { ...res }
 }
 

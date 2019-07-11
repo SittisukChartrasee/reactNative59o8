@@ -226,11 +226,11 @@ export default class extends React.Component {
       trokSoiYaek,
       thanon,
       district: districtNameTH,
-      districtCode: !countryCode || countryCode === 'TH' ? districtCode : '-',
+      districtCode: (!countryCode || countryCode === 'TH') || !districtNameTH ? districtCode : '-',
       subDistrict,
-      subDistrictCode: !countryCode || countryCode === 'TH' ? subDistrictCode : '-',
+      subDistrictCode: (!countryCode || countryCode === 'TH') || !subDistrict ? subDistrictCode : '-',
       province: provinceNameTH,
-      provinceCode: !countryCode || countryCode === 'TH' ? provinceCode : '-',
+      provinceCode: (!countryCode || countryCode === 'TH') || !provinceNameTH ? provinceCode : '-',
       zipCode
     }
 

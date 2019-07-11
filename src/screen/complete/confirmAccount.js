@@ -48,19 +48,7 @@ export default class extends React.Component {
 		else if (sumSuittest <= 29) this.setState({ risk: 2 })
 		else if (sumSuittest > 30) this.setState({ risk: 3 })
 	}
-
-	onRequestOtp = token => {
-		this.props.requestOtp(null, token)
-			.then(res => {
-				if (res.success) {
-					this.props.navigateAction({ ...this.props, page: 'otp' })
-				}
-			})
-			.catch(err => {
-				console.log(err)
-			})
-	}
-
+	
 	onNext = async () => {
 		const token = await AsyncStorage.getItem("access_token")
 
@@ -68,6 +56,18 @@ export default class extends React.Component {
 			.then(res => {
 				console.log(res)
 				if (res.success) this.onRequestOtp(res.result.access_token)
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	}
+
+	onRequestOtp = token => {
+		this.props.requestOtp(null, token)
+			.then(res => {
+				if (res.success) {
+					this.props.navigateAction({ ...this.props, page: 'otp' })
+				}
 			})
 			.catch(err => {
 				console.log(err)

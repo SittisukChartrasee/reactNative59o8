@@ -107,12 +107,12 @@ export default class extends React.Component {
             <WKWebView
               source={{ uri: url }}
               onProgress={(progress) => console.log(progress)}
-              injectedJavaScript={`(function(){
-                document.querySelector("#emailAdd").disabled = true;
-                document.querySelector("#mobileNo").disabled = true;
-                document.querySelector("#nationalID").disabled = true;               
-                return false
-              }())`}
+              // injectedJavaScript={`(function(){
+              //   document.querySelector("#emailAdd").disabled = true;
+              //   document.querySelector("#mobileNo").disabled = true;
+              //   document.querySelector("#nationalID").disabled = true;               
+              //   return false
+              // }())`}
               onNavigationResponse={(e) => console.log(e.nativeEvent)}
               onNavigationStateChange={this.onHandleWebView}
             />

@@ -33,10 +33,7 @@ export default class extends React.Component {
 		dot: [false, false, false, false, false, false],
 		number: '',
 		currentDot: '',
-		overRequest: false,
-		overRequestUi: false,
 		ref_no: this.props.root.ref_no,
-		details: 3,
 		defaultKey: false,
 	}
 
@@ -54,11 +51,10 @@ export default class extends React.Component {
 		else obj.dot.map(d => d && this.delayDot(d))
 
 		if (obj.number.length === 6) {
-			const token = await AsyncStorage.getItem("access_token")
+			const token = this.props.root.access_token
 
 			this.props.velidateOtp(data, token) // Api ใช้สำหรับ OTP register และ accept
 				.then(res => {
-					console.log(res)
 					if (res.success) {
 						if (res.result.is_register) {
 							this.props.navigateAction({ ...this.props, page: 'login', params: { user_token: res.result.user_token } })
@@ -67,12 +63,10 @@ export default class extends React.Component {
 						}
 						this.setState({ ...defaultDot, defaultKey: true })
 					} else if (!res.success) {
-						if (res.details === 6) {
-							this.setState({
-								overRequest: true,
-								overRequestUi: true,
-								details: res.details,
-							})
+						if (res.details && res.details.code === '1001') {
+							this.props.updateRoot('time', res.details.time)
+							this.props.updateRoot('overRequest', true)
+							this.props.updateRoot('overRequestUi', true)
 						}
 						this.setState({ ...defaultDot, defaultKey: true })
 					}
@@ -103,10 +97,10 @@ export default class extends React.Component {
 		this.props.requestOtp(data, token) // Api ใช้สำหรับ OTP register และ accept
 			.then(res => {
 				if (res.success) {
-					setTimeWaiting(res.details)
+					setTimeWaiting()
+					this.props.updateRoot('overRequestUi', false)
 					this.setState({
 						ref_no: res.result.ref_no,
-						overRequestUi: false,
 						defaultKey: true,
 						...defaultDot
 					})
@@ -126,18 +120,18 @@ export default class extends React.Component {
 						dot: this.state.dot,
 						currentDot: this.state.currentDot,
 						refNo: ref_no || null,
-						start: this.props.root.time || (Date.now() / 1000),
-						overRequest: this.state.overRequest,
-						overRequestUi: this.state.overRequestUi,
-						details: this.state.details,
+						timer: this.props.root.time || (Date.now() / 1000),
+						text: this.props.root.overRequestUi ? '6' : '3',
+						overRequest: this.props.root.overRequest,
+						overRequestUi: this.props.root.overRequestUi,
 						onPress: this.onPress,
 						onPrevPage: () => this.props.navigation.goBack(),
-						setState: () => this.setState({ overRequest: false }),
+						setState: () => this.props.updateRoot('overRequest', false),
 					})
 				}
 
 				{
-					this.state.overRequestUi
+					this.props.root.overRequestUi
 						? (
 							<View style={{ flex: 1, backgroundColor: colors.white, marginTop: -40 }}>
 								<TBold color={colors.softRed}>ท่านกรอกผิดเกินจำนวนครั้งที่กำหนด</TBold>
