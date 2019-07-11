@@ -51,7 +51,7 @@ export default class extends React.Component {
 		else obj.dot.map(d => d && this.delayDot(d))
 
 		if (obj.number.length === 6) {
-			const token = await AsyncStorage.getItem("access_token")
+			const token = this.props.root.access_token
 
 			this.props.velidateOtp(data, token) // Api ใช้สำหรับ OTP register และ accept
 				.then(res => {
@@ -63,7 +63,7 @@ export default class extends React.Component {
 						}
 						this.setState({ ...defaultDot, defaultKey: true })
 					} else if (!res.success) {
-						if (res.details.is_over) {
+						if (res.details && res.details.code === '1001') {
 							this.props.updateRoot('time', res.details.time)
 							this.props.updateRoot('overRequest', true)
 							this.props.updateRoot('overRequestUi', true)
