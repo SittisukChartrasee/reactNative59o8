@@ -23,8 +23,6 @@ import lockout from '../containers/hoc/lockout'
 import Input from '../component/input'
 import { LongPositionButton, NextButton } from '../component/button'
 import { navigateAction } from '../redux/actions'
-import { requestOtp } from '../redux/actions/root-active'
-import { updateUser } from '../redux/actions/commonAction'
 import { containerQuery, getStatusInProgress, getRegisterBankStatus } from '../containers/query'
 
 const { width: widthScreen } = Dimensions.get('window')

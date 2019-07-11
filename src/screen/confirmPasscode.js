@@ -56,9 +56,15 @@ export default class extends React.Component {
     }
     if (obj.number.length === 6) {
       if (this.props.passcode.passcode === data.password) {
-        this.props.confirmPasscode(data, { token: this.props.root.access_token, currFlowUP: this.props.root.currFlowUP,})
+        const token = this.props.root.access_token
+        const currFlowUP = this.props.root.currFlowUP
+
+        this.props.confirmPasscode(data, { token, currFlowUP })
           .then(res => {
-            if (res.success) {
+            if (currFlowUP === 'forgetPasscode') {
+              this.props.navigation.navigate('login')
+              return
+            } else if (res.success) {
               this.props.navigateAction({ ...this.props, page: handleLinkPage(this.props.root.currFlowUP) })
               AsyncStorage.setItem('access_token', res.result.access_token)
               AsyncStorage.setItem('user_token', res.result.user_token)

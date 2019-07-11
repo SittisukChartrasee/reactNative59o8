@@ -27,7 +27,7 @@ const text = ` 1. บริษัทจัดการมีสิทธิท�
  3. การเปิดบัญชีกองทุนผ่าน K-My Funds จะครอบคลุมถึงการสมัครใช้บริการ SMS Fund Alert บริการ K-Mutual Fund Reports และบริการ K-Cyber Invest  อย่างไรก็ตาม บริษัทอาจเปลี่ยนแปลงหรือยกเลิกการให้บริการดังกล่าวได้ โดยเป็นดุลยพินิจของบริษัทจัดการ
 				`
 
-const mapToProps = () => ({})
+const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
 	requestOtp: bindActionCreators(requestOtp, dispatch),
 	acceptTerm: bindActionCreators(acceptTerm, dispatch),
@@ -51,6 +51,7 @@ export default class extends React.Component {
 	
 	onNext = async () => {
 		const token = await AsyncStorage.getItem("access_token")
+		this.props.updateRoot('currFlowUP', 'updatePasscode')
 
 		this.props.acceptTerm(token)
 			.then(res => {
@@ -63,10 +64,9 @@ export default class extends React.Component {
 	}
 
 	onRequestOtp = token => {
-		this.props.requestOtp(null, token)
+		this.props.requestOtp(null, { token, currFlowUP: this.props.root.currFlowUP })
 			.then(res => {
 				if (res.success) {
-					this.props.updateRoot('currFlowUP', 'updatePasscode')
 					this.props.navigation.navigate({ routeName: 'otp', key: 'otpUpdatePasscode'})
 				}
 			})

@@ -1,9 +1,16 @@
 import request from '../../utility/requestApi'
 import { CHANGE_ROOT } from '../types'
 
-export const requestOtp = (obj, token = null) => async dispatch => {  // Api ใช้สำหรับ OTP register และ accept  
-  const url = token ? 'user/accept-term/request-otp' : 'auth/otp'
-  const res = await request(url, {
+export const requestOtp = (obj, { token = null, currFlowUP }) => async dispatch => {  // Api ใช้สำหรับ OTP register และ accept  
+  const handleEndPoint = currFlow => {
+    switch (currFlow) {
+      case 'updatePasscode': return 'user/accept-term/request-otp'
+      case 'forgetPasscode': return 'user/forgot-password/request-otp'
+      default: return 'auth/otp'
+    }
+  }
+
+  const res = await request(handleEndPoint(currFlowUP), {
     method: 'POST',
     body: token ? null : JSON.stringify(obj),
   }, token)
@@ -42,9 +49,16 @@ export const acceptTerm = token => async dispatch => { // Api ใช้สำห
   return { ...res }
 }
 
-export const velidateOtp = (obj, token = null) => async dispatch => { // Api ใช้สำหรับ OTP register และ accept
-  const url = token ? 'user/accept-term/verify-otp' : 'auth/token'
-  const res = await request(url, {
+export const velidateOtp = (obj, { token = null, currFlowUP }) => async dispatch => { // Api ใช้สำหรับ OTP register และ accept
+  const handleEndPoint = currFlow => {
+    switch (currFlow) {
+      case 'updatePasscode': return 'user/accept-term/verify-otp'
+      case 'forgetPasscode': return 'user/forgot-password/verify-otp'
+      default: return 'auth/token'
+    }
+  }
+
+  const res = await request(handleEndPoint(currFlowUP), {
     method: 'POST',
     body: JSON.stringify({
       trans_id: obj.trans_id,
@@ -110,6 +124,26 @@ export const requestLogin = (obj, token) => async dispatch => {
       ...obj,
     }),
   }, token)
+
+  if (res && res.result) {
+    for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    return { ...res }
+  }
+
+  for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  return { ...res }
+}
+
+export const forgotPasscode = (obj) => async dispatch => {
+  const url = 'user/forgot-password'
+
+  const res = await request(url, {
+    method: 'POST',
+    body: JSON.stringify({
+      user_token: obj.user_token,
+      id_card: obj.id_card,
+    }),
+  })
 
   if (res && res.result) {
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
