@@ -296,12 +296,12 @@ export default class extends React.Component {
   onHandleScrollToErrorField = (field) => {
     const errField = field.map(d => d.field)
     const layoutY = this.state.fields
-    .map((d, index) => (errField.indexOf(d.field) > -1 ||
-    errField.indexOf('countryCode') > -1 ||
-    errField.indexOf('subDistrictCode') > -1 ||
-    errField.indexOf('districtCode') > -1 ||
-    errField.indexOf('provinceCode') > -1) && index)
-  .filter(d => d !== false)
+      .map((d, index) => (errField.indexOf(d.field) > -1 ||
+        (d.field === 'country' && errField.indexOf('countryCode') > -1) ||
+        (d.field === 'subDistrict' && errField.indexOf('subDistrictCode') > -1) ||
+        (d.field === 'districtNameTH' && errField.indexOf('districtCode') > -1) ||
+        (d.field === 'provinceNameTH' && errField.indexOf('provinceCode') > -1)) && index)
+      .filter(d => d !== false)
     this.refScrollView.scrollToPosition(0, this.state.layout[layoutY[0]], true)
   }
 
