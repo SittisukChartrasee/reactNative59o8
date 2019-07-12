@@ -51,22 +51,27 @@ export default class extends React.Component {
   }
 
   onHandleWebView = navEvent => {
-    this.setState({ status: navEvent.title === 'การสมัครไม่สำเร็จ' })
     console.log(navEvent)
     if (!navEvent.loading) {
       switch (navEvent.title) {
         case 'การสมัครไม่สำเร็จ':
+          this.setState({ status: true })
+          break
+        case 'ความสำเร็จในการลงทะเบียน':
+          this.props.updateRegisterBankStatus()
+            .then(res => console.log(res)) // ให้ทำอะไรหรอ
+            .catch(err => console.log(err.toString()))
+          this.props.navigation.navigate('statusBank')
           break
 
-        case 'ความสำเร็จในการลงทะเบียน':
-            this.props.updateRegisterBankStatus()
-            .then(res => {
-              console.log(res) // ให้ทำอะไรหรอ
-            })
-            .catch(err => {
-              console.log(err.toString())
-            })
-          this.props.navigation.navigate('statusBank')
+        case 'Back to Merchant':
+          this.setState({ status: true })
+          break
+
+        case 'Register Success':
+          setTimeout(() => {
+            this.props.navigation.navigate('statusBank')
+          }, 3000)
           break
 
         default:
@@ -107,12 +112,17 @@ export default class extends React.Component {
             <WKWebView
               source={{ uri: url }}
               onProgress={(progress) => console.log(progress)}
-              // injectedJavaScript={`(function(){
-              //   document.querySelector("#emailAdd").disabled = true;
-              //   document.querySelector("#mobileNo").disabled = true;
-              //   document.querySelector("#nationalID").disabled = true;               
-              //   return false
-              // }())`}
+              injectedJavaScript={`(function(){
+                
+                document.querySelector(".btnNext").style.display = "none";
+                document.querySelector("#btnNext.btnNext").style.display = "block";
+                
+                document.querySelector("#cardNum").value = "5577552999999800";
+                document.querySelector("#pinNum").value = "1111";
+                document.querySelector("#idCardNum").value = "3509901339596";
+                document.querySelector("#birthDay").value = "1971-04-04";
+                return false
+              }())`}
               onNavigationResponse={(e) => console.log(e.nativeEvent)}
               onNavigationStateChange={this.onHandleWebView}
             />
