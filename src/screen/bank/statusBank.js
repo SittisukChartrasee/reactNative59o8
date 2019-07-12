@@ -64,19 +64,6 @@ export default class extends React.Component {
 		const status = this.props.getRegisterBankStatus.getRegisterBankStatus && this.props.getRegisterBankStatus.getRegisterBankStatus.status
 		return (
 			<Screen>
-				<NavBar
-					color="transparent"
-					title={renderText(status).header || null}
-					navLeft={
-						<TouchableOpacity
-							onPress={() => this.props.navigation.navigate('chooseBank')}
-							style={{ paddingRight: 30, display: status === 'FAIL' ? 'none' : 'flex' }}
-						>
-							<Image source={images.iconback} />
-						</TouchableOpacity>
-					}
-				/>
-
 				<ScrollView
 					showsVerticalScrollIndicator={false}
 					contentContainerStyle={{ flexGrow: 1 }}
@@ -85,6 +72,7 @@ export default class extends React.Component {
 						style={{
 							alignItems: 'center',
 							paddingTop: '12%',
+							marginTop: '24%',
 							paddingHorizontal: 24,
 							marginBottom: 24
 						}}

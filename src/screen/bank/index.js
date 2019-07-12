@@ -5,8 +5,8 @@ import statusBank from './statusBank'
 import connectBank from './connectBank'
 
 export default {
-  chooseBank,
-  connectBank,
+  // chooseBank,
+  // connectBank,
   statusBank,
   reviewBank,
   tutorialBank,
