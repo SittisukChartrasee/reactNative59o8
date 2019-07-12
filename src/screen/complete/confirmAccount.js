@@ -27,7 +27,7 @@ const text = ` 1. บริษัทจัดการมีสิทธิท�
  3. การเปิดบัญชีกองทุนผ่าน K-My Funds จะครอบคลุมถึงการสมัครใช้บริการ SMS Fund Alert บริการ K-Mutual Fund Reports และบริการ K-Cyber Invest  อย่างไรก็ตาม บริษัทอาจเปลี่ยนแปลงหรือยกเลิกการให้บริการดังกล่าวได้ โดยเป็นดุลยพินิจของบริษัทจัดการ
 				`
 
-const mapToProps = () => ({})
+const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
 	requestOtp: bindActionCreators(requestOtp, dispatch),
 	acceptTerm: bindActionCreators(acceptTerm, dispatch),
@@ -48,26 +48,27 @@ export default class extends React.Component {
 		else if (sumSuittest <= 29) this.setState({ risk: 2 })
 		else if (sumSuittest > 30) this.setState({ risk: 3 })
 	}
+	
+	onNext = async () => {
+		const token = await AsyncStorage.getItem("access_token")
+		this.props.updateRoot('currFlowUP', 'updatePasscode')
 
-	onRequestOtp = token => {
-		this.props.requestOtp(null, token)
+		this.props.acceptTerm(token)
 			.then(res => {
-				if (res.success) {
-					this.props.navigateAction({ ...this.props, page: 'otp' })
-				}
+				console.log(res)
+				if (res.success) this.onRequestOtp(res.result.access_token)
 			})
 			.catch(err => {
 				console.log(err)
 			})
 	}
 
-	onNext = async () => {
-		const token = await AsyncStorage.getItem("access_token")
-
-		this.props.acceptTerm(token)
+	onRequestOtp = token => {
+		this.props.requestOtp(null, { token, currFlowUP: this.props.root.currFlowUP })
 			.then(res => {
-				console.log(res)
-				if (res.success) this.onRequestOtp(res.result.access_token)
+				if (res.success) {
+					this.props.navigation.navigate({ routeName: 'otp', key: 'otpUpdatePasscode'})
+				}
 			})
 			.catch(err => {
 				console.log(err)

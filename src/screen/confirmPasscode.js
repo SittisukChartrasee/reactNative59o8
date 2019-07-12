@@ -10,7 +10,7 @@ import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
 import { HeadSpace } from '../component/headSpace'
 import { navigateAction, navigateReset } from '../redux/actions'
-import { requestRegister } from '../redux/actions/root-active'
+import { confirmPasscode } from '../redux/actions/root-active'
 import { root } from '../redux/actions/commonAction'
 import getnativeModules from '../containers/hoc/infoAppNativeModules'
 
@@ -23,7 +23,7 @@ const mapToProps = ({ root, passcode }) => ({ root, passcode })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   navigateReset: bindActionCreators(navigateReset, dispatch),
-  requestRegister: bindActionCreators(requestRegister, dispatch),
+  confirmPasscode: bindActionCreators(confirmPasscode, dispatch),
   updateRoot: bindActionCreators(root, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
@@ -48,9 +48,18 @@ export default class extends React.Component {
     }
     if (obj.number.length === 6) {
       if (this.props.passcode.passcode === data.password) {
-        this.props.requestRegister(data, this.props.root.access_token)
+        const token = this.props.root.access_token
+        const currFlowUP = this.props.root.currFlowUP
+
+        this.props.confirmPasscode(data, { token, currFlowUP })
           .then(res => {
-            if (res.success) {
+            if (currFlowUP === 'forgetPasscode') {
+              this.props.navigation.navigate('login')
+              return
+            } else if (currFlowUP === 'updatePasscode') {
+              this.props.navigation.navigate('portSuggestion')
+              return
+            } else if (res.success) {
               this.props.navigateAction({ ...this.props, page: 'condi' })
               AsyncStorage.setItem('access_token', res.result.access_token)
               AsyncStorage.setItem('user_token', res.result.user_token)
