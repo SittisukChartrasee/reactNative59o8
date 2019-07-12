@@ -65,7 +65,7 @@ export default class extends React.Component {
 						}
 						this.setState({ ...defaultDot, defaultKey: true })
 					} else if (!res.success) {
-						if (res.details && res.details.code === '1001') {
+						if (res.details && res.code === '1001') {
 							this.props.updateRoot('time', res.details.time)
 							this.props.updateRoot('overRequest', true)
 							this.props.updateRoot('overRequestUi', true)
