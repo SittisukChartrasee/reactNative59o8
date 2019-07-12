@@ -113,19 +113,17 @@ export default class extends React.Component {
               source={{ uri: url }}
               onProgress={(progress) => console.log(progress)}
               injectedJavaScript={`(function(){
-                
                 document.querySelector(".btnNext").style.display = "none";
                 document.querySelector("#btnNext.btnNext").style.display = "block";
-                
-                document.querySelector("#cardNum").value = "5577552999999800";
-                document.querySelector("#pinNum").value = "1111";
-                document.querySelector("#idCardNum").value = "3509901339596";
-                document.querySelector("#birthDay").value = "1971-04-04";
                 return false
               }())`}
               onNavigationResponse={(e) => console.log(e.nativeEvent)}
               onNavigationStateChange={this.onHandleWebView}
             />
+            {/* document.querySelector("#cardNum").value = "5577552999999800";
+                document.querySelector("#pinNum").value = "1111";
+                document.querySelector("#idCardNum").value = "3509901339596";
+                document.querySelector("#birthDay").value = "1971-04-04"; */}
             {/* document.querySelector("#emailAdd").value = '${user.contact.email}'
                 document.querySelector("#mobileNo").value = '${user.contact.mobilePhone}'
                 document.querySelector("#nationalID").value = '${user.profile.idCard}' */}
