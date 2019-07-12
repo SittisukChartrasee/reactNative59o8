@@ -73,35 +73,31 @@ export default class extends React.Component {
         required: true,
       }, {
         label: 'แขวง/ตำบล',
-        type: 'search',
+        type: this.props.user.addressCurr.countryCode !== 'TH' && this.props.user.addressCurr.countryCode ? 'textInput' : 'search',
         field: 'subDistrict', //subDistrictCode
         required: true,
       }, {
         label: 'เขต/อำเภอ',
+        type: this.props.user.addressCurr.countryCode !== 'TH' && this.props.user.addressCurr.countryCode ? 'textInput' : null,
         field: 'districtNameTH', // districtCode
-        required: false,
+        required: this.props.user.addressCurr.countryCode !== 'TH' && this.props.user.addressCurr.countryCode,
       }, {
         label: 'จังหวัด',
+        type: this.props.user.addressCurr.countryCode !== 'TH' && this.props.user.addressCurr.countryCode ? 'textInput' : null,
         field: 'provinceNameTH', // provinceCode
-        required: false,
+        required: this.props.user.addressCurr.countryCode !== 'TH' && this.props.user.addressCurr.countryCode,
       }, {
         label: 'รหัสไปรษณีย์',
+        type: this.props.user.addressCurr.countryCode !== 'TH' && this.props.user.addressCurr.countryCode ? 'textInput' : null,
         field: 'zipCode',
-        required: false,
+        required: this.props.user.addressCurr.countryCode !== 'TH' && this.props.user.addressCurr.countryCode,
       }
     ]
   }
 
-
-  handleInput = (props) => {
-    const { user } = this.props
-    if (props.field === 'country') {
-      this.props.updateUser('addressCurr', {
-        ...user.addressCurr,
-        [props.field]: props.value,
-        countryCode: props.code
-      })
-      if (props.code !== 'TH') {
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.user.addressCurr) {
+      if (nextProps.user.addressCurr.countryCode !== 'TH' && nextProps.user.addressCurr.countryCode) {
         const result = this.state.fields.map(d => {
           if (d.field === 'subDistrict') return { ...d, type: 'textInput' }
           else if (d.field === 'districtNameTH') return { ...d, type: 'textInput', required: true }
@@ -120,6 +116,32 @@ export default class extends React.Component {
         })
         this.setState({ fields: result, doneFlat: 'thanon' })
       }
+    }
+  }
+
+  handleInput = (props) => {
+    const { user } = this.props
+    if (props.field === 'country') {
+      if ((props.code !== 'TH' && user.addressCurr.countryCode === 'TH') ||
+        (user.addressCurr.countryCode !== 'TH' && user.addressCurr.countryCode))
+        this.props.updateUser('addressCurr', {
+          ...user.addressCurr,
+          [props.field]: props.value,
+          countryCode: props.code,
+          subDistrictCode: '',
+          subDistrict: '',
+          zipCode: '',
+          districtNameTH: '',
+          districtCode: '',
+          provinceCode: '',
+          provinceNameTH: '',
+        })
+      else
+        this.props.updateUser('addressCurr', {
+          ...user.addressCurr,
+          [props.field]: props.value,
+          countryCode: props.code,
+        })
     } else {
       this.props.updateUser('addressCurr', {
         ...user.addressCurr,
@@ -167,17 +189,26 @@ export default class extends React.Component {
     const { PreconditionRequired, InvalidArgument } = this.state
     const { Required, Invalid } = this.getRequiredInvalid(field)
 
-    if (field === 'addressVillageTH' && this.props.user.addressWork.addressVillageTH.length > 50) {
+    if (field === 'addressVillageTH' && this.props.user.addressCurr.addressVillageTH.length > 50) {
       return 'กรุณาระบุไม่เกิน 50 ตัวอักษร'
     }
 
     if (Required && RequiredFields(value)) {
       this.setState({
         PreconditionRequired: PreconditionRequired.filter(o => {
-          if (!(o.field === 'countryCode' && field === 'country') &&
-            !((o.field === 'subDistrictCode' || o.field === 'districtCode' || o.field === 'provinceCode') && field === 'subDistrict') &&
-            o.field !== field)
-            return o
+          if (this.props.user.addressCurr.countryCode === 'TH') {
+            if (!(o.field === 'countryCode' && field === 'country') &&
+              !((o.field === 'subDistrictCode' || o.field === 'districtCode' || o.field === 'provinceCode') && field === 'subDistrict') &&
+              o.field !== field)
+              return o
+          } else {
+            if (!(o.field === 'countryCode' && field === 'country') &&
+              !(o.field === 'subDistrictCode' && field === 'subDistrict') &&
+              !(o.field === 'districtCode' && field === 'districtNameTH') &&
+              !(o.field === 'provinceCode' && field === 'provinceNameTH') &&
+              o.field !== field)
+              return o
+          }
         })
       })
     }
@@ -186,7 +217,7 @@ export default class extends React.Component {
   onValidation = (field) => {
     const { Required, Invalid } = this.getRequiredInvalid(field)
 
-    if (field === 'addressVillageTH' && this.props.user.addressHome.addressVillageTH.length > 50) {
+    if (field === 'addressVillageTH' && this.props.user.addressCurr.addressVillageTH.length > 50) {
       return 'กรุณาระบุไม่เกิน 50 ตัวอักษร'
     }
 
@@ -263,7 +294,11 @@ export default class extends React.Component {
   onHandleScrollToErrorField = (field) => {
     const errField = field.map(d => d.field)
     const layoutY = this.state.fields
-      .map((d, index) => (errField.indexOf(d.field) > -1 || errField.indexOf('countryCode') > -1) && index)
+      .map((d, index) => (errField.indexOf(d.field) > -1 ||
+        (d.field === 'country' && errField.indexOf('countryCode') > -1) ||
+        (d.field === 'subDistrict' && errField.indexOf('subDistrictCode') > -1) ||
+        (d.field === 'districtNameTH' && errField.indexOf('districtCode') > -1) ||
+        (d.field === 'provinceNameTH' && errField.indexOf('provinceCode') > -1)) && index)
       .filter(d => d !== false)
     this.refScrollView.scrollToPosition(0, this.state.layout[layoutY[0]], true)
   }
