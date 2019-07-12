@@ -429,6 +429,7 @@ export default class extends React.Component {
 	}
 
 	onHandleChooseScreen = val => {
+		// NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
 		switch (val.data.getStatus) {
 			case 'Approved':
 				this.props.navigateAction({ ...this.props, page: 'confirmAccount' })
