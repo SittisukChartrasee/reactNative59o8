@@ -19,14 +19,6 @@ const defaultPasscode = {
   number: '',
 }
 
-const handleLinkPage = currFlow => {
-  switch (currFlow) {
-    case 'updatePasscode': return 'portSuggestion'
-    case 'forgetPasscode': return 'user/forgot-password/reset-passcode'
-    default: return 'condi'
-  }
-}
-
 const mapToProps = ({ root, passcode }) => ({ root, passcode })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
@@ -64,8 +56,11 @@ export default class extends React.Component {
             if (currFlowUP === 'forgetPasscode') {
               this.props.navigation.navigate('login')
               return
+            } else if (currFlowUP === 'updatePasscode') {
+              this.props.navigation.navigate('portSuggestion')
+              return
             } else if (res.success) {
-              this.props.navigateAction({ ...this.props, page: handleLinkPage(this.props.root.currFlowUP) })
+              this.props.navigateAction({ ...this.props, page: 'condi' })
               AsyncStorage.setItem('access_token', res.result.access_token)
               AsyncStorage.setItem('user_token', res.result.user_token)
               NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)

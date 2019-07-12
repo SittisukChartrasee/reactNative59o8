@@ -131,7 +131,7 @@ export default class extends React.Component {
       phone_no: replaceSpace(user.contact.mobilePhone),
     }
 
-    this.props.requestOtp(data)
+    this.props.requestOtp(data, { token: null })
       .then(res => {
         if (res.success || res.code === '1001') {
           if (res.code === '1001') {

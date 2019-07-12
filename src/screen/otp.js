@@ -59,6 +59,7 @@ export default class extends React.Component {
 					if (res.success) {
 						if (res.result.is_register) {
 							this.props.navigateAction({ ...this.props, page: 'login', params: { user_token: res.result.user_token } })
+							AsyncStorage.setItem('user_token', res.result.user_token)
 						} else {
 							this.props.navigateAction({ ...this.props, page: 'passcode' })
 						}
