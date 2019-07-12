@@ -14,7 +14,7 @@ import { TBold } from './component/texts';
 export const store = onStore
 const ReactWithState = connect(({ nav }) => ({ state: nav }))(createReduxContainer(AppNavigator, 'root'))
 
-const TEST = true // ถ้าจะ TEST ให้ set true : false
+const TEST = false // ถ้าจะ TEST ให้ set true : false
 
 
 const mapToProps = ({ root, nav }) => ({ root, nav })
