@@ -50,6 +50,13 @@ class OnboardManager(private val reactContext: ReactApplicationContext) : ReactC
     }
 
     @ReactMethod
+    fun autoLogin(code: String, token: String) {
+        val text = "code : "+code+" token : "+token
+        Toast.makeText(reactApplicationContext, "call function autoLogin"+text, Toast.LENGTH_SHORT).show();
+        // todo
+    }
+
+    @ReactMethod
     fun getRegisterFlag(callback: Callback) {
         val stringFromPref = getStringFromPref(KEY_USER_FLAG)
         callback.invoke(stringFromPref ?: "")

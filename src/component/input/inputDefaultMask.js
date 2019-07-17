@@ -31,6 +31,7 @@ export default class extends React.Component {
     option: "999 AAA SSS ***",
     label: 'label',
     value: null,
+    handleInput: () => {}
   }
 
   state = {

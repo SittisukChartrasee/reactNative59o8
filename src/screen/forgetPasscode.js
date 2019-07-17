@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import find from 'lodash/find'
 import Screen from '../component/screenComponent'
 import { NavBar } from '../component/gradient'
 import { LongPositionButton } from '../component/button'
@@ -31,12 +32,14 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
 
   state = {
+    PreconditionRequired: [],
+    InvalidArgument: [],
     card: [
       {
+        type: 'mask',
         label: 'เลขบัตรประชาชน',
-        type: 'textInput',
         field: 'idCard',
-        value: '',
+        option: '9 9999 99999 99 9',
       }
     ]
   }
@@ -54,6 +57,16 @@ export default class extends React.Component {
     })
       .then((res) => {
         if (res.success) this.onHandleToken(res)
+        else if (!res.success) {
+          switch (res.message) {
+            case 'PreconditionRequired':
+              return this.setState({ PreconditionRequired: res.details })
+            case 'InvalidArgument':
+              return this.setState({ InvalidArgument: res.details })
+            default:
+              return null
+          }
+        }
       })
       .catch(err => console.log(err))
   }
@@ -75,6 +88,35 @@ export default class extends React.Component {
     this.setState({
       card: this.state.card.map(d => d.field === val.field ? ({ ...d, value: val.value }) : d)
     })
+    this.handleValidation({ field: val.field, value: val.value })
+  }
+
+  handleValidation = ({ field, value }) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const { Required, Invalid } = this.getRequiredInvalid(field)
+
+    if (field === 'idCard' && Invalid && validateIdentityCard(replaceSpace(value))) {
+      this.setState({ InvalidArgument: InvalidArgument.filter(o => o.field !== field) })
+    }
+
+    if (Required && RequiredFields(value))
+      this.setState({ PreconditionRequired: PreconditionRequired.filter(o => o.field !== field) })
+  }
+
+  onValidation = field => {
+    const { Required, Invalid } = this.getRequiredInvalid(field)
+    if (Required)
+      return Required.description
+    else if (Invalid)
+      return Invalid.description
+    return null
+  }
+
+  getRequiredInvalid = (field) => {
+    const { PreconditionRequired, InvalidArgument } = this.state
+    const Required = find(PreconditionRequired, (o) => o.field === field)
+    const Invalid = find(InvalidArgument, (o) => o.field === field)
+    return { Required, Invalid }
   }
 
   render() {
@@ -103,6 +145,8 @@ export default class extends React.Component {
               image: d.image,
               number: d.number,
               disabled: d.disabled,
+              option: d.option,
+              err: this.onValidation(d.field),
               onChangeText: value => this.onChange({ value, field: d.field })
             }, key))
           }

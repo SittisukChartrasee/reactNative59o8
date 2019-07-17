@@ -22,9 +22,9 @@ import { RiskList } from '../../component/lists'
 import { navigateAction } from '../../redux/actions'
 import lockout from '../../containers/hoc/lockout'
 import { data } from './data'
-import {
-  getInvestment
-} from '../../containers/query'
+import { getInvestment } from '../../containers/query'
+import setMutation from '../../containers/mutation'
+import getnativeModules from '../../containers/hoc/infoAppNativeModules'
 
 const query = debounce((client, obj, setState) => {
   client.query({ ...obj })
@@ -40,6 +40,8 @@ const dispatchToProps = dispatch => ({
 
 @connect(mapToProps, dispatchToProps)
 @withApollo
+@setMutation
+@getnativeModules
 @lockout
 export default class extends React.Component {
   state = {
@@ -74,13 +76,29 @@ export default class extends React.Component {
   }
 
   onNext = () => {
+    this.props.saveFCMToken({ variables: { input: { FCMToken: this.props.fcm } } })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => console.log(err))
     NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
     NativeModules.KMyFundOnboarding.finishActivity()
   }
 
+  onConfirm = () => {
+    this.props.saveFCMToken({ variables: { input: { FCMToken: this.props.fcm } } })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+    NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
+    this.props.toggleModal({ visible: false })
+    setTimeout(() => Linking.openURL('https://google.com'), 100)
+  }
+
   render() {
     const { risk, descTH, assetClass, fundCodeKAsset, returnText } = this.state
-    console.log(this.state)
+    console.log(this.props)
     return (
       <Screen>
         <NavBar
@@ -159,11 +177,7 @@ export default class extends React.Component {
               swap: true,
               type: 'row',
               onPress: () => this.props.toggleModal({ visible: false }),
-              onConfirm: async () => {
-                NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
-                this.props.toggleModal({ visible: false })
-                setTimeout(() => Linking.openURL('https://google.com'), 100)
-              },
+              onConfirm: this.onConfirm,
               onPressClose: () => this.props.toggleModal({ visible: false }),
             })}
           />
