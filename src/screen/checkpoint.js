@@ -122,17 +122,16 @@ export default class extends React.Component {
     })
   }
 
-  onNext = () => {
-    //
-    // ********** waiting best TODO:// **********
-    //
-    // containerQuery(this.props.client, {
-    //   query: getRegisterBankStatus,
-    // }, val => {
-    //   console.log(val)
-    // })
-    // // this.props.getRegisterBankStatus.getRegisterBankStatus
-    this.props.navigateAction({ ...this.props, page: this.state.link })
+  onNext = async () => {
+    await this.props.client.query({ query: getRegisterBankStatus })
+      .then((val) => {
+        if (val.data.getRegisterBankStatus.status) {
+          this.props.navigateAction({ ...this.props, page: 'statusBank' })
+        } else {
+          this.props.navigateAction({ ...this.props, page: this.state.link })
+        }
+      })
+      .catch(() => this.props.navigateAction({ ...this.props, page: this.state.link }))
   }
 
   render() {
