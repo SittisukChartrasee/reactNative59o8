@@ -146,10 +146,20 @@ export const forgotPasscode = (obj) => async dispatch => {
   })
 
   if (res && res.result) {
-    for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    for (const key in res.result) {
+      if (key === 'code')
+        dispatch({ type: CHANGE_ROOT, key, value: { code: res.result.code, message: res.result.message } })
+      else
+        dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    }
     return { ...res }
   }
 
-  for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  for (const key in res) {
+    if (key === 'code')
+      dispatch({ type: CHANGE_ROOT, key, value: { code: res.code, message: res.message } })
+    else
+      dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+  }
   return { ...res }
 }

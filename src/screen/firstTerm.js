@@ -25,7 +25,8 @@ const item1 = [
   'บัตรประจำตัวประชาชนของคุณและคู่สมรส',
   'หนังสือเดินทางของคู่สมรสในกรณี\nชาวต่างชาติ',
   'สมุดบัญชี ธ.กสิกรไทย หรือ ธ.ไทยพาณิชย์ อย่างใดอย่างหนึ่ง',
-  'แอปพลิเคชั่น K PLUS / SCB Easy ขึ้นอยู่กับธนาคารที่คุณใช้สมัคร',
+  'แอปพลิเคชั่น K PLUS สำหรับธนาคารกสิกรไทยที่ท่านใช้สมัคร',
+  'บัตร ATM สำหรับธนาคารไทยพาณิชย์ที่ท่านใช้สมัคร',
 ]
 
 const item2 = [
@@ -69,9 +70,9 @@ export default class extends React.Component {
         <ScrollView contentContainerStyle={{ marginHorizontal: 24 }}>
           <View style={{ alignItems: 'center', marginBottom: 32 }}>
             <TLight fontSize={16} mb="7%" color={colors.white}>{`เตรียมก่อนปลอดภัยเปิดบัญชีกองทุนง๊ายง่าย`}</TLight>
-            <Image source={images.tutorialBankaccount} style={{ width: widthView * .6 }} resizeMode="contain"  />
+            <Image source={images.tutorialBankaccount} style={{ width: widthView * .6 }} resizeMode="contain" />
           </View>
-          
+
           {
             item1.map((d, key) => (
               <View key={key} style={{ flexDirection: 'row', marginTop: 8 }}>
@@ -97,7 +98,7 @@ export default class extends React.Component {
               </View>
             ))
           }
-          
+
         </ScrollView>
 
         <SafeAreaView style={{ marginHorizontal: 16 }}>
