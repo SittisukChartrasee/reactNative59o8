@@ -18,6 +18,7 @@ import { navigateAction } from '../redux/actions'
 import colors from '../config/colors';
 import { root } from '../redux/actions/commonAction'
 import { forgotPasscode, requestOtp } from '../redux/actions/root-active'
+import { replaceSpace } from '../utility/helper'
 import { TBold } from '../component/texts';
 
 const mapToProps = ({ root }) => ({ root })
@@ -40,6 +41,7 @@ export default class extends React.Component {
         label: 'เลขบัตรประชาชน',
         field: 'idCard',
         option: '9 9999 99999 99 9',
+        value: '',
       }
     ]
   }
@@ -50,10 +52,9 @@ export default class extends React.Component {
 
   onNext = async () => {
     const user_token = await AsyncStorage.getItem('user_token')
-    
     this.props.forgotPasscode({
       user_token: user_token,
-      id_card: this.state.card[0].value,
+      id_card: replaceSpace(this.state.card[0].value),
     })
       .then((res) => {
         if (res.success) this.onHandleToken(res)
@@ -77,18 +78,18 @@ export default class extends React.Component {
         this.props.updateRoot('trans_id', resValidate.result.trans_id)
         this.props.updateRoot('ref_no', resValidate.result.ref_no)
         this.props.updateRoot('phone_no', resValidate.result.phone_no)
-        
+
         // AsyncStorage.setItem('access_token', resValidate.result.access_token)
         this.props.navigation.navigate({ routeName: 'otp', key: 'otpForgetPasscode' })
       })
       .catch(err => console.log('err validate', err))
   }
 
-  onChange = val => {
+  handleInput = (obj) => {
     this.setState({
-      card: this.state.card.map(d => d.field === val.field ? ({ ...d, value: val.value }) : d)
+      card: this.state.card.map(d => d.field === obj.field ? ({ ...d, value: obj.value }) : d)
     })
-    this.handleValidation({ field: val.field, value: val.value })
+    this.handleValidation({ field: obj.field, value: obj.value })
   }
 
   handleValidation = ({ field, value }) => {
@@ -135,10 +136,11 @@ export default class extends React.Component {
           }
         />
 
-        
+
         <View style={{ flex: 1, backgroundColor: colors.white, paddingVertical: 24 }}>
           {
             card.map((d, key) => Input({
+              field: d.field,
               label: d.label,
               value: d.value,
               type: d.type,
@@ -147,12 +149,12 @@ export default class extends React.Component {
               disabled: d.disabled,
               option: d.option,
               err: this.onValidation(d.field),
-              onChangeText: value => this.onChange({ value, field: d.field })
+              handleInput: value => this.handleInput(value),
             }, key))
           }
         </View>
 
-        <LongPositionButton bg={colors.lightgrey} label="ถัดไป" onPress={this.onNext}/>
+        <LongPositionButton bg={colors.lightgrey} label="ถัดไป" onPress={this.onNext} />
       </Screen>
     )
   }
