@@ -316,6 +316,19 @@ const saveWaitingApprove = gql`
   }
 `
 
+const saveFCMToken = gql`
+  mutation saveFCMToken($input: NewFCMToken!) {
+    saveFCMToken(input: $input) {
+      success
+      message
+      details{
+        field
+        description
+      }
+    }
+  }
+`
+
 export default compose(
   graphql(saveSpouse, { name: 'saveSpouse' }),
   graphql(saveCareer, { name: 'saveCareer' }),
@@ -344,4 +357,5 @@ export default compose(
   graphql(updateRegisterBankStatus, { name: 'updateRegisterBankStatus' }),
   graphql(saveWaitingApprove, { name: 'saveWaitingApprove' }),
   graphql(resendEmail, { name: 'resendEmail' }),
+  graphql(saveFCMToken, { name: 'saveFCMToken' })
 )
