@@ -314,6 +314,12 @@ export const getStatusEditing = gql`
   }
 `
 
+export const getTermAndCondition = gql`
+  query getTermAndCondition {
+    getTermAndCondition
+  }
+`
+
 export const checkVerifiedEmailInterval = graphql(checkVerifiedEmail, {
   name: 'checkVerifiedEmailInterval',
   options: {
