@@ -182,7 +182,7 @@ export default class extends React.Component {
 						'secondTitle': val.data.getUser.result.secondChild.ChildTitleTH,
 						'secondFirstName': val.data.getUser.result.secondChild.ChildFirstNameTH,
 						'secondLastName': val.data.getUser.result.secondChild.ChildLastNameTH,
-						'secondBirthDay': `${val.data.getUser.result.secondChild.ChildDayOfBirth}/${val.data.getUser.result.firstChild.ChildMonthOfBirth !== '-' ? month[parseInt(val.data.getUser.result.firstChild.ChildMonthOfBirth) - 1] : '-'}/${val.data.getUser.result.firstChild.ChildYearOfBirth}`,
+						'secondBirthDay': `${val.data.getUser.result.secondChild.ChildDayOfBirth}/${val.data.getUser.result.secondChild.ChildMonthOfBirth !== '-' ? month[parseInt(val.data.getUser.result.secondChild.ChildMonthOfBirth) - 1] : '-'}/${val.data.getUser.result.secondChild.ChildYearOfBirth}`,
 						'secondDocNo': formatIdCard(val.data.getUser.result.secondChild.ChildDocNo),
 						'secondExpireDateFlag': !val.data.getUser.result.secondChild.ChildIsNoDocExpDate ? 'มีวันหมดอายุ' : 'ไม่มีวันหมดอายุ',
 						'secondDocExpDate': !val.data.getUser.result.secondChild.ChildIsNoDocExpDate ? convertDate_reverse(secondChildDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,

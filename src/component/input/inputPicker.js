@@ -96,8 +96,8 @@ export default class extends React.Component {
         selectedValue: [this.state.day],
         ...configPicker,
         onPickerConfirm: data => {
-          this.setState({ day: data[0] })
-          handleInput({ value: `${data[0]}/${month}/${year}`, type, field })
+          this.setState({ day: month === '-' ? '-' : data[0] })
+          handleInput({ value: month === '-' ? `-/${month}/${year}` : `${data[0]}/${month}/${year}`, type, field })
         }
       });
     }
