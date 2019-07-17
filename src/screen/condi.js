@@ -8,7 +8,6 @@ import {
   SafeAreaView,
   NativeModules
 } from 'react-native'
-import WKWebView from 'react-native-wkwebview-reborn'
 import { withApollo } from 'react-apollo'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -35,7 +34,7 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     agree: false,
-    html: ''
+    text: ''
   }
 
   componentDidMount = async () => {
@@ -50,8 +49,7 @@ export default class extends React.Component {
         query: getTermAndCondition
       },
       (val) => {
-        console.log(val)
-        this.setState({ html: val.data.getTermAndCondition })
+        this.setState({ text: val.data.getTermAndCondition })
       }
     )
   }
@@ -79,19 +77,11 @@ export default class extends React.Component {
             </TouchableOpacity>
           }
         />
-
-        <WKWebView
-          source={{ html: this.state.html }}
-          injectedJavaScript={`(function(){
-            document.querySelector("#content").style.fontFamily = "SukhumvitSet-Light";
-            document.querySelector("#content").style.fontSize = '40px';
-            document.querySelector("#content").style.marginRight = '30px';
-            document.querySelector("#content").style.marginLeft = '30px';
-            document.querySelector("#content").style.marginTop = '40px';
-            document.querySelector("#content").style.color = '${colors.grey}';
-            return false
-          }())`}
-        />
+        <ScrollView contentContainerStyle={{ marginHorizontal: 16, paddingTop: '5%' }} showsVerticalScrollIndicator={false}>
+          <TLight color={colors.grey} fontSize={16} textAlign="left"> 
+            {this.state.text}
+          </TLight>
+        </ScrollView>
         <View>
           <TouchableOpacity
             onPress={() => this.setState({ agree: !agree })}
