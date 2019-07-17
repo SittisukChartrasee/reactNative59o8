@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   NativeModules
 } from 'react-native'
+import { withApollo } from 'react-apollo'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import colors from '../config/colors'
@@ -17,8 +18,10 @@ import { TLight } from '../component/texts'
 import { NavBar } from '../component/gradient'
 import { navigateAction } from '../redux/actions'
 import setMutation from '../containers/mutation'
+import { containerQuery, getTermAndCondition } from '../containers/query'
 import { LongButton } from '../component/button'
 import lockout from '../containers/hoc/lockout'
+import fonts from '../config/fonts';
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
@@ -27,9 +30,11 @@ const dispatchToProps = dispatch => ({
 @connect(mapToProps, dispatchToProps)
 @setMutation
 @lockout
+@withApollo
 export default class extends React.Component {
   state = {
     agree: false,
+    text: ''
   }
 
   componentDidMount = async () => {
@@ -37,6 +42,16 @@ export default class extends React.Component {
     const b = await AsyncStorage.getItem('userToken')
     const c = await AsyncStorage.getAllKeys()
     console.log(a, b, c)
+
+    containerQuery(
+      this.props.client,
+      { 
+        query: getTermAndCondition
+      },
+      (val) => {
+        this.setState({ text: val.data.getTermAndCondition })
+      }
+    )
   }
 
   onNext = async () => {
@@ -63,13 +78,8 @@ export default class extends React.Component {
           }
         />
         <ScrollView contentContainerStyle={{ marginHorizontal: 16, paddingTop: '5%' }} showsVerticalScrollIndicator={false}>
-          <TLight color={colors.grey} fontSize={16} textAlign="left">
-            {` 1. บริษัทจัดการมีสิทธิที่จะไม่อนุมัติหรือปฏิเสธคำขอเปิดบัญชีกองทุนรวม หรือการทำธุรกรรมกับผู้ลงทุนทั้งหมดหรือบางส่วน ได้โดยไม่จำเป็นต้องชี้แจงแสดงเหตุผลใดๆแก่ผู้ลงทุน และการตัดสินใจของบริษัทจัดการให้ถือเป็นที่สุด ทั้งนี้ ให้รวมถึงสิทธิที่จะดำเนินการใดๆให้เป็นไปตามข้อกำหนดสิทธิและหน้าที่ของบริษัทจัดการที่ระบุไว้ในหนังสือชี้ชวน ตลอดจนเงื่อนไขและข้อกำหนดอื่นใดที่บริษัทจัดการได้กำหนดไว้ นอกจากนี้บริษัทจัดการจะไม่รับเปิดบัญชีกองทุนในกรณีดังต่อไปนี้
-  - พลเมืองสหรัฐอเมริกาหรือผู้ที่มีถิ่นฐานอยู่ในสหรัฐอเมริกา หรือบุคคลซึ่งโดยปกติมีถิ่นที่อยู่ในสหรัฐอเมริกา
-  - บุคคลที่อายุต่ำกว่า 20 ปีบริบูรณ์
-  2. ในการเปิดบัญชีกองทุนผ่านK-My Funds บัญชีเงินฝากธนาคารที่ผู้ขอเปิดบัญชีกองทุนระบุให้เป็นบัญชีเพื่อซื้อหน่วยลงทุนจะถูกใช้เป็นบัญชีเพื่อรับเงินค่าขายคืนและ/หรือเงินปันผล ในกรณีที่ผู้ขอเปิดบัญชีประสงค์จะเปลี่ยนแปลงบัญชีเงินฝากธนาคารจะต้องปฎิบัติตามหลักเกณฑ์ เงื่อนไขและวิธีการที่บริษัทจัดการกำหนด
-  3. การเปิดบัญชีกองทุนผ่าน K-My Funds จะครอบคลุมถึงการสมัครใช้บริการ SMS Fund Alert บริการ K-Mutual Fund Reports และบริการ K-Cyber Invest  อย่างไรก็ตาม บริษัทอาจเปลี่ยนแปลงหรือยกเลิกการให้บริการดังกล่าวได้ โดยเป็นดุลยพินิจของบริษัทจัดการ
-          `}
+          <TLight color={colors.grey} fontSize={16} textAlign="left"> 
+            {this.state.text}
           </TLight>
         </ScrollView>
         <View>

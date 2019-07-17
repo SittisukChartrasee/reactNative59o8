@@ -93,7 +93,7 @@ export default class extends React.Component {
       .catch(err => console.log(err))
     NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
     this.props.toggleModal({ visible: false })
-    setTimeout(() => Linking.openURL('https://google.com'), 100)
+    setTimeout(() => Linking.openURL('https://k-invest.kasikornbankgroup.com/CustomerRisk/CustomerRiskPolicy.aspx'), 100)
   }
 
   render() {

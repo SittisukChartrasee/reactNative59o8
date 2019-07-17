@@ -6,6 +6,7 @@ import {
 	Image,
 	AsyncStorage,
 } from 'react-native'
+import { withApollo } from 'react-apollo'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { PieChart } from '../../component/chart'
@@ -19,13 +20,7 @@ import { RiskList } from '../../component/lists'
 import { navigateAction } from '../../redux/actions'
 import { root } from '../../redux/actions/commonAction'
 import { requestOtp, acceptTerm } from '../../redux/actions/root-active'
-
-const text = ` 1. บริษัทจัดการมีสิทธิที่จะไม่อนุมัติหรือปฏิเสธคำขอเปิดบัญชีกองทุนรวม หรือการทำธุรกรรมกับผู้ลงทุนทั้งหมดหรือบางส่วน ได้โดยไม่จำเป็นต้องชี้แจงแสดงเหตุผลใดๆแก่ผู้ลงทุน และการตัดสินใจของบริษัทจัดการให้ถือเป็นที่สุด ทั้งนี้ ให้รวมถึงสิทธิที่จะดำเนินการใดๆให้เป็นไปตามข้อกำหนดสิทธิและหน้าที่ของบริษัทจัดการที่ระบุไว้ในหนังสือชี้ชวน ตลอดจนเงื่อนไขและข้อกำหนดอื่นใดที่บริษัทจัดการได้กำหนดไว้ นอกจากนี้บริษัทจัดการจะไม่รับเปิดบัญชีกองทุนในกรณีดังต่อไปนี้
- - พลเมืองสหรัฐอเมริกาหรือผู้ที่มีถิ่นฐานอยู่ในสหรัฐอเมริกา หรือบุคคลซึ่งโดยปกติมีถิ่นที่อยู่ในสหรัฐอเมริกา
- - บุคคลที่อายุต่ำกว่า 20 ปีบริบูรณ์
- 2. ในการเปิดบัญชีกองทุนผ่านK-My Funds บัญชีเงินฝากธนาคารที่ผู้ขอเปิดบัญชีกองทุนระบุให้เป็นบัญชีเพื่อซื้อหน่วยลงทุนจะถูกใช้เป็นบัญชีเพื่อรับเงินค่าขายคืนและ/หรือเงินปันผล ในกรณีที่ผู้ขอเปิดบัญชีประสงค์จะเปลี่ยนแปลงบัญชีเงินฝากธนาคารจะต้องปฎิบัติตามหลักเกณฑ์ เงื่อนไขและวิธีการที่บริษัทจัดการกำหนด
- 3. การเปิดบัญชีกองทุนผ่าน K-My Funds จะครอบคลุมถึงการสมัครใช้บริการ SMS Fund Alert บริการ K-Mutual Fund Reports และบริการ K-Cyber Invest  อย่างไรก็ตาม บริษัทอาจเปลี่ยนแปลงหรือยกเลิกการให้บริการดังกล่าวได้ โดยเป็นดุลยพินิจของบริษัทจัดการ
-				`
+import { containerQuery, getTermAndCondition } from '../../containers/query'
 
 const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
@@ -34,11 +29,14 @@ const dispatchToProps = dispatch => ({
 	navigateAction: bindActionCreators(navigateAction, dispatch),
 	updateRoot: bindActionCreators(root, dispatch)
 })
+
+@withApollo
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
 	state = {
 		risk: 0,
 		agree: false,
+		text: ''
 	}
 
 	componentDidMount = () => {
@@ -47,6 +45,16 @@ export default class extends React.Component {
 		else if (sumSuittest <= 21) this.setState({ risk: 1 })
 		else if (sumSuittest <= 29) this.setState({ risk: 2 })
 		else if (sumSuittest > 30) this.setState({ risk: 3 })
+
+		containerQuery(
+      this.props.client,
+      { 
+        query: getTermAndCondition
+      },
+      (val) => {
+        this.setState({ text: val.data.getTermAndCondition })
+      }
+    )
 	}
 	
 	onNext = async () => {
@@ -114,7 +122,7 @@ export default class extends React.Component {
 							<View style={{ height: 40, flexDirection: 'row' }}>
 								<TBold fontSize={18} textAlign="left">เงื่อนไขการเปิดบัญชี</TBold>
 							</View>
-							<TLight color={colors.grey} textAlign="left">{text}</TLight>
+							<TLight color={colors.grey} textAlign="left">{this.state.text}</TLight>
 						</View>
 						<TouchableOpacity
 							onPress={() => this.setState({ agree: !agree })}
