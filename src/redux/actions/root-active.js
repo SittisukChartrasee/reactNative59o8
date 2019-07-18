@@ -1,8 +1,9 @@
+import { NavigationActions } from 'react-navigation'
 import request from '../../utility/requestApi'
 import { CHANGE_ROOT } from '../types'
 
-const handleModal = res => async dispatch => {
-  if (!res.success) {
+const handleTimeout = (res, dispatch) => {
+  if (!res.success && res.message === 'jwt expired') {
     const modal = {
       dis: `ท่านไม่ได้ทำรายการใดๆ เกินระยะเวลาที่\nกำหนด กรุณาเข้าสู่ระบบใหม่อีกครั้ง`,
       visible: true,
@@ -33,7 +34,9 @@ export const requestOtp = (obj, { token = null, currFlowUP }) => async dispatch 
     method: 'POST',
     body: token ? null : JSON.stringify(obj),
   }, token)
-  // handleModal({ success: false })
+
+  handleTimeout(res, dispatch)
+
   if (res && res.result) {
     for (const key in res.result) {
       if (key === 'code')
@@ -58,6 +61,8 @@ export const acceptTerm = token => async dispatch => { // Api ใช้สำห
   const res = await request(url, {
     method: 'POST',
   }, token)
+
+  handleTimeout(res, dispatch)
 
   if (res && res.result) {
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
@@ -86,6 +91,8 @@ export const velidateOtp = (obj, { token = null, currFlowUP }) => async dispatch
       secret: obj.secret,
     }),
   }, token)
+
+  handleTimeout(res, dispatch)
 
   if (res && res.result) {
     for (const key in res.result) {
@@ -123,6 +130,8 @@ export const confirmPasscode = (obj, { token, currFlowUP }) => async dispatch =>
     }),
   }, token)
 
+  handleTimeout(res, dispatch)
+
   if (res && res.result) {
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
@@ -144,6 +153,8 @@ export const requestLogin = (obj, token) => async dispatch => {
     }),
   }, token)
 
+  handleTimeout(res, dispatch)
+
   if (res && res.result) {
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
@@ -163,6 +174,8 @@ export const forgotPasscode = (obj) => async dispatch => {
       id_card: obj.id_card,
     }),
   })
+
+  handleTimeout(res, dispatch)
 
   if (res && res.result) {
     for (const key in res.result) {
