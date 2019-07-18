@@ -5,6 +5,7 @@ import {
   ScrollView,
   Image,
   Linking,
+  AsyncStorage,
   NativeModules
 } from 'react-native'
 import { bindActionCreators } from 'redux'
@@ -75,8 +76,15 @@ export default class extends React.Component {
     )
   }
 
-  onNext = () => {
-    this.props.saveFCMToken({ variables: { input: { FCMToken: this.props.fcm } } })
+  onNext = async () => {
+    this.props.saveFCMToken({
+      variables: {
+        input: {
+          FCMToken: this.props.fcm,
+          accessToken: await AsyncStorage.getItem('access_token')
+        }
+      }
+    })
       .then(res => {
         console.log(res)
       })
@@ -85,8 +93,15 @@ export default class extends React.Component {
     NativeModules.KMyFundOnboarding.finishActivity()
   }
 
-  onConfirm = () => {
-    this.props.saveFCMToken({ variables: { input: { FCMToken: this.props.fcm } } })
+  onConfirm = async () => {
+    this.props.saveFCMToken({
+      variables: {
+        input: {
+          FCMToken: this.props.fcm,
+          accessToken: await AsyncStorage.getItem('access_token')
+        }
+      }
+    })
       .then(res => {
         console.log(res)
       })
