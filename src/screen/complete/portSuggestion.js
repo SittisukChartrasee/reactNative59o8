@@ -23,6 +23,7 @@ import { RiskList } from '../../component/lists'
 import { navigateAction } from '../../redux/actions'
 import lockout from '../../containers/hoc/lockout'
 import { data } from './data'
+import { root } from '../../redux/actions/commonAction'
 import { getInvestment } from '../../containers/query'
 import setMutation from '../../containers/mutation'
 import getnativeModules from '../../containers/hoc/infoAppNativeModules'
@@ -36,6 +37,7 @@ const query = debounce((client, obj, setState) => {
 const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateRoot: bindActionCreators(root, dispatch),
   toggleModal: value => dispatch({ type: 'modal', value })
 })
 
@@ -76,6 +78,10 @@ export default class extends React.Component {
     )
   }
 
+  componentWillUnmount = () => {
+    this.props.updateRoot('password', '')
+  }
+
   onNext = async () => {
     this.onCallApi()
     NativeModules.KMyFundOnboarding.finishActivity()
@@ -88,6 +94,7 @@ export default class extends React.Component {
   }
 
   onCallApi = async () => {
+    NativeModules.KMyFundOnboarding.autoLogin(this.props.root.password, await AsyncStorage.getItem('user_token'))
     NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
     this.props.saveFCMToken({
       variables: {
