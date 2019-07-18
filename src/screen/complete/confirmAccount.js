@@ -74,7 +74,6 @@ export default class extends React.Component {
 	onRequestOtp = token => {
 		this.props.requestOtp(null, { token, currFlowUP: this.props.root.currFlowUP })
 			.then(res => {
-				console.log(res)
 				if (res.success || res.code === '1001') {
 					if (res.code === '1001') {
 						this.props.updateRoot('time', res.details.time)
