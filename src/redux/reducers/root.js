@@ -4,6 +4,7 @@ const init = {
   root: 'TEST',
   appState: '',
   currFlowUP: '',
+  password: '',
   modal: {
     visible: false
   }

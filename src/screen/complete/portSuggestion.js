@@ -5,6 +5,7 @@ import {
   ScrollView,
   Image,
   Linking,
+  AsyncStorage,
   NativeModules
 } from 'react-native'
 import { bindActionCreators } from 'redux'
@@ -22,6 +23,7 @@ import { RiskList } from '../../component/lists'
 import { navigateAction } from '../../redux/actions'
 import lockout from '../../containers/hoc/lockout'
 import { data } from './data'
+import { root } from '../../redux/actions/commonAction'
 import { getInvestment } from '../../containers/query'
 import setMutation from '../../containers/mutation'
 import getnativeModules from '../../containers/hoc/infoAppNativeModules'
@@ -35,6 +37,7 @@ const query = debounce((client, obj, setState) => {
 const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateRoot: bindActionCreators(root, dispatch),
   toggleModal: value => dispatch({ type: 'modal', value })
 })
 
@@ -75,25 +78,36 @@ export default class extends React.Component {
     )
   }
 
-  onNext = () => {
-    this.props.saveFCMToken({ variables: { input: { FCMToken: this.props.fcm } } })
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => console.log(err))
-    NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
+  componentWillUnmount = () => {
+    this.props.updateRoot('password', '')
+  }
+
+  onNext = async () => {
+    this.onCallApi()
     NativeModules.KMyFundOnboarding.finishActivity()
   }
 
-  onConfirm = () => {
-    this.props.saveFCMToken({ variables: { input: { FCMToken: this.props.fcm } } })
+  onConfirm = async () => {
+    this.onCallApi()
+    this.props.toggleModal({ visible: false })
+    setTimeout(() => Linking.openURL('https://k-invest.kasikornbankgroup.com/CustomerRisk/CustomerRiskPolicy.aspx'), 100)
+  }
+
+  onCallApi = async () => {
+    NativeModules.KMyFundOnboarding.autoLogin(this.props.root.password, await AsyncStorage.getItem('user_token'))
+    NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
+    this.props.saveFCMToken({
+      variables: {
+        input: {
+          FCMToken: this.props.fcm,
+          accessToken: await AsyncStorage.getItem('access_token')
+        }
+      }
+    })
       .then(res => {
         console.log(res)
       })
       .catch(err => console.log(err))
-    NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
-    this.props.toggleModal({ visible: false })
-    setTimeout(() => Linking.openURL('https://k-invest.kasikornbankgroup.com/CustomerRisk/CustomerRiskPolicy.aspx'), 100)
   }
 
   render() {

@@ -9,9 +9,8 @@ import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
 import { HeadSpace } from '../component/headSpace'
 import { navigateAction } from '../redux/actions'
-import { fatca, suittest } from '../redux/actions/commonAction'
 import { requestLogin } from '../redux/actions/root-active'
-import { updateUser } from '../redux/actions/commonAction'
+import { root, fatca, suittest, updateUser } from '../redux/actions/commonAction'
 import { containerQuery, getStatus, getUser } from '../containers/query'
 import getnativeModules from '../containers/hoc/infoAppNativeModules'
 import {
@@ -36,6 +35,7 @@ const dispatchToProps = dispatch => ({
 	navigateAction: bindActionCreators(navigateAction, dispatch),
 	requestLogin: bindActionCreators(requestLogin, dispatch),
 	updateUser: bindActionCreators(updateUser, dispatch),
+	updateRoot: bindActionCreators(root, dispatch),
 	updateFatca: bindActionCreators(fatca, dispatch),
 	updateSuittest: bindActionCreators(suittest, dispatch),
 	toggleModal: value => dispatch({ type: 'modal', value })
@@ -91,7 +91,7 @@ export default class extends React.Component {
 						await containerQuery(
 							this.props.client,
 							{ query: getStatus },
-							this.onHandleChooseScreen
+							val => this.onHandleChooseScreen({ val, password: obj.number })
 						)
 
 					} else if (!res.success) {
@@ -118,6 +118,32 @@ export default class extends React.Component {
 				.catch(err => {
 					console.log(err)
 				})
+		}
+	}
+
+	onHandleChooseScreen = ({ val, password }) => {
+		// NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
+		switch (val.data.getStatus) {
+			case 'Approved':
+				this.props.updateRoot('password', password)
+				this.props.navigateAction({ ...this.props, page: 'confirmAccount' })
+				break
+
+			case 'InProgress':
+				this.props.navigateAction({ ...this.props, page: 'checkpoint' })
+				break
+
+			case 'WaitingApprove':
+				this.props.navigateAction({ ...this.props, page: 'waiting' })
+				break
+
+			case 'Editing':
+				this.props.navigateAction({ ...this.props, page: 'softReject' })
+				break
+
+			default: // Rejected
+				this.props.navigateAction({ ...this.props, page: 'statusApprove', params: { status: 'Rejected' } })
+				break
 		}
 	}
 
@@ -425,31 +451,6 @@ export default class extends React.Component {
 				}
 				this.props.updateUser('career', career)
 			}
-		}
-	}
-
-	onHandleChooseScreen = val => {
-		// NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
-		switch (val.data.getStatus) {
-			case 'Approved':
-				this.props.navigateAction({ ...this.props, page: 'confirmAccount' })
-				break
-
-			case 'InProgress':
-				this.props.navigateAction({ ...this.props, page: 'checkpoint' })
-				break
-
-			case 'WaitingApprove':
-				this.props.navigateAction({ ...this.props, page: 'waiting' })
-				break
-
-			case 'Editing':
-				this.props.navigateAction({ ...this.props, page: 'softReject' })
-				break
-
-			default: // Rejected
-				this.props.navigateAction({ ...this.props, page: 'statusApprove', params: { status: 'Rejected' } })
-				break
 		}
 	}
 
