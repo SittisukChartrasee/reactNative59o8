@@ -77,23 +77,18 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    this.props.saveFCMToken({
-      variables: {
-        input: {
-          FCMToken: this.props.fcm,
-          accessToken: await AsyncStorage.getItem('access_token')
-        }
-      }
-    })
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => console.log(err))
-    NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
+    this.onCallApi()
     NativeModules.KMyFundOnboarding.finishActivity()
   }
 
   onConfirm = async () => {
+    this.onCallApi()
+    this.props.toggleModal({ visible: false })
+    setTimeout(() => Linking.openURL('https://k-invest.kasikornbankgroup.com/CustomerRisk/CustomerRiskPolicy.aspx'), 100)
+  }
+
+  onCallApi = async () => {
+    NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
     this.props.saveFCMToken({
       variables: {
         input: {
@@ -106,9 +101,6 @@ export default class extends React.Component {
         console.log(res)
       })
       .catch(err => console.log(err))
-    NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
-    this.props.toggleModal({ visible: false })
-    setTimeout(() => Linking.openURL('https://k-invest.kasikornbankgroup.com/CustomerRisk/CustomerRiskPolicy.aspx'), 100)
   }
 
   render() {
