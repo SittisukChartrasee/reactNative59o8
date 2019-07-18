@@ -123,15 +123,19 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    await this.props.client.query({ query: getRegisterBankStatus })
-      .then((val) => {
-        if (val.data.getRegisterBankStatus.status) {
-          this.props.navigateAction({ ...this.props, page: 'statusBank' })
-        } else {
-          this.props.navigateAction({ ...this.props, page: this.state.link })
-        }
-      })
-      .catch(() => this.props.navigateAction({ ...this.props, page: this.state.link }))
+    if (this.state.link === 'tutorialBank') {
+      await this.props.client.query({ query: getRegisterBankStatus })
+        .then((val) => {
+          if (val.data.getRegisterBankStatus.status) {
+            this.props.navigateAction({ ...this.props, page: 'statusBank' })
+          } else {
+            this.props.navigateAction({ ...this.props, page: this.state.link })
+          }
+        })
+        .catch(() => this.props.navigateAction({ ...this.props, page: this.state.link }))
+    } else {
+      this.props.navigateAction({ ...this.props, page: this.state.link })
+    }
   }
 
   render() {

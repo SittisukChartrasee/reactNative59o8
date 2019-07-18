@@ -47,16 +47,16 @@ export default class extends React.Component {
 		else if (sumSuittest > 30) this.setState({ risk: 3 })
 
 		containerQuery(
-      this.props.client,
-      { 
-        query: getTermAndCondition
-      },
-      (val) => {
-        this.setState({ text: val.data.getTermAndCondition })
-      }
-    )
+			this.props.client,
+			{
+				query: getTermAndCondition
+			},
+			(val) => {
+				this.setState({ text: val.data.getTermAndCondition })
+			}
+		)
 	}
-	
+
 	onNext = async () => {
 		const token = await AsyncStorage.getItem("access_token")
 		this.props.updateRoot('currFlowUP', 'updatePasscode')
@@ -74,8 +74,18 @@ export default class extends React.Component {
 	onRequestOtp = token => {
 		this.props.requestOtp(null, { token, currFlowUP: this.props.root.currFlowUP })
 			.then(res => {
-				if (res.success) {
-					this.props.navigation.navigate({ routeName: 'otp', key: 'otpUpdatePasscode'})
+				console.log(res)
+				if (res.success || res.code === '1001') {
+					if (res.code === '1001') {
+						this.props.updateRoot('time', res.details.time)
+						this.props.updateRoot('ref_no', res.details.ref_no)
+						this.props.updateRoot('overRequest', true)
+						this.props.updateRoot('overRequestUi', true)
+					} else {
+						this.props.updateRoot('overRequest', false)
+						this.props.updateRoot('overRequestUi', false)
+					}
+					this.props.navigation.navigate({ routeName: 'otp', key: 'otpUpdatePasscode' })
 				}
 			})
 			.catch(err => {

@@ -75,12 +75,22 @@ export default class extends React.Component {
   onHandleToken = res => {
     this.props.requestOtp(null, { token: res.result.access_token, currFlowUP: this.props.root.currFlowUP })
       .then(resValidate => {
-        this.props.updateRoot('trans_id', resValidate.result.trans_id)
-        this.props.updateRoot('ref_no', resValidate.result.ref_no)
-        this.props.updateRoot('phone_no', resValidate.result.phone_no)
-
+        if (resValidate.success || resValidate.code === '1001') {
+          if (resValidate.code === '1001') {
+            this.props.updateRoot('ref_no', resValidate.details.ref_no)
+            this.props.updateRoot('time', resValidate.details.time)
+            this.props.updateRoot('overRequest', true)
+            this.props.updateRoot('overRequestUi', true)
+          } else {
+            this.props.updateRoot('trans_id', resValidate.result.trans_id)
+            this.props.updateRoot('ref_no', resValidate.result.ref_no)
+            this.props.updateRoot('phone_no', resValidate.result.phone_no)
+            this.props.updateRoot('overRequest', false)
+            this.props.updateRoot('overRequestUi', false)
+          }
+          this.props.navigation.navigate({ routeName: 'otp', key: 'otpForgetPasscode' })
+        }
         // AsyncStorage.setItem('access_token', resValidate.result.access_token)
-        this.props.navigation.navigate({ routeName: 'otp', key: 'otpForgetPasscode' })
       })
       .catch(err => console.log('err validate', err))
   }
