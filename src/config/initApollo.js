@@ -7,9 +7,9 @@ import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createUploadLink } from 'apollo-upload-client'
 import { CHANGE_ROOT } from '../redux/types'
+import env from './env'
 
 // import { beforLogin } from './router'
-// import env from './env'
 
 const errorLink = store => onError(({ graphQLErrors, networkError }) => {
   try {
@@ -73,6 +73,6 @@ export default (store) => {
     // case 'SIT': return getAuthLink(`${env.API_PATH_SIT}/graphql`, store)
     // default: return getAuthLink(`${env.API_PATH}/graphql`, store)
     // default: return getAuthLink('https://ka-ob-client-dev.codefin.io/query', store) // DEV
-    default: return getAuthLink('http://k-myfunds.kasikornasset.com:30443/query', store) // SIT
+    default: return getAuthLink(`${env.API_PATH_SIT}/query`, store) // SIT
   }
 }
