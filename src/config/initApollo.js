@@ -6,6 +6,7 @@ import { onError } from 'apollo-link-error'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createUploadLink } from 'apollo-upload-client'
+import { CHANGE_ROOT } from '../redux/types'
 
 // import { beforLogin } from './router'
 // import env from './env'
@@ -21,7 +22,20 @@ const errorLink = store => onError(({ graphQLErrors, networkError }) => {
 
     if (networkError) {
       if (networkError.statusCode === 401 && networkError.bodyText.trim() === 'jwt expired') {
-        store.dispatch(NavigationActions.navigate({ routeName: 'welcome' }))
+        const modal = {
+          dis: `ท่านไม่ได้ทำรายการใดๆ เกินระยะเวลาที่\nกำหนด กรุณาเข้าสู่ระบบใหม่อีกครั้ง`,
+          visible: true,
+          onPress: () => {
+            store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false } })
+            store.dispatch({ type: CHANGE_ROOT, key: 'modalVisible', value: false })
+          },
+          onPressClose: () => {
+            store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false } })
+            store.dispatch({ type: CHANGE_ROOT, key: 'modalVisible', value: false })
+            store.dispatch(NavigationActions.navigate({ routeName: 'welcome' }))
+          },
+        }
+        store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: modal })
       }
     }
   } catch (error) {

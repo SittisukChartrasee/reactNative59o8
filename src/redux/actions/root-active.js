@@ -1,6 +1,25 @@
 import request from '../../utility/requestApi'
 import { CHANGE_ROOT } from '../types'
 
+const handleModal = res => async dispatch => {
+  if (!res.success) {
+    const modal = {
+      dis: `ท่านไม่ได้ทำรายการใดๆ เกินระยะเวลาที่\nกำหนด กรุณาเข้าสู่ระบบใหม่อีกครั้ง`,
+      visible: true,
+      onPress: () => {
+        dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false } })
+        dispatch({ type: CHANGE_ROOT, key: 'modalVisible', value: false })
+      },
+      onPressClose: () => {
+        dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false } })
+        dispatch({ type: CHANGE_ROOT, key: 'modalVisible', value: false })
+        dispatch(NavigationActions.navigate({ routeName: 'welcome' }))
+      },
+    }
+    return dispatch({ type: CHANGE_ROOT, key: 'modal', value: modal })
+  }
+}
+
 export const requestOtp = (obj, { token = null, currFlowUP }) => async dispatch => {  // Api ใช้สำหรับ OTP register และ accept  
   const handleEndPoint = currFlow => {
     switch (currFlow) {
@@ -14,7 +33,7 @@ export const requestOtp = (obj, { token = null, currFlowUP }) => async dispatch 
     method: 'POST',
     body: token ? null : JSON.stringify(obj),
   }, token)
-
+  // handleModal({ success: false })
   if (res && res.result) {
     for (const key in res.result) {
       if (key === 'code')
