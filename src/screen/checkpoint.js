@@ -126,7 +126,7 @@ export default class extends React.Component {
     if (this.state.link === 'tutorialBank') {
       await this.props.client.query({ query: getRegisterBankStatus })
         .then((val) => {
-          if (val.data.getRegisterBankStatus.status) {
+          if (val.data.getRegisterBankStatus.status && val.data.getRegisterBankStatus.status !== 'SENT') {
             this.props.navigateAction({ ...this.props, page: 'statusBank' })
           } else {
             this.props.navigateAction({ ...this.props, page: this.state.link })

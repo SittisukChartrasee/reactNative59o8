@@ -1,3 +1,4 @@
+import { NativeModules } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import request from '../../utility/requestApi'
 import { CHANGE_ROOT } from '../types'
@@ -7,14 +8,10 @@ const handleTimeout = (res, dispatch) => {
     const modal = {
       dis: `ท่านไม่ได้ทำรายการใดๆ เกินระยะเวลาที่\nกำหนด กรุณาเข้าสู่ระบบใหม่อีกครั้ง`,
       visible: true,
-      onPress: () => {
-        dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false } })
-        dispatch({ type: CHANGE_ROOT, key: 'modalVisible', value: false })
-      },
+      onPress: () => NativeModules.KMyFundOnboarding.finishActivity(),
       onPressClose: () => {
         dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false } })
         dispatch({ type: CHANGE_ROOT, key: 'modalVisible', value: false })
-        dispatch(NavigationActions.navigate({ routeName: 'welcome' }))
       },
     }
     return dispatch({ type: CHANGE_ROOT, key: 'modal', value: modal })
