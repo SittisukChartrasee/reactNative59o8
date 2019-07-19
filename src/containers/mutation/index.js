@@ -290,19 +290,6 @@ const saveSanction = gql`
   }
 `
 
-const updateRegisterBankStatus = gql`
-  mutation updateRegisterBankStatus {
-    updateRegisterBankStatus{
-      success
-      message
-      details{
-        field
-        description
-      }
-    }
-  }
-`
-
 const saveWaitingApprove = gql`
   mutation saveWaitingApprove {
     saveWaitingApprove{
@@ -354,7 +341,6 @@ export default compose(
     options: { fetchPolicy: 'no-cache' },
   }),
   graphql(saveSanction, { name: 'saveSanction' }),
-  graphql(updateRegisterBankStatus, { name: 'updateRegisterBankStatus' }),
   graphql(saveWaitingApprove, { name: 'saveWaitingApprove' }),
   graphql(resendEmail, { name: 'resendEmail' }),
   graphql(saveFCMToken, { name: 'saveFCMToken' })
