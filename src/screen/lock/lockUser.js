@@ -43,10 +43,10 @@ export default class extends React.Component {
 
         <View style={{ width: widthView, justifyContent: 'flex-end', paddingBottom: 44 }}>
           <LongButton
-            label="ติดต่อ 02 673 3999"
+            label="ติดต่อ 02 673 3888"
             style={{ marginHorizontal: 24 }}
             bgTransparent
-            onPress={() => Linking.openURL(`tel://02-673-3999`)}
+            onPress={() => Linking.openURL(`tel://02-673-3888`)}
           />
         </View>
       </Screen>
