@@ -49,10 +49,6 @@ export default class extends React.Component {
         label: 'ธนาคารไทยพาณิชย์',
         image: images.iconscb,
         type: 'selectCard',
-      }, {
-        label: 'ข้าม',
-        type: 'selectCard',
-        link: 'suittest',
       }
     ],
     fields: [
@@ -68,9 +64,6 @@ export default class extends React.Component {
 
   handleInput = (props) => {
     if (props.type === 'selectCard') {
-      if (props.value === 'ข้าม') {
-        return this.props.navigateAction({ ...this.props, page: 'suittest' })
-      }
       this.setState({ selected: props.value })
       this.setState({ card: this.state.card.map((d) => d.label === props.value ? { ...d, active: true } : { ...d, active: false }) })
       this.props.updateUser('bank', { bankName: props.value })
@@ -78,7 +71,7 @@ export default class extends React.Component {
   }
 
   onNext = () => {
-    const data = { bank: this.state.selected === 'ธนาคารไทยพาณิชย์' ? 'SCB' : 'KASIKORN'} 
+    const data = { bank: this.state.selected === 'ธนาคารไทยพาณิชย์' ? 'SCB' : 'KASIKORN' }
 
     this.props.registerBank({ variables: { input: data } })
       .then(res => {
@@ -97,7 +90,7 @@ export default class extends React.Component {
               url: res.data.registerBank.url
             }
           })
-        } 
+        }
 
         const modal = {
           dis: res.data.registerBank.message,
@@ -172,7 +165,7 @@ export default class extends React.Component {
           } */}
         </KeyboardAwareScrollView>
 
-        <LongPositionButton onPress={this.onNext} disabled={!handleDisabled(this.state.card).active} bg={colors.lightgrey} label="ยืนยัน"/>
+        <LongPositionButton onPress={this.onNext} disabled={!handleDisabled(this.state.card).active} bg={colors.lightgrey} label="ยืนยัน" />
       </Screen>
     )
   }

@@ -69,7 +69,7 @@ export default (store) => {
     // case 'SIT': return getAuthLink(`${env.API_PATH_SIT}/graphql`, store)
     // default: return getAuthLink(`${env.API_PATH}/graphql`, store)
     // default: return getAuthLink('https://ka-ob-client-dev.codefin.io/query', store) // DEV
-    default: return getAuthLink(`${env.API_PATH_SIT}/query`, store) // SIT
-    // default: return getAuthLink(`${env.API_PATH_UAT}/query`, store) // UAT
+    // default: return getAuthLink(`${env.API_PATH_SIT}/query`, store) // SIT
+    default: return getAuthLink(`${env.API_PATH_UAT}/query`, store) // UAT
   }
 }
