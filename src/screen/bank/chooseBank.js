@@ -49,11 +49,12 @@ export default class extends React.Component {
         label: 'ธนาคารไทยพาณิชย์',
         image: images.iconscb,
         type: 'selectCard',
-      }, {
-        label: 'ข้าม',
-        type: 'selectCard',
-        link: 'suittest',
-      }
+      },
+      // {
+      //   label: 'ข้าม',
+      //   type: 'selectCard',
+      //   link: 'suittest',
+      // }
     ],
     fields: [
       {
