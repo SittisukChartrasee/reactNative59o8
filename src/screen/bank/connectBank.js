@@ -58,9 +58,6 @@ export default class extends React.Component {
           this.setState({ status: true })
           break
         case 'ความสำเร็จในการลงทะเบียน':
-          this.props.updateRegisterBankStatus()
-            .then(res => console.log(res)) // ให้ทำอะไรหรอ
-            .catch(err => console.log(err.toString()))
           this.props.navigation.navigate('statusBank')
           break
 

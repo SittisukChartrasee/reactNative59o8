@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
-import { View, AppState, BackHandler, AsyncStorage } from 'react-native'
+import { Text, View, AppState, BackHandler, AsyncStorage } from 'react-native'
 import { createReduxContainer } from 'react-navigation-redux-helpers'
 import { bindActionCreators } from 'redux'
 import { onStore, AppNavigator } from './redux/store'
@@ -29,6 +29,9 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   constructor(props) {
     super(props)
+
+    Text.defaultProps = Text.defaultProps || {};
+    Text.defaultProps.allowFontScaling = false;
 
     this.state = {
       appState: AppState.currentState,
