@@ -61,6 +61,7 @@ export default class extends React.Component {
 			this.props.requestLogin({
 				userToken,
 				password: obj.number,
+				type: Platform.OS,
 				fcm_token: this.props.fcm,
 				version: this.props.version,
 				system_version: DeviceInfo.getSystemVersion(),
