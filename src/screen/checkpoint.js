@@ -60,9 +60,15 @@ export default class extends React.Component {
       }
     ],
     link: '',
+    statusBank: '',
   }
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
+
+    await this.props.client.query({ query: getRegisterBankStatus })
+      .then((val) => this.setState({ statusBank: val.data.getRegisterBankStatus.status ? val.data.getRegisterBankStatus.status : '' }))
+      .catch(() => this.setState({ statusBank: '' }))
+
     containerQuery(this.props.client, {
       query: getStatusInProgress,
     }, val => {
@@ -85,7 +91,7 @@ export default class extends React.Component {
           ),
           link: 'profile'
         })
-      } else if (val.data.getStatusInProgress === 'LinkBank') {
+      } else if (val.data.getStatusInProgress === 'LinkBank' || this.state.statusBank) {
         this.setState({
           checkPoint: this.state.checkPoint.map(
             (d, i) => i < 2
@@ -94,9 +100,14 @@ export default class extends React.Component {
                 ? ({ ...d, check: 'current' })
                 : ({ ...d, check: 'future' })
           ),
-          link: 'tutorialBank'
+          link: () => {
+            if (this.state.statusBank === 'SUCCESS' || this.state.statusBank === 'FAIL')
+              return 'statusBank'
+            else
+              return 'tutorialBank'
+          }
         })
-      } else if (val.data.getStatusInProgress === 'Suittest') {
+      } else if (val.data.getStatusInProgress === 'Suittest' && this.state.statusBank === 'SUCCESS') {
         this.setState({
           checkPoint: this.state.checkPoint.map(
             (d, i) => i < 3
@@ -122,23 +133,25 @@ export default class extends React.Component {
     })
   }
 
-  onNext = async () => {
-    if (this.state.link === 'tutorialBank') {
-      await this.props.client.query({ query: getRegisterBankStatus })
-        .then((val) => {
-          if (val.data.getRegisterBankStatus.status &&
-            (val.data.getRegisterBankStatus.status === 'FAIL' ||
-              val.data.getRegisterBankStatus.status === 'SUCCESS')) {
-            this.props.navigateAction({ ...this.props, page: 'statusBank' })
-          } else {
-            this.props.navigateAction({ ...this.props, page: this.state.link })
-          }
-        })
-        .catch(() => this.props.navigateAction({ ...this.props, page: this.state.link }))
-    } else {
-      this.props.navigateAction({ ...this.props, page: this.state.link })
-    }
-  }
+  onNext = () => this.props.navigateAction({ ...this.props, page: this.state.link })
+
+  // onNext = async () => {
+  //   if (this.state.link === 'tutorialBank') {
+  //     await this.props.client.query({ query: getRegisterBankStatus })
+  //       .then((val) => {
+  //         if (val.data.getRegisterBankStatus.status &&
+  //           (val.data.getRegisterBankStatus.status === 'FAIL' ||
+  //             val.data.getRegisterBankStatus.status === 'SUCCESS')) {
+  //           this.props.navigateAction({ ...this.props, page: 'statusBank' })
+  //         } else {
+  //           this.props.navigateAction({ ...this.props, page: this.state.link })
+  //         }
+  //       })
+  //       .catch(() => this.props.navigateAction({ ...this.props, page: this.state.link }))
+  //   } else {
+  //     this.props.navigateAction({ ...this.props, page: this.state.link })
+  //   }
+  // }
 
   render() {
     const { checkPoint } = this.state

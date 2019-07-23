@@ -1,5 +1,5 @@
 import React from 'react'
-import { AsyncStorage, NativeModules } from 'react-native'
+import { AsyncStorage, Platform, NativeModules } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import moment from 'moment-timezone'
@@ -61,6 +61,7 @@ export default class extends React.Component {
 			this.props.requestLogin({
 				userToken,
 				password: obj.number,
+				type: Platform.OS,
 				fcm_token: this.props.fcm,
 				version: this.props.version,
 				system_version: DeviceInfo.getSystemVersion(),

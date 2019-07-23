@@ -36,12 +36,13 @@ export default class extends React.Component {
     layout: [],
     doneFlat: 'thanon',
     fields: [
+      // {
+      //   label: 'ประเทศ',
+      //   type: 'search',
+      //   field: 'country', // countryCode
+      //   required: true,
+      // },
       {
-        label: 'ประเทศ',
-        type: 'search',
-        field: 'country', // countryCode
-        required: true,
-      }, {
         label: 'เลขที่',
         type: 'textInput',
         field: 'addressNoTH',
@@ -250,7 +251,6 @@ export default class extends React.Component {
 
 
     const data = {
-      countryCode,
       addressNoTH,
       addressVillageTH,
       floorNo,

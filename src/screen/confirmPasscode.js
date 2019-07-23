@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  Platform,
   AsyncStorage,
   NativeModules,
 } from 'react-native'
@@ -41,6 +42,7 @@ export default class extends React.Component {
 
     const data = {
       password: obj.number,
+      type: Platform.OS,
       fcm_token: this.props.fcm,
       version: this.props.version,
       system_version: DeviceInfo.getSystemVersion(),

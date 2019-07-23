@@ -2,6 +2,7 @@ import { CHANGE_ROOT } from '../types'
 
 const init = {
   root: 'TEST',
+  env: 'UAT',
   appState: '',
   currFlowUP: '',
   password: '',

@@ -25,7 +25,11 @@ const errorLink = store => onError(({ graphQLErrors, networkError }) => {
         const modal = {
           dis: `ท่านไม่ได้ทำรายการใดๆ เกินระยะเวลาที่\nกำหนด กรุณาเข้าสู่ระบบใหม่อีกครั้ง`,
           visible: true,
-          onPress: () => NativeModules.KMyFundOnboarding.finishActivity(),
+          onPress: () => {
+            NativeModules.KMyFundOnboarding.finishActivity()
+            store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false } })
+            store.dispatch({ type: CHANGE_ROOT, key: 'modalVisible', value: false })
+          },
           onPressClose: () => {
             store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false } })
             store.dispatch({ type: CHANGE_ROOT, key: 'modalVisible', value: false })
@@ -61,6 +65,8 @@ const getAuthLink = (link, store) => new ApolloClient({
 
 export default (store) => {
   // const { scbENV } = store.getState().root
+  console.log(store)
+  console.log('yesss')
 
   switch (true) {
     // case 'PRO': return getAuthLink(`${env.API_PATH}/graphql`, store)
@@ -69,6 +75,7 @@ export default (store) => {
     // case 'SIT': return getAuthLink(`${env.API_PATH_SIT}/graphql`, store)
     // default: return getAuthLink(`${env.API_PATH}/graphql`, store)
     // default: return getAuthLink('https://ka-ob-client-dev.codefin.io/query', store) // DEV
-    default: return getAuthLink(`${env.API_PATH_UAT}/query`, store) // SIT
+    default: return getAuthLink(`${env.API_PATH_SIT}/query`, store) // SIT
+    // default: return getAuthLink(`${env.API_PATH_UAT}/query`, store) // UAT
   }
 }

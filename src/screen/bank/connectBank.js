@@ -51,7 +51,6 @@ export default class extends React.Component {
   }
 
   onHandleWebView = navEvent => {
-    console.log(navEvent)
     if (!navEvent.loading) {
       switch (navEvent.title) {
         case 'การสมัครไม่สำเร็จ':

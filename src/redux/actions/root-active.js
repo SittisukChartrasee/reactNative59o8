@@ -18,7 +18,8 @@ const handleTimeout = (res, dispatch) => {
   }
 }
 
-export const requestOtp = (obj, { token = null, currFlowUP }) => async dispatch => {  // Api ใช้สำหรับ OTP register และ accept  
+// requestOtp :: Api ใช้สำหรับ OTP register และ accept
+export const requestOtp = (obj, { token = null, currFlowUP }) => async dispatch => {
   const handleEndPoint = currFlow => {
     switch (currFlow) {
       case 'updatePasscode': return 'user/accept-term/request-otp'
@@ -53,7 +54,8 @@ export const requestOtp = (obj, { token = null, currFlowUP }) => async dispatch 
   return { ...res }
 }
 
-export const acceptTerm = token => async dispatch => { // Api ใช้สำหรับ accept ก่อน OTP
+// acceptTerm :: Api ใช้สำหรับ accept ก่อน OTP
+export const acceptTerm = token => async dispatch => {
   const url = 'user/accept-term'
   const res = await request(url, {
     method: 'POST',
@@ -70,7 +72,8 @@ export const acceptTerm = token => async dispatch => { // Api ใช้สำห
   return { ...res }
 }
 
-export const velidateOtp = (obj, { token = null, currFlowUP }) => async dispatch => { // Api ใช้สำหรับ OTP register และ accept
+// velidateOtp :: Api ใช้สำหรับ OTP register และ accept
+export const velidateOtp = (obj, { token = null, currFlowUP }) => async dispatch => {
   const handleEndPoint = currFlow => {
     switch (currFlow) {
       case 'updatePasscode': return 'user/accept-term/verify-otp'
