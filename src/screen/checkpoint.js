@@ -91,7 +91,7 @@ export default class extends React.Component {
           ),
           link: 'profile'
         })
-      } else if (val.data.getStatusInProgress === 'LinkBank' || this.state.statusBank) {
+      } else if (val.data.getStatusInProgress === 'LinkBank') {
         this.setState({
           checkPoint: this.state.checkPoint.map(
             (d, i) => i < 2
@@ -100,14 +100,17 @@ export default class extends React.Component {
                 ? ({ ...d, check: 'current' })
                 : ({ ...d, check: 'future' })
           ),
-          link: () => {
-            if (this.state.statusBank === 'SUCCESS' || this.state.statusBank === 'FAIL')
-              return 'statusBank'
-            else
-              return 'tutorialBank'
+        }, () => {
+          switch (this.state.statusBank) {
+            case 'SUCCESS':
+              return this.setState({ link: 'statusBank' })
+            case 'FAIL':
+              return this.setState({ link: 'statusBank' })
+            default:
+              return this.setState({ link: 'tutorialBank' })
           }
         })
-      } else if (val.data.getStatusInProgress === 'Suittest' && this.state.statusBank === 'SUCCESS') {
+      } else if (val.data.getStatusInProgress === 'Suittest') {
         this.setState({
           checkPoint: this.state.checkPoint.map(
             (d, i) => i < 3
@@ -134,24 +137,6 @@ export default class extends React.Component {
   }
 
   onNext = () => this.props.navigateAction({ ...this.props, page: this.state.link })
-
-  // onNext = async () => {
-  //   if (this.state.link === 'tutorialBank') {
-  //     await this.props.client.query({ query: getRegisterBankStatus })
-  //       .then((val) => {
-  //         if (val.data.getRegisterBankStatus.status &&
-  //           (val.data.getRegisterBankStatus.status === 'FAIL' ||
-  //             val.data.getRegisterBankStatus.status === 'SUCCESS')) {
-  //           this.props.navigateAction({ ...this.props, page: 'statusBank' })
-  //         } else {
-  //           this.props.navigateAction({ ...this.props, page: this.state.link })
-  //         }
-  //       })
-  //       .catch(() => this.props.navigateAction({ ...this.props, page: this.state.link }))
-  //   } else {
-  //     this.props.navigateAction({ ...this.props, page: this.state.link })
-  //   }
-  // }
 
   render() {
     const { checkPoint } = this.state
