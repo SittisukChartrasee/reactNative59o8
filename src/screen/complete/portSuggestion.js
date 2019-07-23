@@ -100,7 +100,7 @@ export default class extends React.Component {
       variables: {
         input: {
           FCMToken: this.props.fcm,
-          accessToken: await AsyncStorage.getItem('access_token')
+          userToken: await AsyncStorage.getItem('access_token')
         }
       }
     })
