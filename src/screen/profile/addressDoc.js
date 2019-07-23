@@ -250,7 +250,6 @@ export default class extends React.Component {
     } = user.addressDoc
 
     const data = {
-      countryCode,
       addressNoTH,
       addressVillageTH,
       floorNo,

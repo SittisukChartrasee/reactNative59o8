@@ -1,5 +1,5 @@
 import React from 'react'
-import { AsyncStorage, NativeModules } from 'react-native'
+import { AsyncStorage, Platform, NativeModules } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import moment from 'moment-timezone'

@@ -254,7 +254,6 @@ export default class extends React.Component {
 
 
     const data = {
-      countryCode,
       companyName,
       addressNoTH,
       addressVillageTH,
