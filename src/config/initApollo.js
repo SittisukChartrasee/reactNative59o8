@@ -66,6 +66,8 @@ const getAuthLink = (link, store) => new ApolloClient({
 
 export default (store) => {
   // const { scbENV } = store.getState().root
+  console.log(store)
+  console.log('yesss')
 
   switch (true) {
     // case 'PRO': return getAuthLink(`${env.API_PATH}/graphql`, store)
