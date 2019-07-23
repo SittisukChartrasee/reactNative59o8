@@ -1,4 +1,5 @@
 import ENV from '../config/env'
+import { onStore } from '../redux/store'
 
 export default async (url, options, verifytoken) => {
   let allOption
@@ -17,7 +18,7 @@ export default async (url, options, verifytoken) => {
 
   try {
     // const res = await fetch(`${ENV.API_PATH_SIT}/${url}`, allOption) // SIT
-    const res = await fetch(`${ENV.API_PATH_UAT}/${url}`, allOption) // UAT
+    const res = await fetch(`${ENV[onStore.getState().root.env]}/${url}`, allOption) // UAT
     return await res.json()
   } catch (err) {
     throw err
