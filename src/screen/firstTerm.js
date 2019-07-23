@@ -6,6 +6,7 @@ import {
   Dimensions,
   ScrollView,
   SafeAreaView,
+  Clipboard,
   Image,
   AsyncStorage
 } from 'react-native'
@@ -19,6 +20,8 @@ import colors from '../config/colors'
 import { LongButton } from '../component/button'
 import images from '../config/images'
 import { navigateAction } from '../redux/actions'
+import getVersion from '../config/version'
+
 const { width: widthView } = Dimensions.get('window')
 
 const item1 = [
@@ -43,15 +46,17 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
 
   onNext = () => {
-    // const userToken = await AsyncStorage.getItem('user_token')
-    // const accessToken = await AsyncStorage.getItem('access_token')
     this.props.navigateAction({ ...this.props, page: 'welcome' })
   }
 
+  onClipboardVersion = () => {
+    const version = getVersion.version
+    const build = getVersion.build
+    const time = getVersion.time
+    Clipboard.setString(`version : ${version} build : ${build} date : ${time}`)
+  }
+
   render() {
-    // console.log(NativeModules)
-    // console.log(NativeModules.PlatformConstants.getConstants())
-    // console.log(DeviceInfo.getDeviceId(), DeviceInfo.getSystemVersion())
     return (
       <Screen>
         <NavBar
@@ -70,7 +75,9 @@ export default class extends React.Component {
         <ScrollView contentContainerStyle={{ marginHorizontal: 24 }}>
           <View style={{ alignItems: 'center', marginBottom: 32 }}>
             <TLight fontSize={16} mb="7%" color={colors.white}>{`เตรียมก่อนปลอดภัยเปิดบัญชีกองทุนง๊ายง่าย`}</TLight>
-            <Image source={images.tutorialBankaccount} style={{ width: widthView * .6 }} resizeMode="contain" />
+            <TouchableOpacity activeOpacity={1} onPress={this.onClipboardVersion}>
+              <Image source={images.tutorialBankaccount} style={{ width: widthView * .6 }} resizeMode="contain" />
+            </TouchableOpacity>
           </View>
 
           {
