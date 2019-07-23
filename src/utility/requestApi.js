@@ -16,7 +16,8 @@ export default async (url, options, verifytoken) => {
   } else allOption = { ...options }
 
   try {
-    const res = await fetch(`${ENV.API_PATH_SIT}/${url}`, allOption) // SIT
+    // const res = await fetch(`${ENV.API_PATH_SIT}/${url}`, allOption) // SIT
+    const res = await fetch(`${ENV.API_PATH_UAT}/${url}`, allOption) // UAT
     return await res.json()
   } catch (err) {
     throw err

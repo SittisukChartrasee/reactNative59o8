@@ -84,7 +84,6 @@ export default class extends React.Component {
 
   onNext = async () => {
     this.onCallApi()
-    NativeModules.KMyFundOnboarding.finishActivity()
   }
 
   onConfirm = async () => {
