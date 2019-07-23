@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage, NativeModules } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { ApolloClient } from 'apollo-client'
 import { ApolloLink } from 'apollo-link'
@@ -26,6 +26,7 @@ const errorLink = store => onError(({ graphQLErrors, networkError }) => {
           dis: `ท่านไม่ได้ทำรายการใดๆ เกินระยะเวลาที่\nกำหนด กรุณาเข้าสู่ระบบใหม่อีกครั้ง`,
           visible: true,
           onPress: () => {
+            NativeModules.KMyFundOnboarding.finishActivity()
             store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false } })
             store.dispatch({ type: CHANGE_ROOT, key: 'modalVisible', value: false })
           },
@@ -73,6 +74,7 @@ export default (store) => {
     // case 'SIT': return getAuthLink(`${env.API_PATH_SIT}/graphql`, store)
     // default: return getAuthLink(`${env.API_PATH}/graphql`, store)
     // default: return getAuthLink('https://ka-ob-client-dev.codefin.io/query', store) // DEV
-    default: return getAuthLink(`${env.API_PATH_UAT}/query`, store) // SIT
+    // default: return getAuthLink(`${env.API_PATH_SIT}/query`, store) // SIT
+    default: return getAuthLink(`${env.API_PATH_UAT}/query`, store) // UAT
   }
 }
