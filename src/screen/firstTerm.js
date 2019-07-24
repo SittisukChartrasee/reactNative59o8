@@ -38,7 +38,7 @@ const item2 = [
   'สำหรับผู้ลงทุนที่ไม่เคยเปิดบัญชีกองทุนกับ\nบลจ. กสิกรไทยมาก่อน',
 ]
 
-const mapToProps = () => ({})
+const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
 })
@@ -52,8 +52,10 @@ export default class extends React.Component {
   onClipboardVersion = () => {
     const version = getVersion.version
     const build = getVersion.build
+    const getEnv = this.props.root.env
     const time = getVersion.time
-    Clipboard.setString(`version : ${version} build : ${build} date : ${time}`)
+    const formate = `version : ${version} build : ${build} env : ${getEnv} date : ${time}`
+    Clipboard.setString(formate)
   }
 
   render() {
