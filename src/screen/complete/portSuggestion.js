@@ -5,7 +5,9 @@ import {
   ScrollView,
   Image,
   Linking,
+  Modal,
   AsyncStorage,
+  ActivityIndicator,
   NativeModules
 } from 'react-native'
 import { bindActionCreators } from 'redux'
@@ -190,6 +192,19 @@ export default class extends React.Component {
             })}
           />
         </View>
+
+        {/* <Modal
+          visible
+          transparent
+        >
+          <View style={{ flex: 1 }}>
+              <View style={{ flex: 1, marginVertical: '50%', marginHorizontal: 20, backgroundColor: 'white' }}>
+                <View style={{ flex: 1, justifyContent: 'center', aligmItems: 'center', flexDirection: 'row' }}>
+                  <ActivityIndicator size="large" color={colors.emerald} />
+                </View>
+              </View>
+          </View>
+        </Modal> */}
       </Screen>
     )
   }
