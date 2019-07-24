@@ -322,20 +322,22 @@ export const getTermAndCondition = gql`
 
 export const getInvestmentAfterApprove = gql`
   query getInvestmentAfterApprove {
-    riskLevel
-    crrLevel
-    nameTH
-    nameEN
-    returnText
-    descTH
-    descEN
-    fundCodeKAsset
-    assetClass {
+    getInvestmentAfterApprove {
+      riskLevel
+      crrLevel
       nameTH
       nameEN
-      weight
-      color
-      sortOrder
+      returnText
+      descTH
+      descEN
+      fundCodeKAsset
+      assetClass {
+        nameTH
+        nameEN
+        weight
+        color
+        sortOrder
+      }
     }
   }
 `
