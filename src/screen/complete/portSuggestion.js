@@ -5,7 +5,9 @@ import {
   ScrollView,
   Image,
   Linking,
+  Modal,
   AsyncStorage,
+  ActivityIndicator,
   NativeModules
 } from 'react-native'
 import { bindActionCreators } from 'redux'
@@ -22,9 +24,9 @@ import images from '../../config/images'
 import { RiskList } from '../../component/lists'
 import { navigateAction } from '../../redux/actions'
 import lockout from '../../containers/hoc/lockout'
-import { data } from './data'
+import { imageRisk } from './data'
 import { root } from '../../redux/actions/commonAction'
-import { getInvestment } from '../../containers/query'
+import { getInvestmentAfterApprove } from '../../containers/query'
 import setMutation from '../../containers/mutation'
 import getnativeModules from '../../containers/hoc/infoAppNativeModules'
 
@@ -48,34 +50,23 @@ const dispatchToProps = dispatch => ({
 @lockout
 export default class extends React.Component {
   state = {
-    risk: 0,
+    riskLevel: 0,
+    crrLevel: '',
+    nameTH: '',
+    nameEN: '',
+    returnText: '',
+    descTH: '',
+    descEN: '',
+    fundCodeKAsset: '',
+    assetClass: [],
   }
 
   componentDidMount = () => {
-    const sumSuittest = this.props.navigation.getParam('sumSuittest', 0)
-    let point = 1
-    if (sumSuittest <= 15) {
-      this.setState({ risk: 0 })
-      point = 1
-    }
-    else if (sumSuittest <= 21) {
-      this.setState({ risk: 1 })
-      point = 2
-    }
-    else if (sumSuittest <= 29) {
-      this.setState({ risk: 2 })
-      point = 3
-    }
-    else if (sumSuittest > 30) {
-      this.setState({ risk: 3 })
-      point = 4
-    }
-
     query(this.props.client, {
-      query: getInvestment,
-      variables: { point: `${point}` }
-    }, val => this.setState({ ...val.data.getInvestment })
-    )
+      query: getInvestmentAfterApprove,
+    }, val => {
+      this.setState({ ...val.data.getInvestmentAfterApprove })
+    })
   }
 
   componentWillUnmount = () => {
@@ -89,7 +80,7 @@ export default class extends React.Component {
   onConfirm = async () => {
     this.onCallApi()
     this.props.toggleModal({ visible: false })
-    setTimeout(() => Linking.openURL('https://k-invest.kasikornbankgroup.com/CustomerRisk/CustomerRiskPolicy.aspx'), 100)
+    setTimeout(() => Linking.openURL('https://k-invest.kasikornbankgroup.com/CustomerRisk/default.aspx?lang=TH'), 100)
   }
 
   onCallApi = async () => {
@@ -110,8 +101,14 @@ export default class extends React.Component {
   }
 
   render() {
-    const { risk, descTH, assetClass, fundCodeKAsset, returnText } = this.state
-    console.log(this.props)
+    const {
+      riskLevel,
+      descTH,
+      nameTH,
+      assetClass,
+      fundCodeKAsset,
+      returnText
+    } = this.state
     return (
       <Screen>
         <NavBar
@@ -138,11 +135,11 @@ export default class extends React.Component {
         <ScrollView contentContainerStyle={{ paddingTop: 40, paddingHorizontal: 24 }}>
           <View style={{ flex: 1, alignItems: 'center' }}>
             <View style={{ marginBottom: 19 }}>
-              <Image source={data[risk].image} />
+              <Image source={riskLevel ? imageRisk[+riskLevel] : {}} />
             </View>
 
             <View style={{ marginBottom: 10 }}>
-              <TBold fontSize={28} color={colors.white}>{data[risk].title}</TBold>
+              <TBold fontSize={28} color={colors.white}>{nameTH}</TBold>
               <TBold fontSize={16} color={colors.white}>{`ผลตอบแทนที่คาดหวังโดยเฉลี่ย ${returnText} ต่อปี`}</TBold>
             </View>
 
@@ -158,14 +155,14 @@ export default class extends React.Component {
                   <TBold fontSize={28} textAlign="left">{fundCodeKAsset}</TBold>
                 </View>
                 <View style={{ width: 75, justifyContent: 'flex-start', alignItems: 'center' }}>
-                  <PieChart data={data[0].risk.data} />
+                  <PieChart data={assetClass} />
                 </View>
               </View>
 
               <View style={{ flex: 1, paddingHorizontal: 16 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <TBold fontSize={14}>ตัวอย่างสัดส่วน</TBold>
-                  <TLight fontSize={12} color={colors.grey}>{data[risk].risk.time}</TLight>
+                  {/* <TLight fontSize={12} color={colors.grey}>{data[risk].risk.time}</TLight> // เวลาเอาออกเพราะยังไม่มีจากหลังบ้าน */} 
                 </View>
                 {assetClass ? assetClass.map(RiskList) : null}
               </View>
@@ -195,6 +192,19 @@ export default class extends React.Component {
             })}
           />
         </View>
+
+        {/* <Modal
+          visible
+          transparent
+        >
+          <View style={{ flex: 1 }}>
+              <View style={{ flex: 1, marginVertical: '50%', marginHorizontal: 20, backgroundColor: 'white' }}>
+                <View style={{ flex: 1, justifyContent: 'center', aligmItems: 'center', flexDirection: 'row' }}>
+                  <ActivityIndicator size="large" color={colors.emerald} />
+                </View>
+              </View>
+          </View>
+        </Modal> */}
       </Screen>
     )
   }

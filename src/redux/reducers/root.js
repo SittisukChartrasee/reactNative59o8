@@ -1,8 +1,9 @@
 import { CHANGE_ROOT } from '../types'
+import releaseApp from '../../../release/releaseApp.json'
 
 const init = {
   root: 'TEST',
-  env: 'SIT', // DEV, UAT, PRO
+  env: releaseApp.env.toUpperCase(), // DEV, SIT, UAT, PRO
   appState: '',
   currFlowUP: '',
   password: '',
