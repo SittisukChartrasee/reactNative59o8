@@ -6,6 +6,7 @@ const saveSpouse = gql`
     saveSpouse(input: $input) {
       success
       message
+      code
       details{
         field
         description
@@ -18,6 +19,7 @@ const saveSourceOfFund = gql`
     saveSourceOfFund(input: $input) {
       success
       message
+      code
       details{
         field
         description
@@ -31,6 +33,7 @@ const saveCurrentSameWork = gql`
     saveCurrentSameWork {
       success
       message
+      code
       details{
         field
         description
@@ -43,6 +46,7 @@ const SaveCurrentSamePermanent = gql`
     SaveCurrentSamePermanent {
       success
       message
+      code
       details{
         field
         description
@@ -56,6 +60,7 @@ const saveMailingSamePermanent = gql`
     saveMailingSamePermanent {
       success
       message
+      code
       details{
         field
         description
@@ -68,6 +73,7 @@ const saveMailingSameWork = gql`
     saveMailingSameWork {
       success
       message
+      code
       details{
         field
         description
@@ -80,6 +86,7 @@ const saveMailingSameCurrent = gql`
     saveMailingSameCurrent {
       success
       message
+      code
       details{
         field
         description
@@ -93,6 +100,7 @@ const saveWorkSamePermanent = gql`
     saveWorkSamePermanent {
       success
       message
+      code
       details{
         field
         description
@@ -106,6 +114,7 @@ const saveIdentity = gql`
     saveIdentity(input: $input) {
       success
       message
+      code
       details{
         field
         description
@@ -119,6 +128,7 @@ const saveChild = gql`
     saveChild(input: $input) {
       success
       message
+      code
       details{
         field
         description
@@ -132,6 +142,7 @@ const saveFatca = gql`
     saveFatca(input: $input) {
       success
       message
+      code
       details{
         field
         description
@@ -145,6 +156,7 @@ const saveFraud = gql`
     saveFraud(input: $input) {
       success
       message
+      code
       details{
         field
         description
@@ -158,6 +170,7 @@ const savePermanentAddress = gql`
     savePermanentAddress(input: $input) {
       success
       message
+      code
       details{
         field
         description
@@ -171,6 +184,7 @@ const saveWorkplaceAddress = gql`
     saveWorkplaceAddress(input: $input) {
       success
       message
+      code
       details{
         field
         description
@@ -184,6 +198,7 @@ const saveCurrentAddress = gql`
     saveCurrentAddress(input: $input) {
       success
       message
+      code
       details{
         field
         description
@@ -197,6 +212,7 @@ const saveCareer = gql`
     saveCareer(input: $input) {
       success
       message
+      code
       details{
         field
         description
@@ -210,6 +226,7 @@ const saveContact = gql`
     saveContact(input: $input) {
       success
       message
+      code
       details{
         field
         description
@@ -223,6 +240,7 @@ const saveMailingAddress = gql`
     saveMailingAddress(input: $input) {
       success
       message
+      code
       details{
         field
         description
@@ -236,6 +254,7 @@ const saveSuittest = gql`
     saveSuittest(input: $input) {
       success
       message
+      code
       details{
         field
         description
@@ -249,6 +268,7 @@ const acceptTerm = gql`
     acceptTerm {
       success
       message
+      code
       details{
         field
         description
@@ -286,6 +306,7 @@ const saveSanction = gql`
     saveSanction{
       success
       message
+      code
     }
   }
 `
@@ -295,6 +316,7 @@ const saveWaitingApprove = gql`
     saveWaitingApprove{
       success
       message
+      code
       details{
         field
         description
@@ -308,6 +330,7 @@ const saveFCMToken = gql`
     saveFCMToken(input: $input) {
       success
       message
+      code
       details{
         field
         description

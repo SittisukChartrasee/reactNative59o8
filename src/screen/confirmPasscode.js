@@ -14,6 +14,7 @@ import { navigateAction, navigateReset } from '../redux/actions'
 import { confirmPasscode } from '../redux/actions/root-active'
 import { root } from '../redux/actions/commonAction'
 import getnativeModules from '../containers/hoc/infoAppNativeModules'
+import typeModal from '../utility/typeModal'
 
 const defaultPasscode = {
   dot: ['', '', '', '', '', ''],
@@ -25,7 +26,8 @@ const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   navigateReset: bindActionCreators(navigateReset, dispatch),
   confirmPasscode: bindActionCreators(confirmPasscode, dispatch),
-  updateRoot: bindActionCreators(root, dispatch)
+  updateRoot: bindActionCreators(root, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 @connect(mapToProps, dispatchToProps)
 @getnativeModules
@@ -68,33 +70,29 @@ export default class extends React.Component {
               AsyncStorage.setItem('user_token', res.result.user_token)
               NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
               NativeModules.KMyFundOnboarding.saveUserToken(res.result.access_token)
-            } else if (!res.success) {
-              const modal = {
+            } else if (!res.success && res.code) {
+              this.props.toggleModal({
+                ...typeModal[res.code],
                 dis: res.message,
-                visible: true,
-                onPress: () => this.props.updateRoot('modal', { visible: false }),
-                onPressClose: () => this.props.updateRoot('modal', { visible: false })
-              }
-              return this.props.updateRoot('modal', modal)
+              })
             }
           })
           .catch(err => {
             console.log(err)
           })
       } else if (this.props.passcode.passcode !== data.password) {
-        const modal = {
+        this.props.toggleModal({
+          ...typeModal['1103'],
           dis: `รหัสผ่าน (PIN) ไม่ตรงกับที่ตั้งไว้\nกรุณากรอกใหม่อีกครั้ง`,
-          visible: true,
           onPress: () => {
-            this.props.updateRoot('modal', { visible: false })
+            this.props.toggleModal({ ...this.props.root.modal, visible: false })
             this.setState({ ...defaultPasscode, defaultKey: true })
           },
           onPressClose: () => {
-            this.props.updateRoot('modal', { visible: false })
+            this.props.toggleModal({ ...this.props.root.modal, visible: false })
             this.setState({ ...defaultPasscode, defaultKey: true })
           }
-        }
-        return this.props.updateRoot('modal', modal)
+        })
       }
     }
   }

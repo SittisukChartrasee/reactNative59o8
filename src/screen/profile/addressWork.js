@@ -18,12 +18,14 @@ import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
 import { RequiredFields } from '../../utility/validation'
+import typeModal from '../../utility/typeModal'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   updateUser: bindActionCreators(updateUser, dispatch),
   updateRoot: bindActionCreators(root, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -275,21 +277,18 @@ export default class extends React.Component {
         if (res.data.saveWorkplaceAddress.success) {
           this.props.navigateAction({ ...this.props, page: 'chooseCurr' })
         } else if (!res.data.saveWorkplaceAddress.success) {
-          switch (res.data.saveWorkplaceAddress.message) {
-            case 'PreconditionRequired':
+          switch (res.data.saveWorkplaceAddress.code) {
+            case '2101':
               this.onHandleScrollToErrorField(res.data.saveWorkplaceAddress.details)
               return this.setState({ PreconditionRequired: res.data.saveWorkplaceAddress.details })
-            case 'InvalidArgument':
+            case '2201':
               this.onHandleScrollToErrorField(res.data.saveWorkplaceAddress.details)
               return this.setState({ InvalidArgument: res.data.saveWorkplaceAddress.details })
             default:
-              const modal = {
-                dis: res.data.saveWorkplaceAddress.message,
-                visible: true,
-                onPress: () => this.props.updateRoot('modal', { visible: false }),
-                onPressClose: () => this.props.updateRoot('modal', { visible: false })
-              }
-              return this.props.updateRoot('modal', modal)
+              return this.props.toggleModal({
+                ...typeModal[res.data.saveWorkplaceAddress.code],
+                dis: res.data.saveWorkplaceAddress.message
+              })
           }
         }
       })

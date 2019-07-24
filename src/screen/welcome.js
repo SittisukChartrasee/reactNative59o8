@@ -145,10 +145,10 @@ export default class extends React.Component {
           }
           this.props.navigateAction({ ...this.props, page: 'otp' })
         } else if (!res.success) {
-          switch (res.message) {
-            case 'PreconditionRequired':
+          switch (res.code) {
+            case '2101':
               return this.setState({ PreconditionRequired: res.details })
-            case 'InvalidArgument':
+            case '2201':
               return this.setState({ InvalidArgument: res.details })
             default:
               return null

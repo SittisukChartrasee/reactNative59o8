@@ -119,7 +119,7 @@ export default class extends React.Component {
                 ? ({ ...d, check: 'current' })
                 : ({ ...d, check: 'future' })
           ),
-          link: 'suittest'
+          link: 'statusBank'
         })
       } else if (val.data.getStatusInProgress === 'Complete') {
         this.setState({

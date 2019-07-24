@@ -18,6 +18,7 @@ import { navigateAction } from '../../redux/actions'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
+import typeModal from '../../utility/typeModal'
 import {
   validateIdentityCard,
   validateIdentityJcNumber,
@@ -40,6 +41,7 @@ const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   updateUser: bindActionCreators(updateUser, dispatch),
   updateRoot: bindActionCreators(root, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -156,14 +158,11 @@ export default class extends React.Component {
     const { expireSatus } = this.state
     let isNoDoc = expireSatus === 'มีวันหมดอายุ' ? false : true
     if (props.type === 'modal') {
-      const modal = {
+      this.props.toggleModal({
+        ...typeModal['1103'],
         image: images.iconBackIdcard,
         dis: `ด้านหลังบัตรประชาชน ประกอบด้วยอักษรภาษาอังกฤษ 2 ตัว และตัวเลข 10 ตัว \nตัวอย่างการกรอก : JC1234567890`,
-        visible: true,
-        onPress: () => this.props.updateRoot('modal', { visible: false }),
-        onPressClose: () => this.props.updateRoot('modal', { visible: false })
-      }
-      return this.props.updateRoot('modal', modal)
+      })
     }
     else if (props.field === 'expireDateFlag') {
       isNoDoc = props.value === 'มีวันหมดอายุ' ? false : true
@@ -288,7 +287,7 @@ export default class extends React.Component {
 
     this.props.saveIdentity({ variables: { input: data } })
       .then(res => {
-        // console.log(res)
+        console.log(res)
         if (res.data.saveIdentity.success) {
           if (martialStatus === 'สมรส' && isChild === 'มี') {
             this.props.navigateAction({ ...this.props, page: 'marry', params: { redirec: 'child' } })
@@ -298,21 +297,23 @@ export default class extends React.Component {
           else if (isChild === 'มี') this.props.navigateAction({ ...this.props, page: 'child' })
 
         } else if (!res.data.saveIdentity.success) {
-          switch (res.data.saveIdentity.message) {
-            case 'PreconditionRequired':
+          switch (res.data.saveIdentity.code) {
+            case '2101':
               this.onHandleScrollToErrorField(res.data.saveIdentity.details)
               return this.setState({ PreconditionRequired: res.data.saveIdentity.details })
-            case 'InvalidArgument':
+            case '2201':
               this.onHandleScrollToErrorField(res.data.saveIdentity.details)
               return this.setState({ InvalidArgument: res.data.saveIdentity.details })
+            case '1101':
+              return this.props.toggleModal({
+                ...typeModal[res.data.saveIdentity.code],
+                dis: res.data.saveIdentity.message
+              })
             default:
-              const modal = {
-                dis: res.data.saveIdentity.message,
-                visible: true,
-                onPress: () => this.props.updateRoot('modal', { visible: false }),
-                onPressClose: () => this.props.updateRoot('modal', { visible: false })
-              }
-              return this.props.updateRoot('modal', modal)
+              return this.props.toggleModal({
+                ...typeModal[res.data.saveIdentity.code],
+                dis: res.data.saveIdentity.message
+              })
           }
         }
       })

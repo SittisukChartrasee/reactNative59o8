@@ -18,12 +18,14 @@ import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
 import { RequiredFields } from '../../utility/validation'
+import typeModal from '../../utility/typeModal'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   updateUser: bindActionCreators(updateUser, dispatch),
   updateRoot: bindActionCreators(root, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -273,21 +275,18 @@ export default class extends React.Component {
         if (res.data.savePermanentAddress.success) {
           this.props.navigateAction({ ...this.props, page: 'chooseWork' })
         } else if (!res.data.savePermanentAddress.success) {
-          switch (res.data.savePermanentAddress.message) {
-            case 'PreconditionRequired':
+          switch (res.data.savePermanentAddress.code) {
+            case '2101':
               this.onHandleScrollToErrorField(res.data.savePermanentAddress.details)
               return this.setState({ PreconditionRequired: res.data.savePermanentAddress.details })
-            case 'InvalidArgument':
+            case '2201':
               this.onHandleScrollToErrorField(res.data.savePermanentAddress.details)
               return this.setState({ InvalidArgument: res.data.savePermanentAddress.details })
             default:
-              const modal = {
-                dis: res.data.savePermanentAddress.message,
-                visible: true,
-                onPress: () => this.props.updateRoot('modal', { visible: false }),
-                onPressClose: () => this.props.updateRoot('modal', { visible: false })
-              }
-              return this.props.updateRoot('modal', modal)
+              return this.props.toggleModal({
+                ...typeModal[res.data.savePermanentAddress.code],
+                dis: res.data.savePermanentAddress.message
+              })
           }
         }
       })

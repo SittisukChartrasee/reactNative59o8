@@ -11,6 +11,7 @@ import { TLight, TBold, TMed } from '../component/texts'
 import images from '../config/images'
 import { velidateOtp, requestOtp } from '../redux/actions/root-active'
 import { root } from '../redux/actions/commonAction'
+import typeModal from '../utility/typeModal'
 
 const defaultDot = {
 	dot: [false, false, false, false, false, false],
@@ -25,6 +26,7 @@ const dispatchToProps = dispatch => ({
 	requestOtp: bindActionCreators(requestOtp, dispatch),
 	velidateOtp: bindActionCreators(velidateOtp, dispatch),
 	updateRoot: bindActionCreators(root, dispatch),
+	toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -65,10 +67,26 @@ export default class extends React.Component {
 						}
 						this.setState({ ...defaultDot, defaultKey: true })
 					} else if (!res.success) {
-						if (res.details && res.code === '1001') {
-							this.props.updateRoot('time', res.details.time)
-							this.props.updateRoot('overRequest', true)
-							this.props.updateRoot('overRequestUi', true)
+						switch (res.code) {
+							case '1001':
+								this.props.updateRoot('time', res.details.time)
+								this.props.updateRoot('overRequest', true)
+								this.props.updateRoot('overRequestUi', true)
+								break
+							case '1102':
+								this.props.toggleModal({
+									...typeModal[res.code],
+									dis: res.message,
+									labelBtn: typeModal[res.code].labelBtn('ไปหน้ากรอกข้อมูลเพื่อเปิดบัญชีฯ'),
+									onPress: () => typeModal[res.code].onPress('welcome'),
+								})
+								break
+							default:
+								this.props.toggleModal({
+									...typeModal[res.code],
+									dis: res.message,
+								})
+								break
 						}
 						this.setState({ ...defaultDot, defaultKey: true })
 					}

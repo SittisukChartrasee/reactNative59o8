@@ -25,6 +25,7 @@ import lockout from '../../containers/hoc/lockout'
 import colors from '../../config/colors'
 import { validateIdentityCard, validateIdentityThaiLanguage, RequiredFields } from '../../utility/validation'
 import { convertDate, getOfBirth, replaceSpace, tomorrowDate } from '../../utility/helper'
+import typeModal from '../../utility/typeModal'
 
 const { width: widthView } = Dimensions.get('window')
 
@@ -33,6 +34,7 @@ const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   updateUser: bindActionCreators(updateUser, dispatch),
   updateRoot: bindActionCreators(root, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -287,7 +289,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const { user, updateRoot } = this.props
+    const { user } = this.props
     this.setState({ PreconditionRequired: [], InvalidArgument: [] })
 
     const {
@@ -337,21 +339,23 @@ export default class extends React.Component {
         if (res.data.saveChild.success) {
           this.props.navigateAction({ ...this.props, page: 'career' })
         } else if (!res.data.saveChild.success) {
-          switch (res.data.saveChild.message) {
-            case 'PreconditionRequired':
+          switch (res.data.saveChild.code) {
+            case '2101':
               this.onHandleScrollToErrorField(res.data.saveChild.details)
               return this.setState({ PreconditionRequired: res.data.saveChild.details })
-            case 'InvalidArgument':
+            case '2201':
               this.onHandleScrollToErrorField(res.data.saveChild.details)
               return this.setState({ InvalidArgument: res.data.saveChild.details })
+            case '1101':
+              return this.props.toggleModal({
+                ...typeModal[res.data.saveChild.code],
+                dis: res.data.saveChild.message
+              })
             default:
-              const modal = {
-                dis: res.data.saveChild.message,
-                visible: true,
-                onPress: () => updateRoot('modal', { visible: false }),
-                onPressClose: () => this.props.updateRoot('modal', { visible: false })
-              }
-              return updateRoot('modal', modal)
+              return this.props.toggleModal({
+                ...typeModal[res.data.saveChild.code],
+                dis: res.data.saveChild.message
+              })
           }
         }
       })

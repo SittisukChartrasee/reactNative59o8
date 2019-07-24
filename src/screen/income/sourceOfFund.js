@@ -19,12 +19,14 @@ import setMutation from '../../containers/mutation'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
 import { RequiredFields } from '../../utility/validation'
+import typeModal from '../../utility/typeModal'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   updateUser: bindActionCreators(updateUser, dispatch),
   updateRoot: bindActionCreators(root, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -226,33 +228,26 @@ export default class extends React.Component {
     console.log(data)
 
     if (data.investmentSourceCountry === 'US') {
-      const modal = {
+      return this.props.toggleModal({
+        ...typeModal['1101'],
         dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
-        visible: true,
-        labelBtn: 'ติดต่อ 02 673 3888',
-        onPress: () => Linking.openURL(`tel:026733888`),
-        onPressClose: () => this.props.updateRoot('modal', { visible: false })
-      }
-      return this.props.updateRoot('modal', modal)
+      })
     } else {
       this.props.saveSourceOfFund({ variables: { input: data } })
         .then(res => {
           if (res.data.saveSourceOfFund.success) {
             this.props.navigateAction({ ...this.props, page: 'addressHome' })
           } else if (!res.data.saveSourceOfFund.success) {
-            switch (res.data.saveSourceOfFund.message) {
-              case 'PreconditionRequired':
+            switch (res.data.saveSourceOfFund.code) {
+              case '2101':
                 return this.setState({ PreconditionRequired: res.data.saveSourceOfFund.details })
-              case 'InvalidArgument':
+              case '2201':
                 return this.setState({ InvalidArgument: res.data.saveSourceOfFund.details })
               default:
-                const modal = {
-                  dis: res.data.saveSourceOfFund.message,
-                  visible: true,
-                  onPress: () => this.props.updateRoot('modal', { visible: false }),
-                  onPressClose: () => this.props.updateRoot('modal', { visible: false })
-                }
-                return this.props.updateRoot('modal', modal)
+                return this.props.toggleModal({
+                  ...typeModal[res.data.saveSourceOfFund.code],
+                  dis: res.data.saveSourceOfFund.message
+                })
             }
           }
         })

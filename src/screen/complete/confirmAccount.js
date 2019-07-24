@@ -149,7 +149,7 @@ export default class extends React.Component {
 									agree
 										? <Image source={images.iconCheck}
 											style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: 'red' }} />
-										: <Image source={{}} style={{
+										: <View style={{
 											width: 16,
 											height: 16,
 											borderRadius: 5,

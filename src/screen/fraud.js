@@ -21,6 +21,7 @@ import { root, updateUser } from '../redux/actions/commonAction'
 import { navigateAction } from '../redux/actions'
 import setMutation from '../containers/mutation'
 import lockout from '../containers/hoc/lockout'
+import typeModal from '../utility/typeModal'
 
 const checkActiveData = data => {
   return data.reduce(
@@ -53,7 +54,8 @@ const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   updateRoot: bindActionCreators(root, dispatch),
-  updateUser: bindActionCreators(updateUser, dispatch)
+  updateUser: bindActionCreators(updateUser, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(
@@ -81,14 +83,10 @@ export default class extends React.Component {
     }
 
     if (!checkActiveData(this.props.user.fraud.choice).IS_INCORRECT) {
-      const modal = {
+      this.props.toggleModal({
+        ...typeModal['1101'],
         dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
-        visible: true,
-        labelBtn: 'ติดต่อ 02 673 3888',
-        onPress: () => Linking.openURL(`tel:026733888`),
-        onPressClose: () => this.props.updateRoot('modal', { visible: false })
-      }
-      return this.props.updateRoot('modal', modal)
+      })
     } else {
       this.props.saveFraud({ variables: { input: data } })
         .then(res => {

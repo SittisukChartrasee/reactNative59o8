@@ -19,6 +19,7 @@ import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
 import setMutation from '../../containers/mutation'
 import { replaceSpace } from '../../utility/helper'
+import typeModal from '../../utility/typeModal'
 
 const fields = [
   {
@@ -48,6 +49,7 @@ const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   updateUser: bindActionCreators(updateUser, dispatch),
   updateRoot: bindActionCreators(root, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -97,18 +99,16 @@ export default class extends React.Component {
         if (res.data.saveContact.success) {
           this.props.navigateAction({ ...this.props, page: 'tutorialBank' })
         } else if (!res.data.saveContact.success) {
-          switch (res.data.saveContact.message) {
-            case 'PreconditionRequired':
+          switch (res.data.saveContact.code) {
+            case '2101':
               return this.setState({ PreconditionRequired: res.data.saveContact.details })
-            case 'InvalidArgument':
+            case '2201':
               return this.setState({ InvalidArgument: res.data.saveContact.details })
             default:
-              const modal = {
-                dis: res.data.saveContact.message,
-                visible: true,
-                onPress: () => this.props.updateRoot('modal', { visible: false })
-              }
-              return this.props.updateRoot('modal', modal)
+              return this.props.toggleModal({
+                ...typeModal[res.data.saveContact.code],
+                dis: res.data.saveContact.message
+              })
           }
         }
       })

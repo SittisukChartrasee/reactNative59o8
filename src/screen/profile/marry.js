@@ -20,6 +20,7 @@ import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
 import { convertDate, replaceSpace } from '../../utility/helper'
+import typeModal from '../../utility/typeModal'
 import {
   validateIdentityCard,
   RequiredFields
@@ -30,6 +31,7 @@ const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   updateUser: bindActionCreators(updateUser, dispatch),
   updateRoot: bindActionCreators(root, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -294,21 +296,23 @@ export default class extends React.Component {
           if (redirec) return this.props.navigateAction({ ...this.props, page: redirec })
           this.props.navigateAction({ ...this.props, page: 'career' })
         } else if (!res.data.saveSpouse.success) {
-          switch (res.data.saveSpouse.message) {
-            case 'PreconditionRequired':
+          switch (res.data.saveSpouse.code) {
+            case '2101':
               this.onHandleScrollToErrorField(res.data.saveSpouse.details)
               return this.setState({ PreconditionRequired: res.data.saveSpouse.details })
-            case 'InvalidArgument':
+            case '2201':
               this.onHandleScrollToErrorField(res.data.saveSpouse.details)
               return this.setState({ InvalidArgument: res.data.saveSpouse.details })
+            case '1101':
+              return this.props.toggleModal({
+                ...typeModal[res.data.saveSpouse.code],
+                dis: res.data.saveSpouse.message
+              })
             default:
-              const modal = {
-                dis: res.data.saveSpouse.message,
-                visible: true,
-                onPress: () => this.props.updateRoot('modal', { visible: false }),
-                onPressClose: () => this.props.updateRoot('modal', { visible: false })
-              }
-              return this.props.updateRoot('modal', modal)
+              return this.props.toggleModal({
+                ...typeModal[res.data.saveSpouse.code],
+                dis: res.data.saveSpouse.message
+              })
           }
         }
       })

@@ -21,6 +21,7 @@ import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
 import setMutation from '../../containers/mutation'
 import { checkVerifiedEmailInterval, checkVerifiedEmail } from '../../containers/query'
+import typeModal from '../../utility/typeModal'
 
 const { width: widthView } = Dimensions.get('window')
 
@@ -28,7 +29,8 @@ const mapToProps = ({ user, root }) => ({ user, root })
 const dispatchToProps = dispatch => ({
 	navigateAction: bindActionCreators(navigateAction, dispatch),
 	updateUser: bindActionCreators(updateUser, dispatch),
-	updateRoot: bindActionCreators(root, dispatch)
+	updateRoot: bindActionCreators(root, dispatch),
+	toggleModal: value => dispatch({ type: 'modal', value })
 })
 @connect(mapToProps, dispatchToProps)
 @lockout
@@ -57,13 +59,10 @@ export default class extends React.Component {
 				console.log(res)
 				if (res.data.saveSanction.success) this.props.navigateAction({ ...this.props, page: 'waiting' })
 				else if (!res.data.saveSanction.success) {
-					const modal = {
-						dis: res.data.saveSanction.message,
-						visible: true,
-						onPress: () => this.props.updateRoot('modal', { visible: false }),
-						onPressClose: () => this.props.updateRoot('modal', { visible: false })
-					}
-					this.props.updateRoot('modal', modal)
+					return this.props.toggleModal({
+						...typeModal[res.data.saveSanction.code],
+						dis: res.data.saveSanction.message
+					})
 				}
 			})
 			.catch(err => {
@@ -77,13 +76,10 @@ export default class extends React.Component {
 
 		const res = await this.props.resendEmail()
 		if (res.data.resendEmail.success) {
-			const modal = {
+			this.props.toggleModal({
+				...typeModal['1103'],
 				dis: `ระบบได้จัดส่งลิงก์ (Link) สำหรับยืนยันตัวตน\nไปยัง Email ของท่านแล้วกรุณาตรวจสอบ\n${email}`,
-				visible: true,
-				onPress: () => this.props.updateRoot('modal', { visible: false }),
-				onPressClose: () => this.props.updateRoot('modal', { visible: false })
-			}
-			this.props.updateRoot('modal', modal)
+			})
 		}
 	}
 

@@ -3,8 +3,6 @@ import { NavigationActions } from 'react-navigation'
 import { onStore } from '../redux/store'
 import { CHANGE_ROOT } from '../redux/types'
 
-// const defaultModal = onStore.getState()
-
 export default {
   '1101': {
     visible: true,

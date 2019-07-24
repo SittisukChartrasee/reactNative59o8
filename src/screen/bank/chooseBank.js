@@ -18,6 +18,7 @@ import colors from '../../config/colors';
 import lockout from '../../containers/hoc/lockout'
 import setMutation from '../../containers/mutation'
 import { root, updateUser } from '../../redux/actions/commonAction'
+import typeModal from '../../utility/typeModal'
 
 const handleDisabled = arr => arr && arr.find(d => d.active) !== undefined && arr.find(d => d.active)
 
@@ -25,7 +26,8 @@ const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   updateRoot: bindActionCreators(root, dispatch),
-  updateUser: bindActionCreators(updateUser, dispatch)
+  updateUser: bindActionCreators(updateUser, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -97,13 +99,11 @@ export default class extends React.Component {
           })
         }
 
-        const modal = {
-          dis: res.data.registerBank.message,
-          visible: true,
-          onPress: () => this.props.updateRoot("modal", { visible: false }),
-          onPressClose: () => this.props.updateRoot('modal', { visible: false })
-        };
-        return this.props.updateRoot("modal", modal);
+        return this.props.toggleModal({
+          ...typeModal['1103'],
+          dis: res.data.registerBank.message
+        })
+
       })
       .catch(err => {
         console.log(err)

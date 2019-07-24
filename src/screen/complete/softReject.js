@@ -21,6 +21,7 @@ import { root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
 import { containerQuery, getStatusEditing } from '../../containers/query'
 import setMutation from '../../containers/mutation'
+import typeModal from '../../utility/typeModal'
 
 const { width: widthView } = Dimensions.get('window')
 
@@ -28,6 +29,7 @@ const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   updateRoot: bindActionCreators(root, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 @connect(mapToProps, dispatchToProps)
 @withApollo
@@ -114,13 +116,10 @@ export default class extends React.Component {
         if (res.data.saveWaitingApprove.success) {
           this.props.navigateAction({ ...this.props, page: 'waiting' })
         } else if (!res.data.saveWaitingApprove.success) {
-          const modal = {
-            dis: res.data.saveWaitingApprove.message,
-            visible: true,
-            onPress: () => this.props.updateRoot('modal', { visible: false }),
-            onPressClose: () => this.props.updateRoot('modal', { visible: false })
-          }
-          return this.props.updateRoot('modal', modal)
+          return this.props.toggleModal({
+            ...typeModal[res.data.saveWaitingApprove.code],
+            dis: res.data.saveWaitingApprove.message
+          })
         }
       })
       .catch(err => {

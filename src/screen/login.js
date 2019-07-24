@@ -106,11 +106,17 @@ export default class extends React.Component {
 									case '1000':
 										this.props.navigateAction({ ...this.props, page: 'lockUser' })
 										break
+									case '1104':
+										this.props.toggleModal({
+											...typeModal[res.code],
+											dis: res.message,
+											labelBtn: typeModal[res.code].labelBtn('ลองใหม่'),
+										})
+										break
 									default:
 										this.props.toggleModal({
-											...typeModal['1104'],
+											...typeModal[res.code],
 											dis: res.message,
-											labelBtn: typeModal['1104'].labelBtn('ลองใหม่'),
 										})
 										break
 								}
