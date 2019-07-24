@@ -320,6 +320,26 @@ export const getTermAndCondition = gql`
   }
 `
 
+export const getInvestmentAfterApprove = gql`
+  query getInvestmentAfterApprove {
+    riskLevel
+    crrLevel
+    nameTH
+    nameEN
+    returnText
+    descTH
+    descEN
+    fundCodeKAsset
+    assetClass {
+      nameTH
+      nameEN
+      weight
+      color
+      sortOrder
+    }
+  }
+`
+
 export const checkVerifiedEmailInterval = graphql(checkVerifiedEmail, {
   name: 'checkVerifiedEmailInterval',
   options: {
