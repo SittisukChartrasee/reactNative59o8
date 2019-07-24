@@ -8,7 +8,7 @@ export default async (url, options, verifytoken) => {
       ...options,
       headers: {
         Accept: 'application/json',
-        // 'Content-Type': 'application/json',
+        // 'Content-Type': 'application/json', // ห้ามใช้
         ...(token => ((token) ? ({
           Authorization: token ? `Bearer ${token}` : '',
         }) : {}))(verifytoken),
