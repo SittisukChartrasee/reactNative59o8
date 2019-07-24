@@ -89,7 +89,7 @@ export default class extends React.Component {
   onConfirm = async () => {
     this.onCallApi()
     this.props.toggleModal({ visible: false })
-    setTimeout(() => Linking.openURL('https://k-invest.kasikornbankgroup.com/CustomerRisk/CustomerRiskPolicy.aspx'), 100)
+    setTimeout(() => Linking.openURL('https://k-invest.kasikornbankgroup.com/CustomerRisk/default.aspx?lang=TH'), 100)
   }
 
   onCallApi = async () => {
