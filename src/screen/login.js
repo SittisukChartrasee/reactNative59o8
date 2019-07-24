@@ -468,7 +468,7 @@ export default class extends React.Component {
 					{...{
 						dot,
 						title: 'กรุณากรอกรหัสผ่าน',
-						onPrevPage: () => AsyncStorage.clear(),
+						onPrevPage: () => NativeModules.KMyFundOnboarding.finishActivity(),
 						forgetbtn: () => this.props.navigateAction({ ...this.props, page: 'forgetPasscode' })
 					}}
 				/>
