@@ -13,6 +13,7 @@ import { requestLogin } from '../redux/actions/root-active'
 import { root, fatca, suittest, updateUser } from '../redux/actions/commonAction'
 import { containerQuery, getStatus, getUser } from '../containers/query'
 import getnativeModules from '../containers/hoc/infoAppNativeModules'
+import typeModal from '../utility/typeModal'
 import {
 	formatIdCard,
 	formatPhoneNumber,
@@ -30,7 +31,7 @@ const defaultPasscode = {
 
 const momentDate = date => moment(date).tz('Asia/Bangkok')
 
-const mapToProps = ({ user, fatcaReducer, suitReducer }) => ({ user, fatcaReducer, suitReducer })
+const mapToProps = ({ root, user, fatcaReducer, suitReducer }) => ({ root, user, fatcaReducer, suitReducer })
 const dispatchToProps = dispatch => ({
 	navigateAction: bindActionCreators(navigateAction, dispatch),
 	requestLogin: bindActionCreators(requestLogin, dispatch),
@@ -101,16 +102,17 @@ export default class extends React.Component {
 							defaultKey: true,
 						},
 							() => {
-								if (res.code === "1000") return this.props.navigateAction({ ...this.props, page: 'lockUser' })
-								else {
-									this.props.toggleModal({
-										dis: res.message,
-										visible: true,
-										labelBtn: 'ลองใหม่',
-										onPress: () => this.props.toggleModal({ visible: false }),
-										onConfirm: () => this.props.toggleModal({ visible: false }),
-										onPressClose: () => this.props.toggleModal({ visible: false }),
-									})
+								switch (res.code) {
+									case '1000':
+										this.props.navigateAction({ ...this.props, page: 'lockUser' })
+										break
+									default:
+										this.props.toggleModal({
+											...typeModal['1104'],
+											dis: res.message,
+											labelBtn: typeModal['1104'].labelBtn('ลองใหม่'),
+										})
+										break
 								}
 							}
 						)

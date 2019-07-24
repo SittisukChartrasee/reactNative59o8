@@ -2,7 +2,7 @@ import { CHANGE_ROOT } from '../types'
 
 const init = {
   root: 'TEST',
-  env: 'UAT', // DEV, UAT, PRO
+  env: 'SIT', // DEV, UAT, PRO
   appState: '',
   currFlowUP: '',
   password: '',

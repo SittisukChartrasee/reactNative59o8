@@ -24,7 +24,7 @@ import colors from '../../config/colors';
 
 export default class extends React.Component {
   static defaultProps = {
-    visible: true,
+    visible: false,
     image: undefined,
     type: undefined,
     labelBtn: "ตกลง",
