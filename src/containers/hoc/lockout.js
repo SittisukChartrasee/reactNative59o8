@@ -8,23 +8,26 @@ import { root } from '../../redux/actions/commonAction'
 
 export default WrapperComponent => {
   const Enhance = props => {
-    const modal = {
+    const detailModal = {
       type: 'LOGOUT',
       dis: 'คุณต้องการออกไปหน้า Login ใช่หรือไม่',
       visible: true,
       swap: true,
-      onChange: val => console.log(val),
-      onPress: () => props.updateRoot('modal', { visible: false }),
-      onConfirm: () => NativeModules.KMyFundOnboarding.finishActivity(),
-      onPressClose: () => props.updateRoot('modal', { visible: false })
     }
-    return <WrapperComponent lockout={() => props.updateRoot('modal', modal)} {...props}/>
+    const modal = {
+      ...detailModal,
+      onChange: val => console.log(val),
+      onPress: () => props.updateRoot('modal', { ...detailModal, visible: false }),
+      onConfirm: () => NativeModules.KMyFundOnboarding.finishActivity(),
+      onPressClose: () => props.updateRoot('modal', { ...detailModal, visible: false })
+    }
+    return <WrapperComponent lockout={() => props.updateRoot('modal', modal)} {...props} />
   }
   noneStatic(Enhance, WrapperComponent)
 
-  const mapToProps = () => ({  })
+  const mapToProps = ({ root }) => ({ root })
   const dispatchToProps = dispatch => ({
-    updateRoot: bindActionCreators(root, dispatch)
+    updateRoot: bindActionCreators(root, dispatch),
   })
   return connect(mapToProps, dispatchToProps)(Enhance)
 }

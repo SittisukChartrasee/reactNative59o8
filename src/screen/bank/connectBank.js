@@ -28,7 +28,7 @@ const handleNameBank = key => {
   }
 }
 
-const mapToProps = ({ user }) => ({ user })
+const mapToProps = ({ root, user }) => ({ root, user })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   toggleModal: value => dispatch({ type: 'modal', value })
@@ -89,12 +89,12 @@ export default class extends React.Component {
                 dis: 'คุณต้องการออกจากหน้าเชื่อมบัญชี\nใช่หรือไม่',
                 visible: true,
                 type: 'row',
-                onPress: () => this.props.toggleModal({ visible: false }),
+                onPress: () => this.props.toggleModal({ ...this.props.root.modal, visible: false }),
                 onConfirm: async () => {
-                  await this.props.toggleModal({ visible: false })
+                  await this.props.toggleModal({ ...this.props.root.modal, visible: false })
                   await this.props.navigation.navigate('chooseBank')
                 },
-                onPressClose: () => this.props.toggleModal({ visible: false }),
+                onPressClose: () => this.props.toggleModal({ ...this.props.root.modal, visible: false }),
               })}
               style={{ paddingRight: 30 }}
             >
@@ -135,22 +135,22 @@ export default class extends React.Component {
           </View>
           {
             this.state.status
-              && (
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.goBack()}
-                  style={{
-                    backgroundColor: colors.emerald,
-                    marginVertical: 24,
-                    marginHorizontal: 24,
-                    padding: 10,
-                    borderRadius: 100,
-                  }}
-                >
-                  <TBold color={colors.white}>กลับ</TBold>
-                </TouchableOpacity>
-              )
+            && (
+              <TouchableOpacity
+                onPress={() => this.props.navigation.goBack()}
+                style={{
+                  backgroundColor: colors.emerald,
+                  marginVertical: 24,
+                  marginHorizontal: 24,
+                  padding: 10,
+                  borderRadius: 100,
+                }}
+              >
+                <TBold color={colors.white}>กลับ</TBold>
+              </TouchableOpacity>
+            )
           }
-          
+
         </SafeAreaView>
       </Screen>
     )
