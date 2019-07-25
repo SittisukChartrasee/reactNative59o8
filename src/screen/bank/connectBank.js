@@ -57,7 +57,7 @@ export default class extends React.Component {
           this.setState({ status: true })
           break
         case 'ความสำเร็จในการลงทะเบียน':
-          this.props.navigation.navigate('statusBank')
+          this.props.navigateAction({ page: 'statusBank', params: { bankName: 'KASIKORN' } })
           break
 
         case 'Back to Merchant':
@@ -66,9 +66,8 @@ export default class extends React.Component {
 
         case 'Register Success':
           setTimeout(() => {
-            this.props.navigation.navigate('statusBank')
+            this.props.navigateAction({ page: 'statusBank', params: { bankName: 'SCB' } })
           }, 3000)
-          break
 
         default:
           break

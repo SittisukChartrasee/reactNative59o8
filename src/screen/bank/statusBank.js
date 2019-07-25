@@ -20,32 +20,38 @@ import queryStatus, { checkVerifiedEmail } from '../../containers/query'
 const { width: widthView } = Dimensions.get('window')
 
 const renderText = (caseStatus) => {
-	switch (caseStatus) {
-		case 'FAIL':
-			return {
-				title: 'เชื่อมบัญชีธนาคารไม่สำเร็จ',
-				des: `กรุณาตรวจสอบกับธนาคารที่ท่านเลือก\n1. แอปพลิเคชันธนาคารเป็นเวอร์ชันล่าสุดหรือไม่\n2. ข้อมูลบัญชีธนาคาร หรือข้อมูลที่ให้ไว้\nกับธนาคารไม่ถูกต้อง`,
-				image: images.iconFailBank,
-				titleBtn: 'ลองอีกครั้ง',
-				page: 'chooseBank',
-			}
+	const bankName = this.props.navigation.getParam('bankName', '')
 
-		case 'SUCCESS':
-			return {
-				title: 'เชื่อมบัญชีธนาคารสำเร็จ',
-				des: 'ท่านได้ดำเนินการเชื่อมบัญชีสำเร็จแล้ว',
-				image: images.iconPassBank,
-				titleBtn: 'ถัดไป',
-				page: 'suittest',
-			}
-
-		default:
-			return {
-				title: 'กรุณาดำเนินการต่อที่แอป K PLUS',
-				header: 'เชื่อมบัญชีธนาคาร',
-				des: `เมื่อทำรายการสำเร็จ ให้กลับเข้าแอป KmyFunds อีกครั้ง เพื่ออัพเดทสถานะการเชื่อมบัญชีธนาคาร`,
-				image: images.iconWaitBank,
-			}
+	if (caseStatus === 'FAIL') {
+		return {
+			title: 'เชื่อมบัญชีธนาคารไม่สำเร็จ',
+			des: `กรุณาตรวจสอบกับธนาคารที่ท่านเลือก\n1. แอปพลิเคชันธนาคารเป็นเวอร์ชันล่าสุดหรือไม่\n2. ข้อมูลบัญชีธนาคาร หรือข้อมูลที่ให้ไว้\nกับธนาคารไม่ถูกต้อง`,
+			image: images.iconFailBank,
+			titleBtn: 'ลองอีกครั้ง',
+			page: 'chooseBank',
+		}
+	} else if (caseStatus === 'SUCCESS') {
+		return {
+			title: 'เชื่อมบัญชีธนาคารสำเร็จ',
+			des: 'ท่านได้ดำเนินการเชื่อมบัญชีสำเร็จแล้ว',
+			image: images.iconPassBank,
+			titleBtn: 'ถัดไป',
+			page: 'suittest',
+		}
+	} else if (caseStatus === 'WAIT' && bankName === 'KASIKORN') {
+		return {
+			title: 'กรุณาดำเนินการต่อที่แอป K PLUS',
+			header: 'เชื่อมบัญชีธนาคาร',
+			des: `เมื่อทำรายการสำเร็จ ให้กลับเข้าแอป KmyFunds อีกครั้ง เพื่ออัพเดทสถานะการเชื่อมบัญชีธนาคาร`,
+			image: images.iconWaitBank,
+		}
+	} else {
+		return {
+			title: 'รอดำเนินการเชื่อมบัญชีธนาคาร',
+			header: 'เชื่อมบัญชีธนาคาร',
+			des: `รอดำเนินการอัพเดทสถานะการเชื่อมบัญชีธนาคาร`,
+			image: images.iconWaitBank,
+		}
 	}
 }
 
