@@ -10,7 +10,7 @@ import colors from '../config/colors'
 import { TLight, TBold, TMed } from '../component/texts'
 import images from '../config/images'
 import { velidateOtp, requestOtp } from '../redux/actions/root-active'
-import { root } from '../redux/actions/commonAction'
+import { updateUser, root } from '../redux/actions/commonAction'
 import typeModal from '../utility/typeModal'
 
 const defaultDot = {
@@ -26,6 +26,7 @@ const dispatchToProps = dispatch => ({
 	requestOtp: bindActionCreators(requestOtp, dispatch),
 	velidateOtp: bindActionCreators(velidateOtp, dispatch),
 	updateRoot: bindActionCreators(root, dispatch),
+	updateUser: bindActionCreators(updateUser, dispatch),
 	toggleModal: value => dispatch({ type: 'modal', value })
 })
 
@@ -78,7 +79,11 @@ export default class extends React.Component {
 									...typeModal[res.code],
 									dis: res.message,
 									labelBtn: typeModal[res.code].labelBtn('ไปหน้ากรอกข้อมูลเพื่อเปิดบัญชีฯ'),
-									onPress: () => typeModal[res.code].onPress('welcome'),
+									onPress: () => {
+										typeModal[res.code].onPress('welcome')
+										this.props.updateUser('profile', { ...this.props.user.profile, idCard: '' })
+										this.props.updateUser('contact', { ...this.props.user.contact, mobilePhone: '', email: '', })
+									},
 								})
 								break
 							default:
