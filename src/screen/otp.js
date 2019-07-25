@@ -111,7 +111,7 @@ export default class extends React.Component {
 
 	onPress = async setTimeWaiting => {
 		const { user } = this.props
-		const token = await AsyncStorage.getItem("access_token")
+		const token = this.props.root.access_token
 
 		const data = {
 			id_card: user.profile.idCard.replace(/ /g, ''),
@@ -119,7 +119,7 @@ export default class extends React.Component {
 			phone_no: user.contact.mobilePhone.replace(/ /g, ''),
 		}
 
-		this.props.requestOtp(data, { token }) // Api ใช้สำหรับ OTP register และ accept
+		this.props.requestOtp(data, { token, currFlowUP: this.props.root.currFlowUP }) // Api ใช้สำหรับ OTP register และ accept
 			.then(res => {
 				if (res.success) {
 					setTimeWaiting()

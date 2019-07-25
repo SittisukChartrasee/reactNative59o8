@@ -79,11 +79,12 @@ export default class extends React.Component {
 
   onConfirm = async () => {
     this.onCallApi()
-    this.props.toggleModal({ visible: false })
+    this.props.toggleModal({ ...this.props.root.modal, visible: false })
     setTimeout(() => Linking.openURL('https://k-invest.kasikornbankgroup.com/CustomerRisk/default.aspx?lang=TH'), 100)
   }
 
   onCallApi = async () => {
+    console.log(this.props.root.password)
     NativeModules.KMyFundOnboarding.autoLogin(this.props.root.password, await AsyncStorage.getItem('user_token'))
     NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
     this.props.saveFCMToken({
@@ -115,7 +116,7 @@ export default class extends React.Component {
           color="transparent"
           title="ยืนยันผลการประเมินความเสี่ยง"
           navLeft={
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => this.props.navigation.goBack()}
               style={{ paddingRight: 30 }}
             >
@@ -162,7 +163,7 @@ export default class extends React.Component {
               <View style={{ flex: 1, paddingHorizontal: 16 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <TBold fontSize={14}>ตัวอย่างสัดส่วน</TBold>
-                  {/* <TLight fontSize={12} color={colors.grey}>{data[risk].risk.time}</TLight> // เวลาเอาออกเพราะยังไม่มีจากหลังบ้าน */} 
+                  {/* <TLight fontSize={12} color={colors.grey}>{data[risk].risk.time}</TLight> // เวลาเอาออกเพราะยังไม่มีจากหลังบ้าน */}
                 </View>
                 {assetClass ? assetClass.map(RiskList) : null}
               </View>

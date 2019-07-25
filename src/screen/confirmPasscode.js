@@ -61,7 +61,7 @@ export default class extends React.Component {
               this.props.navigation.navigate('login')
               return
             } else if (currFlowUP === 'updatePasscode') {
-              console.log(res)
+              if (res.success) this.props.updateRoot('password', data.password)
               this.props.navigation.navigate('portSuggestion')
               return
             } else if (res.success) {
