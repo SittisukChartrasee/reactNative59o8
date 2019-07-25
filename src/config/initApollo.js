@@ -25,15 +25,8 @@ const errorLink = store => onError(({ graphQLErrors, networkError }) => {
         const modal = {
           dis: `ท่านไม่ได้ทำรายการใดๆ เกินระยะเวลาที่\nกำหนด กรุณาเข้าสู่ระบบใหม่อีกครั้ง`,
           visible: true,
-          onPress: () => {
-            NativeModules.KMyFundOnboarding.finishActivity()
-            store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false } })
-            store.dispatch({ type: CHANGE_ROOT, key: 'modalVisible', value: false })
-          },
-          onPressClose: () => {
-            store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false } })
-            store.dispatch({ type: CHANGE_ROOT, key: 'modalVisible', value: false })
-          },
+          onPress: () => NativeModules.KMyFundOnboarding.finishActivity(),
+          onPressClose: () => store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { dis: `ท่านไม่ได้ทำรายการใดๆ เกินระยะเวลาที่\nกำหนด กรุณาเข้าสู่ระบบใหม่อีกครั้ง`, visible: false } }),
         }
         store.dispatch({ type: CHANGE_ROOT, key: 'modal', value: modal })
       }

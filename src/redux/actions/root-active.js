@@ -9,10 +9,7 @@ const handleTimeout = (res, dispatch) => {
       dis: `ท่านไม่ได้ทำรายการใดๆ เกินระยะเวลาที่\nกำหนด กรุณาเข้าสู่ระบบใหม่อีกครั้ง`,
       visible: true,
       onPress: () => NativeModules.KMyFundOnboarding.finishActivity(),
-      onPressClose: () => {
-        dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false } })
-        dispatch({ type: CHANGE_ROOT, key: 'modalVisible', value: false })
-      },
+      onPressClose: () => dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false } })
     }
     return dispatch({ type: CHANGE_ROOT, key: 'modal', value: modal })
   }
@@ -172,7 +169,7 @@ export const requestLogin = (obj, token) => async dispatch => {
       dispatch({ type: CHANGE_ROOT, key, value: res[key] })
   }
   return { ...res }
-  
+
 }
 
 export const forgotPasscode = (obj) => async dispatch => {
