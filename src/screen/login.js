@@ -75,6 +75,8 @@ export default class extends React.Component {
 						AsyncStorage.setItem('access_token', res.result.access_token)
 						AsyncStorage.setItem('user_token', userToken)
 
+						NativeModules.KMyFundOnboarding.saveUserToken(userToken)
+
 						this.props.updateUser('profile', {
 							...user.profile,
 							'idCard': formatIdCard(res.result.id_card)
@@ -131,7 +133,7 @@ export default class extends React.Component {
 	}
 
 	onHandleChooseScreen = ({ val, password }) => {
-		// NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
+		NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
 		switch (val.data.getStatus) {
 			case 'Approved':
 				this.props.updateRoot('password', password)
