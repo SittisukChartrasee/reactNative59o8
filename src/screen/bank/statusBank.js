@@ -19,9 +19,7 @@ import queryStatus, { checkVerifiedEmail } from '../../containers/query'
 
 const { width: widthView } = Dimensions.get('window')
 
-const renderText = (caseStatus) => {
-	const bankName = this.props.navigation.getParam('bankName', '')
-
+const renderText = (caseStatus, bankName) => {
 	if (caseStatus === 'FAIL') {
 		return {
 			title: 'เชื่อมบัญชีธนาคารไม่สำเร็จ',
@@ -67,6 +65,7 @@ export default class extends React.Component {
 	}
 
 	render() {
+		const bankName = this.props.navigation.getParam('bankName', '')
 		const status = this.props.getRegisterBankStatus.getRegisterBankStatus && this.props.getRegisterBankStatus.getRegisterBankStatus.status
 		return (
 			<Screen>
@@ -83,18 +82,18 @@ export default class extends React.Component {
 							marginBottom: 24
 						}}
 					>
-						<Image source={renderText(status).image} style={{ width: widthView * .6, marginBottom: 53 }}
+						<Image source={renderText(status, bankName).image} style={{ width: widthView * .6, marginBottom: 53 }}
 							resizeMode="contain" />
-						<TBold color={colors.white} mb={24}>{renderText(status).title}</TBold>
-						<TLight color={colors.smoky}>{renderText(status).des}</TLight>
+						<TBold color={colors.white} mb={24}>{renderText(status, bankName).title}</TBold>
+						<TLight color={colors.smoky}>{renderText(status, bankName).des}</TLight>
 					</View>
 				</ScrollView>
 				{
-					renderText(status).titleBtn !== undefined &&
+					renderText(status, bankName).titleBtn !== undefined &&
 					<LongButton
-						label={renderText(status).titleBtn}
+						label={renderText(status, bankName).titleBtn}
 						style={{ marginHorizontal: 24, marginBottom: 24 }}
-						onPress={() => this.props.navigateAction({ ...this.props, page: renderText(status).page })}
+						onPress={() => this.props.navigateAction({ ...this.props, page: renderText(status, bankName).page })}
 					/>
 				}
 			</Screen>
