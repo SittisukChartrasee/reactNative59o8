@@ -86,10 +86,6 @@ export default class extends React.Component {
     } else if (props.field === 'incomeRangeCode') {
       this.props.updateUser('career', { ...user.career, [props.field]: props.value })
     } else {
-      // console.log({[props.field]: props.value})
-      // if (props.value.indexOf('busType_other') ) {
-
-      // }
       this.props.updateUser('career', { ...user.career, [props.field]: props.value.value })
     }
     this.handleValidation({ field: props.field, value: props.value })
@@ -148,9 +144,9 @@ export default class extends React.Component {
 
     const data = {
       isicCode,
-      isicOther: busType_other,
+      isicOther: busType_other && isicCode === '180' ? busType_other : '',
       occupationCode,
-      occupationOther: occupation_other,
+      occupationOther: occupation_other && occupationCode === '170' ? occupation_other : '',
       incomeRangeCode,
       countrySourceOfIncome: countyCode
     }
