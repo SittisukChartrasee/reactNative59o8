@@ -39,7 +39,7 @@ const dispatchToProps = dispatch => ({
 @lockout
 export default class extends React.Component {
   state = {
-    expireSatus: 'มีวันหมดอายุ',
+    expireSatus: this.props.user.spouse.isIDCardExpDate ? 'ไม่มีวันหมดอายุ' : 'มีวันหมดอายุ',
     code: this.props.user.spouse.nationalityCode ? this.props.user.spouse.nationalityCode : '',
     PreconditionRequired: [],
     InvalidArgument: [],
@@ -341,6 +341,8 @@ export default class extends React.Component {
   }
 
   render() {
+    console.log(this.state.expireSatus)
+
     const { user } = this.props
     const { fields, disabledPepFlag } = this.state
     return (

@@ -49,7 +49,7 @@ const dispatchToProps = dispatch => ({
 @lockout
 export default class extends React.Component {
   state = {
-    expireSatus: 'มีวันหมดอายุ',
+    expireSatus: this.props.user.profile.isNoDocExpDate ? 'ไม่มีวันหมดอายุ' : 'มีวันหมดอายุ',
     PreconditionRequired: [],
     InvalidArgument: [],
     layout: [],
@@ -283,7 +283,7 @@ export default class extends React.Component {
       martialStatusCode: getStatusMartial(martialStatus),
     }
 
-    // console.log(data)
+    console.log(data)
 
     this.props.saveIdentity({ variables: { input: data } })
       .then(res => {
