@@ -131,7 +131,7 @@ export default class extends React.Component {
 	}
 
 	onHandleChooseScreen = ({ val, password }) => {
-		NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
+		// NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
 		switch (val.data.getStatus) {
 			case 'Approved':
 				this.props.updateRoot('password', password)

@@ -40,7 +40,7 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
   state = {
     expireSatus: 'มีวันหมดอายุ',
-    code: this.props.user.spouse.nationalityCode,
+    code: this.props.user.spouse.nationalityCode ? this.props.user.spouse.nationalityCode : '',
     PreconditionRequired: [],
     InvalidArgument: [],
     layout: [],
@@ -147,11 +147,13 @@ export default class extends React.Component {
   }
 
   handleInput = (props) => {
-    const { fields } = this.state
+    const { fields, PreconditionRequired, InvalidArgument } = this.state
     const { user } = this.props
 
     if (props.field === 'nationFlag') {
       this.setState({
+        PreconditionRequired: PreconditionRequired.filter(o => o.field !== 'nationalityCode' && o.field !== 'IDCardNo'),
+        InvalidArgument: InvalidArgument.filter(o => o.field !== 'nationalityCode' && o.field !== 'IDCardNo'),
         fields: fields.map((d) => {
           if (props.value === 'ไทย') {
             this.props.updateUser('spouse', { ...user.spouse, nationFlag: 'ไทย' })

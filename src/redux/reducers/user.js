@@ -114,7 +114,7 @@ const init = {
     IDCardNo: '',
     marryPassport: '',
     marryCountry: '',
-    nationalityCode: 'TH',
+    nationalityCode: '',
     nationalityRisk: false,
     expireFlag: '',
     marryIsIDCardExpDate: true,
