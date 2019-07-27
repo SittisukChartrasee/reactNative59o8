@@ -84,7 +84,6 @@ export default class extends React.Component {
   }
 
   onCallApi = async () => {
-    console.log(this.props.root.password)
     NativeModules.KMyFundOnboarding.autoLogin(this.props.root.password, await AsyncStorage.getItem('user_token'))
     NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
     this.props.saveFCMToken({
