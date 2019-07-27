@@ -7,7 +7,7 @@ export default {
   '1101': {
     visible: true,
     labelBtn: 'ติดต่อ 02 673 3888',
-    onPress: (tel = '026733888') => Linking.openURL(`tel://${tel}`),
+    onPress: () => Linking.openURL(`tel://026733888`),
     onConfirm: () => onStore.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { ...onStore.getState().root.modal, visible: false } }),
     onPressClose: () => onStore.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { ...onStore.getState().root.modal, visible: false } })
   },

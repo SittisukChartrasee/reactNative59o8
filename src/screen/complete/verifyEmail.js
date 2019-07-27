@@ -39,35 +39,49 @@ const dispatchToProps = dispatch => ({
 @checkVerifiedEmailInterval
 export default class extends React.Component {
 
+	state = {
+		emailStatus: false
+	}
+
 	componentWillReceiveProps = newProps => {
 		if (newProps.root.appState === 'active') {
 			this.props.client.query({ query: checkVerifiedEmail })
 				.then(res => {
-					if (res.data.checkVerifiedEmail) this.handleSanction()
+					if (res.data.checkVerifiedEmail) {
+						newProps.checkVerifiedEmailInterval.stopPolling()
+						this.handleSanction()
+					}
 				})
 				.catch(err => console.log(err))
-		}
-		if (newProps.checkVerifiedEmailInterval.checkVerifiedEmail) {
+		} else if (newProps.checkVerifiedEmailInterval.checkVerifiedEmail) {
 			newProps.checkVerifiedEmailInterval.stopPolling()
 			this.handleSanction()
 		}
 	}
 
+	componentWillUnmount = () => this.props.checkVerifiedEmailInterval.stopPolling()
+
 	handleSanction = async () => {
-		await this.props.saveSanction()
-			.then(res => {
-				console.log(res)
-				if (res.data.saveSanction.success) this.props.navigateAction({ ...this.props, page: 'waiting' })
-				else if (!res.data.saveSanction.success) {
-					return this.props.toggleModal({
-						...typeModal[res.data.saveSanction.code],
-						dis: res.data.saveSanction.message
-					})
-				}
-			})
-			.catch(err => {
-				console.log(err)
-			})
+		if (!this.state.emailStatus) {
+			await this.props.saveSanction()
+				.then(res => {
+					console.log(res)
+					if (res.data.saveSanction.success) {
+						this.props.navigateAction({ ...this.props, page: 'waiting' })
+						this.setState({ emailStatus: true })
+					}
+					else if (!res.data.saveSanction.success) {
+						return this.props.toggleModal({
+							...typeModal[res.data.saveSanction.code],
+							dis: res.data.saveSanction.message
+						})
+					}
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		}
+
 	}
 
 	onNext = async () => {

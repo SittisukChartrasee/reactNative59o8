@@ -183,7 +183,7 @@ export default class extends React.Component {
             bgTransparent
             style={{ marginHorizontal: 24 }}
             onPress={() => this.props.toggleModal({
-              dis: 'คุณต้องการออกจากหน้าเชื่อมบัญชี\nใช่หรือไม่',
+              dis: 'ท่านต้องการทำแบบประเมินความเสี่ยงใหม่\nใช่หรือไม่',
               visible: true,
               swap: true,
               type: 'row',
