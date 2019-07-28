@@ -2,6 +2,7 @@ import React from 'react'
 import {
   NativeModules,
   View,
+  Platform
 } from 'react-native'
 import noneStatic from 'hoist-non-react-statics'
 
@@ -9,29 +10,34 @@ export default (ComponentWrapper) => {
   class Enhance extends React.Component {
     state = {
       fcm: '',
+      fcm2: '',
       version: '',
     }
     componentDidMount = () => {
       if (NativeModules.KMyFundOnboarding) {
-        NativeModules.KMyFundOnboarding.getFCMToken(fcm => {
-          NativeModules.KMyFundOnboarding.getVersionAppKMyFunds(version => {
+        NativeModules.KMyFundOnboarding.getFCMToken((fcm, fcm2) => {
+          NativeModules.KMyFundOnboarding.getVersionAppKMyFunds((version, version2) => {
             this.setState({
               fcm,
-              version
+              fcm2,
+              version,
+              version2
             })
           })
         })
       }
     }
 
-    fcmToken = (fcm) => {
-      alert(`fcm : ${JSON.stringify(fcm)}`)
-    }
-
     render() {
-      const { fcm, version } = this.state
-      this.fcmToken(fcm)
-      return <ComponentWrapper {...this.props} fcm={fcm} version={version} />
+      const { fcm, fcm2, version, version2 } = this.state
+      const FCMtoken2 = 'Test for FCM IOS'
+      alert(FCMtoken2)
+      return <ComponentWrapper
+        {...this.props}
+        fcm={Platform === 'android' ? fcm : FCMtoken2}
+        version={Platform === 'android' ? version : version2}
+
+      />
     }
   }
 
