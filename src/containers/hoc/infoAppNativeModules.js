@@ -24,9 +24,13 @@ export default (ComponentWrapper) => {
       }
     }
 
+    fcmToken = (fcm) => {
+      alert(`fcm : ${JSON.stringify(fcm)}`)
+    }
+
     render() {
       const { fcm, version } = this.state
-      alert(`FCM Token: ${fcm}, VersionApp: ${version}`)
+      this.fcmToken(fcm)
       return <ComponentWrapper {...this.props} fcm={fcm} version={version} />
     }
   }
