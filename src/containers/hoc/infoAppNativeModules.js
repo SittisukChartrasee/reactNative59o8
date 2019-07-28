@@ -29,6 +29,7 @@ export default (ComponentWrapper) => {
     }
 
     render() {
+<<<<<<< HEAD
       const { fcm, fcm2, version, version2 } = this.state
       const FCMtoken2 = 'Test for FCM IOS'
       alert(FCMtoken2)
@@ -38,6 +39,10 @@ export default (ComponentWrapper) => {
         version={Platform === 'android' ? version : version2}
 
       />
+=======
+      const { fcm, version } = this.state
+      return <ComponentWrapper {...this.props} fcm={fcm} version={version} />
+>>>>>>> b97d12c9f7b27c1a04b8798c44789ad898383fae
     }
   }
 
