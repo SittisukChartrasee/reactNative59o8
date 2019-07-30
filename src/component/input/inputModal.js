@@ -1,4 +1,5 @@
 import React from 'react'
+import isEmpty from 'lodash/isEmpty'
 import {
   View,
   Image,
@@ -143,6 +144,21 @@ export default class extends React.Component {
                     )
                   }
                 </View>
+
+                {
+                  this.props.field === 'investmentSource' || this.props.field === 'investmentPurpose' ?
+                    (
+                      <View style={{ paddingBottom: 44 }}>
+                        <LongButton
+                          label="ตกลง"
+                          style={{ marginHorizontal: 24 }}
+                          disabled={isEmpty(this.props.value)}
+                          onPress={() => this.setState({ open: false })}
+                        />
+                      </View>
+                    ) : null
+                }
+
               </KeyboardAwareScrollView>
             </SafeAreaView>
           </View>

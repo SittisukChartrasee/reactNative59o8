@@ -8,6 +8,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import head from 'lodash/head'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -143,7 +144,7 @@ export default class extends React.Component {
     const { user } = this.props
     if (props.field === 'investmentSource') {
       const arr = props.data.split(',')
-      this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: arr, investmentSourceOther: props.otherField })
+      this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: head(arr) ? arr : [], investmentSourceOther: props.otherField })
       this.setState({
         fields: this.state.fields.map(d => {
           if (d.field === 'investmentSource') {
