@@ -16,7 +16,6 @@ const ReactWithState = connect(({ nav }) => ({ state: nav }))(createReduxContain
 
 const TEST = false // ถ้าจะ TEST ให้ set true : false
 
-
 const mapToProps = ({ root, nav }) => ({ root, nav })
 const dispatchToProps = dispatch => ({
   updateRoot: bindActionCreators(root, dispatch),
@@ -52,7 +51,7 @@ export default class extends React.Component {
           }
         })
   }
-  
+
 
 
   componentDidMount() {
@@ -98,13 +97,13 @@ export default class extends React.Component {
     const { modal } = this.props.root
     return (
       <View style={{ flex: 1 }}>
-        { 
+        {
           !TEST ?
-            this.state.loading 
-              ? <ReactWithState /> 
+            this.state.loading
+              ? <ReactWithState />
               : <View style={{ flex: 1, backgroundColor: colors.white, justifyContent: 'center', alignItems: 'center' }}>
-                  <TBold>Loading...</TBold>
-                </View> 
+                <TBold>Loading...</TBold>
+              </View>
             : <ReactWithState />
         }
         <Modal {...modal} />
