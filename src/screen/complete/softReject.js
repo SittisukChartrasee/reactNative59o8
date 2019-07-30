@@ -67,15 +67,15 @@ export default class extends React.Component {
     let statusText = ''
     if (val.data.getStatusEditing.idCard) {
       if (val.data.getStatusEditing.selfie) {
-        statusText = `ถ่ายรูปบัตรประชาชน และรูปคู่กับใบหน้าไม่ชัด\nกรุณาถ่ายใหม่ด้วยนะคะ`
+        statusText = `ถ่ายรูปบัตรประชาชน และรูปคู่กับใบหน้าไม่ชัด\nกรุณาถ่ายใหม่`
         if (!val.data.getStatusEditing.checkIDCard ||
           !val.data.getStatusEditing.checkSelfie) status = true
       } else {
-        statusText = `ถ่ายรูปบัตรประชาชนไม่ชัด\nกรุณาถ่ายใหม่ด้วยนะคะ`
+        statusText = `ถ่ายรูปบัตรประชาชนไม่ชัด\nกรุณาถ่ายใหม่`
         if (!val.data.getStatusEditing.checkIDCard) status = true
       }
     } else if (val.data.getStatusEditing.selfie) {
-      statusText = `ถ่ายรูปคู่กับใบหน้าไม่ชัด\nกรุณาถ่ายใหม่ด้วยนะคะ`
+      statusText = `ถ่ายรูปคู่กับใบหน้าไม่ชัด\nกรุณาถ่ายใหม่`
       if (!val.data.getStatusEditing.checkSelfie) status = true
     } else { status = false }
 

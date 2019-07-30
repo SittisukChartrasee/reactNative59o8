@@ -138,7 +138,7 @@ export default class Demo extends Component {
                   <View style={{ position: 'absolute', width: '70%' }}>
                     <View style={{ alignItems: 'center', opacity: this.state.dragged === null ? 1 : 0 }}>
                       <Image source={images.iconsign} />
-                      <TLight color={colors.smoky} fontSize={14} mt={15}>เซ็นลายเซ็นของคุณที่นี่</TLight>
+                      <TLight color={colors.smoky} fontSize={14} mt={15}>เซ็นลายเซ็นของท่านที่นี่</TLight>
                     </View>
                     <View style={{ justifyContent: 'center' }}>
                       <Image source={images.iconlinepath} style={{ width: '100%' }} resizeMode="contain" />

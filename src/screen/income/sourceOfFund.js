@@ -8,6 +8,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import head from 'lodash/head'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -38,7 +39,7 @@ export default class extends React.Component {
     InvalidArgument: [],
     fields: [
       {
-        label: 'คุณได้รับเงินทุนจากแหล่งใด',
+        label: 'ท่านได้รับเงินทุนจากแหล่งใด',
         labelOther: 'โปรดระบุแหล่งเงินทุน',
         type: 'modal',
         field: 'investmentSource',
@@ -117,7 +118,7 @@ export default class extends React.Component {
 
       // ทาง KA บอกให้ตัดออก
       // {
-      //   label: 'คุณต้องการหักภาษี ณ ที่จ่ายสำหรับเงินปันผลและค่าขายคืน หรือไม่ ?',
+      //   label: 'ท่านต้องการหักภาษี ณ ที่จ่ายสำหรับเงินปันผลและค่าขายคืน หรือไม่ ?',
       //   type: 'radioColumn',
       //   init: [{ title: 'ต้องการ หักภาษี ณ ที่จ่าย', active: true }, { title: 'ไม่ต้องการ' }],
       //   field: 'dividendWithHoldingTax',
@@ -143,7 +144,7 @@ export default class extends React.Component {
     const { user } = this.props
     if (props.field === 'investmentSource') {
       const arr = props.data.split(',')
-      this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: arr, investmentSourceOther: props.otherField })
+      this.props.updateUser('sourceOfFund', { ...user.sourceOfFund, [props.field]: head(arr) ? arr : [], investmentSourceOther: props.otherField })
       this.setState({
         fields: this.state.fields.map(d => {
           if (d.field === 'investmentSource') {

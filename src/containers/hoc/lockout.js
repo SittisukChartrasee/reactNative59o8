@@ -10,7 +10,7 @@ export default WrapperComponent => {
   const Enhance = props => {
     const detailModal = {
       type: 'LOGOUT',
-      dis: 'คุณต้องการออกไปหน้า Login ใช่หรือไม่',
+      dis: 'ท่านต้องการออกไปหน้า Login ใช่หรือไม่',
       visible: true,
       swap: true,
     }
