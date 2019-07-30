@@ -67,7 +67,7 @@ export default class extends React.Component {
         case 'Register Success':
           setTimeout(() => {
             this.props.navigation.navigate('statusBank', { bankName: 'SCB', })
-          }, 3000)
+          }, 1000)
 
         default:
           break

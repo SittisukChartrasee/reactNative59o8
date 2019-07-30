@@ -69,7 +69,7 @@ export default class extends React.Component {
               AsyncStorage.setItem('access_token', res.result.access_token)
               AsyncStorage.setItem('user_token', res.result.user_token)
               NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
-              NativeModules.KMyFundOnboarding.saveUserToken(res.result.access_token)
+              NativeModules.KMyFundOnboarding.saveUserToken(res.result.user_token)
             } else if (!res.success && res.code) {
               this.props.toggleModal({
                 ...typeModal[res.code],
