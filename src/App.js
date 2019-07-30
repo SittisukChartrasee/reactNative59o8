@@ -15,6 +15,7 @@ export const store = onStore
 const ReactWithState = connect(({ nav }) => ({ state: nav }))(createReduxContainer(AppNavigator, 'root'))
 
 const TEST = false // ถ้าจะ TEST ให้ set true : false
+// test
 
 
 const mapToProps = ({ root, nav }) => ({ root, nav })
