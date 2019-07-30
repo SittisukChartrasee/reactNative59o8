@@ -59,7 +59,6 @@ export default class extends React.Component {
   }
 
   render() {
-    // test
     return (
       <Screen>
         <NavBar
