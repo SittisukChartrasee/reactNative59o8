@@ -85,7 +85,7 @@ export default class extends React.Component {
           navLeft={
             <TouchableOpacity
               onPress={() => this.props.toggleModal({
-                dis: 'คุณต้องการออกจากหน้าเชื่อมบัญชี\nใช่หรือไม่',
+                dis: 'ท่านต้องการออกจากหน้าเชื่อมบัญชี\nใช่หรือไม่',
                 visible: true,
                 type: 'row',
                 onPress: () => this.props.toggleModal({ ...this.props.root.modal, visible: false }),
@@ -130,7 +130,7 @@ export default class extends React.Component {
             /> */}
           </View>
           <View style={{ height: 56, backgroundColor: colors.lightgrey, justifyContent: 'center' }}>
-            <TMed fontSize={14} color={colors.grey}>คุณได้ออกจาก Kmyfunds และเข้าสู่เว็บไซต์ {handleNameBank(bankName)} แล้ว</TMed>
+            <TMed fontSize={14} color={colors.grey}>ท่านได้ออกจาก Kmyfunds และเข้าสู่เว็บไซต์ {handleNameBank(bankName)} แล้ว</TMed>
           </View>
           {
             this.state.status

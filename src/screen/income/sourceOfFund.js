@@ -38,7 +38,7 @@ export default class extends React.Component {
     InvalidArgument: [],
     fields: [
       {
-        label: 'คุณได้รับเงินทุนจากแหล่งใด',
+        label: 'ท่านได้รับเงินทุนจากแหล่งใด',
         labelOther: 'โปรดระบุแหล่งเงินทุน',
         type: 'modal',
         field: 'investmentSource',
@@ -117,7 +117,7 @@ export default class extends React.Component {
 
       // ทาง KA บอกให้ตัดออก
       // {
-      //   label: 'คุณต้องการหักภาษี ณ ที่จ่ายสำหรับเงินปันผลและค่าขายคืน หรือไม่ ?',
+      //   label: 'ท่านต้องการหักภาษี ณ ที่จ่ายสำหรับเงินปันผลและค่าขายคืน หรือไม่ ?',
       //   type: 'radioColumn',
       //   init: [{ title: 'ต้องการ หักภาษี ณ ที่จ่าย', active: true }, { title: 'ไม่ต้องการ' }],
       //   field: 'dividendWithHoldingTax',
