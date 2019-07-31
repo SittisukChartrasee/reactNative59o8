@@ -4,6 +4,7 @@ import React from 'react'
 import {
   View,
   Image,
+  Keyboard,
   TouchableOpacity,
   Text,
 } from 'react-native'
@@ -56,12 +57,20 @@ export default class extends React.Component {
       month: splitText[1],
       year: splitText[2],
     })
+
+    this.keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      val => {
+        if (val) Picker.hide()
+      }
+    );
   }
 
   onPicker = (text) => {
     const { handleInput, field, type, date } = this.props
     const { year, month, day } = this.state
     const configPicker = {
+      pickerTextEllipsisLen: 50,
       pickerTitleText: 'กรุณาเลือก',
       pickerCancelBtnText: 'ยกเลิก',
       pickerConfirmBtnText: 'ตกลง',
