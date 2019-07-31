@@ -6,6 +6,7 @@ import {
 	Image,
 	AsyncStorage,
 } from 'react-native'
+import throttle from 'lodash/throttle'
 import { withApollo } from 'react-apollo'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -57,7 +58,7 @@ export default class extends React.Component {
 		)
 	}
 
-	onNext = async () => {
+	onNext = throttle(async () => {
 		const token = await AsyncStorage.getItem("access_token")
 		this.props.updateRoot('currFlowUP', 'updatePasscode')
 
@@ -69,7 +70,7 @@ export default class extends React.Component {
 			.catch(err => {
 				console.log(err)
 			})
-	}
+	}, 2000)
 
 	onRequestOtp = token => {
 		this.props.requestOtp(null, { token, currFlowUP: this.props.root.currFlowUP })
