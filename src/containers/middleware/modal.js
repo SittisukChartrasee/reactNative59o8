@@ -4,7 +4,6 @@ const checkWordTh = text => /[\u0E01-\u0E3A\u0E40-\u0E59]/g.test(text)
 
 
 export const handleModal = (store) => (next) => action => {
-  console.log(action)
   if (action.key === 'code' && action.value.code === '1103' && checkWordTh(action.value.message)) {
     const modal = {
       dis: action.value.message,
