@@ -98,6 +98,11 @@ class OnboardManager(private val reactContext: ReactApplicationContext) : ReactC
     }
 
     @ReactMethod
+    fun getDeviceInfo(callback: Callback) {
+        callback.invoke("getDeviceInfo")
+    }
+
+    @ReactMethod
     fun finishActivity() {
         reactContext.currentActivity?.finish()
     }

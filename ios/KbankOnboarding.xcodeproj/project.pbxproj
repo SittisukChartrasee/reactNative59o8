@@ -27,6 +27,7 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		26253A9A225F2199006A90E6 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26253A71225F217D006A90E6 /* libART.a */; };
 		26783970229D42070012A13A /* libRCTWKWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2678395D229D41F90012A13A /* libRCTWKWebView.a */; };
+		2687B5B922F172ED00492525 /* Onboarding.m in Sources */ = {isa = PBXBuildFile; fileRef = 2687B5B822F172ED00492525 /* Onboarding.m */; };
 		269AF1341079F93886A0CF24 /* libPods-KbankOnboarding.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E8069BC2CC14669CE3C28B /* libPods-KbankOnboarding.a */; };
 		26B2DBA022715A2C00F57ECD /* libRSSignatureCapture.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26B2DB9F22715A2300F57ECD /* libRSSignatureCapture.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -388,6 +389,8 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		26253A6B225F217D006A90E6 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
 		26783941229D41F90012A13A /* RCTWKWebView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWKWebView.xcodeproj; path = "../node_modules/react-native-wkwebview-reborn/ios/RCTWKWebView.xcodeproj"; sourceTree = "<group>"; };
+		2687B5B822F172ED00492525 /* Onboarding.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Onboarding.m; sourceTree = "<group>"; };
+		2687B5E422F17D7200492525 /* Onboarding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Onboarding.h; sourceTree = "<group>"; };
 		26B2DB7222715A2300F57ECD /* RSSignatureCapture.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RSSignatureCapture.xcodeproj; path = "../node_modules/react-native-signature-capture/ios/RSSignatureCapture.xcodeproj"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* KbankOnboarding-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KbankOnboarding-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* KbankOnboarding-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "KbankOnboarding-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -569,6 +572,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				2687B5E422F17D7200492525 /* Onboarding.h */,
+				2687B5B822F172ED00492525 /* Onboarding.m */,
 			);
 			name = KbankOnboarding;
 			sourceTree = "<group>";
@@ -1392,6 +1397,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				2687B5B922F172ED00492525 /* Onboarding.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

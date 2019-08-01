@@ -48,7 +48,7 @@ export default class extends React.Component {
       fcm_token: this.props.fcm,
       version: this.props.version,
       system_version: DeviceInfo.getSystemVersion(),
-      device_id: DeviceInfo.getDeviceId()
+      device_id: this.props.deviceInfo,
     }
     if (obj.number.length === 6) {
       if (this.props.passcode.passcode === data.password) {
