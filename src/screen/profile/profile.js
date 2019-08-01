@@ -130,7 +130,7 @@ export default class extends React.Component {
         field: 'martialStatus', // martialStatusCode
         required: true,
       }, {
-        label: 'คุณมีบุตร หรือบุตรบุญธรรมหรือไม่ ',
+        label: 'ท่านมีบุตร หรือบุตรบุญธรรมหรือไม่ ',
         type: 'radio',
         init: [
           {
