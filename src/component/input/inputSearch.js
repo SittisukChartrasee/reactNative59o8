@@ -163,8 +163,17 @@ export default class extends React.Component {
             }
             <Image source={images.iconNextPageBlack} />
           </View>
-          <View style={{ height: err ? 2 : 1, backgroundColor: err ? 'rgb(213, 0, 0)' : colors.smoky, marginTop: 5 }} />
-          <Text style={{ fontFamily: fonts.sukhumvitLight, fontSize: 12, color: err ? 'rgb(213, 0, 0)' : undefined, marginTop: 4 }}>{err}</Text>
+          <View style={{
+            height: (err && (value.indexOf('อื่นๆ') === -1 || this.state.text.indexOf('อื่นๆ') === -1)) ? 2 : 1,
+            backgroundColor: (err && (value.indexOf('อื่นๆ') === -1 || this.state.text.indexOf('อื่นๆ') === -1)) ? 'rgb(213, 0, 0)' : colors.smoky,
+            marginTop: 5
+          }} />
+          <Text style={{
+            fontFamily: fonts.sukhumvitLight,
+            fontSize: 12,
+            color: (err && (value.indexOf('อื่นๆ') === -1 || this.state.text.indexOf('อื่นๆ') === -1)) ? 'rgb(213, 0, 0)' : undefined,
+            marginTop: 4
+          }}>{err}</Text>
         </TouchableOpacity>
 
         {

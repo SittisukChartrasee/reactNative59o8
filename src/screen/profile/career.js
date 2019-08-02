@@ -94,13 +94,17 @@ export default class extends React.Component {
   getRequiredInvalid = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
     const Required = find(PreconditionRequired, (o) => {
-      if (o.field === 'isicCode' && (field === 'busType' || field === 'busType_other')) return o
-      if (o.field === 'occupationCode' && field === 'occupation') return o
+      if ((o.field === 'isicCode' || o.field === 'isicOther') && field === 'busType') return o
+      if (o.field === 'isicOther' && field === 'busType_other') return o
+      if ((o.field === 'occupationCode' || o.field === 'occupationOther') && field === 'occupation') return o
+      if (o.field === 'occupationOther' && field === 'occupation_other') return o
       return o.field === field
     })
     const Invalid = find(InvalidArgument, (o) => {
-      if (o.field === 'isicCode' && (field === 'busType' || field === 'busType_other')) return o
-      if (o.field === 'occupationCode' && field === 'occupation') return o
+      if ((o.field === 'isicCode' || o.field === 'isicOther') && field === 'busType') return o
+      if (o.field === 'isicOther' && field === 'busType_other') return o
+      if ((o.field === 'occupationCode' || o.field === 'occupationOther') && field === 'occupation') return o
+      if (o.field === 'occupationOther' && field === 'occupation_other') return o
       return o.field === field
     })
     return { Required, Invalid }
@@ -110,11 +114,17 @@ export default class extends React.Component {
     const { PreconditionRequired } = this.state
     const { Required } = this.getRequiredInvalid(field)
 
-    if (Required && RequiredFields(value)) {
+    let val = value
+
+    if (typeof value === 'object') val = value.value
+
+    if (Required && RequiredFields(val)) {
       this.setState({
         PreconditionRequired: PreconditionRequired.filter(o => {
           if (!(o.field === 'isicCode' && field === 'busType') &&
+            !(o.field === 'isicOther' && field === 'busType_other') &&
             !(o.field === 'occupationCode' && field === 'occupation') &&
+            !(o.field === 'occupationOther' && field === 'occupation_other') &&
             o.field !== field)
             return o
         })
