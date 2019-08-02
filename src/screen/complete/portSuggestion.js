@@ -26,7 +26,7 @@ import { navigateAction } from '../../redux/actions'
 import lockout from '../../containers/hoc/lockout'
 import { imageRisk } from './data'
 import { root } from '../../redux/actions/commonAction'
-import { getInvestmentAfterApprove } from '../../containers/query'
+import { getInvestmentAfterApprove, getLinkRisk } from '../../containers/query'
 import setMutation from '../../containers/mutation'
 import getnativeModules from '../../containers/hoc/infoAppNativeModules'
 
@@ -80,7 +80,15 @@ export default class extends React.Component {
   onConfirm = async () => {
     this.onCallApi()
     this.props.toggleModal({ ...this.props.root.modal, visible: false })
-    setTimeout(() => Linking.openURL('https://k-invest.kasikornbankgroup.com/CustomerRisk/default.aspx?lang=TH'), 100)
+    query(this.props.client, {
+      query: getLinkRisk,
+    }, val => {
+      if (val) {
+        setTimeout(() => Linking.openURL(val.data.getLinkRisk), 100)
+      } else {
+        setTimeout(() => Linking.openURL('https://k-invest.kasikornbankgroup.com/CustomerRisk/default.aspx?lang=TH'), 100)
+      }
+    })
   }
 
   onCallApi = async () => {
@@ -94,9 +102,6 @@ export default class extends React.Component {
         }
       }
     })
-      .then(res => {
-        console.log(res)
-      })
       .catch(err => console.log(err))
   }
 

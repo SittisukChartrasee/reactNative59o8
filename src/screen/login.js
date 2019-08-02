@@ -467,17 +467,13 @@ export default class extends React.Component {
 
 	render() {
 		const { dot, defaultKey } = this.state
-
-		// console.log(
-		// 	AsyncStorage.getItem('access_token'),
-		// 	AsyncStorage.getItem('user_token')
-		// )
 		return (
 			<Screen>
 				<HeadSpace
 					{...{
 						dot,
 						title: 'กรุณากรอกรหัสผ่าน',
+						// onPrevPage: () => AsyncStorage.clear(),
 						onPrevPage: () => NativeModules.KMyFundOnboarding.finishActivity(),
 						forgetbtn: () => this.props.navigateAction({ ...this.props, page: 'forgetPasscode' })
 					}}
