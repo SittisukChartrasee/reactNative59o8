@@ -320,6 +320,12 @@ export const getTermAndCondition = gql`
   }
 `
 
+export const getLinkRisk = gql`
+  query getLinkRisk {
+    getLinkRisk
+  }
+`
+
 export const getInvestmentAfterApprove = gql`
   query getInvestmentAfterApprove {
     getInvestmentAfterApprove {

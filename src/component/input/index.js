@@ -78,7 +78,13 @@ export default (props, key) => {
     case 'search':
       return (
         <View key={key} onLayout={val => props.onSetLayout && props.onSetLayout(val.nativeEvent)} style={{ paddingHorizontal: 24, display: props.inVisible ? 'none' : 'flex' }}>
-          <TLight fontSize="14" mt="13" textAlign="left" color={props.err ? 'rgb(213, 0, 0)' : colors.grey}>{props.label}</TLight>
+          <TLight
+            fontSize="14"
+            mt="13"
+            textAlign="left"
+            color={(props.err && props.value.indexOf('อื่นๆ') === -1) ? 'rgb(213, 0, 0)' : colors.grey}>
+            {props.label}
+          </TLight>
           <InputSearch {...props} />
           {props.required ? <Star top={8} /> : null}
 

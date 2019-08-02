@@ -1,6 +1,8 @@
 #!/bin/sh
+
 choose=""
 keyDrive=1g3FONmC6bbsZ5E5Hht92-Kt7RmcFYD5Z
+
 while [ "$choose" != "q" ]
 do
   echo
@@ -9,7 +11,9 @@ do
   echo "3) UAT"
   echo "4) PRO"
   echo
+
   read -p "choose index your env: "  choose
+
   case $choose in
       '1') 
         echo
@@ -37,22 +41,29 @@ do
       *)   echo "This item is not available; try again!";;
   esac
 done
+
 read -p "Enter Your build: "  build
+
 yarn build-ios && yarn build-android
+
 DATE=$(date +'%m%d%Y')
 NAME=onboarding-$build-$DATE-$env
 mkdir release/$NAME
+
 cp android/app/src/main/assets/index.android.bundle release/$NAME
 cp ios/main.jsbundle release/$NAME
+
 gdrive sync upload release $keyDrive
+
 echo "{\"nameFile\": \"${NAME}\", \"env\": \"${env}\", \"build\": \"${build}\", \"time\": \"${DATE}\"}" > release/releaseApp.json
-echo
+
+echo 
 echo "************** $env **************"
-echo
+echo 
 echo "share this link !!"
 gdrive info $keyDrive | grep 'ViewUrl' | sed 's/ViewUrl: //'
 echo 
 echo "Created $NAME file successfully!"
 echo 
 echo "*********************************"
-echo
+echo 
