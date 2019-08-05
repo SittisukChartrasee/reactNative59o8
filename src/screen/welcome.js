@@ -70,6 +70,8 @@ export default class extends React.Component {
     InvalidArgument: [],
   }
 
+  // handle release.sh
+
   componentDidMount = async () => {
     const a = await AsyncStorage.getItem('access_token')
     const b = await AsyncStorage.getItem('user_token')
