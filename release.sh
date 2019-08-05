@@ -1,7 +1,7 @@
 #!/bin/sh
 
 choose=""
-keyDrive=1g3FONmC6bbsZ5E5Hht92-Kt7RmcFYD5Z
+keyDrive=1U0T-es67ZV2hKdb0BxzbL-3HqxmKC4AR
 
 while [ "$choose" != "q" ]
 do
@@ -53,7 +53,7 @@ mkdir release/$NAME
 cp android/app/src/main/assets/index.android.bundle release/$NAME
 cp ios/main.jsbundle release/$NAME
 
-gdrive sync upload release $keyDrive
+gdrive sync upload --delete-extraneous --keep-local release $keyDrive
 
 echo "{\"nameFile\": \"${NAME}\", \"env\": \"${env}\", \"build\": \"${build}\", \"time\": \"${DATE}\"}" > release/releaseApp.json
 
