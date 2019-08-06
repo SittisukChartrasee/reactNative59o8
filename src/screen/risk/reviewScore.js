@@ -10,6 +10,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import sortBy from 'lodash/sortBy'
+import debounce from 'lodash/debounce'
 import { withApollo } from 'react-apollo'
 import { PieChart } from '../../component/chart'
 import Screen from '../../component/screenComponent'
@@ -35,6 +36,12 @@ const dataImage = [
   images.iconrisk8,
 ]
 
+const query = debounce((client, obj, setState) => {
+  client.query({ ...obj })
+    .then((val) => setState(val))
+    .catch(err => console.error(err))
+}, 300)
+
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch)
@@ -45,57 +52,27 @@ const dispatchToProps = dispatch => ({
 @lockout
 export default class extends React.Component {
   state = {
-    risk: 0,
-    dataPieChart: [],
-    crrLevel: '',
-    descEN: '',
-    descTH: '',
-    fundCodeKAsset: '',
-    nameEN: '',
-    nameTH: '',
-    returnText: '',
     riskLevel: 0,
+    crrLevel: '',
+    nameTH: '',
+    nameEN: '',
+    returnText: '',
+    descTH: '',
+    descEN: '',
+    fundCodeKAsset: '',
+    assetClass: [],
     loading: true,
   }
 
   componentDidMount = () => {
-
-    containerQuery(
-      this.props.client,
-      { query: getInvestment, fetchPolicy: "no-cache" },
-      this.onHandleRisk
-    )
+    query(this.props.client, {
+      query: getInvestment,
+    }, val => {
+      this.setState({ ...val.data.getInvestment, loading: false })
+    })
   }
 
-  onHandleRisk = val => {
-    if (val.data.getInvestment) {
-      this.setState({
-        loading: false,
-        crrLevel: val.data.getInvestment.crrLevel,
-        descEN: val.data.getInvestment.descEN,
-        descTH: val.data.getInvestment.descTH,
-        fundCodeKAsset: val.data.getInvestment.fundCodeKAsset,
-        nameEN: val.data.getInvestment.nameEN,
-        nameTH: val.data.getInvestment.nameTH,
-        returnText: val.data.getInvestment.returnText,
-        assetClass: val.data.getInvestment.assetClass,
-        riskLevel: val.data.getInvestment.riskLevel,
-        dataPieChart: val.data.getInvestment.assetClass.map((props) => {
-          return {
-            title: props.nameTH,
-            color: props.color,
-            percent: parseInt(props.weight),
-          }
-        })
-      })
-    }
-    
-  }
-
-  onNext = () => {
-    const { risk } = this.state
-    this.props.navigateAction({ ...this.props, page: 'complete', params: { risk } })
-  }
+  onNext = () => this.props.navigateAction({ ...this.props, page: 'complete' })
 
   render() {
     const {
@@ -104,7 +81,6 @@ export default class extends React.Component {
       assetClass,
       fundCodeKAsset,
       returnText,
-      dataPieChart,
       riskLevel,
     } = this.state
     return (
@@ -133,45 +109,45 @@ export default class extends React.Component {
         <ScrollView contentContainerStyle={{ paddingTop: 40, paddingHorizontal: 24 }}>
           {
             !this.state.loading
-              && (
-                <View style={{ flex: 1, alignItems: 'center' }}>
-                  <View style={{ marginBottom: 19 }}>
-                    <Image source={dataImage[+riskLevel]} />
-                  </View>
-
-                  <View style={{ marginBottom: 10 }}>
-                    <TBold fontSize={28} color={colors.white}>{nameTH}</TBold>
-                    <TBold fontSize={16} color={colors.white}>{`ผลตอบแทนที่คาดหวังโดยเฉลี่ย ${returnText} ต่อปี`}</TBold>
-                  </View>
-
-                  <TLight color={colors.white} mb={40}>{descTH.replace('↵', '')}</TLight>
-
-                  <View style={{ backgroundColor: colors.white, width: '100%', minHeight: 352, paddingVertical: 16, borderRadius: 16, overflow: 'hidden' }}>
-                    <View style={{ height: 80, flexDirection: 'row' }}>
-                      <View style={{ flex: 1, paddingHorizontal: 16 }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                          <Image source={images.bookmark} style={{ marginRight: 8 }} />
-                          <TLight fontSize={14} textAlign="left">กองทุนที่แนะนำ</TLight>
-                        </View>
-                        <TBold fontSize={28} textAlign="left">{fundCodeKAsset}</TBold>
-                      </View>
-                      <View style={{ width: 75, justifyContent: 'flex-start', alignItems: 'center' }}>
-                        <PieChart data={dataPieChart} />
-                      </View>
-                    </View>
-
-                    <View style={{ flex: 1, paddingHorizontal: 16 }}>
-                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <TBold fontSize={14}>สัดส่วนการลงทุนตามพอร์ตแนะนำ</TBold>
-                      </View>
-                      {assetClass ? sortBy(assetClass, [(o) => o.sortOrder]).map(RiskList) : null}
-                    </View>
-
-                  </View>
+            && (
+              <View style={{ flex: 1, alignItems: 'center' }}>
+                <View style={{ marginBottom: 19 }}>
+                  <Image source={dataImage[+riskLevel]} />
                 </View>
-              )
+
+                <View style={{ marginBottom: 10 }}>
+                  <TBold fontSize={28} color={colors.white}>{nameTH}</TBold>
+                  <TBold fontSize={16} color={colors.white}>{`ผลตอบแทนที่คาดหวังโดยเฉลี่ย ${returnText} ต่อปี`}</TBold>
+                </View>
+
+                <TLight color={colors.white} mb={40}>{descTH.replace('↵', '')}</TLight>
+
+                <View style={{ backgroundColor: colors.white, width: '100%', minHeight: 352, paddingVertical: 16, borderRadius: 16, overflow: 'hidden' }}>
+                  <View style={{ height: 80, flexDirection: 'row' }}>
+                    <View style={{ flex: 1, paddingHorizontal: 16 }}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image source={images.bookmark} style={{ marginRight: 8 }} />
+                        <TLight fontSize={14} textAlign="left">กองทุนที่แนะนำ</TLight>
+                      </View>
+                      <TBold fontSize={28} textAlign="left">{fundCodeKAsset}</TBold>
+                    </View>
+                    <View style={{ width: 75, justifyContent: 'flex-start', alignItems: 'center' }}>
+                      <PieChart data={assetClass} />
+                    </View>
+                  </View>
+
+                  <View style={{ flex: 1, paddingHorizontal: 16 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <TBold fontSize={14}>สัดส่วนการลงทุนตามพอร์ตแนะนำ</TBold>
+                    </View>
+                    {assetClass ? sortBy(assetClass, [(o) => o.sortOrder]).map(RiskList) : null}
+                  </View>
+
+                </View>
+              </View>
+            )
           }
-          
+
         </ScrollView>
 
         <View style={{ paddingBottom: 44 }}>
