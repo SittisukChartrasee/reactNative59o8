@@ -3,10 +3,8 @@ import {
   View,
   ScrollView,
   Image,
-  AsyncStorage,
   TouchableOpacity,
   SafeAreaView,
-  NativeModules
 } from 'react-native'
 import { withApollo } from 'react-apollo'
 import { bindActionCreators } from 'redux'
@@ -17,6 +15,7 @@ import { isIphoneX } from '../config/helper'
 import { TLight } from '../component/texts'
 import { NavBar } from '../component/gradient'
 import { navigateAction } from '../redux/actions'
+import { root } from '../redux/actions/commonAction'
 import setMutation from '../containers/mutation'
 import { containerQuery, getTermAndCondition } from '../containers/query'
 import { LongButton } from '../component/button'
@@ -25,7 +24,8 @@ import fonts from '../config/fonts';
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateRoot: bindActionCreators(root, dispatch)
 })
 @connect(mapToProps, dispatchToProps)
 @setMutation
@@ -38,27 +38,22 @@ export default class extends React.Component {
   }
 
   componentDidMount = async () => {
-    const a = await AsyncStorage.getItem('user_token')
-    const b = await AsyncStorage.getItem('userToken')
-    const c = await AsyncStorage.getAllKeys()
-    console.log(a, b, c)
-
+    this.props.updateRoot('loading', true)
     containerQuery(
       this.props.client,
-      { 
-        query: getTermAndCondition
-      },
+      { query: getTermAndCondition },
       (val) => {
-        this.setState({ text: val.data.getTermAndCondition })
+        if (val) {
+          this.props.updateRoot('loading', false)
+          this.setState({ text: val.data.getTermAndCondition })
+        }
       }
     )
   }
 
   onNext = async () => {
-    // NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
     this.props.acceptTerm()
       .then(res => {
-        console.log(res)
         if (res.data.acceptTerm.success) {
           this.props.navigateAction({ ...this.props, page: 'tutorialBackCamera' })
         }

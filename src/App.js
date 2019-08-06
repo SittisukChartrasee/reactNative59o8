@@ -10,6 +10,7 @@ import Modal from './component/modal'
 import { root } from './redux/actions/commonAction'
 import colors from './config/colors';
 import { TBold } from './component/texts';
+import Spinner from './component/spinner'
 
 export const store = onStore
 const ReactWithState = connect(({ nav }) => ({ state: nav }))(createReduxContainer(AppNavigator, 'root'))
@@ -94,7 +95,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { modal } = this.props.root
+    const { modal, loading } = this.props.root
     return (
       <View style={{ flex: 1 }}>
         {
@@ -107,6 +108,7 @@ export default class extends React.Component {
             : <ReactWithState />
         }
         <Modal {...modal} />
+        <Spinner loading={loading}/>
       </View>
     )
   }
