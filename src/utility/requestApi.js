@@ -1,7 +1,8 @@
+import throttle from 'lodash/throttle'
 import ENV from '../config/env'
 import { onStore } from '../redux/store'
 
-export default async (url, options, verifytoken) => {
+export default throttle(async (url, options, verifytoken) => {
   let allOption
   if (options.method !== 'GET') {
     allOption = {
@@ -23,4 +24,4 @@ export default async (url, options, verifytoken) => {
   } catch (err) {
     throw err
   }
-}
+}, 1000)
