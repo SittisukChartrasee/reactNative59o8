@@ -15,8 +15,13 @@ const handleTimeout = (res, dispatch) => {
   }
 }
 
+// #
+// #
 // requestOtp :: Api ใช้สำหรับ OTP register และ accept
+// #
+// #
 export const requestOtp = (obj, { token = null, currFlowUP }) => async dispatch => {
+  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
   const handleEndPoint = currFlow => {
     switch (currFlow) {
       case 'updatePasscode': return 'user/accept-term/request-otp'
@@ -33,6 +38,7 @@ export const requestOtp = (obj, { token = null, currFlowUP }) => async dispatch 
   handleTimeout(res, dispatch)
 
   if (res && res.result) {
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
     for (const key in res.result) {
       if (key === 'code')
         dispatch({ type: CHANGE_ROOT, key, value: { code: res.result.code, message: res.result.message } })
@@ -51,8 +57,13 @@ export const requestOtp = (obj, { token = null, currFlowUP }) => async dispatch 
   return { ...res }
 }
 
+// #
+// #
 // acceptTerm :: Api ใช้สำหรับ accept ก่อน OTP
+// #
+// #
 export const acceptTerm = token => async dispatch => {
+  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
   const url = 'user/accept-term'
   const res = await request(url, {
     method: 'POST',
@@ -61,6 +72,7 @@ export const acceptTerm = token => async dispatch => {
   handleTimeout(res, dispatch)
 
   if (res && res.result) {
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
   }
@@ -69,8 +81,13 @@ export const acceptTerm = token => async dispatch => {
   return { ...res }
 }
 
+// #
+// #
 // velidateOtp :: Api ใช้สำหรับ OTP register และ accept
+// #
+// #
 export const velidateOtp = (obj, { token = null, currFlowUP }) => async dispatch => {
+  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
   const handleEndPoint = currFlow => {
     switch (currFlow) {
       case 'updatePasscode': return 'user/accept-term/verify-otp'
@@ -92,6 +109,7 @@ export const velidateOtp = (obj, { token = null, currFlowUP }) => async dispatch
   handleTimeout(res, dispatch)
 
   if (res && res.result) {
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
     for (const key in res.result) {
       if (key === 'code')
         dispatch({ type: CHANGE_ROOT, key, value: { code: res.result.code, message: res.result.message } })
@@ -111,6 +129,7 @@ export const velidateOtp = (obj, { token = null, currFlowUP }) => async dispatch
 }
 
 export const confirmPasscode = (obj, { token, currFlowUP }) => async dispatch => {
+  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
   const handleEndPoint = currFlow => {
     switch (currFlow) {
       case 'updatePasscode': return 'user/accept-term/update-passcode'
@@ -130,6 +149,7 @@ export const confirmPasscode = (obj, { token, currFlowUP }) => async dispatch =>
   handleTimeout(res, dispatch)
 
   if (res && res.result) {
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
   }
@@ -139,6 +159,7 @@ export const confirmPasscode = (obj, { token, currFlowUP }) => async dispatch =>
 }
 
 export const requestLogin = (obj, token) => async dispatch => {
+  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
   const url = 'auth/login'
 
   const res = await request(url, {
@@ -153,6 +174,7 @@ export const requestLogin = (obj, token) => async dispatch => {
   handleTimeout(res, dispatch)
 
   if (res && res.result) {
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
     for (const key in res.result) {
       if (key === 'code')
         dispatch({ type: CHANGE_ROOT, key, value: { code: res.result.code, message: res.result.message } })
@@ -173,6 +195,7 @@ export const requestLogin = (obj, token) => async dispatch => {
 }
 
 export const forgotPasscode = (obj) => async dispatch => {
+  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
   const url = 'user/forgot-password'
 
   const res = await request(url, {
@@ -186,6 +209,7 @@ export const forgotPasscode = (obj) => async dispatch => {
   handleTimeout(res, dispatch)
 
   if (res && res.result) {
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
     for (const key in res.result) {
       if (key === 'code')
         dispatch({ type: CHANGE_ROOT, key, value: { code: res.result.code, message: res.result.message } })

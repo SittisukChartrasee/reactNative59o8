@@ -59,6 +59,7 @@ export default class extends React.Component {
 		const { user } = this.props
 		this.setState({ ...obj })
 		if (obj.number.length === 6) {
+			this.props.updateRoot('loading', true)
 			this.props.requestLogin({
 				userToken,
 				password: obj.number,
@@ -92,12 +93,13 @@ export default class extends React.Component {
 							.then((val) => this.onHandletesttest(val))
 							.catch(err => console.error(err))
 
+						this.props.updateRoot('loading', false)
+						
 						await containerQuery(
 							this.props.client,
 							{ query: getStatus },
 							val => this.onHandleChooseScreen({ val, password: obj.number })
 						)
-
 					} else if (!res.success) {
 						this.setState({
 							...defaultPasscode,
@@ -473,8 +475,8 @@ export default class extends React.Component {
 					{...{
 						dot,
 						title: 'กรุณากรอกรหัสผ่าน',
-						// onPrevPage: () => AsyncStorage.clear(),
-						onPrevPage: () => NativeModules.KMyFundOnboarding.finishActivity(),
+						onPrevPage: () => AsyncStorage.clear(),
+						// onPrevPage: () => NativeModules.KMyFundOnboarding.finishActivity(),
 						forgetbtn: () => this.props.navigateAction({ ...this.props, page: 'forgetPasscode' })
 					}}
 				/>

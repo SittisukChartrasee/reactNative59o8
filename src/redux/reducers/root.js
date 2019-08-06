@@ -7,6 +7,7 @@ const init = {
   appState: '',
   currFlowUP: '',
   password: '',
+  loading: false,
   modal: {
     visible: false
   }
