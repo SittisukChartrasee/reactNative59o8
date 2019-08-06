@@ -4,7 +4,7 @@ import noneStatic from 'hoist-non-react-statics'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { root } from '../../redux/actions/commonAction'
-
+import { onStore } from '../../redux/store'
 
 export default WrapperComponent => {
   const Enhance = props => {
@@ -16,10 +16,9 @@ export default WrapperComponent => {
     }
     const modal = {
       ...detailModal,
-      onChange: val => console.log(val),
-      onPress: () => props.updateRoot('modal', { ...detailModal, visible: false }),
+      onPress: () => props.updateRoot('modal', { ...onStore.getState().root.modal, visible: false }),
       onConfirm: () => NativeModules.KMyFundOnboarding.finishActivity(),
-      onPressClose: () => props.updateRoot('modal', { ...detailModal, visible: false })
+      onPressClose: () => props.updateRoot('modal', { ...onStore.getState().root.modal, visible: false })
     }
     return <WrapperComponent lockout={() => props.updateRoot('modal', modal)} {...props} />
   }
