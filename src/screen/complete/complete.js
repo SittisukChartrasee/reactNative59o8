@@ -35,11 +35,9 @@ const dispatchToProps = dispatch => ({
 export default class extends React.Component {
 
 	onNext = () => {
-		const risk = this.props.navigation.getParam('risk', 0) // เตรียมส่งข้อมูล
 		this.props.client.query({ query: checkVerifiedEmail })
 			.then(res => {
 				if (res.data.checkVerifiedEmail) {
-					// ========================== mock Data ตรวจสอบความเสียงสูง ส่ง risk ไป ============================== //
 					this.props.saveSanction()
 						.then(res => {
 							if (res.data.saveSanction.success) this.props.navigateAction({ ...this.props, page: 'waiting' })
@@ -53,7 +51,6 @@ export default class extends React.Component {
 						.catch(err => {
 							console.log(err)
 						})
-					// console.log(risk) //
 				} else {
 					this.props.navigateAction({ ...this.props, page: 'verifyEmail' })
 				}
