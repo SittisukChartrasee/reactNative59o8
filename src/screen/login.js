@@ -2,7 +2,6 @@ import React from 'react'
 import { AsyncStorage, Platform, NativeModules } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import moment from 'moment-timezone'
 import { withApollo } from 'react-apollo'
 import DeviceInfo from 'react-native-device-info'
 import Keyboard from '../component/keyboard'
@@ -15,9 +14,9 @@ import { containerQuery, getStatus, getUser } from '../containers/query'
 import getnativeModules from '../containers/hoc/infoAppNativeModules'
 import typeModal from '../utility/typeModal'
 import {
+	formatDate,
 	formatIdCard,
 	formatPhoneNumber,
-	convertDate_reverse,
 	getStatusGender_reverse,
 	getStatusMartial_reverse,
 	month,
@@ -28,8 +27,6 @@ const defaultPasscode = {
 	dot: ['', '', '', '', '', ''],
 	number: '',
 }
-
-const momentDate = date => moment(date).tz('Asia/Bangkok')
 
 const mapToProps = ({ root, user, fatcaReducer, suitReducer }) => ({ root, user, fatcaReducer, suitReducer })
 const dispatchToProps = dispatch => ({
@@ -94,7 +91,7 @@ export default class extends React.Component {
 							.catch(err => console.error(err))
 
 						this.props.updateRoot('loading', false)
-						
+
 						await containerQuery(
 							this.props.client,
 							{ query: getStatus },
@@ -164,12 +161,11 @@ export default class extends React.Component {
 		if (val.data.getUser.success) {
 
 			if (val.data.getUser.result.identity) {
-				const identityDocExpDate = momentDate(val.data.getUser.result.identity.docExpDate)._a
 				this.props.updateUser('profile', {
 					...this.props.user.profile,
 					isNoDocExpDate: val.data.getUser.result.identity.isNoDocExpDate,
 					expireDateFlag: val.data.getUser.result.identity.isNoDocExpDate ? 'ไม่มีวันหมดอายุ' : 'มีวันหมดอายุ',
-					docExpDate: val.data.getUser.result.identity.isNoDocExpDate ? `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}` : convertDate_reverse(identityDocExpDate),
+					docExpDate: val.data.getUser.result.identity.isNoDocExpDate ? `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}` : formatDate(val.data.getUser.result.identity.docExpDate),
 					genderCode: val.data.getUser.result.identity.genderCode,
 					gender: getStatusGender_reverse(val.data.getUser.result.identity.genderCode),
 					titleTH: val.data.getUser.result.identity.titleTH,
@@ -189,7 +185,7 @@ export default class extends React.Component {
 			}
 
 			if (val.data.getUser.result.spouse) {
-				const spouseDocExpDate = momentDate(val.data.getUser.result.spouse.cardExpiredDate)._a
+
 				this.props.updateUser('spouse', {
 					...this.props.user.spouse,
 					nationFlag: val.data.getUser.result.spouse.nationalityCode === 'TH' ? 'ไทย' : 'ชาวต่างชาติ',
@@ -198,8 +194,8 @@ export default class extends React.Component {
 					marryCountry: val.data.getUser.result.spouse.nationality,
 					nationalityCode: val.data.getUser.result.spouse.nationalityCode,
 					isIDCardExpDate: !val.data.getUser.result.spouse.isIDCardExpDate,
-					cardExpiredDate: val.data.getUser.result.spouse.isIDCardExpDate ? convertDate_reverse(spouseDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
-					marryExpireDate: val.data.getUser.result.spouse.nationalityCode === 'TH' ? `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}` : convertDate_reverse(spouseDocExpDate),
+					cardExpiredDate: val.data.getUser.result.spouse.isIDCardExpDate ? formatDate(val.data.getUser.result.spouse.cardExpiredDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
+					marryExpireDate: val.data.getUser.result.spouse.nationalityCode === 'TH' ? `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}` : formatDate(val.data.getUser.result.spouse.cardExpiredDate),
 					title: val.data.getUser.result.spouse.title,
 					fistName: val.data.getUser.result.spouse.fistName,
 					lastName: val.data.getUser.result.spouse.lastName,
@@ -209,13 +205,9 @@ export default class extends React.Component {
 
 			if (val.data.getUser.result.firstChild) {
 
-				const firstChildDocExpDate = momentDate(val.data.getUser.result.firstChild.ChildDocExpDate)._a
-
 				let secondC = { inVisibleSecond: true, inVisible: false }
 
 				if (val.data.getUser.result.secondChild) {
-
-					const secondChildDocExpDate = momentDate(val.data.getUser.result.secondChild.ChildDocExpDate)._a
 
 					secondC = {
 						'secondTitle': val.data.getUser.result.secondChild.ChildTitleTH,
@@ -224,7 +216,7 @@ export default class extends React.Component {
 						'secondBirthDay': `${val.data.getUser.result.secondChild.ChildDayOfBirth}/${val.data.getUser.result.secondChild.ChildMonthOfBirth !== '-' ? month[parseInt(val.data.getUser.result.secondChild.ChildMonthOfBirth) - 1] : '-'}/${val.data.getUser.result.secondChild.ChildYearOfBirth}`,
 						'secondDocNo': formatIdCard(val.data.getUser.result.secondChild.ChildDocNo),
 						'secondExpireDateFlag': !val.data.getUser.result.secondChild.ChildIsNoDocExpDate ? 'มีวันหมดอายุ' : 'ไม่มีวันหมดอายุ',
-						'secondDocExpDate': !val.data.getUser.result.secondChild.ChildIsNoDocExpDate ? convertDate_reverse(secondChildDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
+						'secondDocExpDate': !val.data.getUser.result.secondChild.ChildIsNoDocExpDate ? formatDate(val.data.getUser.result.secondChild.ChildDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
 						'inVisibleSecond': false,
 						inVisible: true
 					}
@@ -238,7 +230,7 @@ export default class extends React.Component {
 					'firstBirthDay': `${val.data.getUser.result.firstChild.ChildDayOfBirth}/${val.data.getUser.result.firstChild.ChildMonthOfBirth !== '-' ? month[parseInt(val.data.getUser.result.firstChild.ChildMonthOfBirth) - 1] : '-'}/${val.data.getUser.result.firstChild.ChildYearOfBirth}`,
 					'firstDocNo': formatIdCard(val.data.getUser.result.firstChild.ChildDocNo),
 					'firstExpireDateFlag': !val.data.getUser.result.firstChild.ChildIsNoDocExpDate ? 'มีวันหมดอายุ' : 'ไม่มีวันหมดอายุ',
-					'firstDocExpDate': !val.data.getUser.result.firstChild.ChildIsNoDocExpDate ? convertDate_reverse(firstChildDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
+					'firstDocExpDate': !val.data.getUser.result.firstChild.ChildIsNoDocExpDate ? formatDate(val.data.getUser.result.firstChild.ChildDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
 					...secondC
 				})
 			}
