@@ -33,8 +33,9 @@ export const convertDate = (date) => {
   return new Date(convert)
 }
 
-export const convertDate_reverse = (date) => {
-  const convert = `${date[2]}-${month[date[1]]}-${date[0].toString()}`
+export const formatDate = date => {
+  const prvDate = new Date(date)
+  const convert = `${prvDate.getDate()}-${month[prvDate.getMonth()]}-${prvDate.getFullYear()}`
   return convert
 }
 
