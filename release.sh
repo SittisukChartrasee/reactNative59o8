@@ -44,18 +44,18 @@ done
 
 read -p "Enter Your build: "  build
 
-yarn build-ios && yarn build-android
-
 DATE=$(date +'%m%d%Y')
 NAME=onboarding-$build-$DATE-$env
 mkdir release/$NAME
+
+echo "{\"nameFile\": \"${NAME}\", \"env\": \"${env}\", \"build\": \"${build}\", \"time\": \"${DATE}\"}" > release/releaseApp.json
+
+yarn build-ios && yarn build-android
 
 cp android/app/src/main/assets/index.android.bundle release/$NAME
 cp ios/main.jsbundle release/$NAME
 
 gdrive sync upload --delete-extraneous --keep-local release $keyDrive
-
-echo "{\"nameFile\": \"${NAME}\", \"env\": \"${env}\", \"build\": \"${build}\", \"time\": \"${DATE}\"}" > release/releaseApp.json
 
 echo 
 echo "************** $env **************"
