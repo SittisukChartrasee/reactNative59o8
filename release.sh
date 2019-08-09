@@ -1,7 +1,12 @@
 #!/bin/sh
 
 choose=""
-keyDrive=1U0T-es67ZV2hKdb0BxzbL-3HqxmKC4AR
+apkChoose=""
+KEYTEST=1k8oqUFNDixldtDmsr-nYMLCFAnpeQNkd
+KEYTEST_APK=1BWmdG5PlK_6nV0yhHW89RyACBqh2KuBG
+
+KEY=1U0T-es67ZV2hKdb0BxzbL-3HqxmKC4AR
+KEY_APK=1-q2EScI8LqFkYhGVlMDsy3hXHHgT6H0c
 
 while [ "$choose" != "q" ]
 do
@@ -16,23 +21,19 @@ do
 
   case $choose in
       '1') 
-        echo
-        echo "SET ENV -> DEV"
+        echo "seted DEV"
         env="DEV"
         break;;
       '2')
-        echo
-        echo "SET ENV -> SIT"
+        echo "seted SIT"
         env="SIT"
         break;;
       '3')
-        echo
-        echo "SET ENV -> UAT"
+        echo "seted UAT"
         env="UAT"
         break;;
       '4')
-        echo
-        echo "SET ENV -> PRO"
+        echo "seted PRO"
         env="PRO"
         break;;
       'q')
@@ -44,24 +45,49 @@ done
 
 read -p "Enter Your build: "  build
 
-DATE=$(date +'%m%d%Y')
-NAME=onboarding-$build-$DATE-$env
-mkdir release/$NAME
+echo "What you want to build apk y or n"
+
+read apkChoose
+
+# ******** create file env ******** #
 
 echo "{\"nameFile\": \"${NAME}\", \"env\": \"${env}\", \"build\": \"${build}\", \"time\": \"${DATE}\"}" > release/releaseApp.json
 
 yarn build-ios && yarn build-android
 
-cp android/app/src/main/assets/index.android.bundle release/$NAME
-cp ios/main.jsbundle release/$NAME
+DATE=$(date +'%m%d%Y')
 
-gdrive sync upload --delete-extraneous --keep-local release $keyDrive
+NAME=onboarding-$build-$DATE-$env
+
+mkdir release/apk/$NAME
+
+mkdir release/bundle/$NAME
+
+# ******** copy path to release ******** #
+
+if [ "$apkChoose" = "y" ]
+then
+  cd android && ./gradlew assembleRelease
+  cp android/app/build/outputs/apk/release/app-release.apk release/apk/$NAME
+fi
+cp android/app/src/main/assets/index.android.bundle release/bundle/$NAME
+cp ios/main.jsbundle release/bundle/$NAME
+
+# ******** push build to Gdrive ******** #
+
+gdrive sync upload --delete-extraneous --keep-local release/bundle $KEY
+if [ "$apkChoose" = "y" ]
+then
+  gdrive sync upload --delete-extraneous --keep-local release/apk $KEY_APK  
+fi
 
 echo 
 echo "************** $env **************"
 echo 
-echo "share this link !!"
-gdrive info $keyDrive | grep 'ViewUrl' | sed 's/ViewUrl: //'
+echo "share this link bundle !!"
+gdrive info $KEY | grep 'ViewUrl' | sed 's/ViewUrl: //'
+echo "share this link apk !!"
+gdrive info $KEY_APK | grep 'ViewUrl' | sed 's/ViewUrl: //'
 echo 
 echo "Created $NAME file successfully!"
 echo 
