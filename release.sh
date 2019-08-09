@@ -1,5 +1,6 @@
 #!/bin/sh
 
+rootPath=$PWD
 choose=""
 apkChoose=""
 KEYTEST=1k8oqUFNDixldtDmsr-nYMLCFAnpeQNkd
@@ -59,26 +60,24 @@ DATE=$(date +'%m%d%Y')
 
 NAME=onboarding-$build-$DATE-$env
 
-mkdir release/apk/$NAME
+mkdir -p release/apk/$NAME
 
-mkdir release/bundle/$NAME
+mkdir -p release/bundle/$NAME
 
 # ******** copy path to release ******** #
 
-if [ "$apkChoose" = "y" ]
-then
-  cd android && ./gradlew assembleRelease
-  cp android/app/build/outputs/apk/release/app-release.apk release/apk/$NAME
+if [ "$apkChoose" = "y" ]; then
+  cd android && ./gradlew assembleRelease && cp $rootPath/android/app/build/outputs/apk/release/app-release.apk $rootPath/release/apk/$NAME
 fi
-cp android/app/src/main/assets/index.android.bundle release/bundle/$NAME
-cp ios/main.jsbundle release/bundle/$NAME
+
+cp $rootPath/android/app/src/main/assets/index.android.bundle $rootPath/release/bundle/$NAME
+cp $rootPath/ios/main.jsbundle $rootPath/release/bundle/$NAME
 
 # ******** push build to Gdrive ******** #
 
-gdrive sync upload --delete-extraneous --keep-local release/bundle $KEY
-if [ "$apkChoose" = "y" ]
-then
-  gdrive sync upload --delete-extraneous --keep-local release/apk $KEY_APK  
+gdrive sync upload --delete-extraneous --keep-local $rootPath/release/bundle $KEY
+if [ "$apkChoose" = "y" ]; then
+  gdrive sync upload --delete-extraneous --keep-local $rootPath/release/apk $KEY_APK  
 fi
 
 echo 
