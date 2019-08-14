@@ -6,7 +6,7 @@ apkChoose=""
 KEYTEST=1k8oqUFNDixldtDmsr-nYMLCFAnpeQNkd
 KEYTEST_APK=1BWmdG5PlK_6nV0yhHW89RyACBqh2KuBG
 
-KEY=1U0T-es67ZV2hKdb0BxzbL-3HqxmKC4AR
+KEY=1hl_mGXBBevrMowOSoDLxJOPMtyqZ_btW
 KEY_APK=1-q2EScI8LqFkYhGVlMDsy3hXHHgT6H0c
 
 while [ "$choose" != "q" ]
@@ -52,13 +52,13 @@ read apkChoose
 
 # ******** create file env ******** #
 
-echo "{\"nameFile\": \"${NAME}\", \"env\": \"${env}\", \"build\": \"${build}\", \"time\": \"${DATE}\"}" > release/releaseApp.json
-
-yarn build-ios && yarn build-android
-
-DATE=$(date +'%m%d%Y')
+DATE=$(date +'%Y%m%d')
 
 NAME=onboarding-$build-$DATE-$env
+
+echo "{\"nameFile\": \"${NAME}\", \"env\": \"${env}\", \"build\": \"${build}\", \"time\": \"${DATE}$(date +'%H%M')\"}" > release/releaseApp.json
+
+yarn build-ios && yarn build-android
 
 mkdir -p release/apk/$NAME
 
@@ -91,4 +91,4 @@ echo
 echo "Created $NAME file successfully!"
 echo 
 echo "*********************************"
-echo 
+echo
