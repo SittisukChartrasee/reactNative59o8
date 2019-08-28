@@ -35,10 +35,11 @@ export const requestOtp = (obj, { token = null, currFlowUP }) => async dispatch 
     body: token ? null : JSON.stringify(obj),
   }, token)
 
+  if (res) dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+
   handleTimeout(res, dispatch)
 
   if (res && res.result) {
-    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
     for (const key in res.result) {
       if (key === 'code')
         dispatch({ type: CHANGE_ROOT, key, value: { code: res.result.code, message: res.result.message } })
@@ -69,10 +70,11 @@ export const acceptTerm = token => async dispatch => {
     method: 'POST',
   }, token)
 
+  if (res) dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+
   handleTimeout(res, dispatch)
 
   if (res && res.result) {
-    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
   }
@@ -106,10 +108,11 @@ export const velidateOtp = (obj, { token = null, currFlowUP }) => async dispatch
     }),
   }, token)
 
+  if (res) dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+
   handleTimeout(res, dispatch)
 
   if (res && res.result) {
-    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
     for (const key in res.result) {
       if (key === 'code')
         dispatch({ type: CHANGE_ROOT, key, value: { code: res.result.code, message: res.result.message } })
@@ -146,10 +149,11 @@ export const confirmPasscode = (obj, { token, currFlowUP }) => async dispatch =>
     }),
   }, token)
 
+  if (res) dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+
   handleTimeout(res, dispatch)
 
   if (res && res.result) {
-    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
     for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
     return { ...res }
   }
@@ -171,10 +175,11 @@ export const requestLogin = (obj, token) => async dispatch => {
     }),
   }, token)
 
+  if (res) dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+
   handleTimeout(res, dispatch)
 
   if (res && res.result) {
-    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
     for (const key in res.result) {
       if (key === 'code')
         dispatch({ type: CHANGE_ROOT, key, value: { code: res.result.code, message: res.result.message } })
@@ -191,7 +196,6 @@ export const requestLogin = (obj, token) => async dispatch => {
       dispatch({ type: CHANGE_ROOT, key, value: res[key] })
   }
   return { ...res }
-
 }
 
 export const forgotPasscode = (obj) => async dispatch => {
@@ -206,10 +210,11 @@ export const forgotPasscode = (obj) => async dispatch => {
     }),
   })
 
+  if (res) dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+
   handleTimeout(res, dispatch)
 
   if (res && res.result) {
-    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
     for (const key in res.result) {
       if (key === 'code')
         dispatch({ type: CHANGE_ROOT, key, value: { code: res.result.code, message: res.result.message } })

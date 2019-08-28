@@ -14,6 +14,7 @@ import Input from '../../component/input'
 import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
+import typeModal from '../../utility/typeModal'
 
 const fields = [
   {
@@ -33,7 +34,8 @@ const fields = [
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -46,6 +48,10 @@ export default class extends React.Component {
       await this.props.saveMailingSamePermanent()
         .then(res => {
           if (res.data.saveMailingSamePermanent.success) this.props.navigateAction({ ...this.props, page: 'contact' })
+          else return this.props.toggleModal({
+            ...typeModal[res.data.saveMailingSamePermanent.code],
+            dis: res.data.saveMailingSamePermanent.message
+          })
         })
         .catch(err => {
           console.log(err)
@@ -54,6 +60,10 @@ export default class extends React.Component {
       await this.props.saveMailingSameWork()
         .then(res => {
           if (res.data.saveMailingSameWork.success) this.props.navigateAction({ ...this.props, page: 'contact' })
+          else return this.props.toggleModal({
+            ...typeModal[res.data.saveMailingSameWork.code],
+            dis: res.data.saveMailingSameWork.message
+          })
         })
         .catch(err => {
           console.log(err)
@@ -62,6 +72,10 @@ export default class extends React.Component {
       await this.props.saveMailingSameCurrent()
         .then(res => {
           if (res.data.saveMailingSameCurrent.success) this.props.navigateAction({ ...this.props, page: 'contact' })
+          else return this.props.toggleModal({
+            ...typeModal[res.data.saveMailingSameCurrent.code],
+            dis: res.data.saveMailingSameCurrent.message
+          })
         })
         .catch(err => {
           console.log(err)
