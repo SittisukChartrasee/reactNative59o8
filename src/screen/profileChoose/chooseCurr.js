@@ -14,6 +14,7 @@ import Input from '../../component/input'
 import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
+import typeModal from '../../utility/typeModal'
 
 const fields = [
   {
@@ -31,6 +32,7 @@ const fields = [
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -43,6 +45,10 @@ export default class extends React.Component {
       await this.props.saveCurrentSameWork()
         .then(res => {
           if (res.data.saveCurrentSameWork.success) this.props.navigateAction({ ...this.props, page: 'chooseDoc' })
+          else return this.props.toggleModal({
+            ...typeModal[res.data.saveCurrentSameWork.code],
+            dis: res.data.saveCurrentSameWork.message
+          })
         })
         .catch(err => {
           console.log(err)
@@ -51,6 +57,10 @@ export default class extends React.Component {
       await this.props.SaveCurrentSamePermanent()
         .then(res => {
           if (res.data.SaveCurrentSamePermanent.success) this.props.navigateAction({ ...this.props, page: 'chooseDoc' })
+          else return this.props.toggleModal({
+            ...typeModal[res.data.SaveCurrentSamePermanent.code],
+            dis: res.data.SaveCurrentSamePermanent.message
+          })
         })
         .catch(err => {
           console.log(err)

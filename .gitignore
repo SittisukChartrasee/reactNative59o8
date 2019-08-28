@@ -35,6 +35,10 @@ local.properties
 *.iml
 *.bundle
 
+# file release
+release/apk/*
+release/bundle/*
+
 # node.js
 #
 node_modules/

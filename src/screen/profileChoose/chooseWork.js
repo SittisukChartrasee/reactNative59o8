@@ -14,12 +14,13 @@ import Input from '../../component/input'
 import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
+import typeModal from '../../utility/typeModal'
 
 const fields = [
   {
     label: 'ใช้ที่อยู่เดียวกับทะเบียนบ้าน',
     type: 'buttonCard',
-  }, { 
+  }, {
     label: 'ใช้ที่อยู่อื่น',
     type: 'buttonCard',
   }
@@ -27,7 +28,8 @@ const fields = [
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
-  navigateAction: bindActionCreators(navigateAction, dispatch)
+  navigateAction: bindActionCreators(navigateAction, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -40,6 +42,10 @@ export default class extends React.Component {
       await this.props.saveWorkSamePermanent()
         .then(res => {
           if (res.data.saveWorkSamePermanent.success) this.props.navigateAction({ ...this.props, page: 'chooseCurr' })
+          else return this.props.toggleModal({
+            ...typeModal[res.data.saveWorkSamePermanent.code],
+            dis: res.data.saveWorkSamePermanent.message
+          })
         })
         .catch(err => {
           console.log(err)
@@ -47,7 +53,7 @@ export default class extends React.Component {
     } else {
       this.props.navigateAction({ ...this.props, page: 'addressWork' })
     }
-    
+
   }
 
   render() {
