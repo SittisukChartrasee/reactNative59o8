@@ -9,7 +9,7 @@ import { TBold, TLight, TMed, TSemiBold, TText, TThin } from '../texts'
 import images from '../../config/images'
 
 export default ({
-  label = "Long button test",
+  label = "transparentButton",
   IconImage = "",
   onPress = () => { },
   disabled = false,
