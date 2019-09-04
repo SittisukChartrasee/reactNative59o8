@@ -115,7 +115,11 @@ export default class extends React.Component {
 
   onHandleOnPress = async data => {
     const { field, user, onHandleDistrict } = this.props
-    this.setState({ open: false, confirmText: data.nameTH, text: data.nameTH })
+    this.setState({
+      open: false,
+      confirmText: data.nameDetail ? `${data.nameTH} (${data.nameDetail})` : data.nameTH,
+      text: data.nameDetail ? `${data.nameTH} (${data.nameDetail})` : data.nameTH
+    })
 
     await this.props.handleInput && this.props.handleInput({
       type: 'SEARCH',
@@ -234,7 +238,7 @@ export default class extends React.Component {
                 this.state.result.map((d, key) => (
                   <TouchableOpacity key={key} onPress={() => this.onHandleOnPress(d)}>
                     <View style={{ marginVertical: 16 }}>
-                      <TBold textAlign="left" ml={24} mr={24}>{d.displayName || d.nameTH}</TBold>
+                      <TBold textAlign="left" ml={24} mr={24}>{d.nameDetail ? `${d.nameTH} (${d.nameDetail})` : (d.displayName || d.nameTH)}</TBold>
                     </View>
                     <View style={{ height: 1, backgroundColor: colors.smoky, marginLeft: 24 }} />
                   </TouchableOpacity>

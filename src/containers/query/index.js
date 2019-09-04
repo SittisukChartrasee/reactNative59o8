@@ -200,6 +200,9 @@ export const getUserTitle = gql`
   query getUserTitle($text: String!) {
     getUserTitle(text: $text) {
       nameTH
+      nameDetail
+      code
+      codeDopa
     }
   }
 `

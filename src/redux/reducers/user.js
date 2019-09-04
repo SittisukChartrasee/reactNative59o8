@@ -10,6 +10,7 @@ const init = {
     docExpDate: `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
     gender: '',
     titleTH: '',
+    titleCode: '',
     firstNameTH: '',
     lastNameTH: '',
     firstNameEN: '',
