@@ -196,6 +196,8 @@ export default class extends React.Component {
     } else if (props.field === 'pepFlag') {
       this.setState({ disabledPepFlag: false })
       this.props.updateUser('spouse', { ...user.spouse, [props.field]: (props.value === 'ใช่') })
+    } else if (props.field === 'title') {
+      this.props.updateUser('spouse', { ...user.spouse, [props.field]: props.value, 'titleCode': props.code })
     } else {
       this.props.updateUser('spouse', { ...user.spouse, [props.field]: props.value })
     }
@@ -255,6 +257,7 @@ export default class extends React.Component {
 
     const {
       title,
+      titleCode,
       lastName,
       pepFlag,
       nationalityCode,
@@ -270,6 +273,7 @@ export default class extends React.Component {
 
     const data = {
       title,
+      titleCode,
       lastName,
       pepFlag,
       nationalityCode: this.props.user.spouse.nationFlag === 'ไทย' ? 'TH' : nationalityCode,
