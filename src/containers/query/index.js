@@ -203,6 +203,7 @@ export const getUserTitle = gql`
       nameDetail
       code
       codeDopa
+      gender
     }
   }
 `

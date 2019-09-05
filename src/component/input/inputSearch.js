@@ -124,7 +124,9 @@ export default class extends React.Component {
     await this.props.handleInput && this.props.handleInput({
       type: 'SEARCH',
       field,
-      value: data.nameTH, ...(code => code ? ({ code, risk: data.risk }) : {})(data.code)
+      value: data.nameTH,
+      ...(code => code ? ({ code, risk: data.risk }) : {})(data.code),
+      ...(gender => gender ? ({ titleGender: gender }) : { titleGender: null })(data.gender)
     })
 
     if (data.displayName) {

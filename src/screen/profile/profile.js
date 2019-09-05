@@ -187,7 +187,8 @@ export default class extends React.Component {
         ...user.profile,
         [props.field]: props.value,
         'isNoDocExpDate': isNoDoc,
-        'titleCode': props.code
+        'titleCode': props.code,
+        'titleGender': props.titleGender
       })
     } else {
       this.props.updateUser('profile', {
@@ -264,6 +265,7 @@ export default class extends React.Component {
       gender,
       titleTH,
       titleCode,
+      titleGender,
       firstNameTH,
       lastNameTH,
       firstNameEN,
@@ -284,6 +286,7 @@ export default class extends React.Component {
       genderCode: getStatusGender(gender),
       titleTH,
       titleCode,
+      titleGender,
       firstNameTH,
       lastNameTH,
       firstNameEN,
