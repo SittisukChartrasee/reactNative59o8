@@ -19,7 +19,7 @@ import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { TText, TBold, TSemiBold, TLight } from '../../component/texts'
 import colors from '../../config/colors'
-import { LongButton } from '../../component/button'
+import { LongButton, TransparentButton } from '../../component/button'
 import images from '../../config/images'
 import { RiskList } from '../../component/lists'
 import { navigateAction } from '../../redux/actions'
@@ -177,15 +177,10 @@ export default class extends React.Component {
         </ScrollView>
 
         <View style={{ paddingBottom: 44 }}>
-          <LongButton
-            label="เริ่มต้นใช้งาน"
-            style={{ marginHorizontal: 24 }}
-            onPress={this.onNext}
-          />
-          <LongButton
+          <TransparentButton
+            style={{ marginTop: 32, paddingHorizontal: 74, marginBottom: 19 }}
             label="ทำแบบประเมินความเสี่ยงใหม่"
-            bgTransparent
-            style={{ marginHorizontal: 24 }}
+            IconImage={images.iconCameraRefresh}
             onPress={() => this.props.toggleModal({
               dis: 'ท่านต้องการทำแบบประเมินความเสี่ยงใหม่\nใช่หรือไม่',
               visible: true,
@@ -195,6 +190,11 @@ export default class extends React.Component {
               onConfirm: this.onConfirm,
               onPressClose: () => this.props.toggleModal({ visible: false }),
             })}
+          />
+          <LongButton
+            label="เริ่มต้นใช้งาน"
+            style={{ marginHorizontal: 24 }}
+            onPress={this.onNext}
           />
         </View>
 
