@@ -53,6 +53,8 @@ export default class extends React.Component {
     PreconditionRequired: [],
     InvalidArgument: [],
     layout: [],
+    // hidePicker Use for hide picker Date Back and Next Page
+    hidePicker: false,
     fields: [
       {
         label: 'เลขบัตรประชาชน',
@@ -190,6 +192,8 @@ export default class extends React.Component {
         'titleCode': props.code,
         'titleGender': props.titleGender
       })
+    } else if (props.type === 'onFocus') {
+      this.setState({ hidePicker: true })
     } else {
       this.props.updateUser('profile', {
         ...user.profile,
@@ -256,7 +260,7 @@ export default class extends React.Component {
   onNext = () => {
     const { expireSatus } = this.state
     const { user } = this.props
-    this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+    this.setState({ PreconditionRequired: [], InvalidArgument: [], hidePicker: true })
     const {
       idCard,
       jcNumber,
@@ -363,7 +367,10 @@ export default class extends React.Component {
           title="ข้อมูลส่วนตัว"
           navLeft={
             <TouchableOpacity
-              onPress={() => this.props.navigation.goBack()}
+              onPress={() => {
+                this.setState({ hidePicker: true })
+                this.props.navigation.goBack()
+              }}
               style={{ paddingRight: 30 }}
             >
               <Image source={images.iconback} />
@@ -399,6 +406,7 @@ export default class extends React.Component {
               option: d.option,
               onSetLayout: val => this.onSetLayout(val.layout.y, key),
               handleInput: (props) => this.handleInput(props),
+              hidePicker: this.state.hidePicker,
               err: this.onValidation(d.field)
             }, key))
           }

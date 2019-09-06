@@ -157,6 +157,7 @@ export default class extends React.Component {
       <View>
         <TouchableOpacity
           onPress={() => {
+            this.props.handleInput({ type: 'onFocus' })
             this.onHandleSetText({ text: this.state.text, field })
             this.setState({ open: true })
           }}

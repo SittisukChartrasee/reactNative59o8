@@ -88,6 +88,10 @@ export default class extends React.Component {
     date: this.props.date
   }
 
+  componentWillReceiveProps = newPros => {
+    if (newPros.hidePicker === true) Picker.hide()
+  }
+
   onPicker = () => {
     const { handleInput, field, type } = this.props
     const configPicker = {
@@ -111,8 +115,6 @@ export default class extends React.Component {
     Picker.show()
   }
 
-  onHidePicker = () => this.props.inVisible ? Picker.hide() : null
-
   render() {
     const { err } = this.props
     return (
@@ -125,7 +127,6 @@ export default class extends React.Component {
           <View style={{ height: err ? 2 : 1, backgroundColor: err ? 'rgb(213, 0, 0)' : colors.smoky, marginTop: 5 }} />
           <Text style={{ fontSize: 12, color: err ? 'rgb(213, 0, 0)' : undefined, marginTop: 4 }}>{err}</Text>
         </TouchableOpacity>
-        {this.onHidePicker()}
       </View>
     )
   }

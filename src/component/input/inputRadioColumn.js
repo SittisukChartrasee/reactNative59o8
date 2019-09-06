@@ -10,18 +10,18 @@ import { TText, TMed, TLight, TBold } from '../texts'
 const ActiveCycle = ({
   condition
 }) => (
-  <View 
-    style={{
-      width: 16,
-      height: 16,
-      borderRadius: 8,
-      ...((act) => act
-        ? { backgroundColor: colors.emerald }
-        : { borderColor: colors.smoky, borderWidth: 1, opacity: .6 }
-      )(condition)
-    }}
-  />
-)
+    <View
+      style={{
+        width: 16,
+        height: 16,
+        borderRadius: 8,
+        ...((act) => act
+          ? { backgroundColor: colors.emerald }
+          : { borderColor: colors.smoky, borderWidth: 1, opacity: .6 }
+        )(condition)
+      }}
+    />
+  )
 
 export default class extends React.Component {
   static defaultProps = {
@@ -36,7 +36,7 @@ export default class extends React.Component {
     ],
     label: 'labelRadio',
     field: 'fieldName',
-    handleInput: () => {},
+    handleInput: () => { },
   }
 
   state = { data: this.props.init }
@@ -63,7 +63,10 @@ export default class extends React.Component {
             data.map((d, key) => (
               <TouchableOpacity
                 key={key}
-                onPress={() => this.handleRadio(key)}
+                onPress={() => {
+                  this.props.handleInput({ type: 'onFocus' })
+                  this.handleRadio(key)
+                }}
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'flex-start',
@@ -73,7 +76,7 @@ export default class extends React.Component {
                   borderBottomWidth: 1,
                 }}
               >
-                { d.active ? <View style={{ backgroundColor: colors.emerald, width: 16, height: 16, borderRadius: 16 / 2 }} /> : <ActiveCycle /> }
+                {d.active ? <View style={{ backgroundColor: colors.emerald, width: 16, height: 16, borderRadius: 16 / 2 }} /> : <ActiveCycle />}
                 <TLight ml="16" textAlign="left" fontSize="16" color={colors.midnight}>{d.title}</TLight>
               </TouchableOpacity>
             ))

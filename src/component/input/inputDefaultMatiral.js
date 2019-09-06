@@ -34,6 +34,7 @@ export default class extends React.PureComponent {
     return (
       <TextField
         {...this.props}
+        onFocus={() => this.props.handleInput({ type: 'onFocus' })}
         ref={ref => this.props.refFunc && this.props.refFunc(ref && ref)}
         returnKeyType={this.props.returnKeyType}
         label={this.props.label}

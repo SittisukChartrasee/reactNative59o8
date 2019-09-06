@@ -55,7 +55,8 @@ export default class extends React.Component {
           customTextInputProps={{
             err,
             label: '',
-            styled: { textAlign: 'left', }
+            styled: { textAlign: 'left', },
+            handleInput: props => this.props.handleInput(props)
           }}
           value={this.state.value}
           onChangeText={this.handleInput}

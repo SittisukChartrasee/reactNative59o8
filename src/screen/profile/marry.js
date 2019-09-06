@@ -45,6 +45,7 @@ export default class extends React.Component {
     InvalidArgument: [],
     layout: [],
     disabledPepFlag: this.props.user.spouse.pepFlag === null,
+    hidePicker: false,
     fields: [
       {
         label: 'สัญชาติ',
@@ -198,6 +199,8 @@ export default class extends React.Component {
       this.props.updateUser('spouse', { ...user.spouse, [props.field]: (props.value === 'ใช่') })
     } else if (props.field === 'title') {
       this.props.updateUser('spouse', { ...user.spouse, [props.field]: props.value, 'titleCode': props.code })
+    } else if (props.type === 'onFocus') {
+      this.setState({ hidePicker: true })
     } else {
       this.props.updateUser('spouse', { ...user.spouse, [props.field]: props.value })
     }
@@ -253,7 +256,7 @@ export default class extends React.Component {
     const { expireSatus } = this.state
     const { user } = this.props
     const redirec = this.props.navigation.getParam('redirec', '')
-    this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+    this.setState({ PreconditionRequired: [], InvalidArgument: [], hidePicker: true })
 
     const {
       title,
@@ -355,7 +358,10 @@ export default class extends React.Component {
           title="ข้อมูลคู่สมรส"
           navLeft={
             <TouchableOpacity
-              onPress={() => this.props.navigation.goBack()}
+              onPress={() => {
+                this.setState({ hidePicker: true })
+                this.props.navigation.goBack()
+              }}
               style={{ paddingRight: 30 }}
             >
               <Image source={images.iconback} />
@@ -391,6 +397,7 @@ export default class extends React.Component {
               date: d.date,
               onSetLayout: val => this.onSetLayout(val.layout.y, key),
               handleInput: (props) => this.handleInput(props),
+              hidePicker: this.state.hidePicker,
               err: this.onValidation(d.field)
             }, key))
           }

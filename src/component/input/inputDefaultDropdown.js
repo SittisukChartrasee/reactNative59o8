@@ -10,7 +10,7 @@ const Drop = props => (
     label={props.label}
     data={props.init}
     onChangeText={(value) => props.handleInput({ value, type: 'dropdown', field: props.field })}
-
+    onFocus={() => props.handleInput({ type: 'onFocus', field: props.field })}
     tintColor={colors.darkSage}
     baseColor={colors.grey}
     titleFontSize={12}
@@ -21,7 +21,7 @@ const Drop = props => (
     textColor={colors.darkSage}
     itemColor={colors.darkSage}
     selectedItemColor={colors.darkSage}
-    style={{ fontFamily: fonts.sukhumvitBold, ...(pf => pf.OS === 'android' && { fontWeight: '400' })(Platform)  }}
+    style={{ fontFamily: fonts.sukhumvitBold, ...(pf => pf.OS === 'android' && { fontWeight: '400' })(Platform) }}
     labelTextStyle={{ fontFamily: fonts.sukhumvitText }}
     titleTextStyle={{ fontFamily: fonts.sukhumvitLight }}
     itemTextStyle={{ fontFamily: fonts.sukhumvitBold }}
@@ -37,8 +37,8 @@ Drop.defaultProps = {
   ],
   label: 'test label',
   field: 'fieldName',
-  handleInput: () => {},
-  err : '',
+  handleInput: () => { },
+  err: '',
 }
 
 export default Drop
