@@ -67,15 +67,15 @@ export default class extends React.Component {
     let statusText = ''
     if (val.data.getStatusEditing.idCard) {
       if (val.data.getStatusEditing.selfie) {
-        statusText = `ถ่ายรูปบัตรประชาชน และรูปคู่กับใบหน้าไม่ชัด\nกรุณาถ่ายใหม่`
+        statusText = `ถ่ายรูปบัตรประชาชน และรูปคู่กับใบหน้าไม่ชัด\nกรุณาถ่ายใหม่อีกครั้ง`
         if (!val.data.getStatusEditing.checkIDCard ||
           !val.data.getStatusEditing.checkSelfie) status = true
       } else {
-        statusText = `ถ่ายรูปบัตรประชาชนไม่ชัด\nกรุณาถ่ายใหม่`
+        statusText = `ถ่ายรูปบัตรประชาชนไม่ชัด\nกรุณาถ่ายใหม่อีกครั้ง`
         if (!val.data.getStatusEditing.checkIDCard) status = true
       }
     } else if (val.data.getStatusEditing.selfie) {
-      statusText = `ถ่ายรูปคู่กับใบหน้าไม่ชัด\nกรุณาถ่ายใหม่`
+      statusText = `ถ่ายรูปคู่กับใบหน้าไม่ชัด\nกรุณาถ่ายใหม่อีกครั้ง`
       if (!val.data.getStatusEditing.checkSelfie) status = true
     } else { status = false }
 
@@ -170,7 +170,7 @@ export default class extends React.Component {
 
         <View style={{ paddingBottom: 44 }}>
           <LongButton
-            label="ส่งข้อมูลอีกครั้ง"
+            label="ส่งข้อมูล"
             style={{ marginHorizontal: 24 }}
             disabled={statusEdit}
             onPress={this.onNext}
