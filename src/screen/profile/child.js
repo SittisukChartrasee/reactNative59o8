@@ -168,8 +168,20 @@ export default class extends React.Component {
 
   handleInput = (props) => {
     const { user } = this.props
-    if (props.field === 'firstTitle' || props.field === 'secondTitle') {
-      this.props.updateUser('child', { ...user.child, [props.field]: props.value, 'titleCode': props.code })
+    if (props.field === 'firstTitle') {
+      this.props.updateUser('child', {
+        ...user.child,
+        [props.field]: props.value,
+        'firstTitleCode': props.code,
+        'firstTitleDetail': props.nameDetail
+      })
+    } else if (props.field === 'secondTitle') {
+      this.props.updateUser('child', {
+        ...user.child,
+        [props.field]: props.value,
+        'secondTitleCode': props.code,
+        'secondTitleDetail': props.nameDetail
+      })
     } else if (props.field === 'firstExpireDateFlag') {
       this.props.updateUser('child', { ...user.child, [props.field]: props.value })
       this.setState({
@@ -431,7 +443,11 @@ export default class extends React.Component {
               required: d.required,
               init: d.init,
               option: d.option,
-              value: user.child[d.field],
+              value: d.field === 'firstTitle'
+                ? user.child['firstTitleDetail']
+                : d.field === 'secondTitle'
+                  ? user.child['secondTitleDetail']
+                  : user.child[d.field],
               inVisible: d.inVisible,
               date: d.date,
               onSetLayout: val => this.onSetLayout(val.layout.y, key),

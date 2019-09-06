@@ -198,7 +198,12 @@ export default class extends React.Component {
       this.setState({ disabledPepFlag: false })
       this.props.updateUser('spouse', { ...user.spouse, [props.field]: (props.value === 'ใช่') })
     } else if (props.field === 'title') {
-      this.props.updateUser('spouse', { ...user.spouse, [props.field]: props.value, 'titleCode': props.code })
+      this.props.updateUser('spouse', {
+        ...user.spouse,
+        [props.field]: props.value,
+        'titleCode': props.code,
+        'titleDetail': props.nameDetail,
+      })
     } else if (props.type === 'onFocus') {
       this.setState({ hidePicker: true })
     } else {
@@ -295,12 +300,6 @@ export default class extends React.Component {
     this.props.saveSpouse({ variables: { input: data } })
       .then(res => {
 
-        // ตรวจประเทศเสี่ยงยังไม่มีใน Flow
-
-        // if (user.spouse.nationalityRisk) {
-
-        // }
-
         if (res.data.saveSpouse.success) {
           if (redirec) return this.props.navigateAction({ ...this.props, page: redirec })
           this.props.navigateAction({ ...this.props, page: 'career' })
@@ -348,8 +347,6 @@ export default class extends React.Component {
   }
 
   render() {
-    console.log(this.state.expireSatus)
-
     const { user } = this.props
     const { fields, disabledPepFlag } = this.state
     return (
@@ -392,7 +389,9 @@ export default class extends React.Component {
               required: d.required,
               init: d.init,
               option: d.option,
-              value: user.spouse[d.field],
+              value: d.field === 'title'
+                ? user.spouse['titleDetail']
+                : user.spouse[d.field],
               inVisible: d.inVisible,
               date: d.date,
               onSetLayout: val => this.onSetLayout(val.layout.y, key),

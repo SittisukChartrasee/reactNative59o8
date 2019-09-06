@@ -117,7 +117,7 @@ export default class extends React.Component {
     const { field, user, onHandleDistrict } = this.props
     this.setState({
       open: false,
-      confirmText: data.nameDetail ? `${data.nameTH} (${data.nameDetail})` : data.nameTH,
+      confirmText: data.nameDetail ? data.nameDetail : data.nameTH,
       text: data.nameDetail ? `${data.nameTH} (${data.nameDetail})` : data.nameTH
     })
 
@@ -126,7 +126,7 @@ export default class extends React.Component {
       field,
       value: data.nameTH,
       ...(code => code ? ({ code, risk: data.risk }) : {})(data.code),
-      ...(gender => gender ? ({ titleGender: gender }) : { titleGender: null })(data.gender)
+      ...(nameDetail => nameDetail ? ({ nameDetail: nameDetail, titleGender: data.gender }) : { titleGender: null })(data.nameDetail)
     })
 
     if (data.displayName) {
@@ -152,7 +152,6 @@ export default class extends React.Component {
     const { open, confirmText } = this.state
     const { field, value, err, handleInput } = this.props
     StatusBar.setBarStyle(open ? "dark-content" : "light-content")
-
     return (
       <View>
         <TouchableOpacity

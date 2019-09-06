@@ -10,6 +10,7 @@ const init = {
     docExpDate: `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
     gender: '',
     titleTH: '',
+    titleDetail: '',
     titleCode: '',
     firstNameTH: '',
     lastNameTH: '',
@@ -124,6 +125,7 @@ const init = {
     marryExpireDate: `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
     title: '',
     titleCode: '',
+    titleDetail: '',
     fistName: '',
     lastName: '',
     pepFlag: null, // ครั้งแรกที่เข้าหน้า คู่สมรส ปุ่มถัดไปจะไม่สามารถกดได้ เลยใช้ null เป็นค่าเริ่มต้น
@@ -131,6 +133,7 @@ const init = {
   child: {
     firstTitle: '',
     firstTitleCode: '',
+    firstTitleDetail: '',
     firstFirstName: '',
     firstLastName: '',
     firstBirthDay: `-/-/${tomorrowDate()[0]}`,
@@ -139,6 +142,7 @@ const init = {
     firstDocExpDate: `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
     secondTitle: '',
     secondTitleCode: '',
+    secondTitleDetail: '',
     secondFirstName: '',
     secondLastName: '',
     secondBirthDay: `-/-/${tomorrowDate()[0]}`,
