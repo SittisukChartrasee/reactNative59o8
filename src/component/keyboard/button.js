@@ -59,7 +59,7 @@ const Keyboard = props => (
             {
               n.map((nn, i) => (
                 <NumberTouch
-                  onPress={() => props.onSet(nn)}
+                  onPressIn={() => props.onSet(nn)}
                   key={nn.concat(i)}
                   disabled={nn === ''}
                   del={nn}
