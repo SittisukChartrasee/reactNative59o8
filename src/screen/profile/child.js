@@ -454,5 +454,3 @@ export default class extends React.Component {
     )
   }
 }
-
-// display:  ? 'none' : 'flex'
