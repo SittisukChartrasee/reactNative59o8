@@ -29,7 +29,7 @@ export default class extends React.Component {
 
         setNumber({ number: numberDecrease, dot: decrease, key: d })
         return {
-          number: numberDecrease < 1 ? '' : numberDecrease,
+          number: numberDecrease.length < 1 ? '' : numberDecrease,
           dot: decrease,
         }
       })
