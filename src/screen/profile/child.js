@@ -167,8 +167,9 @@ export default class extends React.Component {
 
   handleInput = (props) => {
     const { user } = this.props
-    this.props.updateUser('child', { ...user.child, [props.field]: props.value })
-    if (props.field === 'firstExpireDateFlag') {
+    if (props.field === 'firstTitle' || props.field === 'secondTitle') {
+      this.props.updateUser('child', { ...user.child, [props.field]: props.value, 'titleCode': props.code })
+    } else if (props.field === 'firstExpireDateFlag') {
       this.props.updateUser('child', { ...user.child, [props.field]: props.value })
       this.setState({
         fields: this.state.fields.map((d) => {
@@ -195,6 +196,7 @@ export default class extends React.Component {
         })
       })
     } else if (props.field === 'secondIdcard') this.onPressNewChild()
+    else this.props.updateUser('child', { ...user.child, [props.field]: props.value })
     this.handleValidation({ field: props.field, value: props.value })
   }
 
@@ -294,6 +296,7 @@ export default class extends React.Component {
 
     const {
       firstTitle,
+      firstTitleCode,
       firstFirstName,
       firstLastName,
       firstBirthDay,
@@ -301,6 +304,7 @@ export default class extends React.Component {
       firstExpireDateFlag,
       firstDocExpDate,
       secondTitle,
+      secondTitleCode,
       secondFirstName,
       secondLastName,
       secondBirthDay,
@@ -312,6 +316,7 @@ export default class extends React.Component {
 
     const data = {
       firstTitle,
+      firstTitleCode,
       firstFirstName,
       firstLastName,
       firstDayOfBirth: getOfBirth(firstBirthDay, 'day'),
@@ -321,6 +326,7 @@ export default class extends React.Component {
       firstIsNoExpDate: firstExpireDateFlag === 'มีวันหมดอายุ' ? false : true,
       firstDocExpDate: firstExpireDateFlag === 'มีวันหมดอายุ' ? convertDate(firstDocExpDate) : new Date('9999-12-31'),
       secondTitle,
+      secondTitleCode,
       secondFirstName,
       secondLastName,
       secondDayOfBirth: getOfBirth(secondBirthDay, 'day'),
