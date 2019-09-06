@@ -53,6 +53,8 @@ export default class extends React.Component {
     PreconditionRequired: [],
     InvalidArgument: [],
     layout: [],
+    // hidePicker Use for hide picker Date Back and Next Page
+    hidePicker: false,
     fields: [
       {
         label: 'เลขบัตรประชาชน',
@@ -184,7 +186,7 @@ export default class extends React.Component {
       [props.field]: props.value,
       'isNoDocExpDate': isNoDoc
     })
-
+    this.setState({ hidePicker: isNoDoc })
     this.handleValidation({ field: props.field, value: props.value })
   }
 
@@ -289,6 +291,7 @@ export default class extends React.Component {
       .then(res => {
         console.log(res)
         if (res.data.saveIdentity.success) {
+          this.setState({ hidePicker: true })
           if (martialStatus === 'สมรส' && isChild === 'มี') {
             this.props.navigateAction({ ...this.props, page: 'marry', params: { redirec: 'child' } })
           }
@@ -340,6 +343,7 @@ export default class extends React.Component {
   }
 
   render() {
+    console.log(this.state.hidePicker)
     const { user } = this.props
     return (
       <Screen color="transparent">
@@ -347,7 +351,10 @@ export default class extends React.Component {
           title="ข้อมูลส่วนตัว"
           navLeft={
             <TouchableOpacity
-              onPress={() => this.props.navigation.goBack()}
+              onPress={() => {
+                this.setState({ hidePicker: true })
+                this.props.navigation.goBack()
+              }}
               style={{ paddingRight: 30 }}
             >
               <Image source={images.iconback} />
@@ -383,6 +390,7 @@ export default class extends React.Component {
               option: d.option,
               onSetLayout: val => this.onSetLayout(val.layout.y, key),
               handleInput: (props) => this.handleInput(props),
+              hidePicker: this.state.hidePicker,
               err: this.onValidation(d.field)
             }, key))
           }

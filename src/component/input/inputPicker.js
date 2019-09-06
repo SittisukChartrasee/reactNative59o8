@@ -66,6 +66,10 @@ export default class extends React.Component {
     );
   }
 
+  componentWillReceiveProps = newPros => {
+    if (newPros.hidePicker === true) Picker.hide()
+  }
+
   onPicker = (text) => {
     const { handleInput, field, type, date } = this.props
     const { year, month, day } = this.state
