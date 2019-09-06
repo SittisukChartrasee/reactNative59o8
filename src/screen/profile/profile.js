@@ -163,8 +163,7 @@ export default class extends React.Component {
         image: images.iconBackIdcard,
         dis: `ด้านหลังบัตรประชาชน ประกอบด้วยอักษรภาษาอังกฤษ 2 ตัว และตัวเลข 10 ตัว \nตัวอย่างการกรอก : JC1234567890`,
       })
-    }
-    else if (props.field === 'expireDateFlag') {
+    } else if (props.field === 'expireDateFlag') {
       isNoDoc = props.value === 'มีวันหมดอายุ' ? false : true
       this.setState({
         expireSatus: props.value,
@@ -178,13 +177,26 @@ export default class extends React.Component {
           }
         })
       })
+      this.props.updateUser('profile', {
+        ...user.profile,
+        [props.field]: props.value,
+        'isNoDocExpDate': isNoDoc
+      })
+    } else if (props.field === 'titleTH') {
+      this.props.updateUser('profile', {
+        ...user.profile,
+        [props.field]: props.value,
+        'isNoDocExpDate': isNoDoc,
+        'titleCode': props.code,
+        'titleGender': props.titleGender
+      })
+    } else {
+      this.props.updateUser('profile', {
+        ...user.profile,
+        [props.field]: props.value,
+        'isNoDocExpDate': isNoDoc
+      })
     }
-    this.props.updateUser('profile', {
-      ...user.profile,
-      [props.field]: props.value,
-      'isNoDocExpDate': isNoDoc
-    })
-
     this.handleValidation({ field: props.field, value: props.value })
   }
 
@@ -252,6 +264,8 @@ export default class extends React.Component {
       docExpDate,
       gender,
       titleTH,
+      titleCode,
+      titleGender,
       firstNameTH,
       lastNameTH,
       firstNameEN,
@@ -271,6 +285,8 @@ export default class extends React.Component {
       docExpDate: expireSatus === 'มีวันหมดอายุ' ? convertDate(docExpDate) : new Date('9999-12-31'),
       genderCode: getStatusGender(gender),
       titleTH,
+      titleCode,
+      titleGender,
       firstNameTH,
       lastNameTH,
       firstNameEN,
