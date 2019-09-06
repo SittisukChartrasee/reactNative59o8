@@ -190,6 +190,7 @@ export default class extends React.Component {
         [props.field]: props.value,
         'isNoDocExpDate': isNoDoc,
         'titleCode': props.code,
+        'titleDetail': props.nameDetail,
         'titleGender': props.titleGender
       })
     } else if (props.type === 'onFocus') {
@@ -400,7 +401,9 @@ export default class extends React.Component {
               type: d.type,
               required: d.required,
               init: d.init,
-              value: user.profile[d.field],
+              value: d.field === 'titleTH'
+                ? user.profile['titleDetail']
+                : user.profile[d.field],
               inVisible: d.inVisible,
               date: d.date,
               option: d.option,
