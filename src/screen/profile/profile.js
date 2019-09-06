@@ -192,6 +192,8 @@ export default class extends React.Component {
         'titleCode': props.code,
         'titleGender': props.titleGender
       })
+    } else if (props.type === 'onFocus') {
+      this.setState({ hidePicker: true })
     } else {
       this.props.updateUser('profile', {
         ...user.profile,
@@ -199,7 +201,6 @@ export default class extends React.Component {
         'isNoDocExpDate': isNoDoc
       })
     }
-    this.setState({ hidePicker: isNoDoc })
     this.handleValidation({ field: props.field, value: props.value })
   }
 
@@ -259,7 +260,7 @@ export default class extends React.Component {
   onNext = () => {
     const { expireSatus } = this.state
     const { user } = this.props
-    this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+    this.setState({ PreconditionRequired: [], InvalidArgument: [], hidePicker: true })
     const {
       idCard,
       jcNumber,
@@ -308,7 +309,6 @@ export default class extends React.Component {
       .then(res => {
         console.log(res)
         if (res.data.saveIdentity.success) {
-          this.setState({ hidePicker: true })
           if (martialStatus === 'สมรส' && isChild === 'มี') {
             this.props.navigateAction({ ...this.props, page: 'marry', params: { redirec: 'child' } })
           }
@@ -360,7 +360,6 @@ export default class extends React.Component {
   }
 
   render() {
-    console.log(this.state.hidePicker)
     const { user } = this.props
     return (
       <Screen color="transparent">

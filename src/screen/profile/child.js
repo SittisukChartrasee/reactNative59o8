@@ -45,6 +45,7 @@ export default class extends React.Component {
     PreconditionRequired: [],
     InvalidArgument: [],
     layout: [],
+    hidePicker: false,
     fields: [
       {
         label: 'ข้อมูลบุตร หรือบุตรบุญธรรมคนที่ 1',
@@ -195,8 +196,11 @@ export default class extends React.Component {
           }
         })
       })
-    } else if (props.field === 'secondIdcard') this.onPressNewChild()
-    else this.props.updateUser('child', { ...user.child, [props.field]: props.value })
+    } else if (props.field === 'secondIdcard') {
+      this.onPressNewChild()
+    } else if (props.type === 'onFocus') {
+      this.setState({ hidePicker: true })
+    } else this.props.updateUser('child', { ...user.child, [props.field]: props.value })
     this.handleValidation({ field: props.field, value: props.value })
   }
 
@@ -292,7 +296,7 @@ export default class extends React.Component {
 
   onNext = async () => {
     const { user } = this.props
-    this.setState({ PreconditionRequired: [], InvalidArgument: [] })
+    this.setState({ PreconditionRequired: [], InvalidArgument: [], hidePicker: true })
 
     const {
       firstTitle,
@@ -393,7 +397,10 @@ export default class extends React.Component {
           title="ข้อมูลบุตร หรือบุตรบุญธรรม"
           navLeft={
             <TouchableOpacity
-              onPress={() => this.props.navigation.goBack()}
+              onPress={() => {
+                this.setState({ hidePicker: true })
+                this.props.navigation.goBack()
+              }}
               style={{ paddingRight: 30 }}
             >
               <Image source={images.iconback} />
@@ -429,6 +436,7 @@ export default class extends React.Component {
               date: d.date,
               onSetLayout: val => this.onSetLayout(val.layout.y, key),
               handleInput: (props) => this.handleInput(props),
+              hidePicker: this.state.hidePicker,
               err: this.onValidation(d.field)
             }, key))
           }
