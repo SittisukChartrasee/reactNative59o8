@@ -9,6 +9,7 @@ import {
   TextInput,
   Text,
   ScrollView,
+  Platform
 } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -212,7 +213,7 @@ export default class extends React.Component {
                 }}
               >
                 <TextInput
-                  style={{ flex: 1, fontSize: 28, fontFamily: fonts.sukhumvitBold }}
+                  style={{ flex: 1, fontSize: 28, fontFamily: fonts.sukhumvitBold, ...(pf => pf.OS === 'android' && { fontWeight: '400' })(Platform) }}
                   autoFocus
                   value={this.state.text}
                   onChangeText={text => this.onHandleSetText({ text, field })}
