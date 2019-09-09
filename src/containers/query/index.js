@@ -19,6 +19,9 @@ export const getUser = gql`
           docExpDate
           genderCode
           titleTH
+          titleCode
+          titleGender
+          titleDetail
           firstNameTH
           lastNameTH
           firstNameEN
@@ -37,6 +40,8 @@ export const getUser = gql`
           isIDCardExpDate
           cardExpiredDate
           title
+          titleCode
+          titleDetail
           fistName
           lastName
           pepFlag
@@ -54,6 +59,8 @@ export const getUser = gql`
         }
         firstChild{
           ChildTitleTH
+          ChildTitleCode
+          ChildTitleDetail
           ChildFirstNameTH
           ChildLastNameTH
           ChildDayOfBirth
@@ -65,6 +72,8 @@ export const getUser = gql`
         }
         secondChild{
           ChildTitleTH
+          ChildTitleCode
+          ChildTitleDetail
           ChildFirstNameTH
           ChildLastNameTH
           ChildDayOfBirth

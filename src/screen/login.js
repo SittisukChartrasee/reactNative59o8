@@ -169,6 +169,9 @@ export default class extends React.Component {
 					genderCode: val.data.getUser.result.identity.genderCode,
 					gender: getStatusGender_reverse(val.data.getUser.result.identity.genderCode),
 					titleTH: val.data.getUser.result.identity.titleTH,
+					titleCode: val.data.getUser.result.identity.titleCode,
+					titleGender: val.data.getUser.result.identity.titleGender,
+					titleDetail: val.data.getUser.result.identity.titleDetail,
 					firstNameTH: val.data.getUser.result.identity.firstNameTH,
 					lastNameTH: val.data.getUser.result.identity.lastNameTH,
 					firstNameEN: val.data.getUser.result.identity.firstNameEN,
@@ -197,6 +200,8 @@ export default class extends React.Component {
 					cardExpiredDate: val.data.getUser.result.spouse.isIDCardExpDate ? formatDate(val.data.getUser.result.spouse.cardExpiredDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
 					marryExpireDate: val.data.getUser.result.spouse.nationalityCode === 'TH' ? `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}` : formatDate(val.data.getUser.result.spouse.cardExpiredDate),
 					title: val.data.getUser.result.spouse.title,
+					titleCode: val.data.getUser.result.spouse.titleCode,
+					titleDetail: val.data.getUser.result.spouse.titleDetail,
 					fistName: val.data.getUser.result.spouse.fistName,
 					lastName: val.data.getUser.result.spouse.lastName,
 					pepFlag: val.data.getUser.result.spouse.pepFlag,
@@ -210,27 +215,31 @@ export default class extends React.Component {
 				if (val.data.getUser.result.secondChild) {
 
 					secondC = {
-						'secondTitle': val.data.getUser.result.secondChild.ChildTitleTH,
-						'secondFirstName': val.data.getUser.result.secondChild.ChildFirstNameTH,
-						'secondLastName': val.data.getUser.result.secondChild.ChildLastNameTH,
-						'secondBirthDay': `${val.data.getUser.result.secondChild.ChildDayOfBirth}/${val.data.getUser.result.secondChild.ChildMonthOfBirth !== '-' ? month[parseInt(val.data.getUser.result.secondChild.ChildMonthOfBirth) - 1] : '-'}/${val.data.getUser.result.secondChild.ChildYearOfBirth}`,
-						'secondDocNo': formatIdCard(val.data.getUser.result.secondChild.ChildDocNo),
-						'secondExpireDateFlag': !val.data.getUser.result.secondChild.ChildIsNoDocExpDate ? 'มีวันหมดอายุ' : 'ไม่มีวันหมดอายุ',
-						'secondDocExpDate': !val.data.getUser.result.secondChild.ChildIsNoDocExpDate ? formatDate(val.data.getUser.result.secondChild.ChildDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
-						'inVisibleSecond': false,
+						secondTitle: val.data.getUser.result.secondChild.ChildTitleTH,
+						secondTitleCode: val.data.getUser.result.secondChild.ChildTitleCode,
+						secondTitleDetail: val.data.getUser.result.secondChild.ChildTitleDetail,
+						secondFirstName: val.data.getUser.result.secondChild.ChildFirstNameTH,
+						secondLastName: val.data.getUser.result.secondChild.ChildLastNameTH,
+						secondBirthDay: `${val.data.getUser.result.secondChild.ChildDayOfBirth}/${val.data.getUser.result.secondChild.ChildMonthOfBirth !== '-' ? month[parseInt(val.data.getUser.result.secondChild.ChildMonthOfBirth) - 1] : '-'}/${val.data.getUser.result.secondChild.ChildYearOfBirth}`,
+						secondDocNo: formatIdCard(val.data.getUser.result.secondChild.ChildDocNo),
+						secondExpireDateFlag: !val.data.getUser.result.secondChild.ChildIsNoDocExpDate ? 'มีวันหมดอายุ' : 'ไม่มีวันหมดอายุ',
+						secondDocExpDate: !val.data.getUser.result.secondChild.ChildIsNoDocExpDate ? formatDate(val.data.getUser.result.secondChild.ChildDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
+						inVisibleSecond: false,
 						inVisible: true
 					}
 				}
 
 				this.props.updateUser('child', {
 					...this.props.user.child,
-					'firstTitle': val.data.getUser.result.firstChild.ChildTitleTH,
-					'firstFirstName': val.data.getUser.result.firstChild.ChildFirstNameTH,
-					'firstLastName': val.data.getUser.result.firstChild.ChildLastNameTH,
-					'firstBirthDay': `${val.data.getUser.result.firstChild.ChildDayOfBirth}/${val.data.getUser.result.firstChild.ChildMonthOfBirth !== '-' ? month[parseInt(val.data.getUser.result.firstChild.ChildMonthOfBirth) - 1] : '-'}/${val.data.getUser.result.firstChild.ChildYearOfBirth}`,
-					'firstDocNo': formatIdCard(val.data.getUser.result.firstChild.ChildDocNo),
-					'firstExpireDateFlag': !val.data.getUser.result.firstChild.ChildIsNoDocExpDate ? 'มีวันหมดอายุ' : 'ไม่มีวันหมดอายุ',
-					'firstDocExpDate': !val.data.getUser.result.firstChild.ChildIsNoDocExpDate ? formatDate(val.data.getUser.result.firstChild.ChildDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
+					firstTitle: val.data.getUser.result.firstChild.ChildTitleTH,
+					firstTitleCode: val.data.getUser.result.firstChild.ChildTitleCode,
+					firstTitleDetail: val.data.getUser.result.firstChild.ChildTitleDetail,
+					firstFirstName: val.data.getUser.result.firstChild.ChildFirstNameTH,
+					firstLastName: val.data.getUser.result.firstChild.ChildLastNameTH,
+					firstBirthDay: `${val.data.getUser.result.firstChild.ChildDayOfBirth}/${val.data.getUser.result.firstChild.ChildMonthOfBirth !== '-' ? month[parseInt(val.data.getUser.result.firstChild.ChildMonthOfBirth) - 1] : '-'}/${val.data.getUser.result.firstChild.ChildYearOfBirth}`,
+					firstDocNo: formatIdCard(val.data.getUser.result.firstChild.ChildDocNo),
+					firstExpireDateFlag: !val.data.getUser.result.firstChild.ChildIsNoDocExpDate ? 'มีวันหมดอายุ' : 'ไม่มีวันหมดอายุ',
+					firstDocExpDate: !val.data.getUser.result.firstChild.ChildIsNoDocExpDate ? formatDate(val.data.getUser.result.firstChild.ChildDocExpDate) : `${tomorrowDate()[2]}-${tomorrowDate()[1]}-${tomorrowDate()[0]}`,
 					...secondC
 				})
 			}

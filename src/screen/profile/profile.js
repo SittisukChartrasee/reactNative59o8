@@ -95,7 +95,7 @@ export default class extends React.Component {
         field: 'gender', //genderCode
         required: true,
       }, {
-        label: 'คำนำหน้า (ตัวย่อ)',
+        label: 'คำนำหน้า',
         type: 'search',
         field: 'titleTH',
         required: true,
