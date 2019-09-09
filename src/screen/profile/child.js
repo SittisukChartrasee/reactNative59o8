@@ -111,7 +111,7 @@ export default class extends React.Component {
         type: 'titleHead',
         inVisible: this.props.user.child.inVisibleSecond,
       }, {
-        label: 'คำนำหน้า (ตัวย่อ)',
+        label: 'คำนำหน้า',
         type: 'search',
         field: 'secondTitle',
         required: true,

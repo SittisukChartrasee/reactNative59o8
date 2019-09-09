@@ -39,7 +39,7 @@ import { updateUser } from '../../redux/actions/commonAction'
 import Input from '../input'
 
 const checkTitle = (field = '') => {
-  if (field.toLowerCase().search('title') > -1) return 'ค้นหาคำนำหน้า (ตัวย่อ)'
+  if (field.toLowerCase().search('title') > -1) return 'ค้นหาคำนำหน้า'
   if (field.toLowerCase().search('country') > -1) return 'ค้นหาประเทศ'
   if (field.toLowerCase().search('bustype') > -1) return 'ค้นหาประเภทธุรกิจ'
   if (field.toLowerCase().search('occupation') > -1) return 'ค้นหาอาชีพ'
@@ -119,7 +119,7 @@ export default class extends React.Component {
     this.setState({
       open: false,
       confirmText: data.nameDetail ? data.nameDetail : data.nameTH,
-      text: data.nameDetail ? `${data.nameTH} (${data.nameDetail})` : data.nameTH
+      text: data.nameDetail ? data.nameDetail : data.nameTH
     })
 
     await this.props.handleInput && this.props.handleInput({
@@ -241,7 +241,7 @@ export default class extends React.Component {
                 this.state.result.map((d, key) => (
                   <TouchableOpacity key={key} onPress={() => this.onHandleOnPress(d)}>
                     <View style={{ marginVertical: 16 }}>
-                      <TBold textAlign="left" ml={24} mr={24}>{d.nameDetail ? `${d.nameTH} (${d.nameDetail})` : (d.displayName || d.nameTH)}</TBold>
+                      <TBold textAlign="left" ml={24} mr={24}>{d.nameDetail ? d.nameDetail : (d.displayName || d.nameTH)}</TBold>
                     </View>
                     <View style={{ height: 1, backgroundColor: colors.smoky, marginLeft: 24 }} />
                   </TouchableOpacity>

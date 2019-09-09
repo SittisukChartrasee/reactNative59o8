@@ -113,7 +113,7 @@ export default class extends React.Component {
         inVisible: this.props.user.spouse.nationFlag === 'ชาวต่างชาติ' ||
           this.props.user.spouse.isIDCardExpDate,
       }, {
-        label: 'คำนำหน้า (ตัวย่อ)',
+        label: 'คำนำหน้า',
         type: 'search',
         field: 'title',
         required: true,
