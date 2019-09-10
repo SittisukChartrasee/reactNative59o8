@@ -361,6 +361,12 @@ export const getInvestmentAfterApprove = gql`
   }
 `
 
+export const checkWorkplaceAddress = gql`
+  query checkWorkplaceAddress {
+    checkWorkplaceAddress
+  }
+`
+
 export const checkVerifiedEmailInterval = graphql(checkVerifiedEmail, {
   name: 'checkVerifiedEmailInterval',
   options: {
