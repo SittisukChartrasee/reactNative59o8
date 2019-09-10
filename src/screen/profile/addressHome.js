@@ -5,6 +5,7 @@ import {
   Image,
 } from 'react-native'
 import { bindActionCreators } from 'redux'
+import { withApollo } from 'react-apollo'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -16,6 +17,7 @@ import Input from '../../component/input'
 import { navigateAction } from '../../redux/actions'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
+import { checkWorkplaceAddress } from '../../containers/query'
 import lockout from '../../containers/hoc/lockout'
 import { RequiredFields } from '../../utility/validation'
 import typeModal from '../../utility/typeModal'
@@ -30,6 +32,7 @@ const dispatchToProps = dispatch => ({
 
 @connect(mapToProps, dispatchToProps)
 @setMutation
+@withApollo
 @lockout
 export default class extends React.Component {
   state = {
@@ -273,7 +276,7 @@ export default class extends React.Component {
       .then(res => {
         console.log(res)
         if (res.data.savePermanentAddress.success) {
-          this.props.navigateAction({ ...this.props, page: 'chooseWork' })
+          this.handleCheckOcupation()
         } else if (!res.data.savePermanentAddress.success) {
           switch (res.data.savePermanentAddress.code) {
             case '2101':
@@ -290,6 +293,19 @@ export default class extends React.Component {
           }
         }
       })
+  }
+
+  handleCheckOcupation = async () => {
+    try {
+      const res = await this.props.client.query({ query: checkWorkplaceAddress })
+      if (res.data.checkWorkplaceAddress) {
+        return this.props.navigateAction({ ...this.props, page: 'addressWork' })
+      } else {
+        return this.props.navigateAction({ ...this.props, page: 'chooseWork' })
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   onHandleScrollToErrorField = (field) => {

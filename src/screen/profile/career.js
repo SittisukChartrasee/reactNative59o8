@@ -3,6 +3,7 @@ import { TouchableOpacity, ScrollView, Image, Linking } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import get from 'lodash/get'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -76,19 +77,31 @@ export default class extends React.Component {
   }
 
   handleInput = props => {
-    const { user } = this.props
-    if (props.field === 'occupation') {
-      this.props.updateUser('career', { ...user.career, [props.field]: props.value, occupationCode: props.code })
-    } else if (props.field === 'countrySourceOfIncome') {
-      this.props.updateUser('career', { ...user.career, [props.field]: props.value, countyCode: props.code })
-    } else if (props.field === 'busType') {
-      this.props.updateUser('career', { ...user.career, [props.field]: props.value, isicCode: props.code })
-    } else if (props.field === 'incomeRangeCode') {
-      this.props.updateUser('career', { ...user.career, [props.field]: props.value })
-    } else {
-      this.props.updateUser('career', { ...user.career, [props.field]: props.value.value })
+    try {
+      const { user } = this.props
+      if (props.type === 'onFocus') {
+        return
+      } else if (props.field === 'occupation') {
+        this.props.updateUser('career', { ...user.career, [props.field]: props.value, occupationCode: props.code })
+      } else if (props.field === 'countrySourceOfIncome') {
+        this.props.updateUser('career', { ...user.career, [props.field]: props.value, countyCode: props.code })
+      } else if (props.field === 'busType') {
+        this.props.updateUser('career', { ...user.career, [props.field]: props.value, isicCode: props.code })
+      } else if (props.field === 'incomeRangeCode') {
+        this.props.updateUser('career', { ...user.career, [props.field]: props.value })
+      } else {
+        const value = get(props, 'value', null)
+        if (value) {
+          const valueOther = get(value, 'value', null)
+          if (valueOther) this.props.updateUser('career', { ...user.career, [props.field]: valueOther })
+        }
+      }
+
+      this.handleValidation({ field: props.field, value: props.value })
+
+    } catch (error) {
+      console.log(error)
     }
-    this.handleValidation({ field: props.field, value: props.value })
   }
 
   getRequiredInvalid = (field) => {
