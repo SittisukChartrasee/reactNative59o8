@@ -38,6 +38,7 @@ export default class extends React.Component {
 		currentDot: '',
 		ref_no: this.props.root.ref_no,
 		defaultKey: false,
+		timer: 180
 	}
 
 	setNumber = async (obj) => {
@@ -71,7 +72,7 @@ export default class extends React.Component {
 						switch (res.code) {
 							case '1001':
 								this.props.updateRoot('time', res.details.time)
-								this.props.updateRoot('overRequest', true)
+								this.props.updateRoot('overRequest', true) // status for tick reNew setInterval in headerotp
 								this.props.updateRoot('overRequestUi', true)
 								break
 							case '1102':
@@ -118,7 +119,6 @@ export default class extends React.Component {
 			email: (user.contact.email).trim().toLowerCase(),
 			phone_no: user.contact.mobilePhone.replace(/ /g, ''),
 		}
-
 		this.props.requestOtp(data, { token, currFlowUP: this.props.root.currFlowUP }) // Api ใช้สำหรับ OTP register และ accept
 			.then(res => {
 				if (res.success) {
@@ -145,7 +145,7 @@ export default class extends React.Component {
 						dot: this.state.dot,
 						currentDot: this.state.currentDot,
 						refNo: ref_no || null,
-						timer: this.props.root.time || (Date.now() / 1000),
+						timer: this.props.root.time,
 						text: this.props.root.overRequestUi ? '6' : '3',
 						overRequest: this.props.root.overRequest,
 						overRequestUi: this.props.root.overRequestUi,

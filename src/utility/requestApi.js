@@ -3,11 +3,15 @@ import ENV from '../config/env'
 import { onStore } from '../redux/store'
 
 export default throttle(async (url, options, verifytoken) => {
+
+  // application version from NativeModules 
+  const appVersion = onStore.getState().root.version
   let allOption
   if (options.method !== 'GET') {
     allOption = {
       ...options,
       headers: {
+        'app-version': appVersion,
         Accept: 'application/json',
         // 'Content-Type': 'application/json', // ห้ามใช้
         ...(token => ((token) ? ({
@@ -24,4 +28,4 @@ export default throttle(async (url, options, verifytoken) => {
   } catch (err) {
     throw err
   }
-}, 1000)
+}, 500)
