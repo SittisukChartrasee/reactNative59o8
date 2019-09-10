@@ -83,7 +83,7 @@ class OnboardManager(private val reactContext: ReactApplicationContext) : ReactC
     @ReactMethod
     fun getVersionAppKMyFunds(callback: Callback) {
         val stringFromPref = getStringFromPref(KEY_VERSION)
-        callback.invoke(stringFromPref ?: "")
+        callback.invoke(stringFromPref ?: "1.7.2")
     }
 
     @ReactMethod

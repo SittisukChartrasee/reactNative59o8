@@ -45,7 +45,7 @@
 
   RCT_EXPORT_METHOD(getVersionAppKMyFunds: (RCTResponseSenderBlock)callback) {
     NSLog(@"%s", "getVersionAppKMyFunds");
-    callback(@[@"getVersionAppKMyFunds"]);
+    callback(@[@"1.7.2"]);
   }
 
   RCT_EXPORT_METHOD(saveFCMToken: (NSString *)token) {

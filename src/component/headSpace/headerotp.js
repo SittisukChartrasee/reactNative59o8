@@ -31,16 +31,13 @@ export default class extends React.Component {
     refNo: null,
     overRequest: false,
     onPress: () => { },
-    timer: Date.now()
   }
-
-  timerCount = ''
 
   state = {
     diff: 0,
     minutes: 0,
     seconds: 0,
-    timer: this.props.timer
+    countdown: 1
   }
 
   componentDidMount = () => {
@@ -50,13 +47,14 @@ export default class extends React.Component {
     }, 1000)
   }
 
+  // tick for Renew countdown otp
   componentWillReceiveProps(nextProps) {
     if (nextProps.overRequest) {
       clearInterval(this.timerCount)
-      this.resendOTP(nextProps.details)
+      this.resendOTP()
+      // tick overRequest for reset state in otp page
       this.props.setState()
     }
-    if (nextProps.timer) this.starttimer()
   }
 
   componentWillUnmount = () => {
@@ -65,6 +63,7 @@ export default class extends React.Component {
 
   starttimer = () => {
     clearInterval(this.timerCount)
+    this.setState({ countdown: 1 })
     this.timerCount = setInterval(() => {
       this.timer()
     }, 1000)
@@ -75,16 +74,20 @@ export default class extends React.Component {
     let minutes = this.state.minutes
     let seconds = this.state.seconds
 
-    diff = ((((this.props.timer * 1000) - Date.now()) / 1000) | 0) // เปรียบเทียบโดยใช้เวลาหมดอายุลบด้วยเวลาปัจจุบัน
+    // เปรียบเทียบโดยใช้เวลาหมดอายุลบด้วยเวลาปัจจุบัน
+    // diff = ((((this.props.timer * 1000) - Date.now()) / 1000) | 0)
+
+    // เปรียบเทียบโดยใช้นับถอยหลัง
+    diff = this.props.timer - this.state.countdown
     minutes = (diff / 60) | 0
     seconds = (diff % 60) | 0
     minutes = minutes < 10 ? "0" + minutes : minutes
     seconds = seconds < 10 ? "0" + seconds : seconds
     if (diff <= 0) { // ดักก่อน setState
       clearInterval(this.timerCount)
-      this.setState({ minutes: '00', seconds: '00' })
+      this.setState({ countdown: 1, minutes: '00', seconds: '00' })
     } else {
-      this.setState({ minutes: minutes, seconds: seconds }) // เปรียบเทียบโดยใช้เวลาเริ่มต้นและเวลาปัจจุบัน
+      this.setState({ countdown: this.state.countdown + 1, minutes: minutes, seconds: seconds }) // เปรียบเทียบโดยใช้เวลาเริ่มต้นและเวลาปัจจุบัน
     }
   }
 
