@@ -68,7 +68,7 @@ export default class extends React.Component {
           handleInput: props => this.props.handleInput(props),
           keyboardType: this.props.keyboardType || 'default',
           label,
-          error: err,
+          err,
           value,
           autoComplete: "off",
           autoCapitalize: "none",
