@@ -297,7 +297,7 @@ export default class extends React.Component {
 
   handleCheckOcupation = async () => {
     try {
-      const res = await this.props.client.query({ query: checkWorkplaceAddress })
+      const res = await this.props.client.query({ query: checkWorkplaceAddress, fetchPolicy: "no-cache" })
       if (res.data.checkWorkplaceAddress) {
         return this.props.navigateAction({ ...this.props, page: 'addressWork' })
       } else {
