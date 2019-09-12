@@ -53,7 +53,7 @@ export default class extends React.Component {
         type: 'titleHead',
         static: true
       }, {
-        label: 'คำนำหน้า (ตัวย่อ)',
+        label: 'คำนำหน้า',
         type: 'search',
         field: 'firstTitle',
         required: true,
