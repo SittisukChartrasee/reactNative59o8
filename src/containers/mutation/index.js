@@ -301,12 +301,11 @@ const registerBank = gql`
   }
 `
 
-const saveSanction = gql`
-  mutation saveSanction {
-    saveSanction{
+const saveSubmit = gql`
+  mutation saveSubmit {
+    saveSubmit{
       success
       message
-      code
     }
   }
 `
@@ -321,6 +320,15 @@ const saveWaitingApprove = gql`
         field
         description
       }
+    }
+  }
+`
+
+const inProgressToWaitingApprove = gql`
+  mutation inProgressToWaitingApprove {
+    inProgressToWaitingApprove{
+      success
+      message
     }
   }
 `
@@ -363,8 +371,9 @@ export default compose(
   graphql(registerBank, { name: 'registerBank' }, {
     options: { fetchPolicy: 'no-cache' },
   }),
-  graphql(saveSanction, { name: 'saveSanction' }),
+  graphql(saveSubmit, { name: 'saveSubmit' }),
   graphql(saveWaitingApprove, { name: 'saveWaitingApprove' }),
+  graphql(inProgressToWaitingApprove, { name: 'inProgressToWaitingApprove' }),
   graphql(resendEmail, { name: 'resendEmail' }),
   graphql(saveFCMToken, { name: 'saveFCMToken' })
 )

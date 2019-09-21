@@ -10,9 +10,16 @@ import { HeadSpace } from '../component/headSpace'
 import { navigateAction } from '../redux/actions'
 import { requestLogin } from '../redux/actions/root-active'
 import { root, fatca, suittest, updateUser } from '../redux/actions/commonAction'
-import { containerQuery, getStatus, getUser } from '../containers/query'
 import getnativeModules from '../containers/hoc/infoAppNativeModules'
 import typeModal from '../utility/typeModal'
+import {
+	containerQuery,
+	getStatus,
+	getUser,
+	getSubmit,
+	checkVerifiedEmail
+} from '../containers/query'
+
 import {
 	formatDate,
 	formatIdCard,
@@ -49,6 +56,47 @@ export default class extends React.Component {
 		dis: '',
 	}
 
+	onGetUser = async () => {
+		try {
+			const val = await this.props.client.query({ query: getUser })
+			return this.onHandleDataUser(val)
+		} catch (error) {
+			this.props.toggleModal({
+				...typeModal['1103'],
+				dis: 'เกิดข้อผิดพลาด กรุณาเข้าสู่ระบบใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
+			})
+		}
+	}
+
+	onGetStatus = async ({ password }) => {
+		try {
+			const res = await this.props.client.query({ query: getStatus })
+			this.onHandleChooseScreen({ res, password })
+		} catch (error) {
+			this.props.toggleModal({
+				...typeModal['1103'],
+				dis: 'เกิดข้อผิดพลาด กรุณาเข้าสู่ระบบใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
+			})
+		}
+	}
+
+	onCheckSubmit = async () => {
+		try {
+			const res = await this.props.client.query({ query: getSubmit })
+			return res.data.getSubmit
+		} catch (error) {
+			return false
+		}
+	}
+
+	onCheckVerifiedEmail = async () => {
+		try {
+			const res = await this.props.client.query({ query: checkVerifiedEmail })
+			return res.data.checkVerifiedEmail
+		} catch (error) {
+			return false
+		}
+	}
 
 	setNumber = async obj => {
 		let userToken = await AsyncStorage.getItem('user_token')
@@ -67,7 +115,6 @@ export default class extends React.Component {
 				device_id: this.props.deviceInfo
 			})
 				.then(async res => {
-					console.log(res)
 
 					if (res.success) {
 						AsyncStorage.setItem('access_token', res.result.access_token)
@@ -86,17 +133,11 @@ export default class extends React.Component {
 							email: res.result.email
 						})
 
-						await this.props.client.query({ query: getUser })
-							.then((val) => this.onHandletesttest(val))
-							.catch(err => console.error(err))
+						this.onGetStatus({ password: obj.number })
+						this.onGetUser()
 
 						this.props.updateRoot('loading', false)
 
-						await containerQuery(
-							this.props.client,
-							{ query: getStatus },
-							val => this.onHandleChooseScreen({ val, password: obj.number })
-						)
 					} else if (!res.success) {
 						this.setState({
 							...defaultPasscode,
@@ -131,16 +172,31 @@ export default class extends React.Component {
 		}
 	}
 
-	onHandleChooseScreen = ({ val, password }) => {
+	onHandleCheckScreen = async () => {
+		const checkSubmit = await this.onCheckSubmit()
+		const checkVerified = await this.onCheckVerifiedEmail()
+
+		if (checkSubmit) {
+			if (checkVerified) {
+				return this.props.navigateAction({ ...this.props, page: 'waiting' })
+			} else {
+				return this.props.navigateAction({ ...this.props, page: 'verifyEmail' })
+			}
+		} else {
+			return this.props.navigateAction({ ...this.props, page: 'checkpoint' })
+		}
+	}
+
+	onHandleChooseScreen = ({ res, password }) => {
 		NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
-		switch (val.data.getStatus) {
+		switch (res.data.getStatus) {
 			case 'Approved':
 				this.props.updateRoot('password', password)
 				this.props.navigateAction({ ...this.props, page: 'confirmAccount' })
 				break
 
 			case 'InProgress':
-				this.props.navigateAction({ ...this.props, page: 'checkpoint' })
+				this.onHandleCheckScreen()
 				break
 
 			case 'WaitingApprove':
@@ -157,7 +213,7 @@ export default class extends React.Component {
 		}
 	}
 
-	onHandletesttest = val => {
+	onHandleDataUser = val => {
 		if (val.data.getUser.success) {
 
 			if (val.data.getUser.result.identity) {
