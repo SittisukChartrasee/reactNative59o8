@@ -20,7 +20,7 @@ import { navigateAction } from '../../redux/actions'
 import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
 import setMutation from '../../containers/mutation'
-import { checkVerifiedEmailInterval, checkVerifiedEmail } from '../../containers/query'
+import { checkVerifiedEmailInterval, getWaitingApprove } from '../../containers/query'
 import typeModal from '../../utility/typeModal'
 
 const { width: widthView } = Dimensions.get('window')
@@ -43,36 +43,70 @@ export default class extends React.Component {
 		if (this.props.checkVerifiedEmailInterval.checkVerifiedEmail !== newProps.checkVerifiedEmailInterval.checkVerifiedEmail)
 			if (newProps.checkVerifiedEmailInterval.checkVerifiedEmail === true) {
 				newProps.checkVerifiedEmailInterval.stopPolling()
-				this.handleSanction()
+				this.handleWaitingApprove()
 			}
 	}
 
 	componentWillUnmount = () => this.props.checkVerifiedEmailInterval.stopPolling()
 
-	handleSanction = async () => {
-		await this.props.saveSanction()
-			.then(res => {
-				if (res.data.saveSanction.success) {
-					this.props.navigateAction({ ...this.props, page: 'waiting' })
-				}
-				else if (!res.data.saveSanction.success) {
-					return this.props.toggleModal({
-						...typeModal[res.data.saveSanction.code],
-						dis: res.data.saveSanction.message
-					})
-				}
+	onInProgressToWaitingApprove = async () => {
+		try {
+			const res = await this.props.inProgressToWaitingApprove()
+			return res.data.inProgressToWaitingApprove.success
+		} catch (error) {
+			return this.props.toggleModal({
+				...typeModal['1103'],
+				dis: 'เกิดข้อผิดพลาด กรุณาเข้าสู่ระบบใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
 			})
-			.catch(err => {
-				console.log(err)
+		}
+	}
+
+	onGetWaitingApprove = async () => {
+		try {
+			const res = await this.props.client.query({ query: getWaitingApprove, fetchPolicy: "no-cache" })
+			return res.data.getWaitingApprove
+		} catch (error) {
+			return this.props.toggleModal({
+				...typeModal['1103'],
+				dis: 'เกิดข้อผิดพลาด กรุณาเข้าสู่ระบบใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
 			})
+		}
+	}
+
+	handleWaitingApprove = async () => {
+
+		const waitingApproveState = await this.onGetWaitingApprove()
+
+		if (waitingApproveState) {
+			return this.props.navigateAction({ ...this.props, page: 'waiting' })
+		} else {
+			const saveInprogressToWaitingApprove = await this.onInProgressToWaitingApprove()
+			
+			if (saveInprogressToWaitingApprove) {
+				return this.props.navigateAction({ ...this.props, page: 'waiting' })
+			}
+		}
+	}
+
+	onPressResendEmail = async () => {
+		try {
+			const res = await this.props.resendEmail()
+			return res.data.resendEmail.success
+		} catch (error) {
+			return this.props.toggleModal({
+				...typeModal['1103'],
+				dis: 'เกิดข้อผิดพลาด กรุณาทำรายการใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
+			})
+		}
 	}
 
 	onNext = async () => {
 		const { user } = this.props
 		const { email } = user.contact
 
-		const res = await this.props.resendEmail()
-		if (res.data.resendEmail.success) {
+		const resendEmail = await this.onPressResendEmail()
+
+		if (resendEmail) {
 			this.props.toggleModal({
 				...typeModal['1103'],
 				dis: `ระบบได้จัดส่งลิงก์ (Link) สำหรับยืนยันตัวตน\nไปยัง Email ของท่านแล้วกรุณาตรวจสอบ\n${email}`,

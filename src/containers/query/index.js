@@ -367,6 +367,18 @@ export const checkWorkplaceAddress = gql`
   }
 `
 
+export const getWaitingApprove = gql`
+  query getWaitingApprove {
+    getWaitingApprove
+  }
+`
+
+export const getSubmit = gql`
+  query getSubmit {
+    getSubmit
+  }
+`
+
 export const checkVerifiedEmailInterval = graphql(checkVerifiedEmail, {
   name: 'checkVerifiedEmailInterval',
   options: {

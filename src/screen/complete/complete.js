@@ -17,7 +17,7 @@ import { LongButton } from '../../component/button'
 import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
 import lockout from '../../containers/hoc/lockout'
-import { checkVerifiedEmail } from '../../containers/query'
+import { checkVerifiedEmail, getWaitingApprove } from '../../containers/query'
 import setMutation from '../../containers//mutation'
 import typeModal from '../../utility/typeModal'
 
@@ -34,28 +34,74 @@ const dispatchToProps = dispatch => ({
 @setMutation
 export default class extends React.Component {
 
-	onNext = () => {
-		this.props.client.query({ query: checkVerifiedEmail })
-			.then(res => {
-				if (res.data.checkVerifiedEmail) {
-					this.props.saveSanction()
-						.then(res => {
-							if (res.data.saveSanction.success) this.props.navigateAction({ ...this.props, page: 'waiting' })
-							else if (!res.data.saveSanction.success) {
-								return this.props.toggleModal({
-									...typeModal[res.data.saveSanction.code],
-									dis: res.data.saveSanction.message
-								})
-							}
-						})
-						.catch(err => {
-							console.log(err)
-						})
-				} else {
-					this.props.navigateAction({ ...this.props, page: 'verifyEmail' })
-				}
+	onSubmit = async () => {
+		try {
+			const res = await this.props.saveSubmit()
+			return res.data.saveSubmit.success
+		} catch (error) {
+			return this.props.toggleModal({
+				...typeModal['1103'],
+				dis: 'เกิดข้อผิดพลาด กรุณาเข้าสู่ระบบใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
 			})
-			.catch(err => console.log(err))
+		}
+	}
+
+	onInProgressToWaitingApprove = async () => {
+		try {
+			const res = await this.props.inProgressToWaitingApprove()
+			return res.data.inProgressToWaitingApprove.success
+		} catch (error) {
+			return this.props.toggleModal({
+				...typeModal['1103'],
+				dis: 'เกิดข้อผิดพลาด กรุณาเข้าสู่ระบบใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
+			})
+		}
+	}
+
+	onCheckVerifiedEmail = async () => {
+		try {
+			const res = await this.props.client.query({ query: checkVerifiedEmail, fetchPolicy: "no-cache" })
+			return res.data.checkVerifiedEmail
+		} catch (error) {
+			return this.props.toggleModal({
+				...typeModal['1103'],
+				dis: 'เกิดข้อผิดพลาด กรุณาเข้าสู่ระบบใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
+			})
+		}
+	}
+
+	onGetWaitingApprove = async () => {
+		try {
+			const res = await this.props.client.query({ query: getWaitingApprove, fetchPolicy: "no-cache" })
+			return res.data.getWaitingApprove
+		} catch (error) {
+			return this.props.toggleModal({
+				...typeModal['1103'],
+				dis: 'เกิดข้อผิดพลาด กรุณาเข้าสู่ระบบใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
+			})
+		}
+	}
+
+	onNext = async () => {
+
+		const submit = await this.onSubmit()
+		const checkVerified = await this.onCheckVerifiedEmail()
+
+		if (!checkVerified) {
+			return this.props.navigateAction({ ...this.props, page: 'verifyEmail' })
+		} else if (submit) {
+
+			const waitingApproveState = await this.onGetWaitingApprove()
+			if (waitingApproveState) {
+				return this.props.navigateAction({ ...this.props, page: 'waiting' })
+			} else {
+
+				const saveInprogressToWaitingApprove = await this.onInProgressToWaitingApprove()
+				if (saveInprogressToWaitingApprove) {
+					return this.props.navigateAction({ ...this.props, page: 'waiting' })
+				}
+			}
+		}
 	}
 
 	render() {
