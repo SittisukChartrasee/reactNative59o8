@@ -124,18 +124,6 @@ export const fontToLower = (data) => data.trim().toLowerCase()
 
 export const replaceJsCard = (data) => data ? data.trim().replace(/\-/g, '').toUpperCase() : ''
 
-export const widthPercentageToDP = widthPercent => {
-  const screenWidth = Dimensions.get('window').width
-  const elemWidth = parseFloat(widthPercent)
-  return PixelRatio.roundToNearestPixel(screenWidth * elemWidth / 100)
-}
-
-export const heightPercentageToDP = heightPercent => {
-  const screenHeight = Dimensions.get('window').height
-  const elemHeight = parseFloat(heightPercent)
-  return PixelRatio.roundToNearestPixel(screenHeight * elemHeight / 100)
-}
-
 export const handleSizing = heightScreen => {
   let sizing = {}
   if (heightScreen <= 568) {
@@ -144,16 +132,4 @@ export const handleSizing = heightScreen => {
     sizing = { width: 176, height: 128 }
   }
   return sizing
-}
-
-export const handleFontSize = heightScreen => {
-  let sizeFont = { TLight: 16, TBold: 16, navBar: 28, margin: 16, }
-  if (heightScreen <= 568) {
-    sizeFont = { TLight: 12, TBold: 12, navBar: 20, margin: 6, }
-  } else if (heightScreen <= 667) {
-    sizeFont = { TLight: 14, TBold: 14, navBar: 24, margin: 10, }
-  } else {
-    sizeFont = { TLight: 16, TBold: 16, navBar: 28, margin: 16, }
-  }
-  return sizeFont
 }

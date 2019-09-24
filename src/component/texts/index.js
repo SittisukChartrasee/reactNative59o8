@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 import fonts from '../../config/fonts'
 
 export const TThin = styled.Text`
