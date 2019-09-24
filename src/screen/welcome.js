@@ -24,7 +24,7 @@ import { requestOtp } from '../redux/actions/root-active'
 import { updateUser, root } from '../redux/actions/commonAction'
 import lockout from '../containers/hoc/lockout'
 import { NavBar } from '../component/gradient'
-import { replaceSpace, fontToLower, handleSizing, heightPercentageToDP } from '../utility/helper'
+import { replaceSpace, fontToLower, handleSizing } from '../utility/helper'
 import { validateEmail, validateIdentityCard, validatePhoneNumber, RequiredFields } from '../utility/validation'
 
 const { width: widthScreen } = Dimensions.get('window')

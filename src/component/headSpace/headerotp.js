@@ -9,7 +9,6 @@ import colors from '../../config/colors'
 import images from '../../config/images'
 import { TLight, TMed, TBold } from '../texts'
 import { NavBar } from '../gradient'
-// import { handleFontSize } from '../../utility/helper'
 
 const secToMinute = ({ minutes, seconds }) => `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
 const { height: heightScreen } = Dimensions.get('window')

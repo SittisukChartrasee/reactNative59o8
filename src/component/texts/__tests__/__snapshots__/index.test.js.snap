@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "color": "black",
+        "fontFamily": "SukhumvitSet-Thin",
+        "fontSize": 18,
+        "marginBottom": 0,
+        "marginLeft": 0,
+        "marginRight": 0,
+        "marginTop": 0,
+        "textAlign": "center",
+      },
+    ]
+  }
+/>
+`;
