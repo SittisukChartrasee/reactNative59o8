@@ -1,5 +1,119 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`renders TBold 1`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "color": "black",
+        "fontFamily": "SukhumvitSet-Bold",
+        "fontSize": 18,
+        "marginBottom": 0,
+        "marginLeft": 0,
+        "marginRight": 0,
+        "marginTop": 0,
+        "textAlign": "center",
+      },
+    ]
+  }
+/>
+`;
+
+exports[`renders TLight 1`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "color": "black",
+        "fontFamily": "SukhumvitSet-Light",
+        "fontSize": 16,
+        "marginBottom": 0,
+        "marginLeft": 0,
+        "marginRight": 0,
+        "marginTop": 0,
+        "textAlign": "center",
+      },
+    ]
+  }
+/>
+`;
+
+exports[`renders TMed 1`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "color": "black",
+        "fontFamily": "SukhumvitSet-Medium",
+        "fontSize": 18,
+        "marginBottom": 0,
+        "marginLeft": 0,
+        "marginRight": 0,
+        "marginTop": 0,
+        "textAlign": "center",
+      },
+    ]
+  }
+/>
+`;
+
+exports[`renders TSemiBold 1`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "color": "black",
+        "fontFamily": "SukhumvitSet-SemiBold",
+        "fontSize": 18,
+        "marginBottom": 0,
+        "marginLeft": 0,
+        "marginRight": 0,
+        "marginTop": 0,
+        "textAlign": "center",
+      },
+    ]
+  }
+/>
+`;
+
+exports[`renders TText 1`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "color": "black",
+        "fontFamily": "SukhumvitSet-Text",
+        "fontSize": 18,
+        "marginBottom": 0,
+        "marginLeft": 0,
+        "marginRight": 0,
+        "marginTop": 0,
+        "textAlign": "center",
+      },
+    ]
+  }
+/>
+`;
+
+exports[`renders TThin 1`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "color": "black",
+        "fontFamily": "SukhumvitSet-Thin",
+        "fontSize": 18,
+        "marginBottom": 0,
+        "marginLeft": 0,
+        "marginRight": 0,
+        "marginTop": 0,
+        "textAlign": "center",
+      },
+    ]
+  }
+/>
+`;
+
 exports[`renders correctly 1`] = `
 <Text
   style={
