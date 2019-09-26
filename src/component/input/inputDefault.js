@@ -56,7 +56,6 @@ export default class extends React.Component {
             err,
             label: '',
             styled: { textAlign: 'left', },
-            handleInput: props => this.props.handleInput(props)
           }}
           value={this.state.value}
           onChangeText={this.handleInput}
