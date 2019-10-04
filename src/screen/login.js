@@ -19,6 +19,7 @@ import {
 	getSubmit,
 	checkVerifiedEmail
 } from '../containers/query'
+import releaseApp from '../../release/releaseApp.json'
 
 import {
 	formatDate,
@@ -532,8 +533,9 @@ export default class extends React.Component {
 					{...{
 						dot,
 						title: 'กรุณากรอกรหัสผ่าน',
-						onPrevPage: () => AsyncStorage.clear(),
-						// onPrevPage: () => NativeModules.KMyFundOnboarding.finishActivity(),
+						onPrevPage: () => releaseApp.modeDev
+							? AsyncStorage.clear()
+							: NativeModules.KMyFundOnboarding.finishActivity(),
 						forgetbtn: () => this.props.navigateAction({ ...this.props, page: 'forgetPasscode' })
 					}}
 				/>

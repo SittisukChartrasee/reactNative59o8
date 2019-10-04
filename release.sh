@@ -56,7 +56,13 @@ DATE=$(date +'%Y%m%d')
 
 NAME=onboarding-$build-$DATE-$env
 
-echo "{\"nameFile\": \"${NAME}\", \"env\": \"${env}\", \"build\": \"${build}\", \"time\": \"${DATE}$(date +'%H%M')\"}" > release/releaseApp.json
+if [ "$choose" = "4" ]; then
+  modeDev="false"
+else
+  modeDev="true"
+fi
+
+echo "{\"nameFile\": \"${NAME}\", \"env\": \"${env}\", \"build\": \"${build}\", \"time\": \"${DATE}$(date +'%H%M')\", \"modeDev\": ${modeDev} }" > release/releaseApp.json
 
 yarn build-ios && yarn build-android
 
