@@ -15,6 +15,7 @@ import getnativeModules from '../containers/hoc/infoAppNativeModules'
 import typeModal from '../utility/typeModal'
 import { getStatus, getUser, getSubmit, checkVerifiedEmail } from '../containers/query'
 import { formatIdCard, formatPhoneNumber, } from '../utility/helper'
+import { userDataToProps } from '../schemaData/userData'
 import releaseApp from '../../release/releaseApp.json'
 
 const defaultPasscode = {
