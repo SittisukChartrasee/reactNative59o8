@@ -121,8 +121,10 @@ export default class extends React.Component {
 		}
 		this.props.requestOtp(data, { token, currFlowUP: this.props.root.currFlowUP }) // Api ใช้สำหรับ OTP register และ accept
 			.then(res => {
+
+				setTimeWaiting(res.success)
+
 				if (res.success) {
-					setTimeWaiting()
 					this.props.updateRoot('overRequestUi', false)
 					this.setState({
 						ref_no: res.result.ref_no,

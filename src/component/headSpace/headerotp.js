@@ -3,8 +3,10 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from 'react-native'
+import { connect } from 'react-redux'
 import colors from '../../config/colors'
 import images from '../../config/images'
 import { TLight, TMed, TBold } from '../texts'
@@ -23,6 +25,9 @@ if (heightScreen <= 568) {
   sizeFont = { TLight: 16, TBold: 16, navBar: 28, margin: 16, }
 }
 
+const mapToProps = ({ root }) => ({ root })
+
+@connect(mapToProps, null)
 export default class extends React.Component {
   static defaultProps = {
     dot: [false, false, false, false, false, false],
@@ -36,36 +41,50 @@ export default class extends React.Component {
     diff: 0,
     minutes: 0,
     seconds: 0,
-    countdown: 1
+    countdown: 1,
+    lastTime: 0,
+    appState: '',
+    loading: false
   }
 
   componentDidMount = () => {
-    clearInterval(this.timerCount)
-    this.timerCount = setInterval(() => {
-      this.timer()
-    }, 1000)
+    this.setState({ loading: true })
+    this.starttimer()
   }
 
   // tick for Renew countdown otp
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.overRequest) {
+  componentWillReceiveProps = nextProps => {
+
+    if (nextProps.root.appState === 'background') {
       clearInterval(this.timerCount)
-      this.resendOTP()
+      this.setState({ appState: 'background', loading: true })
+    } else if (nextProps.root.appState === 'active' && this.state.appState === 'background') {
+      const currentTime = new Date()
+
+      const diff = (Math.abs(currentTime - this.state.lastTime)) / 1000
+
+      this.starttimer(this.state.countdown + diff)
+
+      this.setState({ appState: 'active' })
+    }
+
+    if (nextProps.overRequest) {
+      this.setState({ loading: true })
+      clearInterval(this.timerCount)
+      this.starttimer()
       // tick overRequest for reset state in otp page
       this.props.setState()
     }
+
   }
 
-  componentWillUnmount = () => {
-    clearInterval(this.timerCount)
-  }
+  componentWillUnmount = () => clearInterval(this.timerCount)
 
-  starttimer = () => {
+  starttimer = (countdown = 1) => {
     clearInterval(this.timerCount)
-    this.setState({ countdown: 1 })
-    this.timerCount = setInterval(() => {
-      this.timer()
-    }, 1000)
+    this.setState({ countdown })
+    setTimeout(() => this.setState({ loading: false }), 1300)
+    this.timerCount = setInterval(() => this.timer(), 1000)
   }
 
   timer() {
@@ -86,14 +105,30 @@ export default class extends React.Component {
       clearInterval(this.timerCount)
       this.setState({ countdown: 1, minutes: '00', seconds: '00' })
     } else {
-      this.setState({ countdown: this.state.countdown + 1, minutes: minutes, seconds: seconds }) // เปรียบเทียบโดยใช้เวลาเริ่มต้นและเวลาปัจจุบัน
+      this.setState({
+        lastTime: new Date(),
+        countdown: this.state.countdown + 1,
+        minutes: minutes,
+        seconds: seconds
+      }) // เปรียบเทียบโดยใช้เวลาเริ่มต้นและเวลาปัจจุบัน
     }
   }
 
-  resendOTP = () => this.starttimer()
+  onResendOTP = success => {
+    if (!success) {
+      return this.setState({ countdown: 1, minutes: '00', seconds: '00', loading: false })
+    } else {
+      this.starttimer()
+    }
+  }
+
+  onPressResendOTP = () => {
+    this.setState({ loading: true })
+    this.props.onPress(async success => await this.onResendOTP(success))
+  }
 
   render() {
-    const { minutes, seconds } = this.state
+    const { minutes, seconds, loading } = this.state
     const { dot, refNo, overRequestUi } = this.props
     return (
       <View style={{ flex: 1 }}>
@@ -134,26 +169,27 @@ export default class extends React.Component {
                       justifyContent: 'center',
                     }}
                   >
-                    <TBold>{secToMinute({ minutes, seconds })}</TBold>
+                    {
+                      loading ? <ActivityIndicator size="small" color={colors.emerald} />
+                        : <TBold>{secToMinute({ minutes, seconds })}</TBold>
+                    }
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
-                    onPress={
-                      async () => {
-                        await this.props.onPress(async () => {
-                          await this.resendOTP()
-                        })
-                      }}
+                    onPressIn={this.onPressResendOTP}
                     style={{
                       width: 160,
                       height: 40,
                       borderRadius: 40 / 2,
-                      backgroundColor: colors.emerald,
+                      backgroundColor: loading ? colors.white : colors.emerald,
                       marginBottom: 10,
                       justifyContent: 'center',
                     }}
                   >
-                    <TBold color={colors.white}>ขอรับรหัสใหม่</TBold>
+                    {
+                      loading ? <ActivityIndicator size="small" color={colors.emerald} />
+                        : <TBold color={colors.white}>ขอรับรหัสใหม่</TBold>
+                    }
                   </TouchableOpacity>
                 )
             }
