@@ -3,8 +3,8 @@ import { Platform } from 'react-native'
 import PropsType from 'prop-types'
 import styled from 'styled-components/native'
 import { TextInputMask } from 'react-native-masked-text'
+import { TextField } from 'react-native-material-textfield'
 import colors from '../../config/colors'
-import TextField from './inputDefaultMatiral'
 import fonts from '../../config/fonts'
 
 
@@ -62,16 +62,33 @@ export default class extends React.Component {
         }}
         customTextInput={TextField}
         customTextInputProps={{
+          label,
+          error: err,
           ref: ref => ref && this.props.refFunc && this.props.refFunc(ref),
+          onFocus: () => this.props.handleInput({ type: 'onFocus' }),
           returnKeyType: this.props.returnKeyType,
           onSubmitEditing: this.props.onSubmitEditing,
           handleInput: props => this.props.handleInput(props),
           keyboardType: this.props.keyboardType || 'default',
-          label,
-          err,
-          value,
           autoComplete: "off",
           autoCapitalize: "none",
+          labelTextStyle: { fontFamily: fonts.sukhumvitLight, fontSize: 100 },
+          titleTextStyle: { fontFamily: fonts.sukhumvitLight },
+          tintColor: colors.grey,
+          baseColor: colors.grey,
+          titleFontSize: 12,
+          labelFontSize: this.props.labelFontSize !== undefined ? 20 : 14,
+          activeLineWidth: this.props.activeLineWidth !== undefined ? 0 : 2,
+          fontSize: 18,
+          height: "100%",
+          autoCorrect: false,
+          autoComplete: "off",
+          autoCapitalize: "none",
+          style: [
+            { fontFamily: fonts.sukhumvitBold, color: colors.hunterGreen, ...(pf => pf.OS === 'android' && { fontWeight: '400' })(Platform) },
+            this.props.label === '' && { fontSize: this.props.fs, textAlign: 'center' },
+            { ...this.props.styled },
+          ]
         }}
         value={this.props.value === '' || this.props.value ? this.props.value : value}
         onChangeText={this.handleInput}
