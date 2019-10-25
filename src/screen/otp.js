@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Image, TouchableOpacity, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import get from 'lodash/get'
 import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
 import { headerotp } from '../component/headSpace'
@@ -12,6 +13,7 @@ import images from '../config/images'
 import { velidateOtp, requestOtp } from '../redux/actions/root-active'
 import { updateUser, root } from '../redux/actions/commonAction'
 import typeModal from '../utility/typeModal'
+import { errorMessage, otpMessage } from '../utility/messages'
 
 const defaultDot = {
 	dot: [false, false, false, false, false, false],
@@ -41,6 +43,55 @@ export default class extends React.Component {
 		timer: 180
 	}
 
+	// try and catch in root-active
+	onVelidateOtp = (data, { token, currFlowUP }) => {
+		try {
+			const res = this.props.velidateOtp(data, { token, currFlowUP }) // Api Uses for OTP register and accept
+			return res
+		} catch (error) {
+			this.setState({ ...defaultDot, defaultKey: true })
+		}
+	}
+
+	// try and catch in root-active
+	onRequestOtp = async (data, { token, currFlowUP }) => {
+		const res = await this.props.requestOtp(data, { token, currFlowUP })
+		return res
+	}
+
+	handleError = ({ code, details, message }) => {
+		const time = get(details, 'time', 0)
+
+		switch (code) {
+			case '2101':
+				this.props.toggleModal({
+					...typeModal[otpMessage.preconditionRequired.code],
+					dis: otpMessage.preconditionRequired.defaultMessage
+				})
+				break
+			case '1001':
+				this.props.updateRoot('time', time)
+				this.props.updateRoot('overRequest', true) // status for tick reNew setInterval in headerotp
+				this.props.updateRoot('overRequestUi', true)
+				break
+			case '1102':
+				this.props.toggleModal({
+					...typeModal[code],
+					dis: message,
+					labelBtn: typeModal[code].labelBtn('ไปหน้ากรอกข้อมูลเพื่อเปิดบัญชีฯ'),
+					onPress: () => {
+						typeModal[code].onPress('welcome')
+						this.props.updateUser('profile', { ...this.props.user.profile, idCard: '' })
+						this.props.updateUser('contact', { ...this.props.user.contact, mobilePhone: '', email: '', })
+					},
+				})
+				break
+			default:
+				this.props.toggleModal({ ...typeModal[code], dis: message, })
+				break
+		}
+	}
+
 	setNumber = async (obj) => {
 		const data = {
 			trans_id: this.props.root.trans_id,
@@ -58,48 +109,29 @@ export default class extends React.Component {
 			const token = this.props.root.access_token
 			const currFlowUP = this.props.root.currFlowUP
 
-			this.props.velidateOtp(data, { token, currFlowUP }) // Api ใช้สำหรับ OTP register และ accept
-				.then(res => {
-					if (res.success) {
-						if (res.result.is_register) {
-							this.props.navigateAction({ ...this.props, page: 'login', params: { user_token: res.result.user_token } })
-							AsyncStorage.setItem('user_token', res.result.user_token)
-						} else {
-							this.props.navigateAction({ ...this.props, page: 'passcode' })
-						}
-						this.setState({ ...defaultDot, defaultKey: true })
-					} else if (!res.success) {
-						switch (res.code) {
-							case '1001':
-								this.props.updateRoot('time', res.details.time)
-								this.props.updateRoot('overRequest', true) // status for tick reNew setInterval in headerotp
-								this.props.updateRoot('overRequestUi', true)
-								break
-							case '1102':
-								this.props.toggleModal({
-									...typeModal[res.code],
-									dis: res.message,
-									labelBtn: typeModal[res.code].labelBtn('ไปหน้ากรอกข้อมูลเพื่อเปิดบัญชีฯ'),
-									onPress: () => {
-										typeModal[res.code].onPress('welcome')
-										this.props.updateUser('profile', { ...this.props.user.profile, idCard: '' })
-										this.props.updateUser('contact', { ...this.props.user.contact, mobilePhone: '', email: '', })
-									},
-								})
-								break
-							default:
-								this.props.toggleModal({
-									...typeModal[res.code],
-									dis: res.message,
-								})
-								break
-						}
-						this.setState({ ...defaultDot, defaultKey: true })
-					}
-				})
-				.catch(err => {
-					console.log(err)
-				})
+			const res = await this.onVelidateOtp(data, { token, currFlowUP })
+
+			const success = get(res, 'success', false)
+			const code = get(res, 'code', errorMessage.requestError.code)
+			const details = get(res, 'details', null)
+			const message = get(res, 'message', errorMessage.requestError.defaultMessage)
+
+			if (success) {
+				const isRegister = get(res, 'result.is_register', false)
+				const userToken = get(res, 'result.user_token', null)
+
+				if (isRegister && userToken) {
+					this.props.navigateAction({ ...this.props, page: 'login', params: { user_token: userToken } })
+					AsyncStorage.setItem('user_token', userToken)
+				} else {
+					this.props.navigateAction({ ...this.props, page: 'passcode' })
+				}
+
+				this.setState({ ...defaultDot, defaultKey: true })
+			} else {
+				this.handleError({ code, details, message })
+				this.setState({ ...defaultDot, defaultKey: true })
+			}
 		}
 	}
 
@@ -119,23 +151,18 @@ export default class extends React.Component {
 			email: (user.contact.email).trim().toLowerCase(),
 			phone_no: user.contact.mobilePhone.replace(/ /g, ''),
 		}
-		this.props.requestOtp(data, { token, currFlowUP: this.props.root.currFlowUP }) // Api ใช้สำหรับ OTP register และ accept
-			.then(res => {
 
-				setTimeWaiting(res.success)
+		const res = await this.onRequestOtp(data, { token, currFlowUP: this.props.root.currFlowUP })
 
-				if (res.success) {
-					this.props.updateRoot('overRequestUi', false)
-					this.setState({
-						ref_no: res.result.ref_no,
-						defaultKey: true,
-						...defaultDot
-					})
-				}
-			})
-			.catch(err => {
-				console.log(err)
-			})
+		const success = get(res, 'success', false)
+		const refNo = get(res, 'result.ref_no', '')
+
+		setTimeWaiting(success)
+
+		if (success) {
+			this.props.updateRoot('overRequestUi', false)
+			this.setState({ ref_no: refNo, defaultKey: true, ...defaultDot })
+		}
 	}
 
 	render() {

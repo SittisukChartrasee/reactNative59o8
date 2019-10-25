@@ -9,6 +9,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { withApollo } from 'react-apollo'
 import { connect } from 'react-redux'
+import get from 'lodash/get'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { TText, TBold, TSemiBold, TLight } from '../../component/texts'
@@ -20,12 +21,15 @@ import lockout from '../../containers/hoc/lockout'
 import { checkVerifiedEmail, getWaitingApprove } from '../../containers/query'
 import setMutation from '../../containers//mutation'
 import typeModal from '../../utility/typeModal'
+import { root } from '../../redux/actions/commonAction'
+import { errorMessage } from '../../utility/messages'
 
 const { width: widthView } = Dimensions.get('window')
 
-const mapToProps = () => ({})
+const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
 	navigateAction: bindActionCreators(navigateAction, dispatch),
+	updateRoot: bindActionCreators(root, dispatch),
 	toggleModal: value => dispatch({ type: 'modal', value })
 })
 @connect(mapToProps, dispatchToProps)
@@ -37,48 +41,56 @@ export default class extends React.Component {
 	onSubmit = async () => {
 		try {
 			const res = await this.props.saveSubmit()
-			return res.data.saveSubmit.success
+			const success = get(res, 'data.saveSubmit.success', false)
+			return success
 		} catch (error) {
-			return this.props.toggleModal({
-				...typeModal['1103'],
-				dis: 'เกิดข้อผิดพลาด กรุณาเข้าสู่ระบบใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
+			this.props.toggleModal({
+				...typeModal[errorMessage.requestError.code],
+				dis: errorMessage.requestError.defaultMessage,
 			})
+			return false
 		}
 	}
 
 	onInProgressToWaitingApprove = async () => {
 		try {
 			const res = await this.props.inProgressToWaitingApprove()
-			return res.data.inProgressToWaitingApprove.success
+			const success = get(res, 'data.inProgressToWaitingApprove.success', false)
+			return success
 		} catch (error) {
-			return this.props.toggleModal({
-				...typeModal['1103'],
-				dis: 'เกิดข้อผิดพลาด กรุณาเข้าสู่ระบบใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
+			this.props.toggleModal({
+				...typeModal[errorMessage.requestError.code],
+				dis: errorMessage.requestError.defaultMessage,
 			})
+			return false
 		}
 	}
 
 	onCheckVerifiedEmail = async () => {
 		try {
 			const res = await this.props.client.query({ query: checkVerifiedEmail, fetchPolicy: "no-cache" })
-			return res.data.checkVerifiedEmail
+			const success = get(res, 'data.checkVerifiedEmail', false)
+			return success
 		} catch (error) {
-			return this.props.toggleModal({
-				...typeModal['1103'],
-				dis: 'เกิดข้อผิดพลาด กรุณาเข้าสู่ระบบใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
+			this.props.toggleModal({
+				...typeModal[errorMessage.requestError.code],
+				dis: errorMessage.requestError.defaultMessage,
 			})
+			return false
 		}
 	}
 
 	onGetWaitingApprove = async () => {
 		try {
 			const res = await this.props.client.query({ query: getWaitingApprove, fetchPolicy: "no-cache" })
-			return res.data.getWaitingApprove
+			const success = get(res, 'data.getWaitingApprove', false)
+			return success
 		} catch (error) {
-			return this.props.toggleModal({
-				...typeModal['1103'],
-				dis: 'เกิดข้อผิดพลาด กรุณาเข้าสู่ระบบใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
+			this.props.toggleModal({
+				...typeModal[errorMessage.requestError.code],
+				dis: errorMessage.requestError.defaultMessage,
 			})
+			return false
 		}
 	}
 
@@ -87,20 +99,29 @@ export default class extends React.Component {
 		const submit = await this.onSubmit()
 		const checkVerified = await this.onCheckVerifiedEmail()
 
-		if (!checkVerified) {
-			return this.props.navigateAction({ ...this.props, page: 'verifyEmail' })
-		} else if (submit) {
-
-			const waitingApproveState = await this.onGetWaitingApprove()
-			if (waitingApproveState) {
-				return this.props.navigateAction({ ...this.props, page: 'waiting' })
+		if (submit) {
+			if (!checkVerified) {
+				return this.props.updateRoot('screenModal', { visible: true, page: 'verifyEmail' })
 			} else {
-
-				const saveInprogressToWaitingApprove = await this.onInProgressToWaitingApprove()
-				if (saveInprogressToWaitingApprove) {
+				const waitingApproveState = await this.onGetWaitingApprove()
+				if (waitingApproveState) {
 					return this.props.navigateAction({ ...this.props, page: 'waiting' })
+				} else {
+
+					const saveInprogressToWaitingApprove = await this.onInProgressToWaitingApprove()
+					if (saveInprogressToWaitingApprove) {
+						return this.props.navigateAction({ ...this.props, page: 'waiting' })
+					}
 				}
 			}
+		}
+	}
+
+	onGoBack = () => {
+		if (this.props.root.screenModal.page === 'reviewScore') {
+			this.props.updateRoot('screenModal', { visible: true, page: 'reviewScore' })
+		} else {
+			this.props.navigation.goBack()
 		}
 	}
 
@@ -112,7 +133,7 @@ export default class extends React.Component {
 					title="ยืนยันการสมัคร"
 					navLeft={
 						<TouchableOpacity
-							onPress={() => this.props.navigation.goBack()}
+							onPress={this.onGoBack}
 							style={{ paddingRight: 30 }}
 						>
 							<Image source={images.iconback} />

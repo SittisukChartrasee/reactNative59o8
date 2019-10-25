@@ -6,18 +6,20 @@ import {
 	ScrollView,
 	Image,
 } from 'react-native'
-import {bindActionCreators} from 'redux'
-import {connect} from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import get from 'lodash/get'
 import Screen from '../../component/screenComponent'
-import {NavBar} from '../../component/gradient'
-import {NextButton} from '../../component/button'
+import { NavBar } from '../../component/gradient'
+import { NextButton } from '../../component/button'
 import images from '../../config/images'
-import Input from '../../component/input'
-import {Choice} from '../../component/cardSelect'
-import {suittest} from '../../redux/actions/commonAction'
-import {navigateAction} from '../../redux/actions'
+import { Choice } from '../../component/cardSelect'
+import { suittest } from '../../redux/actions/commonAction'
+import { navigateAction } from '../../redux/actions'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
+import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 
 const checkActiveData = (data) => {
 	return data.reduce((pre, curr, inx, arr) => {
@@ -41,10 +43,11 @@ const checkActiveData = (data) => {
 
 const getBoolean = (arr) => arr.map(d => d.select)
 
-const mapToProps = ({suitReducer}) => ({suitReducer})
+const mapToProps = ({ suitReducer }) => ({ suitReducer })
 const dispatchToProps = dispatch => ({
 	updateSuittest: bindActionCreators(suittest, dispatch),
-	navigateAction: bindActionCreators(navigateAction, dispatch)
+	navigateAction: bindActionCreators(navigateAction, dispatch),
+	toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -57,7 +60,7 @@ export default class extends React.Component {
 		this.props.updateSuittest('sumSuittest', checkActiveData(obj.choice).IS_SUM)
 	}
 
-	onNext = () => {
+	onNext = async () => {
 		const { suitReducer } = this.props
 
 		const data = {
@@ -76,57 +79,61 @@ export default class extends React.Component {
 			suit12: suitReducer.suittest[11].answer + 1,
 		}
 
-		console.log(data)
+		try {
+			const res = await this.props.saveSuittest({ variables: { input: data } })
+			const success = get(res, 'data.saveSuittest.success', false)
+			const code = get(res, 'data.saveIdentity.code', errorMessage.messageIsNull.code)
+			const message = get(res, 'data.saveIdentity.message', errorMessage.messageIsNull.defaultMessage)
 
-		this.props.saveSuittest({ variables: { input: data }})
-				.then(res => {
-					console.log(res)
-					if (res.data.saveSuittest.success) {
-						this.props.navigateAction({
-							...this.props,
-							page: 'reviewScore',
-							params: { sumSuittest: suitReducer.sumSuittest }
-						})
-					}
+			if (success) {
+				this.props.updateRoot('screenModal', { visible: true, page: 'reviewScore' })
+			} else {
+				this.props.toggleModal({
+					...typeModal[code],
+					dis: message,
 				})
-				.catch(err => {
-					alert('time out')
-					console.log(err)
-				})
+			}
+
+		} catch (error) {
+			this.props.toggleModal({
+				...typeModal[errorMessage.requestError.code],
+				dis: errorMessage.requestError.defaultMessage,
+			})
+		}
 	}
 
 	render() {
 		const suittest = this.props.suitReducer.suittest
 		return (
-				<Screen color="transparent">
-					<NavBar
-							title="แบบประเมินความเสี่ยง"
-							navLeft={
-								<TouchableOpacity
-										onPress={() => this.props.navigation.goBack()}
-										style={{paddingRight: 30}}
-								>
-									<Image source={images.iconback}/>
-								</TouchableOpacity>
-							}
-							navRight={
-								<TouchableOpacity
-										onPress={() => this.props.lockout()}
-										style={{paddingLeft: 30}}
-								>
-									<Image source={images.iconlogoOff}/>
-								</TouchableOpacity>
-							}
-					/>
-					{
-						Choice({
-							init: this.props.suitReducer.suittest,
-							onPress: this.onPress,
-							paddingBottom: 100
-						})
+			<Screen color="transparent">
+				<NavBar
+					title="แบบประเมินความเสี่ยง"
+					navLeft={
+						<TouchableOpacity
+							onPress={() => this.props.navigation.goBack()}
+							style={{ paddingRight: 30 }}
+						>
+							<Image source={images.iconback} />
+						</TouchableOpacity>
 					}
-					<NextButton disabled={checkActiveData(suittest).IS_TRUE} onPress={this.onNext}/>
-				</Screen>
+					navRight={
+						<TouchableOpacity
+							onPress={() => this.props.lockout()}
+							style={{ paddingLeft: 30 }}
+						>
+							<Image source={images.iconlogoOff} />
+						</TouchableOpacity>
+					}
+				/>
+				{
+					Choice({
+						init: this.props.suitReducer.suittest,
+						onPress: this.onPress,
+						paddingBottom: 100
+					})
+				}
+				<NextButton disabled={checkActiveData(suittest).IS_TRUE} onPress={this.onNext} />
+			</Screen>
 		)
 	}
 }

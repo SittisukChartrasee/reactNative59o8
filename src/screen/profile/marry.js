@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
 import reverse from 'lodash/reverse'
+import get from 'lodash/get'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -25,6 +26,7 @@ import {
   validateIdentityCard,
   RequiredFields
 } from '../../utility/validation'
+import { errorMessage } from '../../utility/messages'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -257,7 +259,7 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = () => {
+  onNext = async () => {
     const { expireSatus } = this.state
     const { user } = this.props
     const redirec = this.props.navigation.getParam('redirec', '')
@@ -295,38 +297,45 @@ export default class extends React.Component {
       fistName,
     }
 
-    console.log(data)
+    try {
+      const res = await this.props.saveSpouse({ variables: { input: data } })
+      const success = get(res, 'data.saveSpouse.success', false)
+      const details = get(res, 'data.saveSpouse.details', [])
+      const code = get(res, 'data.saveSpouse.code', errorMessage.messageIsNull.code)
+      const message = get(res, 'data.saveSpouse.message', errorMessage.messageIsNull.defaultMessage)
 
-    this.props.saveSpouse({ variables: { input: data } })
-      .then(res => {
-
-        if (res.data.saveSpouse.success) {
-          if (redirec) return this.props.navigateAction({ ...this.props, page: redirec })
+      if (success) {
+        if (redirec) {
+          this.props.navigateAction({ ...this.props, page: redirec })
+        } else {
           this.props.navigateAction({ ...this.props, page: 'career' })
-        } else if (!res.data.saveSpouse.success) {
-          switch (res.data.saveSpouse.code) {
-            case '2101':
-              this.onHandleScrollToErrorField(res.data.saveSpouse.details)
-              return this.setState({ PreconditionRequired: res.data.saveSpouse.details })
-            case '2201':
-              this.onHandleScrollToErrorField(res.data.saveSpouse.details)
-              return this.setState({ InvalidArgument: res.data.saveSpouse.details })
-            case '1101':
-              return this.props.toggleModal({
-                ...typeModal[res.data.saveSpouse.code],
-                dis: res.data.saveSpouse.message
-              })
-            default:
-              return this.props.toggleModal({
-                ...typeModal[res.data.saveSpouse.code],
-                dis: res.data.saveSpouse.message
-              })
-          }
         }
+      } else {
+        switch (code) {
+          case '2101':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({ PreconditionRequired: details || [] })
+          case '2201':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({ InvalidArgument: details || [] })
+          case '1101':
+            return this.props.toggleModal({
+              ...typeModal[code],
+              dis: message
+            })
+          default:
+            return this.props.toggleModal({
+              ...typeModal[code],
+              dis: message
+            })
+        }
+      }
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
       })
-      .catch(err => {
-        console.log(err)
-      })
+    }
   }
 
   onHandleScrollToErrorField = (field) => {

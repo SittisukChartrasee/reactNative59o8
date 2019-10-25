@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import get from 'lodash/get'
 import Screen from '../component/screenComponent'
 import { NavBar } from '../component/gradient'
 import { TText, TBold, TSemiBold, TLight } from '../component/texts'
@@ -22,6 +23,7 @@ import { navigateAction } from '../redux/actions'
 import setMutation from '../containers/mutation'
 import lockout from '../containers/hoc/lockout'
 import typeModal from '../utility/typeModal'
+import { errorMessage, modalMessage } from '../utility/messages'
 
 const checkActiveData = data => {
   return data.reduce(
@@ -75,29 +77,48 @@ export default class extends React.Component {
     })
   }
 
-  onNext = async () => {
+  onGetFraud = () => {
 
+    const status = checkActiveData(this.props.user.fraud.choice).IS_INCORRECT
     const data = {
       hasLaunderingRecord: this.props.user.fraud.choice[0].answer === 0,
       isPolitician: this.props.user.fraud.choice[1].answer === 0
     }
 
-    if (!checkActiveData(this.props.user.fraud.choice).IS_INCORRECT) {
+    return { status, data }
+  }
+
+  onNext = async () => {
+
+    const { status, data } = this.onGetFraud()
+
+    if (!status) {
       this.props.toggleModal({
-        ...typeModal['1101'],
-        dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
+        ...typeModal[modalMessage.callCenter.code],
+        dis: modalMessage.callCenter.defaultMessage,
       })
     } else {
-      this.props.saveFraud({ variables: { input: data } })
-        .then(res => {
-          console.log(res)
-          if (res.data.saveFraud.success) {
-            this.props.navigateAction({ ...this.props, page: 'profile' })
-          }
+
+      try {
+        const res = await this.props.saveFraud({ variables: { input: data } })
+        const success = get(res, 'data.saveFraud.success', false)
+        const code = get(res, 'code', errorMessage.messageIsNull.code)
+        const message = get(res, 'message', errorMessage.messageIsNull.defaultMessage)
+
+        if (success) {
+          this.props.navigateAction({ ...this.props, page: 'profile' })
+        } else {
+          this.props.toggleModal({
+            ...typeModal[code],
+            dis: message,
+          })
+        }
+      } catch (error) {
+        this.props.toggleModal({
+          ...typeModal[errorMessage.requestError.code],
+          dis: errorMessage.requestError.defaultMessage,
         })
-        .catch(err => {
-          console.log(err)
-        })
+      }
     }
   }
 

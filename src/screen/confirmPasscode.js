@@ -7,6 +7,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import DeviceInfo from 'react-native-device-info'
+import get from 'lodash/get'
 import Keyboard from '../component/keyboard'
 import Screen from '../component/screenComponent'
 import { HeadSpace } from '../component/headSpace'
@@ -15,6 +16,7 @@ import { confirmPasscode } from '../redux/actions/root-active'
 import { root } from '../redux/actions/commonAction'
 import getnativeModules from '../containers/hoc/infoAppNativeModules'
 import typeModal from '../utility/typeModal'
+import { passcodeMessage } from '../utility/messages'
 
 const defaultPasscode = {
   dot: ['', '', '', '', '', ''],
@@ -39,7 +41,7 @@ export default class extends React.Component {
     dis: ''
   }
 
-  setNumber = (obj) => {
+  setNumber = async obj => {
     this.setState({ ...obj })
 
     const data = {
@@ -51,39 +53,10 @@ export default class extends React.Component {
       device_id: this.props.deviceInfo,
     }
     if (obj.number.length === 6) {
-      if (this.props.passcode.passcode === data.password) {
-        const token = this.props.root.access_token
-        const currFlowUP = this.props.root.currFlowUP
-
-        this.props.confirmPasscode(data, { token, currFlowUP })
-          .then(res => {
-            if (currFlowUP === 'forgetPasscode') {
-              this.props.navigation.navigate('login')
-              return
-            } else if (currFlowUP === 'updatePasscode') {
-              if (res.success) this.props.updateRoot('password', data.password)
-              this.props.navigation.navigate('portSuggestion')
-              return
-            } else if (res.success) {
-              this.props.navigateAction({ ...this.props, page: 'condi' })
-              AsyncStorage.setItem('access_token', res.result.access_token)
-              AsyncStorage.setItem('user_token', res.result.user_token)
-              NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
-              NativeModules.KMyFundOnboarding.saveUserToken(res.result.user_token)
-            } else if (!res.success && res.code) {
-              this.props.toggleModal({
-                ...typeModal[res.code],
-                dis: res.message,
-              })
-            }
-          })
-          .catch(err => {
-            console.log(err)
-          })
-      } else if (this.props.passcode.passcode !== data.password) {
+      if (this.props.passcode.passcode !== data.password) {
         this.props.toggleModal({
-          ...typeModal['1103'],
-          dis: `รหัสผ่าน (PIN) ไม่ตรงกับที่ตั้งไว้\nกรุณากรอกใหม่อีกครั้ง`,
+          ...typeModal[passcodeMessage.equalPasscode.code],
+          dis: passcodeMessage.equalPasscode.defaultMessage,
           onPress: () => {
             this.props.toggleModal({ ...this.props.root.modal, visible: false })
             this.setState({ ...defaultPasscode, defaultKey: true })
@@ -93,11 +66,54 @@ export default class extends React.Component {
             this.setState({ ...defaultPasscode, defaultKey: true })
           }
         })
+      } else {
+        const token = this.props.root.access_token
+        const currFlowUP = this.props.root.currFlowUP
+
+        try {
+          const res = await this.props.confirmPasscode(data, { token, currFlowUP })
+
+          const success = get(res, 'success', false)
+          const code = get(res, 'code', passcodeMessage.messageIsNull.code)
+          const message = get(res, 'message', passcodeMessage.messageIsNull.defaultMessage)
+
+          const accessToken = get(res, 'result.access_token', '')
+          const userToken = get(res, 'result.user_token', '')
+
+          if (success) {
+
+            if (currFlowUP === 'forgetPasscode') {
+              this.props.navigation.navigate('login')
+              return
+            } else if (currFlowUP === 'updatePasscode') {
+              this.props.updateRoot('password', data.password)
+              this.props.navigation.navigate('portSuggestion')
+              return
+            } else {
+  
+              AsyncStorage.setItem('access_token', accessToken)
+              AsyncStorage.setItem('user_token', userToken)
+              NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
+              NativeModules.KMyFundOnboarding.saveUserToken(userToken)
+  
+              this.props.navigateAction({ ...this.props, page: 'condi' })
+            }
+          } else if (message === 'unauthorized') {
+            this.props.toggleModal({
+              ...typeModal[passcodeMessage.unauthorized.code],
+              dis: passcodeMessage.unauthorized.defaultMessage
+            })
+          } else {
+            this.props.toggleModal({ ...typeModal[code], dis: message })
+          }
+
+        } catch (error) {
+          console.log(error)
+        }
       }
     }
   }
 
-  // onPrevPage = () => this.props.navigateReset({ ...this.props, page: 'passcode' })
   onPrevPage = () => this.props.navigation.goBack()
 
   render() {

@@ -10,18 +10,17 @@ import throttle from 'lodash/throttle'
 import { withApollo } from 'react-apollo'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { PieChart } from '../../component/chart'
+import get from 'lodash/get'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { TText, TBold, TSemiBold, TLight } from '../../component/texts'
 import colors from '../../config/colors'
 import { LongButton } from '../../component/button'
 import images from '../../config/images'
-import { RiskList } from '../../component/lists'
 import { navigateAction } from '../../redux/actions'
 import { root } from '../../redux/actions/commonAction'
 import { requestOtp, acceptTerm } from '../../redux/actions/root-active'
-import { containerQuery, getTermAndCondition } from '../../containers/query'
+import { getTermAndCondition } from '../../containers/query'
 
 const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
@@ -40,61 +39,63 @@ export default class extends React.Component {
 		text: ''
 	}
 
-	componentDidMount = () => {
-		const sumSuittest = this.props.navigation.getParam('sumSuittest', 0)
-		if (sumSuittest <= 15) this.setState({ risk: 0 })
-		else if (sumSuittest <= 21) this.setState({ risk: 1 })
-		else if (sumSuittest <= 29) this.setState({ risk: 2 })
-		else if (sumSuittest > 30) this.setState({ risk: 3 })
+	componentDidMount = async () => {
+		try {
+			const res = await this.props.client.query({ query: getTermAndCondition })
+			const text = get(res, 'data.getTermAndCondition', '')
 
-		containerQuery(
-			this.props.client,
-			{
-				query: getTermAndCondition
-			},
-			(val) => {
-				this.setState({ text: val.data.getTermAndCondition })
-			}
-		)
+			this.setState({ text })
+
+		} catch (error) {
+			this.setState({ text: '' })
+		}
 	}
 
 	onNext = throttle(async () => {
 		const token = await AsyncStorage.getItem("access_token")
 		this.props.updateRoot('currFlowUP', 'updatePasscode')
 
-		this.props.acceptTerm(token)
-			.then(res => {
-				console.log(res)
-				if (res.success) this.onRequestOtp(res.result.access_token)
-			})
-			.catch(err => {
-				console.log(err)
-			})
+		// try and catch in root-active
+		const res = await this.props.acceptTerm(token)
+
+		const success = get(res, 'success', false)
+		const result = get(res, 'result', null)
+
+		if (success) {
+			this.onRequestOtp(result.access_token)
+		}
+
 	}, 2000)
 
-	onRequestOtp = token => {
-		this.props.requestOtp(null, { token, currFlowUP: this.props.root.currFlowUP })
-			.then(res => {
-				if (res.success || res.code === '1001') {
-					if (res.code === '1001') {
-						this.props.updateRoot('time', res.details.time)
-						this.props.updateRoot('ref_no', res.details.ref_no)
-						this.props.updateRoot('overRequest', true)
-						this.props.updateRoot('overRequestUi', true)
-					} else {
-						this.props.updateRoot('overRequest', false)
-						this.props.updateRoot('overRequestUi', false)
-					}
-					this.props.navigation.navigate({ routeName: 'otp', key: 'otpUpdatePasscode' })
-				}
-			})
-			.catch(err => {
-				console.log(err)
-			})
+	onRequestOtp = async token => {
+		// try and catch in root-active
+		const res = await this.props.requestOtp(null, { token, currFlowUP: this.props.root.currFlowUP })
+
+		const success = get(res, 'success', false)
+		const time = get(res, 'details.time', 0)
+		const refNo = get(res, 'details.ref_no', '')
+
+		if (success || res.code === '1001') {
+
+			if (res.code === '1001') {
+				this.props.updateRoot('time', time)
+				this.props.updateRoot('ref_no', refNo)
+				this.props.updateRoot('overRequest', true)
+				this.props.updateRoot('overRequestUi', true)
+			} else {
+				this.props.updateRoot('overRequest', false)
+				this.props.updateRoot('overRequestUi', false)
+			}
+
+			this.props.navigation.navigate({ routeName: 'otp', key: 'otpUpdatePasscode' })
+		} else {
+
+		}
 	}
 
 	render() {
-		const { risk, agree } = this.state
+		const { agree } = this.state
+
 		return (
 			<Screen>
 				<NavBar
@@ -151,15 +152,15 @@ export default class extends React.Component {
 										? <Image source={images.iconCheck}
 											style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: 'red' }} />
 										: <View
-												style={{
-													width: 16,
-													height: 16,
-													borderRadius: 5,
-													backgroundColor: colors.white,
-													borderWidth: 1,
-													borderColor: colors.grey
-												}} 
-											/>
+											style={{
+												width: 16,
+												height: 16,
+												borderRadius: 5,
+												backgroundColor: colors.white,
+												borderWidth: 1,
+												borderColor: colors.grey
+											}}
+										/>
 								}
 							</View>
 							<View style={{ flex: 1 }}>

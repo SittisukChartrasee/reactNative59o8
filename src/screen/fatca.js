@@ -10,6 +10,7 @@ import {
 import { NavigationActions, StackActions } from 'react-navigation'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import get from 'lodash/get'
 import Screen from '../component/screenComponent'
 import { NavBar } from '../component/gradient'
 import { TText, TBold, TSemiBold, TLight } from '../component/texts'
@@ -23,6 +24,7 @@ import { navigateAction } from '../redux/actions'
 import setMutation from '../containers/mutation'
 import lockout from '../containers/hoc/lockout'
 import typeModal from '../utility/typeModal'
+import { errorMessage, modalMessage } from '../utility/messages'
 
 const checkActiveData = (data) => {
   return data.reduce((pre, curr, inx, arr) => {
@@ -40,12 +42,12 @@ const checkActiveData = (data) => {
     pre.IS_INCORRECT = chi.every(d => d)
     return pre
   }, {
-      count: 0,
-      leng: 0,
-      IS_SUM: 0,
-      IS_INCORRECT: false,
-      IS_TRUE: true,
-    })
+    count: 0,
+    leng: 0,
+    IS_SUM: 0,
+    IS_INCORRECT: false,
+    IS_TRUE: true,
+  })
 }
 
 
@@ -61,15 +63,16 @@ const dispatchToProps = dispatch => ({
 @setMutation
 @lockout
 export default class extends React.Component {
+
   onPress = (obj) => {
     this.props.updateFatca('fatca', obj.choice)
     this.props.updateFatca('sumFatca', checkActiveData(obj.choice).IS_SUM)
   }
 
-  onNext = () => {
+  onGetFatca = () => {
 
     const fatca = this.props.fatcaReducer.fatca
-
+    const status = checkActiveData(this.props.fatcaReducer.fatca).IS_INCORRECT
     const data = {
       isUSCitizen: fatca[0].answer === 0,
       isHoldingUsCard: fatca[1].answer === 0,
@@ -82,25 +85,41 @@ export default class extends React.Component {
       isUSPhoneNo: fatca[8].answer === 0,
     }
 
-    if (!checkActiveData(this.props.fatcaReducer.fatca).IS_INCORRECT) {
+    return { status, data }
+  }
+
+  onNext = async () => {
+
+    const { status, data } = this.onGetFatca()
+
+    if (!status) {
       this.props.toggleModal({
-        ...typeModal['1101'],
-        dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
+        ...typeModal[modalMessage.callCenter.code],
+        dis: modalMessage.callCenter.defaultMessage,
       })
     } else {
-      this.props.saveFatca({ variables: { input: data } })
-        .then(res => {
-          if (res.data.saveFatca.success) this.props.navigateAction({ ...this.props, page: 'fraud' })
-          else if (!res.data.saveFatca.success) {
-            this.props.toggleModal({
-              ...typeModal[res.code],
-              dis: res.message,
-            })
-          }
+      try {
+        const res = await this.props.saveFatca({ variables: { input: data } })
+
+        const success = get(res, 'data.saveFatca.success', false)
+        const code = get(res, 'code', errorMessage.messageIsNull.code)
+        const message = get(res, 'message', errorMessage.messageIsNull.defaultMessage)
+
+        if (success) {
+          this.props.navigateAction({ ...this.props, page: 'fraud' })
+        } else {
+          this.props.toggleModal({
+            ...typeModal[code],
+            dis: message,
+          })
+        }
+
+      } catch (error) {
+        this.props.toggleModal({
+          ...typeModal[errorMessage.requestError.code],
+          dis: errorMessage.requestError.defaultMessage,
         })
-        .catch(err => {
-          console.log(err)
-        })
+      }
     }
   }
 

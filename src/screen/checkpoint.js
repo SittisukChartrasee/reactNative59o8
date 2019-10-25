@@ -14,6 +14,7 @@ import { withApollo } from 'react-apollo'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import get from 'lodash/get'
 import { TBold, TLight } from '../component/texts'
 import { NavBar } from '../component/gradient'
 import Screen from '../component/screenComponent'
@@ -24,12 +25,15 @@ import Input from '../component/input'
 import { LongPositionButton, NextButton } from '../component/button'
 import { navigateAction } from '../redux/actions'
 import { containerQuery, getStatusInProgress, getRegisterBankStatus } from '../containers/query'
+import typeModal from '../utility/typeModal'
+import { errorMessage } from '../utility/messages'
 
 const { width: widthScreen } = Dimensions.get('window')
 
 const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -65,14 +69,19 @@ export default class extends React.Component {
 
   componentDidMount = async () => {
 
-    await this.props.client.query({ query: getRegisterBankStatus })
-      .then((val) => this.setState({ statusBank: val.data.getRegisterBankStatus.status ? val.data.getRegisterBankStatus.status : '' }))
-      .catch(() => this.setState({ statusBank: '' }))
+    try {
+      const resBankStatus = await this.props.client.query({ query: getRegisterBankStatus })
+      const status = get(resBankStatus, 'data.getRegisterBankStatus.status', '')
+      this.setState({ statusBank: status })
+    } catch (error) {
+      this.setState({ statusBank: '' })
+    }
 
-    containerQuery(this.props.client, {
-      query: getStatusInProgress,
-    }, val => {
-      if (val.data.getStatusInProgress === 'Assure') {
+    try {
+      const res = await this.props.client.query({ query: getStatusInProgress })
+      const getStatus = get(res, 'data.getStatusInProgress', '')
+
+      if (getStatus === 'Assure') {
         this.setState({
           checkPoint: this.state.checkPoint.map(
             (d, i) => i === 0
@@ -80,7 +89,7 @@ export default class extends React.Component {
               : ({ ...d, check: 'future' })),
           link: 'condi'
         })
-      } else if (val.data.getStatusInProgress === 'PersonalInformation') {
+      } else if (getStatus === 'PersonalInformation') {
         this.setState({
           checkPoint: this.state.checkPoint.map(
             (d, i) => i < 1
@@ -91,7 +100,7 @@ export default class extends React.Component {
           ),
           link: 'profile'
         })
-      } else if (val.data.getStatusInProgress === 'LinkBank') {
+      } else if (getStatus === 'LinkBank') {
         this.setState({
           checkPoint: this.state.checkPoint.map(
             (d, i) => i < 2
@@ -110,7 +119,7 @@ export default class extends React.Component {
               return this.setState({ link: 'tutorialBank' })
           }
         })
-      } else if (val.data.getStatusInProgress === 'Suittest') {
+      } else if (getStatus === 'Suittest') {
         this.setState({
           checkPoint: this.state.checkPoint.map(
             (d, i) => i < 3
@@ -121,7 +130,7 @@ export default class extends React.Component {
           ),
           link: 'statusBank'
         })
-      } else if (val.data.getStatusInProgress === 'Complete') {
+      } else if (getStatus === 'Complete') {
         this.setState({
           checkPoint: this.state.checkPoint.map(
             (d, i) => i < 4
@@ -133,7 +142,13 @@ export default class extends React.Component {
           link: 'complete'
         })
       }
-    })
+
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
+      })
+    }
   }
 
   onNext = () => this.props.navigateAction({ ...this.props, page: this.state.link })

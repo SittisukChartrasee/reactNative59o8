@@ -16,6 +16,7 @@ import typeModal from '../utility/typeModal'
 import { getStatus, getUser, getSubmit, checkVerifiedEmail } from '../containers/query'
 import { formatIdCard, formatPhoneNumber, } from '../utility/helper'
 import { userDataToProps } from '../schemaData/userData'
+import { errorMessage } from '../utility/messages'
 import releaseApp from '../../release/releaseApp.json'
 
 const defaultPasscode = {
@@ -47,13 +48,11 @@ export default class extends React.Component {
 	onGetUser = async () => {
 		try {
 			const res = await this.props.client.query({ query: getUser })
-
-			const success = get(res.data.getUser, 'success', false)
+			const success = get(res, 'data.getUser.success', false)
 
 			if (success) {
-				const result = get(res.data.getUser, 'result', {})
-
-				return userDataToProps({
+				const result = get(res, 'data.getUser.result', {})
+				userDataToProps({
 					result,
 					updateUser: this.props.updateUser,
 					updateFatca: this.props.updateFatca,
@@ -62,13 +61,11 @@ export default class extends React.Component {
 					fatcaProps: this.props.fatcaReducer,
 					suittestProps: this.props.suitReducer
 				})
-
 			}
-
 		} catch (error) {
 			this.props.toggleModal({
-				...typeModal['1103'],
-				dis: 'เกิดข้อผิดพลาด กรุณาเข้าสู่ระบบใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
+				...typeModal[errorMessage.requestError.code],
+				dis: errorMessage.requestError.defaultMessage,
 			})
 		}
 	}
@@ -79,8 +76,8 @@ export default class extends React.Component {
 			this.onHandleChooseScreen({ res, password })
 		} catch (error) {
 			this.props.toggleModal({
-				...typeModal['1103'],
-				dis: 'เกิดข้อผิดพลาด กรุณาเข้าสู่ระบบใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
+				...typeModal[errorMessage.requestError.code],
+				dis: errorMessage.requestError.defaultMessage,
 			})
 		}
 	}
@@ -88,8 +85,13 @@ export default class extends React.Component {
 	onCheckSubmit = async () => {
 		try {
 			const res = await this.props.client.query({ query: getSubmit })
-			return res.data.getSubmit
+			const success = get(res, 'data.getSubmit', false)
+			return success
 		} catch (error) {
+			this.props.toggleModal({
+				...typeModal[errorMessage.requestError.code],
+				dis: errorMessage.requestError.defaultMessage,
+			})
 			return false
 		}
 	}
@@ -97,33 +99,31 @@ export default class extends React.Component {
 	onCheckVerifiedEmail = async () => {
 		try {
 			const res = await this.props.client.query({ query: checkVerifiedEmail })
-			return res.data.checkVerifiedEmail
+			const success = get(res, 'data.checkVerifiedEmail', false)
+			return success
 		} catch (error) {
+			this.props.toggleModal({
+				...typeModal[errorMessage.requestError.code],
+				dis: errorMessage.requestError.defaultMessage,
+			})
 			return false
 		}
 	}
 
+	// try and catch in root-active
 	onRequestLogin = async ({ userToken, obj }) => {
-		try {
 
-			const res = await this.props.requestLogin({
-				userToken,
-				password: obj.number,
-				type: Platform.OS,
-				fcm_token: this.props.fcm,
-				version: this.props.version,
-				system_version: DeviceInfo.getSystemVersion(),
-				device_id: this.props.deviceInfo
-			})
+		const res = await this.props.requestLogin({
+			userToken,
+			password: obj.number,
+			type: Platform.OS,
+			fcm_token: this.props.fcm,
+			version: this.props.version,
+			system_version: DeviceInfo.getSystemVersion(),
+			device_id: this.props.deviceInfo
+		})
 
-			return res
-
-		} catch (error) {
-			this.props.toggleModal({
-				...typeModal['1103'],
-				dis: 'เกิดข้อผิดพลาด กรุณาเข้าสู่ระบบใหม่อีกครั้ง ขออภัยในความไม่สะดวก',
-			})
-		}
+		return res
 	}
 
 	setNumber = async obj => {
@@ -137,23 +137,32 @@ export default class extends React.Component {
 
 			this.props.updateRoot('loading', true)
 
-			const requestLogin = await this.onRequestLogin({ userToken, obj })
+			const res = await this.onRequestLogin({ userToken, obj })
 
-			if (requestLogin.success) {
-				AsyncStorage.setItem('access_token', requestLogin.result.access_token)
+			const success = get(res, 'success', false)
+			const code = get(res, 'code', errorMessage.messageIsNull.code)
+			const message = get(res, 'message', errorMessage.messageIsNull.defaultMessage)
+
+			const accessToken = get(res, 'result.access_token', '')
+			const idCard = get(res, 'result.id_card', '')
+			const phoneNo = get(res, 'result.phone_no', '')
+			const email = get(res, 'result.email', '')
+
+			if (success) {
+				AsyncStorage.setItem('access_token', accessToken)
 				AsyncStorage.setItem('user_token', userToken)
 
 				NativeModules.KMyFundOnboarding.saveUserToken(userToken)
 
 				this.props.updateUser('profile', {
 					...this.props.user.profile,
-					'idCard': formatIdCard(requestLogin.result.id_card)
+					'idCard': formatIdCard(idCard)
 				})
 
 				this.props.updateUser('contact', {
 					...this.props.user.contact,
-					mobilePhone: formatPhoneNumber(requestLogin.result.phone_no),
-					email: requestLogin.result.email
+					mobilePhone: formatPhoneNumber(phoneNo),
+					email
 				})
 
 				this.onGetStatus({ password: obj.number })
@@ -161,9 +170,9 @@ export default class extends React.Component {
 
 				this.props.updateRoot('loading', false)
 
-			} else if (!requestLogin.success) {
+			} else if (!success) {
 				this.setState({ ...defaultPasscode, defaultKey: true })
-				this.handleErrorLogin({ code: requestLogin.code, message: requestLogin.message })
+				this.handleErrorLogin({ code, message })
 			}
 		}
 	}

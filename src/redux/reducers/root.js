@@ -10,7 +10,12 @@ const init = {
   loading: false,
   modal: {
     visible: false
+  },
+  screenModal: {
+    visible: false,
+    page: '',
   }
+
 }
 
 export default (state = init, action) => {

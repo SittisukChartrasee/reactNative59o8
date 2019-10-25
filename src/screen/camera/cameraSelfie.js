@@ -11,17 +11,21 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import get from 'lodash/get'
 import { Camera } from '../../component/camera'
 import colors from '../../config/colors'
 import { TLight, TBold } from '../../component/texts'
 import images from '../../config/images'
 import { navigateAction, navigateReset } from '../../redux/actions'
 import request from '../../utility/requestApi'
+import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 
 const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   navigateReset: bindActionCreators(navigateReset, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 @connect(mapToProps, dispatchToProps)
 export default class extends React.Component {
@@ -31,24 +35,41 @@ export default class extends React.Component {
 
   onNext = async () => {
     const token = await AsyncStorage.getItem("access_token")
+    const url = 'upload-selfie'
     const data = new FormData()
     data.append('file', {
       uri: this.state.photo,
       type: 'image/jpg',
       name: 'selfie.jpg'
     })
-    const url = 'upload-selfie'
-    const res = await request(url, {
-      method: 'POST',
-      body: data
-    }, token)
-    if (res.success) {
-      const status = this.props.navigation.getParam('status', '')
-      if (status === 'Editing') {
-        this.props.navigateReset({ ...this.props, page: 'softReject' })
+
+    try {
+      const res = await request(url, {
+        method: 'POST',
+        body: data
+      }, token)
+
+      const success = get(res, 'success', false)
+
+      if (success) {
+        const status = this.props.navigation.getParam('status', '')
+        if (status === 'Editing') {
+          this.props.navigateReset({ ...this.props, page: 'softReject' })
+        } else {
+          this.props.navigateAction({ ...this.props, page: 'signature' })
+        }
       } else {
-        this.props.navigateAction({ ...this.props, page: 'signature' })
+        this.props.toggleModal({
+          ...typeModal[errorMessage.messageIsNull.code],
+          dis: errorMessage.messageIsNull.defaultMessage,
+        })
       }
+
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
+      })
     }
   }
 

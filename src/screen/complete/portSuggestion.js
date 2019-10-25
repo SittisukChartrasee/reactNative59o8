@@ -13,6 +13,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import debounce from 'lodash/debounce'
+import get from 'lodash/get'
 import { withApollo } from 'react-apollo'
 import { PieChart } from '../../component/chart'
 import Screen from '../../component/screenComponent'
@@ -29,12 +30,8 @@ import { root } from '../../redux/actions/commonAction'
 import { getInvestmentAfterApprove, getLinkRisk } from '../../containers/query'
 import setMutation from '../../containers/mutation'
 import getnativeModules from '../../containers/hoc/infoAppNativeModules'
-
-const query = debounce((client, obj, setState) => {
-  client.query({ ...obj })
-    .then((val) => setState(val))
-    .catch(err => console.error(err))
-}, 300)
+import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 
 const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
@@ -61,34 +58,40 @@ export default class extends React.Component {
     assetClass: [],
   }
 
-  componentDidMount = () => {
-    query(this.props.client, {
-      query: getInvestmentAfterApprove,
-    }, val => {
-      this.setState({ ...val.data.getInvestmentAfterApprove })
-    })
+  componentDidMount = async () => {
+    try {
+      const res = await this.props.client.query({ query: getInvestmentAfterApprove })
+      const data = get(res, 'data.getInvestmentAfterApprove', {})
+      this.setState({ ...data })
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
+      })
+    }
   }
 
   componentWillUnmount = () => {
     this.props.updateRoot('password', '')
   }
 
-  onNext = async () => {
-    this.onCallApi()
-  }
+  onNext = () => this.onCallApi()
 
   onConfirm = async () => {
     this.onCallApi()
     this.props.toggleModal({ ...this.props.root.modal, visible: false })
-    query(this.props.client, {
-      query: getLinkRisk,
-    }, val => {
-      if (val) {
-        setTimeout(() => Linking.openURL(val.data.getLinkRisk), 100)
-      } else {
-        setTimeout(() => Linking.openURL('https://k-invest.kasikornbankgroup.com/CustomerRisk/default.aspx?lang=TH'), 100)
-      }
-    })
+
+    try {
+      const res = await this.props.client.query({ query: getLinkRisk })
+      const dataURL = get(res, 'data.getLinkRisk', 'https://k-invest.kasikornbankgroup.com/CustomerRisk/default.aspx?lang=TH')
+
+      setTimeout(() => Linking.openURL(dataURL), 100)
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
+      })
+    }
   }
 
   onCallApi = async () => {

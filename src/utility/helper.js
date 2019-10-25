@@ -1,4 +1,5 @@
 import { Dimensions, PixelRatio, Platform } from 'react-native'
+import isEmpty from 'lodash/isEmpty'
 
 export const month = [
   'มกราคม',
@@ -111,6 +112,25 @@ export const formatIdCard = (idCard) => {
   const match = cleaned.match(/^(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})$/)
   return match ? `${match[1]} ${match[2]} ${match[3]} ${match[4]} ${match[5]}` : null
 }
+
+export const formatHomeNumber = (homeNumberString) => {
+  const number = homeNumberString.split('#')
+
+  if (number.length === 2) {
+    const cleaned = ('' + number[0]).replace(/\D/g, '')
+    const match = cleaned.match(/^(\d{2})(\d{3})(\d{4})$/)
+    if (!isEmpty(number[0])) {
+      return { homePhone: match ? `${match[1]} ${match[2]} ${match[3]}` : '', homePhoneExt: number[1] }
+    } else {
+      return { homePhone: '', homePhoneExt: '' }
+    }
+  } else if (number.length === 1) {
+    const cleaned = ('' + number[0]).replace(/\D/g, '')
+    const match = cleaned.match(/^(\d{2})(\d{3})(\d{4})$/)
+    return { homePhone: match ? `${match[1]} ${match[2]} ${match[3]}` : '', homePhoneExt: '' }
+  }
+}
+
 
 export const formatPhoneNumber = (phoneNumberString) => {
   const cleaned = ('' + phoneNumberString).replace(/\D/g, '')

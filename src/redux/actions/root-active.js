@@ -1,27 +1,23 @@
+import get from 'lodash/get'
 import { NativeModules } from 'react-native'
-import { NavigationActions } from 'react-navigation'
+import { errorMessage } from '../../utility/messages'
 import request from '../../utility/requestApi'
+import typeModal from '../../utility/typeModal'
 import { CHANGE_ROOT } from '../types'
 
 const handleTimeout = (res, dispatch) => {
   if (!res.success && res.message === 'jwt expired') {
     const modal = {
-      dis: `ท่านไม่ได้ทำรายการใดๆ เกินระยะเวลาที่\nกำหนด กรุณาเข้าสู่ระบบใหม่อีกครั้ง`,
-      visible: true,
-      onPress: () => NativeModules.KMyFundOnboarding.finishActivity(),
-      onPressClose: () => dispatch({ type: CHANGE_ROOT, key: 'modal', value: { visible: false } })
+      ...typeModal[errorMessage.jwtExpired.code],
+      dis: errorMessage.jwtExpired.defaultMessage,
     }
     return dispatch({ type: CHANGE_ROOT, key: 'modal', value: modal })
   }
 }
 
-// #
-// #
 // requestOtp :: Api ใช้สำหรับ OTP register และ accept
-// #
-// #
 export const requestOtp = (obj, { token = null, currFlowUP }) => async dispatch => {
-  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
+
   const handleEndPoint = currFlow => {
     switch (currFlow) {
       case 'updatePasscode': return 'user/accept-term/request-otp'
@@ -30,66 +26,87 @@ export const requestOtp = (obj, { token = null, currFlowUP }) => async dispatch 
     }
   }
 
-  const res = await request(handleEndPoint(currFlowUP), {
-    method: 'POST',
-    body: token ? null : JSON.stringify(obj),
-  }, token)
+  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
 
-  if (res) dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+  try {
+    const res = await request(handleEndPoint(currFlowUP), {
+      method: 'POST',
+      body: token ? null : JSON.stringify(obj),
+    }, token)
 
-  handleTimeout(res, dispatch)
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
 
-  if (res && res.result) {
-    for (const key in res.result) {
-      if (key === 'code')
-        dispatch({ type: CHANGE_ROOT, key, value: { code: res.result.code, message: res.result.message } })
-      else
-        dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    handleTimeout(res, dispatch)
+
+    const result = get(res, 'result', null)
+
+    if (result) {
+      for (const key in result) {
+        if (key === 'code')
+          dispatch({ type: CHANGE_ROOT, key, value: { code: result.code, message: result.message } })
+        else
+          dispatch({ type: CHANGE_ROOT, key, value: result[key] })
+      }
+    } else {
+      for (const key in res) {
+        if (key === 'code')
+          dispatch({ type: CHANGE_ROOT, key, value: { code: res.code, message: res.message } })
+        else
+          dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+      }
     }
-    return { ...res }
-  }
 
-  for (const key in res) {
-    if (key === 'code')
-      dispatch({ type: CHANGE_ROOT, key, value: { code: res.code, message: res.message } })
-    else
-      dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+    return { ...res }
+
+  } catch (error) {
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+
+    const modal = {
+      ...typeModal[errorMessage.requestError.code],
+      dis: errorMessage.requestError.defaultMessage,
+    }
+    dispatch({ type: CHANGE_ROOT, key: 'modal', value: modal })
   }
-  return { ...res }
 }
 
-// #
-// #
 // acceptTerm :: Api ใช้สำหรับ accept ก่อน OTP
-// #
-// #
 export const acceptTerm = token => async dispatch => {
-  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
   const url = 'user/accept-term'
-  const res = await request(url, {
-    method: 'POST',
-  }, token)
 
-  if (res) dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
 
-  handleTimeout(res, dispatch)
+  try {
+    const res = await request(url, {
+      method: 'POST',
+    }, token)
 
-  if (res && res.result) {
-    for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+
+    handleTimeout(res, dispatch)
+
+    const result = get(res, 'result', null)
+
+    if (result) {
+      for (const key in result) dispatch({ type: CHANGE_ROOT, key, value: result[key] })
+    } else {
+      for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+    }
+
     return { ...res }
-  }
+  } catch (error) {
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
 
-  for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
-  return { ...res }
+    const modal = {
+      ...typeModal[errorMessage.requestError.code],
+      dis: errorMessage.requestError.defaultMessage,
+    }
+    dispatch({ type: CHANGE_ROOT, key: 'modal', value: modal })
+  }
 }
 
-// #
-// #
 // velidateOtp :: Api ใช้สำหรับ OTP register และ accept
-// #
-// #
 export const velidateOtp = (obj, { token = null, currFlowUP }) => async dispatch => {
-  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
+
   const handleEndPoint = currFlow => {
     switch (currFlow) {
       case 'updatePasscode': return 'user/accept-term/verify-otp'
@@ -98,41 +115,55 @@ export const velidateOtp = (obj, { token = null, currFlowUP }) => async dispatch
     }
   }
 
-  const res = await request(handleEndPoint(currFlowUP), {
-    method: 'POST',
-    body: JSON.stringify({
-      trans_id: obj.trans_id,
-      ref_no: obj.ref_no,
-      phone_no: obj.phone_no,
-      secret: obj.secret,
-    }),
-  }, token)
+  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
 
-  if (res) dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+  try {
+    const res = await request(handleEndPoint(currFlowUP), {
+      method: 'POST',
+      body: JSON.stringify({
+        trans_id: obj.trans_id,
+        ref_no: obj.ref_no,
+        phone_no: obj.phone_no,
+        secret: obj.secret,
+      }),
+    }, token)
 
-  handleTimeout(res, dispatch)
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
 
-  if (res && res.result) {
-    for (const key in res.result) {
-      if (key === 'code')
-        dispatch({ type: CHANGE_ROOT, key, value: { code: res.result.code, message: res.result.message } })
-      else
-        dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    handleTimeout(res, dispatch)
+
+    const result = get(res, 'result', null)
+
+    if (result) {
+      for (const key in result) {
+        if (key === 'code')
+          dispatch({ type: CHANGE_ROOT, key, value: { code: result.code, message: result.message } })
+        else
+          dispatch({ type: CHANGE_ROOT, key, value: result[key] })
+      }
+    } else {
+      for (const key in res) {
+        if (key === 'code')
+          dispatch({ type: CHANGE_ROOT, key, value: { code: res.code, message: res.message } })
+        else
+          dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+      }
     }
-    return { ...res }
-  }
 
-  for (const key in res) {
-    if (key === 'code')
-      dispatch({ type: CHANGE_ROOT, key, value: { code: res.code, message: res.message } })
-    else
-      dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+    return { ...res }
+  } catch (error) {
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+
+    const modal = {
+      ...typeModal[errorMessage.requestError.code],
+      dis: errorMessage.requestError.defaultMessage,
+    }
+    dispatch({ type: CHANGE_ROOT, key: 'modal', value: modal })
   }
-  return { ...res }
 }
 
 export const confirmPasscode = (obj, { token, currFlowUP }) => async dispatch => {
-  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
+
   const handleEndPoint = currFlow => {
     switch (currFlow) {
       case 'updatePasscode': return 'user/accept-term/update-passcode'
@@ -141,94 +172,135 @@ export const confirmPasscode = (obj, { token, currFlowUP }) => async dispatch =>
     }
   }
 
-  const res = await request(handleEndPoint(currFlowUP), {
-    method: 'POST',
-    body: JSON.stringify({
-      password: obj.password,
-      ...obj,
-    }),
-  }, token)
+  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
 
-  if (res) dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+  try {
+    const res = await request(handleEndPoint(currFlowUP), {
+      method: 'POST',
+      body: JSON.stringify({
+        password: obj.password,
+        ...obj,
+      }),
+    }, token)
 
-  handleTimeout(res, dispatch)
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
 
-  if (res && res.result) {
-    for (const key in res.result) dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    handleTimeout(res, dispatch)
+
+    const result = get(res, 'result', null)
+
+    if (result) {
+      for (const key in result) dispatch({ type: CHANGE_ROOT, key, value: result[key] })
+    } else {
+      for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+    }
+
     return { ...res }
-  }
+  } catch (error) {
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
 
-  for (const key in res) dispatch({ type: CHANGE_ROOT, key, value: res[key] })
-  return { ...res }
+    const modal = {
+      ...typeModal[errorMessage.requestError.code],
+      dis: errorMessage.requestError.defaultMessage,
+    }
+    dispatch({ type: CHANGE_ROOT, key: 'modal', value: modal })
+  }
 }
 
 export const requestLogin = (obj, token) => async dispatch => {
-  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
   const url = 'auth/login'
 
-  const res = await request(url, {
-    method: 'POST',
-    body: JSON.stringify({
-      token: obj.userToken,
-      passcode: obj.password,
-      ...obj,
-    }),
-  }, token)
+  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
 
-  if (res) dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+  try {
+    const res = await request(url, {
+      method: 'POST',
+      body: JSON.stringify({
+        token: obj.userToken,
+        passcode: obj.password,
+        ...obj,
+      }),
+    }, token)
 
-  handleTimeout(res, dispatch)
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
 
-  if (res && res.result) {
-    for (const key in res.result) {
-      if (key === 'code')
-        dispatch({ type: CHANGE_ROOT, key, value: { code: res.result.code, message: res.result.message } })
-      else
-        dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    handleTimeout(res, dispatch)
+
+    const result = get(res, 'result', null)
+
+    if (result) {
+      for (const key in result) {
+        if (key === 'code')
+          dispatch({ type: CHANGE_ROOT, key, value: { code: result.code, message: result.message } })
+        else
+          dispatch({ type: CHANGE_ROOT, key, value: result[key] })
+      }
+    } else {
+      for (const key in res) {
+        if (key === 'code')
+          dispatch({ type: CHANGE_ROOT, key, value: { code: res.code, message: res.message } })
+        else
+          dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+      }
     }
-    return { ...res }
-  }
 
-  for (const key in res) {
-    if (key === 'code')
-      dispatch({ type: CHANGE_ROOT, key, value: { code: res.code, message: res.message } })
-    else
-      dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+    return { ...res }
+  } catch (error) {
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+
+    const modal = {
+      ...typeModal[errorMessage.requestError.code],
+      dis: errorMessage.requestError.defaultMessage,
+    }
+    dispatch({ type: CHANGE_ROOT, key: 'modal', value: modal })
   }
-  return { ...res }
 }
 
 export const forgotPasscode = (obj) => async dispatch => {
-  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
   const url = 'user/forgot-password'
 
-  const res = await request(url, {
-    method: 'POST',
-    body: JSON.stringify({
-      user_token: obj.user_token,
-      id_card: obj.id_card,
-    }),
-  })
+  dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
 
-  if (res) dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+  try {
 
-  handleTimeout(res, dispatch)
+    const res = await request(url, {
+      method: 'POST',
+      body: JSON.stringify({
+        user_token: obj.user_token,
+        id_card: obj.id_card,
+      }),
+    })
 
-  if (res && res.result) {
-    for (const key in res.result) {
-      if (key === 'code')
-        dispatch({ type: CHANGE_ROOT, key, value: { code: res.result.code, message: res.result.message } })
-      else
-        dispatch({ type: CHANGE_ROOT, key, value: res.result[key] })
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+
+    handleTimeout(res, dispatch)
+
+    const result = get(res, 'result', null)
+
+    if (result) {
+      for (const key in result) {
+        if (key === 'code')
+          dispatch({ type: CHANGE_ROOT, key, value: { code: result.code, message: result.message } })
+        else
+          dispatch({ type: CHANGE_ROOT, key, value: result[key] })
+      }
+    } else {
+      for (const key in res) {
+        if (key === 'code')
+          dispatch({ type: CHANGE_ROOT, key, value: { code: res.code, message: res.message } })
+        else
+          dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+      }
     }
-    return { ...res }
-  }
 
-  for (const key in res) {
-    if (key === 'code')
-      dispatch({ type: CHANGE_ROOT, key, value: { code: res.code, message: res.message } })
-    else
-      dispatch({ type: CHANGE_ROOT, key, value: res[key] })
+    return { ...res }
+  } catch (error) {
+    dispatch({ type: CHANGE_ROOT, key: 'loading', value: false })
+
+    const modal = {
+      ...typeModal[errorMessage.requestError.code],
+      dis: errorMessage.requestError.defaultMessage,
+    }
+    dispatch({ type: CHANGE_ROOT, key: 'modal', value: modal })
   }
-  return { ...res }
 }
