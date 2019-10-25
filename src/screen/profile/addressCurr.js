@@ -7,6 +7,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import get from 'lodash/get'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -19,6 +20,7 @@ import lockout from '../../containers/hoc/lockout'
 import setMutation from '../../containers/mutation'
 import { RequiredFields } from '../../utility/validation'
 import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -231,7 +233,7 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = () => {
+  onNext = async () => {
     const { user } = this.props
     this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
@@ -268,26 +270,36 @@ export default class extends React.Component {
       zipCode,
     }
 
-    this.props.saveCurrentAddress({ variables: { input: data } })
-      .then(res => {
-        if (res.data.saveCurrentAddress.success) {
-          this.props.navigateAction({ ...this.props, page: 'chooseDoc' })
-        } else if (!res.data.saveCurrentAddress.success) {
-          switch (res.data.saveCurrentAddress.code) {
-            case '2101':
-              this.onHandleScrollToErrorField(res.data.saveCurrentAddress.details)
-              return this.setState({ PreconditionRequired: res.data.saveCurrentAddress.details })
-            case '2201':
-              this.onHandleScrollToErrorField(res.data.saveCurrentAddress.details)
-              return this.setState({ InvalidArgument: res.data.saveCurrentAddress.details })
-            default:
-              return this.props.toggleModal({
-                ...typeModal[res.data.saveContact.code],
-                dis: res.data.saveContact.message
-              })
-          }
+    try {
+      const res = await this.props.saveCurrentAddress({ variables: { input: data } })
+      const success = get(res, 'data.saveCurrentAddress.success', false)
+      const details = get(res, 'data.saveCurrentAddress.details', [])
+      const code = get(res, 'data.saveCurrentAddress.code', errorMessage.messageIsNull.code)
+      const message = get(res, 'data.saveCurrentAddress.message', errorMessage.messageIsNull.defaultMessage)
+
+      if (success) {
+        this.props.navigateAction({ ...this.props, page: 'chooseDoc' })
+      } else {
+        switch (code) {
+          case '2101':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({ PreconditionRequired: details || [] })
+          case '2201':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({ InvalidArgument: details || [] })
+          default:
+            return this.props.toggleModal({
+              ...typeModal[code],
+              dis: message
+            })
         }
+      }
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
       })
+    }
   }
 
   onHandleScrollToErrorField = (field) => {

@@ -7,6 +7,8 @@ import { bindActionCreators } from 'redux'
 import { onStore, AppNavigator } from './redux/store'
 import provider from './config/provider'
 import Modal from './component/modal'
+import Screen from './component/screenComponent'
+import ScreenModal from './component/screenModal'
 import { root } from './redux/actions/commonAction'
 import colors from './config/colors';
 import { TBold } from './component/texts';
@@ -95,20 +97,20 @@ export default class extends React.Component {
   }
 
   render() {
-    const { modal, loading } = this.props.root
+    const { modal, screenModal, loading } = this.props.root
     return (
       <View style={{ flex: 1 }}>
         {
           !TEST ?
             this.state.loading
               ? <ReactWithState />
-              : <View style={{ flex: 1, backgroundColor: colors.white, justifyContent: 'center', alignItems: 'center' }}>
-                <TBold>Loading...</TBold>
-              </View>
+              : <Screen />
             : <ReactWithState />
         }
-        <Modal {...modal} />
-        <Spinner loading={loading}/>
+        {
+          screenModal.visible ? <ScreenModal modal={modal} {...screenModal} /> : <Modal {...modal} />
+        }
+        <Spinner loading={loading} />
       </View>
     )
   }

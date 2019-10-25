@@ -7,6 +7,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import get from 'lodash/get'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -19,6 +20,7 @@ import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
 import { RequiredFields } from '../../utility/validation'
 import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -233,7 +235,7 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = () => {
+  onNext = async () => {
     const { user } = this.props
     this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
@@ -272,26 +274,36 @@ export default class extends React.Component {
       zipCode
     }
 
-    this.props.saveWorkplaceAddress({ variables: { input: data } })
-      .then(res => {
-        if (res.data.saveWorkplaceAddress.success) {
-          this.props.navigateAction({ ...this.props, page: 'chooseCurr' })
-        } else if (!res.data.saveWorkplaceAddress.success) {
-          switch (res.data.saveWorkplaceAddress.code) {
-            case '2101':
-              this.onHandleScrollToErrorField(res.data.saveWorkplaceAddress.details)
-              return this.setState({ PreconditionRequired: res.data.saveWorkplaceAddress.details })
-            case '2201':
-              this.onHandleScrollToErrorField(res.data.saveWorkplaceAddress.details)
-              return this.setState({ InvalidArgument: res.data.saveWorkplaceAddress.details })
-            default:
-              return this.props.toggleModal({
-                ...typeModal[res.data.saveWorkplaceAddress.code],
-                dis: res.data.saveWorkplaceAddress.message
-              })
-          }
+    try {
+      const res = await this.props.saveWorkplaceAddress({ variables: { input: data } })
+      const success = get(res, 'data.saveWorkplaceAddress.success', false)
+      const details = get(res, 'data.saveWorkplaceAddress.details', [])
+      const code = get(res, 'data.saveWorkplaceAddress.code', errorMessage.messageIsNull.code)
+      const message = get(res, 'data.saveWorkplaceAddress.message', errorMessage.messageIsNull.defaultMessage)
+
+      if (success) {
+        this.props.navigateAction({ ...this.props, page: 'chooseCurr' })
+      } else {
+        switch (code) {
+          case '2101':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({ PreconditionRequired: details || [] })
+          case '2201':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({ InvalidArgument: details || [] })
+          default:
+            return this.props.toggleModal({
+              ...typeModal[code],
+              dis: message
+            })
         }
+      }
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
       })
+    }
   }
 
   onHandleScrollToErrorField = (field) => {

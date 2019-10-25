@@ -1,4 +1,4 @@
-import { Linking } from 'react-native'
+import { Linking, NativeModules } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { onStore } from '../redux/store'
 import { CHANGE_ROOT } from '../redux/types'
@@ -33,6 +33,13 @@ export default {
     labelBtn: (label) => label,
     onPress: () => onStore.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { ...onStore.getState().root.modal, visible: false } }),
     onConfirm: () => onStore.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { ...onStore.getState().root.modal, visible: false } }),
+    onPressClose: () => onStore.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { ...onStore.getState().root.modal, visible: false } })
+  },
+  '1701': {
+    visible: true,
+    labelBtn: 'ตกลง',
+    onPress: () => NativeModules.KMyFundOnboarding.finishActivity(),
+    onConfirm: () => NativeModules.KMyFundOnboarding.finishActivity(),
     onPressClose: () => onStore.dispatch({ type: CHANGE_ROOT, key: 'modal', value: { ...onStore.getState().root.modal, visible: false } })
   },
 }

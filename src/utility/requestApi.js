@@ -21,11 +21,8 @@ export default throttle(async (url, options, verifytoken) => {
     }
   } else allOption = { ...options }
 
-  try {
-    // const res = await fetch(`${ENV.API_PATH_SIT}/${url}`, allOption) // SIT
-    const res = await fetch(`${ENV[onStore.getState().root.env]}/${url}`, allOption) // UAT
-    return await res.json()
-  } catch (err) {
-    throw err
-  }
+  const res = await fetch(`${ENV[onStore.getState().root.env]}/${url}`, allOption)
+
+  return await res.json()
+
 }, 500)

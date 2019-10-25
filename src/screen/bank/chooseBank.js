@@ -8,6 +8,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import get from 'lodash/get'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { LongPositionButton } from '../../component/button'
@@ -19,6 +20,7 @@ import lockout from '../../containers/hoc/lockout'
 import setMutation from '../../containers/mutation'
 import { root, updateUser } from '../../redux/actions/commonAction'
 import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 
 const handleDisabled = arr => arr && arr.find(d => d.active) !== undefined && arr.find(d => d.active)
 
@@ -77,37 +79,42 @@ export default class extends React.Component {
     }
   }
 
-  onNext = () => {
+  onNext = async () => {
     const data = { bank: this.state.selected === 'ธนาคารไทยพาณิชย์' ? 'SCB' : 'KASIKORN' }
 
-    this.props.registerBank({ variables: { input: data } })
-      .then(res => {
-        console.log(res)
-        if (res.data.registerBank.success) {
-          this.props.updateUser('bank', {
-            ...this.props.user.bank,
-            urlbank: res.data.registerBank.url,
-          })
-          // if (this.state.selected === 'ธนาคารไทยพาณิชย์') return navigateAction({ ...this.props, page: "suittest" })
-          return this.props.navigateAction({
-            ...this.props,
-            page: "connectBank",
-            params: {
-              bankName: this.state.selected,
-              url: res.data.registerBank.url
-            }
-          })
-        }
+    try {
+      const res = await this.props.registerBank({ variables: { input: data } })
+      const success = get(res, 'data.registerBank.success', false)
+      const code = get(res, 'data.registerBank.code', errorMessage.messageIsNull.code)
+      const message = get(res, 'data.registerBank.message', errorMessage.messageIsNull.defaultMessage)
 
-        return this.props.toggleModal({
-          ...typeModal['1103'],
-          dis: res.data.registerBank.message
+      if (success) {
+        this.props.updateUser('bank', {
+          ...this.props.user.bank,
+          urlbank: res.data.registerBank.url,
         })
 
+        return this.props.navigateAction({
+          ...this.props,
+          page: "connectBank",
+          params: {
+            bankName: this.state.selected,
+            url: res.data.registerBank.url
+          }
+        })
+      } else {
+        this.props.toggleModal({
+          ...typeModal[code],
+          dis: message
+        })
+      }
+
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
       })
-      .catch(err => {
-        console.log(err)
-      })
+    }
   }
 
   render() {

@@ -21,6 +21,7 @@ import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
 import { RequiredFields } from '../../utility/validation'
 import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -251,6 +252,12 @@ export default class extends React.Component {
                 })
             }
           }
+        })
+        .catch(err => {
+          this.props.toggleModal({
+            ...typeModal[errorMessage.requestError.code],
+            dis: errorMessage.requestError.defaultMessage,
+          })
         })
     }
   }

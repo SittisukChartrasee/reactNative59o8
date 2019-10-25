@@ -16,6 +16,7 @@ import { updateUser, root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
 import { RequiredFields } from '../../utility/validation'
 import typeModal from '../../utility/typeModal'
+import { errorMessage, modalMessage } from '../../utility/messages'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -153,7 +154,7 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = () => {
+  onNext = async () => {
     const { user } = this.props
     this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
@@ -174,43 +175,48 @@ export default class extends React.Component {
       countrySourceOfIncome: countyCode
     }
 
-    console.log(data)
 
     if (countyCode === 'US') {
       return this.props.toggleModal({
-        ...typeModal['1101'],
-        dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
+        ...typeModal[modalMessage.callCenter.code],
+        dis: modalMessage.callCenter.defaultMessage,
       })
-    } else {
-      this.props.saveCareer({ variables: { input: data } })
-        .then(res => {
-          console.log(res)
+    }
 
-          if (res.data.saveCareer.success) {
-            this.props.navigateAction({ ...this.props, page: 'sourceOfFund' })
-          } else if (!res.data.saveCareer.success) {
-            switch (res.data.saveCareer.code) {
-              case '2101':
-                this.onHandleScrollToErrorField(res.data.saveCareer.details)
-                return this.setState({
-                  PreconditionRequired: res.data.saveCareer.details
-                })
-              case '2201':
-                this.onHandleScrollToErrorField(res.data.saveCareer.details)
-                return this.setState({
-                  InvalidArgument: res.data.saveCareer.details
-                })
-              default:
-                return this.props.toggleModal({
-                  ...typeModal[res.data.saveCareer.code],
-                  dis: res.data.saveCareer.message
-                })
-            }
-          }
-        })
-        .catch(err => {
-          console.log(err)
-        })
+    try {
+      const res = await this.props.saveCareer({ variables: { input: data } })
+      const success = get(res, 'data.saveCareer.success', false)
+      const details = get(res, 'data.saveCareer.details', [])
+      const code = get(res, 'data.saveCareer.code', errorMessage.messageIsNull.code)
+      const message = get(res, 'data.saveCareer.message', errorMessage.messageIsNull.defaultMessage)
+
+      if (success) {
+        this.props.navigateAction({ ...this.props, page: 'sourceOfFund' })
+      } else {
+        switch (code) {
+          case '2101':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({
+              PreconditionRequired: details || []
+            })
+          case '2201':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({
+              InvalidArgument: details || []
+            })
+          default:
+            return this.props.toggleModal({
+              ...typeModal[code],
+              dis: message
+            })
+        }
+      }
+
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
+      })
     }
   }
 

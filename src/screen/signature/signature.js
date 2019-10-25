@@ -23,11 +23,14 @@ import colors from '../../config/colors';
 import request from '../../utility/requestApi'
 import lockout from '../../containers/hoc/lockout'
 import { updateUser } from '../../redux/actions/commonAction'
+import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
   updateUser: bindActionCreators(updateUser, dispatch),
   navigateAction: bindActionCreators(navigateAction, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 @connect(mapToProps, dispatchToProps)
 @lockout
@@ -73,10 +76,18 @@ export default class Demo extends Component {
       name: 'sign.jpg'
     })
     const url = 'upload-signature'
-    const res = await request(url, {
-      method: 'POST',
-      body: data
-    }, token)
+
+    try {
+      const res = await request(url, {
+        method: 'POST',
+        body: data
+      }, token)
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
+      })
+    }
 
     if (this.props.user.signature) {
       this.props.navigateAction({ ...this.props, page: 'fatca' })

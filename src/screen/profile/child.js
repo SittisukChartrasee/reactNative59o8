@@ -11,6 +11,7 @@ import { connect } from 'react-redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import find from 'lodash/find'
 import reverse from 'lodash/reverse'
+import get from 'lodash/get'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { LongButton } from '../../component/button'
@@ -26,6 +27,7 @@ import colors from '../../config/colors'
 import { validateIdentityCard, validateIdentityThaiLanguage, RequiredFields } from '../../utility/validation'
 import { convertDate, getOfBirth, replaceSpace, tomorrowDate } from '../../utility/helper'
 import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 
 const { width: widthView } = Dimensions.get('window')
 
@@ -158,7 +160,7 @@ export default class extends React.Component {
         label: 'วันบัตรหมดอายุ (วัน/เดือน/ปี)',
         type: 'dateExpire',
         field: 'secondDocExpDate',
-        date: reverse(this.props.user.child.secondDocExpDate.split('-')),
+        ...((SDED) => SDED ? { date: reverse(SDED.split('-')) } : {})(this.props.user.child.secondDocExpDate), // first time undifiend
         required: true,
         inVisible: this.props.user.child.inVisibleSecond ||
           this.props.user.child.secondExpireDateFlag === 'ไม่มีวันหมดอายุ',
@@ -353,37 +355,41 @@ export default class extends React.Component {
       secondDocExpDate: secondExpireDateFlag === 'มีวันหมดอายุ' ? convertDate(secondDocExpDate) : new Date('9999-12-31'),
     }
 
-    console.log(data)
+    try {
+      const res = await this.props.saveChild({ variables: { input: data } })
+      const success = get(res, 'data.saveChild.success', false)
+      const code = get(res, 'data.saveChild.code', errorMessage.messageIsNull.code)
+      const message = get(res, 'data.saveChild.message', errorMessage.messageIsNull.defaultMessage)
+      const details = get(res, 'data.saveChild.details', [])
 
-    this.props.saveChild({ variables: { input: data } })
-      .then(res => {
-        console.log(res)
-        if (res.data.saveChild.success) {
-          this.props.navigateAction({ ...this.props, page: 'career' })
-        } else if (!res.data.saveChild.success) {
-          switch (res.data.saveChild.code) {
-            case '2101':
-              this.onHandleScrollToErrorField(res.data.saveChild.details)
-              return this.setState({ PreconditionRequired: res.data.saveChild.details })
-            case '2201':
-              this.onHandleScrollToErrorField(res.data.saveChild.details)
-              return this.setState({ InvalidArgument: res.data.saveChild.details })
-            case '1101':
-              return this.props.toggleModal({
-                ...typeModal[res.data.saveChild.code],
-                dis: res.data.saveChild.message
-              })
-            default:
-              return this.props.toggleModal({
-                ...typeModal[res.data.saveChild.code],
-                dis: res.data.saveChild.message
-              })
-          }
+      if (success) {
+        this.props.navigateAction({ ...this.props, page: 'career' })
+      } else {
+        switch (code) {
+          case '2101':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({ PreconditionRequired: details || [] })
+          case '2201':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({ InvalidArgument: details || [] })
+          case '1101':
+            return this.props.toggleModal({
+              ...typeModal[code],
+              dis: message
+            })
+          default:
+            return this.props.toggleModal({
+              ...typeModal[code],
+              dis: message
+            })
         }
+      }
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
       })
-      .catch(err => {
-        console.log(err)
-      })
+    }
   }
 
   onHandleScrollToErrorField = (field) => {

@@ -7,6 +7,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import get from 'lodash/get'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -19,6 +20,7 @@ import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
 import { RequiredFields } from '../../utility/validation'
 import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -231,7 +233,7 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = () => {
+  onNext = async () => {
     const { user } = this.props
     this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
@@ -267,26 +269,36 @@ export default class extends React.Component {
       zipCode,
     }
 
-    this.props.saveMailingAddress({ variables: { input: data } })
-      .then(res => {
-        if (res.data.saveMailingAddress.success) {
-          this.props.navigateAction({ ...this.props, page: 'contact' })
-        } else if (!res.data.saveMailingAddress.success) {
-          switch (res.data.saveMailingAddress.code) {
-            case '2101':
-              this.onHandleScrollToErrorField(res.data.saveMailingAddress.details)
-              return this.setState({ PreconditionRequired: res.data.saveMailingAddress.details })
-            case '2201':
-              this.onHandleScrollToErrorField(res.data.saveMailingAddress.details)
-              return this.setState({ InvalidArgument: res.data.saveMailingAddress.details })
-            default:
-              return this.props.toggleModal({
-                ...typeModal[res.data.saveMailingAddress.code],
-                dis: res.data.saveMailingAddress.message
-              })
-          }
+    try {
+      const res = await this.props.saveMailingAddress({ variables: { input: data } })
+      const success = get(res, 'data.saveMailingAddress.success', false)
+      const details = get(res, 'data.saveMailingAddress.details', [])
+      const code = get(res, 'data.saveMailingAddress.code', errorMessage.messageIsNull.code)
+      const message = get(res, 'data.saveMailingAddress.message', errorMessage.messageIsNull.defaultMessage)
+
+      if (success) {
+        this.props.navigateAction({ ...this.props, page: 'contact' })
+      } else {
+        switch (code) {
+          case '2101':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({ PreconditionRequired: details || [] })
+          case '2201':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({ InvalidArgument: details || [] })
+          default:
+            return this.props.toggleModal({
+              ...typeModal[code],
+              dis: message
+            })
         }
+      }
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
       })
+    }
   }
 
   onHandleScrollToErrorField = (field) => {

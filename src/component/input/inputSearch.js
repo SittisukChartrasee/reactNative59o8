@@ -9,11 +9,13 @@ import {
   TextInput,
   Text,
   ScrollView,
-  Platform
+  Platform,
+  FlatList,
 } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import debounce from 'lodash/debounce'
+import get from 'lodash/get'
 import { withApollo } from 'react-apollo'
 import {
   TBold,
@@ -37,6 +39,8 @@ import {
 } from '../../containers/query'
 import { updateUser } from '../../redux/actions/commonAction'
 import Input from '../input'
+import { errorMessage } from '../../utility/messages'
+
 
 const checkTitle = (field = '') => {
   if (field.toLowerCase().search('title') > -1) return 'ค้นหาคำนำหน้า'
@@ -71,46 +75,56 @@ export default class extends React.Component {
     text: '',
     confirmText: this.props.value,
     result: [],
+    errorMessage: ''
   }
 
-  onHandleSetText = ({ text = '', field }) => {
+  onHandleSetText = async ({ text = '', field }) => {
     this.setState({ text })
     if (field.toLowerCase().search('title') > -1) {
-      query(this.props.client, {
-        query: getUserTitle,
-        variables: { text: text.trim() }
-      }, val => this.setState({ result: val.data.getUserTitle })
-      )
+      try {
+        const res = await this.props.client.query({ query: getUserTitle, variables: { text: text.trim() } })
+        const result = get(res, 'data.getUserTitle', [])
+
+        return this.setState({ result, errorMessage: '' })
+      } catch (error) {
+        this.setState({ errorMessage: errorMessage.requestError.defaultMessage })
+      }
     } else if (field.toLowerCase().search('country') > -1) {
-      query(this.props.client, {
-        query: getCountry,
-        variables: { text: text.trim() }
-      }, val => this.setState({ result: val.data.getCountry })
-      )
+      try {
+        const res = await this.props.client.query({ query: getCountry, variables: { text: text.trim() } })
+        const result = get(res, 'data.getCountry', [])
+
+        return this.setState({ result, errorMessage: '' })
+      } catch (error) {
+        this.setState({ errorMessage: errorMessage.requestError.defaultMessage })
+      }
     } else if (field.toLowerCase().search('district') > -1) {
-      query(this.props.client, {
-        query: getSubDistrict,
-        variables: { text: text.trim() }
-      }, val => {
-        this.setState({ result: val.data.getSubDistrict })
+      try {
+        const res = await this.props.client.query({ query: getSubDistrict, variables: { text: text.trim() } })
+        const result = get(res, 'data.getSubDistrict', [])
+
+        return this.setState({ result, errorMessage: '' })
+      } catch (error) {
+        this.setState({ errorMessage: errorMessage.requestError.defaultMessage })
       }
-      )
     } else if (field.toLowerCase().search('bustype') > -1) {
-      query(this.props.client, {
-        query: getBusinessType,
-        variables: { text: text.trim() }
-      }, val => {
-        this.setState({ result: val.data.getBusinessType })
+      try {
+        const res = await this.props.client.query({ query: getBusinessType, variables: { text: text.trim() } })
+        const result = get(res, 'data.getBusinessType', [])
+
+        return this.setState({ result, errorMessage: '' })
+      } catch (error) {
+        this.setState({ errorMessage: errorMessage.requestError.defaultMessage })
       }
-      )
     } else if (field.toLowerCase().search('occupation') > -1) {
-      query(this.props.client, {
-        query: getOccupation,
-        variables: { text: text.trim() }
-      }, val => {
-        this.setState({ result: val.data.getOccupation })
+      try {
+        const res = await this.props.client.query({ query: getOccupation, variables: { text: text.trim() } })
+        const result = get(res, 'data.getOccupation', [])
+
+        return this.setState({ result, errorMessage: '' })
+      } catch (error) {
+        this.setState({ errorMessage: errorMessage.requestError.defaultMessage })
       }
-      )
     }
   }
 
@@ -236,18 +250,24 @@ export default class extends React.Component {
               </View>
             </View>
 
-            <ScrollView style={{ flex: 1, backgroundColor: colors.lightgrey }} contentContainerStyle={{ paddingBottom: 30 }}>
-              {
-                this.state.result.map((d, key) => (
-                  <TouchableOpacity key={key} onPress={() => this.onHandleOnPress(d)}>
-                    <View style={{ marginVertical: 16 }}>
-                      <TBold textAlign="left" ml={24} mr={24}>{d.nameDetail ? d.nameDetail : (d.displayName || d.nameTH)}</TBold>
-                    </View>
-                    <View style={{ height: 1, backgroundColor: colors.smoky, marginLeft: 24 }} />
-                  </TouchableOpacity>
-                ))
-              }
-            </ScrollView>
+            {
+              this.state.errorMessage
+                ? <View style={{ flex: 1, backgroundColor: colors.lightgrey, paddingTop: 24, paddingHorizontal: 24 }}>
+                    <TBold fontSize={14} color={colors.shadow}>{this.state.errorMessage}</TBold>
+                  </View>
+                : <FlatList
+                    data={this.state.result}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity onPress={() => this.onHandleOnPress(item)}>
+                          <View style={{ marginVertical: 16 }}>
+                            <TBold textAlign="left" ml={24} mr={24}>{item.nameDetail ? item.nameDetail : (item.displayName || item.nameTH)}</TBold>
+                          </View>
+                          <View style={{ height: 1, backgroundColor: colors.smoky, marginLeft: 24 }} />
+                        </TouchableOpacity>
+                    )}
+                    keyExtractor={(i, key) => `${key}`}
+                  />
+            }
           </SafeAreaView>
         </Modal>
       </View>

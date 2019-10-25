@@ -9,6 +9,7 @@ import {
 import { withApollo } from 'react-apollo'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import get from 'lodash/get'
 import colors from '../config/colors'
 import images from '../config/images'
 import { isIphoneX } from '../config/helper'
@@ -20,12 +21,15 @@ import setMutation from '../containers/mutation'
 import { containerQuery, getTermAndCondition } from '../containers/query'
 import { LongButton } from '../component/button'
 import lockout from '../containers/hoc/lockout'
+import typeModal from '../utility/typeModal'
+import { errorMessage } from '../utility/messages'
 import fonts from '../config/fonts';
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
-  updateRoot: bindActionCreators(root, dispatch)
+  updateRoot: bindActionCreators(root, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 @connect(mapToProps, dispatchToProps)
 @setMutation
@@ -39,25 +43,42 @@ export default class extends React.Component {
 
   componentDidMount = async () => {
     this.props.updateRoot('loading', true)
-    containerQuery(
-      this.props.client,
-      { query: getTermAndCondition },
-      (val) => {
-        if (val) {
-          this.props.updateRoot('loading', false)
-          this.setState({ text: val.data.getTermAndCondition })
-        }
-      }
-    )
+
+    try {
+      const res = await this.props.client.query({ query: getTermAndCondition })
+
+      this.props.updateRoot('loading', false)
+
+      const text = get(res, 'data.getTermAndCondition', '')
+
+      this.setState({ text })
+
+    } catch (error) {
+      this.props.updateRoot('loading', false)
+
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
+      })
+    }
   }
 
   onNext = async () => {
-    this.props.acceptTerm()
-      .then(res => {
-        if (res.data.acceptTerm.success) {
-          this.props.navigateAction({ ...this.props, page: 'tutorialBackCamera' })
-        }
+    try {
+      const res = await this.props.acceptTerm()
+
+      const success = get(res, 'data.acceptTerm.success', false)
+
+      if (success) {
+        this.props.navigateAction({ ...this.props, page: 'tutorialBackCamera' })
+      }
+
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
       })
+    }
   }
 
   render() {
@@ -73,7 +94,7 @@ export default class extends React.Component {
           }
         />
         <ScrollView contentContainerStyle={{ marginHorizontal: 16, paddingTop: '5%' }} showsVerticalScrollIndicator={false}>
-          <TLight color={colors.grey} fontSize={16} textAlign="left"> 
+          <TLight color={colors.grey} fontSize={16} textAlign="left">
             {this.state.text}
           </TLight>
         </ScrollView>

@@ -9,6 +9,7 @@ import {
 import { withApollo } from 'react-apollo'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import get from 'lodash/get'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
 import { TText, TBold, TSemiBold, TLight } from '../../component/texts'
@@ -19,9 +20,10 @@ import images from '../../config/images'
 import { navigateAction } from '../../redux/actions'
 import { root } from '../../redux/actions/commonAction'
 import lockout from '../../containers/hoc/lockout'
-import { containerQuery, getStatusEditing } from '../../containers/query'
+import { getStatusEditing } from '../../containers/query'
 import setMutation from '../../containers/mutation'
 import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 
 const { width: widthView } = Dimensions.get('window')
 
@@ -54,30 +56,41 @@ export default class extends React.Component {
     statusText: ''
   }
 
-  componentDidMount = () => {
-    containerQuery(
-      this.props.client,
-      { query: getStatusEditing, fetchPolicy: "no-cache" },
-      this.onHandleCard
-    )
+  componentDidMount = async () => {
+    try {
+      const res = await this.props.client.query({ query: getStatusEditing, fetchPolicy: "no-cache" })
+      const idCard = get(res, 'data.getStatusEditing.idCard', false)
+      const selfie = get(res, 'data.getStatusEditing.selfie', false)
+      const checkIDCard = get(res, 'data.getStatusEditing.checkIDCard', false)
+      const checkSelfie = get(res, 'data.getStatusEditing.checkSelfie', false)
+
+      this.onHandleCard({ idCard, selfie, checkIDCard, checkSelfie })
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
+      })
+    }
   }
 
-  onHandleCard = val => {
+  onHandleCard = ({ idCard, selfie, checkIDCard, checkSelfie }) => {
     let status = false
     let statusText = ''
-    if (val.data.getStatusEditing.idCard) {
-      if (val.data.getStatusEditing.selfie) {
+
+    if (idCard) {
+      if (selfie) {
         statusText = `ถ่ายรูปบัตรประชาชน และรูปคู่กับใบหน้าไม่ชัด\nกรุณาถ่ายใหม่อีกครั้ง`
-        if (!val.data.getStatusEditing.checkIDCard ||
-          !val.data.getStatusEditing.checkSelfie) status = true
+        if (!checkIDCard || !checkSelfie) status = true
       } else {
         statusText = `ถ่ายรูปบัตรประชาชนไม่ชัด\nกรุณาถ่ายใหม่อีกครั้ง`
-        if (!val.data.getStatusEditing.checkIDCard) status = true
+        if (!checkIDCard) status = true
       }
-    } else if (val.data.getStatusEditing.selfie) {
+    } else if (selfie) {
       statusText = `ถ่ายรูปคู่กับใบหน้าไม่ชัด\nกรุณาถ่ายใหม่อีกครั้ง`
-      if (!val.data.getStatusEditing.checkSelfie) status = true
-    } else { status = false }
+      if (!checkSelfie) status = true
+    } else {
+      status = false
+    }
 
     this.setState({
       statusText,
@@ -86,15 +99,15 @@ export default class extends React.Component {
         if (d.label === 'ถ่ายบัตรประชาชน') {
           return {
             ...d,
-            active: val.data.getStatusEditing.checkIDCard,
-            inVisible: !val.data.getStatusEditing.idCard
+            active: checkIDCard,
+            inVisible: !idCard
           }
         }
         if (d.label === 'ถ่ายบัตรประชาชนคู่ใบหน้า') {
           return {
             ...d,
-            active: val.data.getStatusEditing.checkSelfie,
-            inVisible: !val.data.getStatusEditing.selfie
+            active: checkSelfie,
+            inVisible: !selfie
           }
         }
       })
@@ -109,27 +122,32 @@ export default class extends React.Component {
     }
   }
 
-  onNext = () => {
-    this.props.saveWaitingApprove()
-      .then(res => {
-        console.log(res)
-        if (res.data.saveWaitingApprove.success) {
-          this.props.navigateAction({ ...this.props, page: 'waiting' })
-        } else if (!res.data.saveWaitingApprove.success) {
-          return this.props.toggleModal({
-            ...typeModal[res.data.saveWaitingApprove.code],
-            dis: res.data.saveWaitingApprove.message
-          })
-        }
+  onNext = async () => {
+    try {
+      const res = await this.props.saveWaitingApprove()
+      const success = get(res, 'data.saveWaitingApprove.success', false)
+      const code = get(res, 'data.saveWaitingApprove.code', errorMessage.messageIsNull.code)
+      const message = get(res, 'data.saveWaitingApprove.message', errorMessage.messageIsNull.defaultMessage)
+
+      if (success) {
+        this.props.navigateAction({ ...this.props, page: 'waiting' })
+      } else {
+        this.props.toggleModal({
+          ...typeModal[code],
+          dis: message
+        })
+      }
+
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
       })
-      .catch(err => {
-        console.log(err)
-      })
+    }
   }
 
   render() {
     const { statusEdit, statusText } = this.state
-    console.log(statusEdit)
     return (
       <Screen>
         <NavBar

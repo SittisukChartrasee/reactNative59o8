@@ -4,14 +4,12 @@ import {
   Image,
   Dimensions,
   AsyncStorage,
-  Platform,
   TouchableOpacity,
-  StyleSheet
 } from 'react-native'
-import LinearGradient from 'react-native-linear-gradient'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import get from 'lodash/get'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { TBold } from '../component/texts'
 import Screen from '../component/screenComponent'
@@ -27,7 +25,6 @@ import { NavBar } from '../component/gradient'
 import { replaceSpace, fontToLower, handleSizing } from '../utility/helper'
 import { validateEmail, validateIdentityCard, validatePhoneNumber, RequiredFields } from '../utility/validation'
 
-const { width: widthScreen } = Dimensions.get('window')
 const { height: heightScreen } = Dimensions.get('window')
 
 const fields = [
@@ -59,7 +56,7 @@ const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
   requestOtp: bindActionCreators(requestOtp, dispatch),
   updateUser: bindActionCreators(updateUser, dispatch),
-  updateRoot: bindActionCreators(root, dispatch)
+  updateRoot: bindActionCreators(root, dispatch),
 })
 
 @connect(mapToProps, dispatchToProps)
@@ -120,6 +117,23 @@ export default class extends React.Component {
     return null
   }
 
+  // try and catch in root-active
+  onRequestOtp = async data => {
+    const res = await this.props.requestOtp(data, { token: null })
+    return res
+  }
+
+  handleError = ({ code, details }) => {
+    switch (code) {
+      case '2101':
+        return this.setState({ PreconditionRequired: details })
+      case '2201':
+        return this.setState({ InvalidArgument: details })
+      default:
+        return null
+    }
+  }
+
   onNext = async () => {
     const { user } = this.props
 
@@ -131,33 +145,30 @@ export default class extends React.Component {
       phone_no: replaceSpace(user.contact.mobilePhone),
     }
 
-    this.props.requestOtp(data, { token: null })
-      .then(res => {
-        if (res.success || res.code === '1001') {
-          if (res.code === '1001') {
-            this.props.updateRoot('time', res.details.time)
-            this.props.updateRoot('ref_no', res.details.ref_no)
-            this.props.updateRoot('overRequest', true)
-            this.props.updateRoot('overRequestUi', true)
-          } else {
-            this.props.updateRoot('overRequest', false)
-            this.props.updateRoot('overRequestUi', false)
-          }
-          this.props.navigateAction({ ...this.props, page: 'otp' })
-        } else if (!res.success) {
-          switch (res.code) {
-            case '2101':
-              return this.setState({ PreconditionRequired: res.details })
-            case '2201':
-              return this.setState({ InvalidArgument: res.details })
-            default:
-              return null
-          }
-        }
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    const res = await this.onRequestOtp(data)
+
+    const success = get(res, 'success', false)
+    const code = get(res, 'code', '1103')
+    const details = get(res, 'details', null)
+
+    if (success || code === '1001') {
+      if (code === '1001') {
+        const time = get(res, 'details.time', 0)
+        const refNo = get(res, 'details.ref_no', '')
+
+        this.props.updateRoot('time', time)
+        this.props.updateRoot('ref_no', refNo)
+        this.props.updateRoot('overRequest', true)
+        this.props.updateRoot('overRequestUi', true)
+      } else {
+        this.props.updateRoot('overRequest', false)
+        this.props.updateRoot('overRequestUi', false)
+      }
+
+      return this.props.navigateAction({ ...this.props, page: 'otp' })
+    } else {
+      this.handleError({ code, details })
+    }
   }
 
   onSubmitFirstName = (field) => {
@@ -189,7 +200,6 @@ export default class extends React.Component {
           }
         />
         <KeyboardAwareScrollView
-          // extraScrollHeight={Platform.OS === 'ios' ? -86 : -280}
           extraHeight={100}
           showsVerticalScrollIndicator={false}
           enableAutomaticScroll
@@ -208,20 +218,18 @@ export default class extends React.Component {
                 paddingBottom: 24,
               }}>
               {
-                fields.map((setField, key) =>
-                  Input({
-                    ...setField,
-                    refFunc: ref => { this[setField.field] = ref },
-                    value: (setField.field === 'idCard')
-                      ? this.props.user.profile.idCard
-                      : this.props.user.contact[setField.field],
-                    handleInput: value => this.handleInput(value),
-                    err: this.onValidation(setField.field),
-                    keyboardType: setField.keyboardType,
-                    returnKeyType: setField.field === 'mobilePhone' ? 'done' : 'next',
-                    onSubmitEditing: () => this.onSubmitFirstName(setField.field),
-                  }, key)
-                )
+                fields.map((setField, key) => Input({
+                  ...setField,
+                  refFunc: ref => { this[setField.field] = ref },
+                  value: (setField.field === 'idCard')
+                    ? this.props.user.profile.idCard
+                    : this.props.user.contact[setField.field],
+                  handleInput: value => this.handleInput(value),
+                  err: this.onValidation(setField.field),
+                  keyboardType: setField.keyboardType,
+                  returnKeyType: setField.field === 'mobilePhone' ? 'done' : 'next',
+                  onSubmitEditing: () => this.onSubmitFirstName(setField.field),
+                }, key))
               }
             </View>
           </View>

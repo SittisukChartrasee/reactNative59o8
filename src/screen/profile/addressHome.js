@@ -8,6 +8,7 @@ import { bindActionCreators } from 'redux'
 import { withApollo } from 'react-apollo'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import get from 'lodash/get'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -21,6 +22,7 @@ import { checkWorkplaceAddress } from '../../containers/query'
 import lockout from '../../containers/hoc/lockout'
 import { RequiredFields } from '../../utility/validation'
 import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -234,7 +236,7 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = () => {
+  onNext = async () => {
     const { user } = this.props
     this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
@@ -270,41 +272,53 @@ export default class extends React.Component {
       zipCode
     }
 
-    console.log(data)
+    try {
+      const res = await this.props.savePermanentAddress({ variables: { input: data } })
+      const success = get(res, 'data.savePermanentAddress.success', false)
+      const details = get(res, 'data.savePermanentAddress.details', [])
+      const code = get(res, 'data.savePermanentAddress.code', errorMessage.messageIsNull.code)
+      const message = get(res, 'data.savePermanentAddress.message', errorMessage.messageIsNull.defaultMessage)
 
-    this.props.savePermanentAddress({ variables: { input: data } })
-      .then(res => {
-        console.log(res)
-        if (res.data.savePermanentAddress.success) {
-          this.handleCheckOcupation()
-        } else if (!res.data.savePermanentAddress.success) {
-          switch (res.data.savePermanentAddress.code) {
-            case '2101':
-              this.onHandleScrollToErrorField(res.data.savePermanentAddress.details)
-              return this.setState({ PreconditionRequired: res.data.savePermanentAddress.details })
-            case '2201':
-              this.onHandleScrollToErrorField(res.data.savePermanentAddress.details)
-              return this.setState({ InvalidArgument: res.data.savePermanentAddress.details })
-            default:
-              return this.props.toggleModal({
-                ...typeModal[res.data.savePermanentAddress.code],
-                dis: res.data.savePermanentAddress.message
-              })
-          }
+      if (success) {
+        this.handleCheckOcupation()
+      } else {
+        switch (code) {
+          case '2101':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({ PreconditionRequired: details || [] })
+          case '2201':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({ InvalidArgument: details || [] })
+          default:
+            return this.props.toggleModal({
+              ...typeModal[code],
+              dis: message
+            })
         }
+      }
+
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
       })
+    }
   }
 
   handleCheckOcupation = async () => {
     try {
       const res = await this.props.client.query({ query: checkWorkplaceAddress, fetchPolicy: "no-cache" })
-      if (res.data.checkWorkplaceAddress) {
+      const checkWorkplace = get(res, 'data.checkWorkplaceAddress', false)
+      if (checkWorkplace) {
         return this.props.navigateAction({ ...this.props, page: 'addressWork' })
       } else {
         return this.props.navigateAction({ ...this.props, page: 'chooseWork' })
       }
     } catch (error) {
-      console.log(error)
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
+      })
     }
   }
 

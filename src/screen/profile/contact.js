@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  View,
   TouchableOpacity,
   ScrollView,
   Image,
@@ -8,6 +9,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import get from 'lodash/get'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -20,6 +22,7 @@ import lockout from '../../containers/hoc/lockout'
 import setMutation from '../../containers/mutation'
 import { replaceSpace } from '../../utility/helper'
 import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 
 const fields = [
   {
@@ -27,17 +30,31 @@ const fields = [
     type: 'textInput',
     field: 'workPhone',
     required: false,
-  }, {
-    label: 'โทรศัพท์บ้าน',
-    type: 'textInput',
-    field: 'homePhone',
-    required: false,
-  }, {
+  },
+  {
+    field: 'homePhones',
+    init: [
+      {
+        label: 'โทรศัพท์บ้าน',
+        type: 'mask',
+        field: 'homePhone',
+        option: '09 999 9999',
+        required: false,
+      },
+      {
+        label: 'ต่อ',
+        type: 'textInput',
+        field: 'homePhoneExt',
+        required: false,
+      },
+    ]
+  },
+  {
     label: 'หมายเลขโทรศัพท์มือถืิอ',
-    // type: 'textInput',
     field: 'mobilePhone',
     required: false,
-  }, {
+  },
+  {
     label: 'อีเมล',
     field: 'email',
     required: false,
@@ -63,8 +80,17 @@ export default class extends React.Component {
 
   handleInput = (props) => {
     const { user } = this.props
-    this.props.updateUser('contact', { ...user.contact, [props.field]: props.value })
+    if (props.field === 'homePhoneExt') {
+      if (props.value.length <= 4) {
+        return this.props.updateUser('contact', { ...user.contact, [props.field]: props.value })
+      } else {
+        return this.props.updateUser('contact', { ...user.contact })
+      }
+    } else {
+      this.props.updateUser('contact', { ...user.contact, [props.field]: props.value })
+    }
   }
+
 
   onValidation = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
@@ -78,44 +104,51 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = () => {
+  onNext = async () => {
     const { user } = this.props
     const {
       workPhone,
       homePhone,
+      homePhoneExt,
       mobilePhone,
       email
     } = user.contact
 
     const data = {
       workPhone,
-      homePhone,
+      homePhone: homePhoneExt ? `${replaceSpace(homePhone)} #${homePhoneExt}` : replaceSpace(homePhone),
       mobilePhone: replaceSpace(mobilePhone),
       email
     }
 
-    this.props.saveContact({ variables: { input: data } })
-      .then(res => {
-        if (res.data.saveContact.success) {
-          this.props.navigateAction({ ...this.props, page: 'tutorialBank' })
-        } else if (!res.data.saveContact.success) {
-          switch (res.data.saveContact.code) {
-            case '2101':
-              return this.setState({ PreconditionRequired: res.data.saveContact.details })
-            case '2201':
-              return this.setState({ InvalidArgument: res.data.saveContact.details })
-            default:
-              return this.props.toggleModal({
-                ...typeModal[res.data.saveContact.code],
-                dis: res.data.saveContact.message
-              })
-          }
-        }
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    try {
+      const res = await this.props.saveContact({ variables: { input: data } })
+      const success = get(res, 'data.saveContact.success', false)
+      const details = get(res, 'data.saveContact.details', [])
+      const code = get(res, 'data.saveContact.code', errorMessage.messageIsNull.code)
+      const message = get(res, 'data.saveContact.message', errorMessage.messageIsNull.defaultMessage)
 
+      if (success) {
+        this.props.navigateAction({ ...this.props, page: 'tutorialBank' })
+      } else {
+        switch (code) {
+          case '2101':
+            return this.setState({ PreconditionRequired: details || [] })
+          case '2201':
+            return this.setState({ InvalidArgument: details || [] })
+          default:
+            return this.props.toggleModal({
+              ...typeModal[code],
+              dis: message
+            })
+        }
+      }
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
+      })
+    }
   }
 
   render() {
@@ -149,18 +182,39 @@ export default class extends React.Component {
           showsVerticalScrollIndicator={false}
         >
           {
-            fields.map((d, key) => Input({
-              field: d.field,
-              label: d.label,
-              type: d.type,
-              required: d.required,
-              init: d.init,
-              value: user.contact[d.field],
-              inVisible: d.inVisible,
-              handleInput: (props) => this.handleInput(props),
-              err: this.onValidation(d.field)
-            }, key))
+            fields.map(d => {
+              if (d.field === 'homePhones') {
+                return <View key={d.field} style={{ flex: 1, flexDirection: 'row' }}>
+                  {
+                    d.init.map(k =>
+                      <View key={k.field} style={{ flex: 1, justifyContent: 'flex-start' }}>
+                        <Input
+                          {...k}
+                          value={user.contact[k.field]}
+                          handleInput={(props) => this.handleInput(props)}
+                          err={this.onValidation(k.field)}
+                        />
+                      </View>
+                    )
+                  }
+                </View>
+              } else {
+                return <Input
+                  key={d.field}
+                  field={d.field}
+                  label={d.label}
+                  type={d.type}
+                  required={d.required}
+                  init={d.init}
+                  value={user.contact[d.field]}
+                  inVisible={d.inVisible}
+                  handleInput={(props) => this.handleInput(props)}
+                  err={this.onValidation(d.field)}
+                />
+              }
+            })
           }
+
         </KeyboardAwareScrollView>
         <NextButton onPress={this.onNext} />
       </Screen>

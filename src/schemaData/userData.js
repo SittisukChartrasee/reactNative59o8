@@ -2,6 +2,8 @@ import get from 'lodash/get'
 import {
   formatDate,
   formatIdCard,
+  formatHomeNumber,
+  formatPhoneNumber,
   getStatusGender_reverse,
   getStatusMartial_reverse,
   month,
@@ -68,7 +70,7 @@ export const userDataToProps = ({
       lastName: spouse.lastName,
       pepFlag: spouse.pepFlag,
     })
-    
+
   }
 
   const firstChild = get(result, 'firstChild', null)
@@ -96,7 +98,7 @@ export const userDataToProps = ({
     }
 
     updateUser('child', {
-      ...userProps,
+      ...userProps.child,
       firstTitle: firstChild.ChildTitleTH,
       firstTitleCode: firstChild.ChildTitleCode,
       firstTitleDetail: firstChild.ChildTitleDetail,
@@ -170,10 +172,13 @@ export const userDataToProps = ({
   const contact = get(result, 'contact', null)
   if (contact) {
 
+    console.log(contact.homePhone)
+
     const data = {
       workPhone: contact.workPhone,
-      homePhone: contact.homePhone,
-      mobilePhone: contact.mobilePhone,
+      homePhone: formatHomeNumber(contact.homePhone).homePhone || userProps.contact.homePhone,
+      homePhoneExt: formatHomeNumber(contact.homePhone).homePhoneExt,
+      mobilePhone: formatPhoneNumber(contact.mobilePhone),
       email: contact.email
     }
 

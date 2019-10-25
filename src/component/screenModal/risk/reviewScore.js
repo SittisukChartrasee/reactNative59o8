@@ -7,24 +7,27 @@ import {
   ActivityIndicator,
   Modal,
 } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import sortBy from 'lodash/sortBy'
 import get from 'lodash/get'
 import { withApollo } from 'react-apollo'
-import { PieChart } from '../../component/chart'
-import Screen from '../../component/screenComponent'
-import { NavBar } from '../../component/gradient'
-import { TText, TBold, TSemiBold, TLight } from '../../component/texts'
-import colors from '../../config/colors'
-import { LongButton } from '../../component/button'
-import images from '../../config/images'
-import { RiskList } from '../../component/lists'
-import { navigateAction } from '../../redux/actions'
-import lockout from '../../containers/hoc/lockout'
-import { getInvestment } from '../../containers/query'
-import typeModal from '../../utility/typeModal'
-import { errorMessage } from '../../utility/messages'
+import { PieChart } from '../../chart'
+import Screen from '../../screenComponent'
+import { NavBar } from '../../gradient'
+import { TText, TBold, TSemiBold, TLight } from '../../texts'
+import colors from '../../../config/colors'
+import { LongButton } from '../../button'
+import images from '../../../config/images'
+import { RiskList } from '../../lists'
+import { navigateAction } from '../../../redux/actions'
+import lockout from '../../../containers/hoc/lockout'
+import { getInvestment } from '../../../containers/query'
+import typeModal from '../../../utility/typeModal'
+import { root } from '../../../redux/actions/commonAction'
+import { onStore } from '../../../redux/store'
+import { errorMessage } from '../../../utility/messages'
 
 const dataImage = [
   null,
@@ -41,6 +44,7 @@ const dataImage = [
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
   navigateAction: bindActionCreators(navigateAction, dispatch),
+  updateRoot: bindActionCreators(root, dispatch),
   toggleModal: value => dispatch({ type: 'modal', value })
 })
 
@@ -58,19 +62,21 @@ export default class extends React.Component {
     descEN: '',
     fundCodeKAsset: '',
     assetClass: [],
-    loading: true,
   }
 
   componentDidMount = async () => {
 
     try {
+      this.props.updateRoot('loading', true)
+
       const res = await this.props.client.query({ query: getInvestment })
       const dataInvestment = get(res, 'data.getInvestment', {})
 
       this.setState({ ...dataInvestment, loading: false })
+      this.props.updateRoot('loading', false)
 
     } catch (error) {
-      this.setState({ loading: false })
+      this.props.updateRoot('loading', false)
 
       this.props.toggleModal({
         ...typeModal[errorMessage.requestError.code],
@@ -79,7 +85,15 @@ export default class extends React.Component {
     }
   }
 
-  onNext = () => this.props.navigateAction({ ...this.props, page: 'complete' })
+  onNext = () => {
+    this.props.updateRoot('screenModal', { visible: false, page: 'reviewScore' })
+    onStore.dispatch(NavigationActions.navigate({ routeName: 'complete' }))
+  }
+
+  onGoBack = () => {
+    onStore.dispatch(NavigationActions.navigate({ routeName: 'suittest' }))
+    this.props.updateRoot('screenModal', { visible: false, page: 'reviewScore' })
+  }
 
   render() {
     const {
@@ -97,7 +111,7 @@ export default class extends React.Component {
           title="ผลการประเมินความเสี่ยง"
           navLeft={
             <TouchableOpacity
-              onPress={() => this.props.navigation.goBack()}
+              onPress={this.onGoBack}
               style={{ paddingRight: 30 }}
             >
               <Image source={images.iconback} />
@@ -170,14 +184,6 @@ export default class extends React.Component {
             onPress={this.onNext}
           />
         </View>
-
-        <Modal visible={this.state.loading} transparent>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#00000090' }}>
-            <View style={{ width: 160, height: 155, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white, borderRadius: 10 }}>
-              <ActivityIndicator size="large" color={colors.emerald} />
-            </View>
-          </View>
-        </Modal>
       </Screen>
     )
   }

@@ -18,6 +18,8 @@ import images from '../../config/images'
 import { navigateAction, navigateReset } from '../../redux/actions'
 import lockout from '../../containers/hoc/lockout'
 import { getStatus } from '../../containers/query'
+import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 
 const { width: widthView } = Dimensions.get('window')
 
@@ -25,6 +27,7 @@ const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
 	navigateAction: bindActionCreators(navigateAction, dispatch),
 	navigateReset: bindActionCreators(navigateReset, dispatch),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 @connect(mapToProps, dispatchToProps)
 @withApollo
@@ -52,6 +55,12 @@ export default class extends React.Component {
 						break
 				}
 			})
+			.catch(err => {
+        this.props.toggleModal({
+          ...typeModal[errorMessage.requestError.code],
+          dis: errorMessage.requestError.defaultMessage,
+        })
+      })
 	}
 
 	render() {

@@ -9,6 +9,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import get from 'lodash/get'
 import Screen from '../component/screenComponent'
 import { NavBar } from '../component/gradient'
 import { LongPositionButton } from '../component/button'
@@ -50,52 +51,75 @@ export default class extends React.Component {
     this.props.updateRoot('currFlowUP', 'forgetPasscode')
   }
 
+  // try and catch in root-active
+  onForgotPasscode = async ({ user_token, id_card }) => {
+    const res = await this.props.forgotPasscode({ user_token, id_card })
+    return res
+  }
+
+  // try and catch in root-active
+  onRequestOtp = async (data, { token, currFlowUP }) => {
+    const res = await this.props.requestOtp(data, { token, currFlowUP })
+    return res
+  }
+
   onNext = async () => {
     const user_token = await AsyncStorage.getItem('user_token')
-    try {
-      const res = await this.props.forgotPasscode({ user_token: user_token, id_card: replaceSpace(this.state.card[0].value), })
-      if (res.success) {
-        setTimeout(() => {
-          const token = res.result.access_token
-          this.onHandleToken(token)
-        }, 1000)
+    const res = await this.onForgotPasscode({ user_token: user_token, id_card: replaceSpace(this.state.card[0].value) })
+
+    const success = get(res, 'success', false)
+    const code = get(res, 'code', '')
+
+    const accessToken = get(res, 'result.access_token', '')
+
+    if (success) {
+      setTimeout(() => this.onHandleToken(accessToken), 1000)
+    }
+    else if (!success) {
+      switch (code) {
+        case '2101':
+          return this.setState({ PreconditionRequired: res.details })
+        case '2201':
+          return this.setState({ InvalidArgument: res.details })
+        default:
+          return null
       }
-      else if (!res.success) {
-        switch (res.code) {
-          case '2101':
-            return this.setState({ PreconditionRequired: res.details })
-          case '2201':
-            return this.setState({ InvalidArgument: res.details })
-          default:
-            return null
-        }
-      }
-    } catch (error) {
-      console.log(error)
     }
   }
 
   // function throttle in requestApi is interrupt this once API res forgotPasscode or requestOtp
   onHandleToken = async token => {
-    try {
-      const resValidate = await this.props.requestOtp(null, { token, currFlowUP: this.props.root.currFlowUP })
-      if (resValidate.success || resValidate.code === '1001') {
-        if (resValidate.code === '1001') {
-          this.props.updateRoot('ref_no', resValidate.details.ref_no)
-          this.props.updateRoot('time', resValidate.details.time)
-          this.props.updateRoot('overRequest', true)
-          this.props.updateRoot('overRequestUi', true)
-        } else {
-          this.props.updateRoot('trans_id', resValidate.result.trans_id)
-          this.props.updateRoot('ref_no', resValidate.result.ref_no)
-          this.props.updateRoot('phone_no', resValidate.result.phone_no)
-          this.props.updateRoot('overRequest', false)
-          this.props.updateRoot('overRequestUi', false)
-        }
-        this.props.navigation.navigate({ routeName: 'otp', key: 'otpForgetPasscode' })
+
+    const responseOtp = await this.onRequestOtp(null, { token, currFlowUP: this.props.root.currFlowUP })
+
+    const success = get(responseOtp, 'success', false)
+    const code = get(responseOtp, 'code', '')
+
+    const refNo = get(responseOtp, 'details.ref_no', '')
+    const time = get(responseOtp, 'details.time', 0)
+    const transId = get(responseOtp, 'result.trans_id', '')
+    const phoneNo = get(responseOtp, 'result.phone_no', '')
+    const refsNo = get(responseOtp, 'result.ref_no', '')
+
+    if (success || code === '1001') {
+      if (code === '1001') {
+
+        this.props.updateRoot('ref_no', refNo)
+        this.props.updateRoot('time', time)
+        this.props.updateRoot('overRequest', true)
+        this.props.updateRoot('overRequestUi', true)
+
+      } else {
+
+        this.props.updateRoot('trans_id', transId)
+        this.props.updateRoot('ref_no', refsNo)
+        this.props.updateRoot('phone_no', phoneNo)
+        this.props.updateRoot('overRequest', false)
+        this.props.updateRoot('overRequestUi', false)
+
       }
-    } catch (error) {
-      console.log(error)
+
+      this.props.navigation.navigate({ routeName: 'otp', key: 'otpForgetPasscode' })
     }
   }
 

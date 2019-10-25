@@ -7,6 +7,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import find from 'lodash/find'
+import get from 'lodash/get'
 import reverse from 'lodash/reverse'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
@@ -19,6 +20,7 @@ import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
 import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 import {
   validateIdentityCard,
   validateIdentityJcNumber,
@@ -258,10 +260,12 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = () => {
+  onNext = async () => {
     const { expireSatus } = this.state
     const { user } = this.props
+
     this.setState({ PreconditionRequired: [], InvalidArgument: [], hidePicker: true })
+
     const {
       idCard,
       jcNumber,
@@ -280,8 +284,6 @@ export default class extends React.Component {
       nationalityCode,
       martialStatus,
     } = user.profile
-
-    // console.log(PreconditionRequired, InvalidArgument)
 
     const data = {
       docNo: replaceSpace(idCard),
@@ -304,43 +306,47 @@ export default class extends React.Component {
       martialStatusCode: getStatusMartial(martialStatus),
     }
 
-    console.log(data)
+    try {
+      const res = await this.props.saveIdentity({ variables: { input: data } })
 
-    this.props.saveIdentity({ variables: { input: data } })
-      .then(res => {
-        console.log(res)
-        if (res.data.saveIdentity.success) {
-          if (martialStatus === 'สมรส' && isChild === 'มี') {
-            this.props.navigateAction({ ...this.props, page: 'marry', params: { redirec: 'child' } })
-          }
-          else if (martialStatus === 'สมรส') this.props.navigateAction({ ...this.props, page: 'marry' })
-          else if (isChild === 'ไม่มี') this.props.navigateAction({ ...this.props, page: 'career' })
-          else if (isChild === 'มี') this.props.navigateAction({ ...this.props, page: 'child' })
+      const success = get(res, 'data.saveIdentity.success', false)
+      const code = get(res, 'data.saveIdentity.code', errorMessage.messageIsNull.code)
+      const details = get(res, 'data.saveIdentity.details', [])
+      const message = get(res, 'data.saveIdentity.message', errorMessage.messageIsNull.defaultMessage)
 
-        } else if (!res.data.saveIdentity.success) {
-          switch (res.data.saveIdentity.code) {
-            case '2101':
-              this.onHandleScrollToErrorField(res.data.saveIdentity.details)
-              return this.setState({ PreconditionRequired: res.data.saveIdentity.details })
-            case '2201':
-              this.onHandleScrollToErrorField(res.data.saveIdentity.details)
-              return this.setState({ InvalidArgument: res.data.saveIdentity.details })
-            case '1101':
-              return this.props.toggleModal({
-                ...typeModal[res.data.saveIdentity.code],
-                dis: res.data.saveIdentity.message
-              })
-            default:
-              return this.props.toggleModal({
-                ...typeModal[res.data.saveIdentity.code],
-                dis: res.data.saveIdentity.message
-              })
-          }
+      if (success) {
+
+        if (martialStatus === 'สมรส' && isChild === 'มี') {
+          this.props.navigateAction({ ...this.props, page: 'marry', params: { redirec: 'child' } })
         }
+        else if (martialStatus === 'สมรส') this.props.navigateAction({ ...this.props, page: 'marry' })
+        else if (isChild === 'ไม่มี') this.props.navigateAction({ ...this.props, page: 'career' })
+        else if (isChild === 'มี') this.props.navigateAction({ ...this.props, page: 'child' })
+
+      } else {
+
+        switch (code) {
+          case '2101':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({ PreconditionRequired: details || [] })
+          case '2201':
+            this.onHandleScrollToErrorField(details || [])
+            return this.setState({ InvalidArgument: details || [] })
+          default:
+            return this.props.toggleModal({
+              ...typeModal[code],
+              dis: message
+            })
+        }
+
+      }
+
+    } catch (error) {
+      this.props.toggleModal({
+        ...typeModal[errorMessage.requestError.code],
+        dis: errorMessage.requestError.defaultMessage,
       })
-      .catch(err => {
-        console.log(err.toString())
-      })
+    }
   }
 
   onHandleScrollToErrorField = async (field) => {

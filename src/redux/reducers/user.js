@@ -98,6 +98,7 @@ const init = {
   contact: {
     workPhone: '',
     homePhone: '',
+    homePhoneExt: '',
     mobilePhone: '',
     email: ''
   },
