@@ -25,7 +25,7 @@ const createDateData = (start = new Date().getFullYear() + 643, end = new Date()
             day.push(`${k}`)
           }
           // Leap day for years that are divisible by 4, such as 2000, 2004
-          if (i % 4 === 0) {
+          if ((i - 543) % 4 === 0) {
             day.push(`${29}`)
           }
         } else if (j in { 1: 1, 3: 1, 5: 1, 7: 1, 8: 1, 10: 1, 12: 1 }) {
@@ -49,7 +49,7 @@ const createDateData = (start = new Date().getFullYear() + 643, end = new Date()
             day.push(`${k}`)
           }
           // Leap day for years that are divisible by 4, such as 2000, 2004
-          if (i % 4 === 0) {
+          if ((i - 543) % 4 === 0) {
             day.push(`${29}`)
           }
         } else if (j in { 1: 1, 3: 1, 5: 1, 7: 1, 8: 1, 10: 1, 12: 1 }) {
