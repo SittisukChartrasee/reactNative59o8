@@ -44,15 +44,17 @@ export default class extends React.Component {
   setNumber = async obj => {
     this.setState({ ...obj })
 
-    const data = {
-      password: obj.number,
-      type: Platform.OS,
-      fcm_token: this.props.fcm,
-      version: this.props.version,
-      system_version: DeviceInfo.getSystemVersion(),
-      device_id: this.props.deviceInfo,
-    }
     if (obj.number.length === 6) {
+
+      const data = {
+        password: obj.number,
+        type: Platform.OS,
+        fcm_token: this.props.fcm,
+        version: this.props.version,
+        system_version: DeviceInfo.getSystemVersion(),
+        device_id: this.props.deviceInfo,
+      }
+
       if (this.props.passcode.passcode !== data.password) {
         this.props.toggleModal({
           ...typeModal[passcodeMessage.equalPasscode.code],
@@ -90,12 +92,12 @@ export default class extends React.Component {
               this.props.navigation.navigate('portSuggestion')
               return
             } else {
-  
+
               AsyncStorage.setItem('access_token', accessToken)
               AsyncStorage.setItem('user_token', userToken)
               NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
               NativeModules.KMyFundOnboarding.saveUserToken(userToken)
-  
+
               this.props.navigateAction({ ...this.props, page: 'condi' })
             }
           } else if (message === 'unauthorized') {
@@ -103,12 +105,14 @@ export default class extends React.Component {
               ...typeModal[passcodeMessage.unauthorized.code],
               dis: passcodeMessage.unauthorized.defaultMessage
             })
+            this.setState({ ...defaultPasscode, defaultKey: true })
           } else {
             this.props.toggleModal({ ...typeModal[code], dis: message })
+            this.setState({ ...defaultPasscode, defaultKey: true })
           }
 
         } catch (error) {
-          console.log(error)
+          this.setState({ ...defaultPasscode, defaultKey: true })
         }
       }
     }
