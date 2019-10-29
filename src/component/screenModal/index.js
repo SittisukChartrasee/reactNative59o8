@@ -30,6 +30,7 @@ class ScreenModal extends React.PureComponent {
         style={{ position: 'absolute', zIndex: 0 }}
       >
         {this.onHandleChooseScreen()}
+
         <Modal {...this.props.modal} />
       </ModalR>
     )

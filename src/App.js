@@ -97,7 +97,6 @@ export default class extends React.Component {
   }
 
   render() {
-    const { modal, screenModal, loading } = this.props.root
     return (
       <View style={{ flex: 1 }}>
         {
@@ -107,10 +106,14 @@ export default class extends React.Component {
               : <Screen />
             : <ReactWithState />
         }
+
         {
-          screenModal.visible ? <ScreenModal modal={modal} {...screenModal} /> : <Modal {...modal} />
+          this.props.root.screenModal.visible ?
+            <ScreenModal modal={this.props.root.modal} {...this.props.root.screenModal} /> :
+            <Modal {...this.props.root.modal} />
         }
-        <Spinner loading={loading} />
+
+        <Spinner loading={this.props.root.loading} />
       </View>
     )
   }
