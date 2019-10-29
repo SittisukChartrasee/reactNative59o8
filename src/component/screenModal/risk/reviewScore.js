@@ -62,21 +62,20 @@ export default class extends React.Component {
     descEN: '',
     fundCodeKAsset: '',
     assetClass: [],
+    loading: true
   }
 
   componentDidMount = async () => {
 
     try {
-      this.props.updateRoot('loading', true)
 
       const res = await this.props.client.query({ query: getInvestment })
       const dataInvestment = get(res, 'data.getInvestment', {})
 
       this.setState({ ...dataInvestment, loading: false })
-      this.props.updateRoot('loading', false)
 
     } catch (error) {
-      this.props.updateRoot('loading', false)
+      this.setState({ loading: false })
 
       this.props.toggleModal({
         ...typeModal[errorMessage.requestError.code],
@@ -85,13 +84,13 @@ export default class extends React.Component {
     }
   }
 
-  onNext = () => {
+  onNext = async () => {
+    await onStore.dispatch(NavigationActions.navigate({ routeName: 'complete' }))
     this.props.updateRoot('screenModal', { visible: false, page: 'reviewScore' })
-    onStore.dispatch(NavigationActions.navigate({ routeName: 'complete' }))
   }
 
-  onGoBack = () => {
-    onStore.dispatch(NavigationActions.navigate({ routeName: 'suittest' }))
+  onGoBack = async () => {
+    await onStore.dispatch(NavigationActions.navigate({ routeName: 'suittest' }))
     this.props.updateRoot('screenModal', { visible: false, page: 'reviewScore' })
   }
 
@@ -128,53 +127,48 @@ export default class extends React.Component {
         />
 
         <ScrollView contentContainerStyle={{ paddingTop: 40, paddingHorizontal: 24 }}>
-          {
-            (!this.state.loading && returnText)
-              ? (
-                <View style={{ flex: 1, alignItems: 'center' }}>
-                  <View style={{ marginBottom: 19 }}>
-                    <Image source={dataImage[+riskLevel]} />
-                  </View>
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            {
+              this.state.loading ?
+                <ActivityIndicator size="large" color={colors.white} /> : (
+                  <>
+                    <View style={{ marginBottom: 19 }}>
+                      <Image source={dataImage[+riskLevel]} />
+                    </View>
 
-                  <View style={{ marginBottom: 10 }}>
-                    <TBold fontSize={28} color={colors.white}>{nameTH}</TBold>
-                    <TBold fontSize={16} color={colors.white}>{`ผลตอบแทนที่คาดหวังโดยเฉลี่ย ${returnText} ต่อปี`}</TBold>
-                  </View>
+                    <View style={{ marginBottom: 10 }}>
+                      <TBold fontSize={28} color={colors.white}>{nameTH}</TBold>
+                      <TBold fontSize={16} color={colors.white}>{`ผลตอบแทนที่คาดหวังโดยเฉลี่ย ${returnText} ต่อปี`}</TBold>
+                    </View>
 
-                  <TLight color={colors.white} mb={40}>{descTH.replace('↵', '')}</TLight>
+                    <TLight color={colors.white} mb={40}>{descTH.replace('↵', '')}</TLight>
 
-                  <View style={{ backgroundColor: colors.white, width: '100%', minHeight: 352, paddingVertical: 16, borderRadius: 16, overflow: 'hidden' }}>
-                    <View style={{ height: 80, flexDirection: 'row' }}>
-                      <View style={{ flex: 1, paddingHorizontal: 16 }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                          <Image source={images.bookmark} style={{ marginRight: 8 }} />
-                          <TLight fontSize={14} textAlign="left">กองทุนที่แนะนำ</TLight>
+                    <View style={{ backgroundColor: colors.white, width: '100%', minHeight: 352, paddingVertical: 16, borderRadius: 16, overflow: 'hidden' }}>
+                      <View style={{ height: 80, flexDirection: 'row' }}>
+                        <View style={{ flex: 1, paddingHorizontal: 16 }}>
+                          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Image source={images.bookmark} style={{ marginRight: 8 }} />
+                            <TLight fontSize={14} textAlign="left">กองทุนที่แนะนำ</TLight>
+                          </View>
+                          <TBold fontSize={28} textAlign="left">{fundCodeKAsset}</TBold>
                         </View>
-                        <TBold fontSize={28} textAlign="left">{fundCodeKAsset}</TBold>
+                        <View style={{ width: 75, justifyContent: 'flex-start', alignItems: 'center' }}>
+                          <PieChart data={assetClass} />
+                        </View>
                       </View>
-                      <View style={{ width: 75, justifyContent: 'flex-start', alignItems: 'center' }}>
-                        <PieChart data={assetClass} />
+
+                      <View style={{ flex: 1, paddingHorizontal: 16 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                          <TBold fontSize={14}>สัดส่วนการลงทุนตามพอร์ตแนะนำ</TBold>
+                        </View>
+                        {assetClass ? sortBy(assetClass, [(o) => o.sortOrder]).map(RiskList) : null}
                       </View>
+
                     </View>
-
-                    <View style={{ flex: 1, paddingHorizontal: 16 }}>
-                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <TBold fontSize={14}>สัดส่วนการลงทุนตามพอร์ตแนะนำ</TBold>
-                      </View>
-                      {assetClass ? sortBy(assetClass, [(o) => o.sortOrder]).map(RiskList) : null}
-                    </View>
-
-                  </View>
-                </View>
-              ) : (
-                <View style={{ flex: 1, alignItems: 'center' }}>
-                  <View style={{ marginBottom: 10 }}>
-                    <TBold fontSize={16} color={colors.white}>{`ไม่สามารถเชื่อมต่อกับระบบได้ กรุณารอสักครู่ และทำรายการใหม่อีกครั้ง`}</TBold>
-                  </View>
-                </View>
-              )
-          }
-
+                  </>
+                )
+            }
+          </View>
         </ScrollView>
 
         <View style={{ paddingBottom: 44 }}>
