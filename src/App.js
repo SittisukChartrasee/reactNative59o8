@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
-import { Text, View, AppState, BackHandler, AsyncStorage } from 'react-native'
+import { Text, View, AppState, BackHandler, AsyncStorage, NativeModules } from 'react-native'
 import { createReduxContainer } from 'react-navigation-redux-helpers'
 import { bindActionCreators } from 'redux'
 import { onStore, AppNavigator } from './redux/store'
@@ -13,6 +13,7 @@ import { root } from './redux/actions/commonAction'
 import colors from './config/colors';
 import { TBold } from './component/texts';
 import Spinner from './component/spinner'
+import releaseApp from '../release/releaseApp.json'
 
 export const store = onStore
 const ReactWithState = connect(({ nav }) => ({ state: nav }))(createReduxContainer(AppNavigator, 'root'))
@@ -60,6 +61,7 @@ export default class extends React.Component {
   componentDidMount() {
     AppState.addEventListener('change', this._handleAppStateChange);
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+    this._handleGetBundleVersion(releaseApp)
 
     // const nativeEventListener = DeviceEventEmitter.addListener('ActivityStateChange',
     //   (e)=>{
@@ -84,6 +86,8 @@ export default class extends React.Component {
     // this.props.handleActionBack()
     return true
   }
+
+  _handleGetBundleVersion = release => NativeModules.KMyFundOnboarding.getBundleVersion(`${release.nameFile}, ENV: ${release.env}, Build: ${release.build}`)
 
   _handleAppStateChange = (nextAppState) => {
     if (

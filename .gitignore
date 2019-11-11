@@ -12,6 +12,7 @@ release/bundle/
 
 # Xcode
 #
+/ios/Pods/
 build/
 *.pbxuser
 !default.pbxuser

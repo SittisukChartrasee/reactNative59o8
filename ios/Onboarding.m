@@ -34,6 +34,10 @@
     NSLog(@"saveUserToken : %@", token);
   }
 
+  RCT_EXPORT_METHOD(getBundleVersion: (NSString *)version) {
+    NSLog(@"version : %@", version);
+  }
+
   RCT_EXPORT_METHOD(getUserToken: (RCTResponseSenderBlock)callback) {
     NSLog(@"%s", "getUserToken");
     callback(@[@"getUserToken"]);
