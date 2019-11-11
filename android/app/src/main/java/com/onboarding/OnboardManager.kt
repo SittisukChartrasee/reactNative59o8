@@ -25,6 +25,7 @@ class OnboardManager(private val reactContext: ReactApplicationContext) : ReactC
         const val KEY_ACCESS_TOKEN = "ob_access_token"
         const val KEY_FCM = "ob_FCM"
         const val KEY_VERSION = "ob_version"
+        const val KEY_BUNDLE = "bundle_version"
     }
 
     private val sharedPref: SharedPreferences by lazy {
@@ -66,6 +67,12 @@ class OnboardManager(private val reactContext: ReactApplicationContext) : ReactC
     fun saveUserToken(token: String) {
         saveStringToPref(KEY_ACCESS_TOKEN, token)
 //        TokenManager.saveStringToken(token)
+    }
+
+    @ReactMethod
+    fun getBundleVersion(version: String) {
+        Log.d("version", version)
+        saveStringToPref(KEY_BUNDLE, version)
     }
 
     @ReactMethod
