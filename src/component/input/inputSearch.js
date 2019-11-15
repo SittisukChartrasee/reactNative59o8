@@ -227,7 +227,12 @@ export default class extends React.Component {
                 }}
               >
                 <TextInput
-                  style={{ flex: 1, fontSize: 28, fontFamily: fonts.sukhumvitBold, ...(pf => pf.OS === 'android' && { fontWeight: '400' })(Platform) }}
+                  style={{
+                    ...((p) => p === 'android' ? ({ fontWeight: '400' }) : ({}))(Platform.OS),
+                    flex: 1,
+                    fontSize: 28,
+                    fontFamily: fonts.sukhumvitBold
+                  }}
                   autoFocus
                   value={this.state.text}
                   onChangeText={text => this.onHandleSetText({ text, field })}
