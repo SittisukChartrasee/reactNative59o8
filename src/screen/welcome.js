@@ -24,15 +24,22 @@ import lockout from '../containers/hoc/lockout'
 import { NavBar } from '../component/gradient'
 import { replaceSpace, fontToLower, handleSizing } from '../utility/helper'
 import { validateEmail, validateIdentityCard, validatePhoneNumber, RequiredFields } from '../utility/validation'
+import { maskedFormat } from '../utility/util'
 
 const { height: heightScreen } = Dimensions.get('window')
 
 const fields = [
   {
-    type: 'mask',
+    type: 'textInput',
     label: 'หมายเลขบัตรประชาชน',
     field: 'idCard',
-    option: '9 9999 99999 99 9',
+    format: [
+      { index: 1, char: ' ' },
+      { index: 5, char: ' ' },
+      { index: 10, char: ' ' },
+      { index: 12, char: ' ' },
+    ],
+    // option: '9 9999 99999 99 9',
     required: true,
   },
   {
@@ -42,10 +49,14 @@ const fields = [
     required: true,
   },
   {
-    type: 'mask',
+    type: 'textInput',
     label: 'หมายเลขโทรศัพท์มือถือ',
     field: 'mobilePhone',
-    option: '099 999 9999',
+    format: [
+      { index: 3, char: ' ' },
+      { index: 6, char: ' ' },
+    ],
+    // option: '099 999 9999',
     keyboardType: 'number-pad',
     required: true,
   }
@@ -75,12 +86,19 @@ export default class extends React.Component {
 
   handleInput = (obj) => {
     const { user } = this.props
+    console.log(obj)
     if (obj.field === 'idCard') {
-      this.props.updateUser('profile', { ...user.profile, [obj.field]: obj.value })
+      this.props.updateUser('profile', {
+        ...user.profile,
+        [obj.field]: maskedFormat({ value: obj.value, format: obj.format, limit: 13, field: obj.field })
+      })
     } else if (obj.field === 'email') {
       this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value })
     } else if (obj.field === 'mobilePhone') {
-      this.props.updateUser('contact', { ...user.contact, [obj.field]: obj.value })
+      this.props.updateUser('contact', {
+        ...user.contact,
+        [obj.field]: maskedFormat({ value: obj.value, format: obj.format, limit: 10, field: obj.field })
+      })
     }
     this.handleValidation({ field: obj.field, value: obj.value })
   }

@@ -20,6 +20,7 @@ import colors from '../config/colors';
 import { root } from '../redux/actions/commonAction'
 import { forgotPasscode, requestOtp } from '../redux/actions/root-active'
 import { replaceSpace } from '../utility/helper'
+import { maskedFormat } from '../utility/util'
 import { TBold } from '../component/texts';
 
 const mapToProps = ({ root }) => ({ root })
@@ -38,10 +39,16 @@ export default class extends React.Component {
     InvalidArgument: [],
     card: [
       {
-        type: 'mask',
+        type: 'textInput',
         label: 'เลขบัตรประชาชน',
         field: 'idCard',
-        option: '9 9999 99999 99 9',
+        format: [
+          { index: 1, char: ' ' },
+          { index: 5, char: ' ' },
+          { index: 10, char: ' ' },
+          { index: 12, char: ' ' },
+        ],
+        // option: '9 9999 99999 99 9',
         value: '',
       }
     ]
@@ -125,7 +132,17 @@ export default class extends React.Component {
 
   handleInput = (obj) => {
     this.setState({
-      card: this.state.card.map(d => d.field === obj.field ? ({ ...d, value: obj.value }) : d)
+      card: this.state.card.map(d => d.field === obj.field ?
+        ({
+          ...d,
+          value: maskedFormat({
+            value: obj.value,
+            format: obj.format,
+            limit: 13,
+            field: obj.field
+          })
+        })
+        : d)
     })
     this.handleValidation({ field: obj.field, value: obj.value })
   }
@@ -185,7 +202,7 @@ export default class extends React.Component {
               image: d.image,
               number: d.number,
               disabled: d.disabled,
-              option: d.option,
+              format: d.format,
               err: this.onValidation(d.field),
               handleInput: value => this.handleInput(value),
             }, key))
