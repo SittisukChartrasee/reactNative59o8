@@ -21,6 +21,7 @@ import { updateUser, root } from '../../redux/actions/commonAction'
 import setMutation from '../../containers/mutation'
 import lockout from '../../containers/hoc/lockout'
 import { convertDate, replaceSpace } from '../../utility/helper'
+import { maskedFormat } from '../../utility/util'
 import typeModal from '../../utility/typeModal'
 import {
   validateIdentityCard,
@@ -65,10 +66,16 @@ export default class extends React.Component {
         field: 'nationFlag',
         required: true,
       }, {
-        type: 'mask',
+        type: 'textInput',
         label: 'หมายเลขบัตรประชาชน',
         field: 'IDCardNo',
-        option: '9 9999 99999 99 9',
+        format: [
+          { index: 1, char: ' ' },
+          { index: 5, char: ' ' },
+          { index: 10, char: ' ' },
+          { index: 12, char: ' ' },
+        ],
+        // option: '9 9999 99999 99 9',
         inVisible: this.props.user.spouse.nationFlag === 'ชาวต่างชาติ',
         required: true,
       }, {
@@ -208,6 +215,11 @@ export default class extends React.Component {
       })
     } else if (props.type === 'onFocus') {
       this.setState({ hidePicker: true })
+    } else if (props.field === 'IDCardNo') {
+      this.props.updateUser('spouse', {
+        ...user.spouse,
+        [props.field]: maskedFormat({ value: props.value, format: props.format, limit: 13, field: props.field })
+      })
     } else {
       this.props.updateUser('spouse', { ...user.spouse, [props.field]: props.value })
     }
@@ -392,12 +404,12 @@ export default class extends React.Component {
         >
           {
             fields.map((d, key) => Input({
+              ...d,
               field: d.field,
               label: d.label,
               type: d.type,
               required: d.required,
               init: d.init,
-              option: d.option,
               value: d.field === 'title'
                 ? user.spouse['titleDetail']
                 : user.spouse[d.field],

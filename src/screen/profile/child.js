@@ -28,6 +28,7 @@ import { validateIdentityCard, validateIdentityThaiLanguage, RequiredFields } fr
 import { convertDate, getOfBirth, replaceSpace, tomorrowDate } from '../../utility/helper'
 import typeModal from '../../utility/typeModal'
 import { errorMessage } from '../../utility/messages'
+import { maskedFormat } from '../../utility/util'
 
 const { width: widthView } = Dimensions.get('window')
 
@@ -79,10 +80,16 @@ export default class extends React.Component {
         required: true,
         static: true
       }, {
-        type: 'mask',
+        type: 'textInput',
         label: 'เลขบัตรประชาชน',
         field: 'firstDocNo',
-        option: '9 9999 99999 99 9',
+        format: [
+          { index: 1, char: ' ' },
+          { index: 5, char: ' ' },
+          { index: 10, char: ' ' },
+          { index: 12, char: ' ' },
+        ],
+        // option: '9 9999 99999 99 9',
         required: true,
         static: true
       }, {
@@ -137,10 +144,16 @@ export default class extends React.Component {
         required: true,
         inVisible: this.props.user.child.inVisibleSecond,
       }, {
-        type: 'mask',
+        type: 'textInput',
         label: 'เลขบัตรประชาชน',
         field: 'secondDocNo',
-        option: '9 9999 99999 99 9',
+        format: [
+          { index: 1, char: ' ' },
+          { index: 5, char: ' ' },
+          { index: 10, char: ' ' },
+          { index: 12, char: ' ' },
+        ],
+        // option: '9 9999 99999 99 9',
         required: true,
         inVisible: this.props.user.child.inVisibleSecond,
       }, {
@@ -209,6 +222,16 @@ export default class extends React.Component {
             else return d
           }
         })
+      })
+    } else if (props.field === 'firstDocNo') {
+      this.props.updateUser('child', {
+        ...user.child,
+        [props.field]: maskedFormat({ value: props.value, format: props.format, limit: 13, field: props.field })
+      })
+    } else if (props.field === 'secondDocNo') {
+      this.props.updateUser('child', {
+        ...user.child,
+        [props.field]: maskedFormat({ value: props.value, format: props.format, limit: 13, field: props.field })
       })
     } else if (props.field === 'secondIdcard') {
       this.onPressNewChild()
@@ -448,7 +471,7 @@ export default class extends React.Component {
               type: d.type,
               required: d.required,
               init: d.init,
-              option: d.option,
+              format: d.format,
               value: d.field === 'firstTitle'
                 ? user.child['firstTitleDetail']
                 : d.field === 'secondTitle'

@@ -23,6 +23,7 @@ import setMutation from '../../containers/mutation'
 import { replaceSpace } from '../../utility/helper'
 import typeModal from '../../utility/typeModal'
 import { errorMessage } from '../../utility/messages'
+import { maskedFormat } from '../../utility/util'
 
 const fields = [
   {
@@ -36,9 +37,13 @@ const fields = [
     init: [
       {
         label: 'โทรศัพท์บ้าน',
-        type: 'mask',
+        type: 'textInput',
         field: 'homePhone',
-        option: '09 999 9999',
+        format: [
+          { index: 2, char: ' ' },
+          { index: 5, char: ' ' },
+        ],
+        // option: '09 999 9999',
         required: false,
       },
       {
@@ -86,11 +91,21 @@ export default class extends React.Component {
       } else {
         return this.props.updateUser('contact', { ...user.contact })
       }
+    } else if (props.field === 'homePhone') {
+      this.props.updateUser('contact', {
+        ...user.contact,
+        [props.field]: maskedFormat({
+          value: props.value,
+          format: props.format,
+          limit: 9,
+          field: props.field
+        })
+      })
+
     } else {
       this.props.updateUser('contact', { ...user.contact, [props.field]: props.value })
     }
   }
-
 
   onValidation = (field) => {
     const { PreconditionRequired, InvalidArgument } = this.state
