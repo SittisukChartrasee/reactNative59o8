@@ -86,7 +86,7 @@ export default class extends React.Component {
 
   handleInput = (obj) => {
     const { user } = this.props
-    console.log(obj)
+    
     if (obj.field === 'idCard') {
       this.props.updateUser('profile', {
         ...user.profile,
