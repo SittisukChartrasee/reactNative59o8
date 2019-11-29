@@ -43,11 +43,13 @@
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* KbankOnboardingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* KbankOnboardingTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
+		6A1C27FC61C145BBAA956E7A /* libRNSecureKeyStore-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EECD4123AB86458FAEFCDD61 /* libRNSecureKeyStore-tvOS.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8C281611352D4732985CBC0A /* SukhumvitSet-Text.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7CE566BF4BB740FEBCC661E9 /* SukhumvitSet-Text.ttf */; };
 		8E1C9C9EED9EB2EB29B69BF6 /* libPods-KbankOnboarding-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC08D8F73B24B4E4A716CF7E /* libPods-KbankOnboarding-tvOSTests.a */; };
 		99640BEAA81F415D9E90D6B3 /* SukhumvitSet-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34C7CD23DF3E4E21BAD4D292 /* SukhumvitSet-Thin.ttf */; };
 		A4ACD03F58D0455CB2E823EF /* SukhumvitSet-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7DA48EFE273B468F917969B3 /* SukhumvitSet-Bold.ttf */; };
+		A88B92EB185249F39F9B2D1E /* libRNSecureKeyStore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EF088DEDD374B2BBAA041F1 /* libRNSecureKeyStore.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		D7738871E44C4611875B55B5 /* SukhumvitSet-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C388ABE18F7344D6A9D14536 /* SukhumvitSet-Light.ttf */; };
 		DCC18E575AD2C871DD99CCDD /* libPods-KbankOnboardingTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7E8948B0D71E719F38F1EE5 /* libPods-KbankOnboardingTests.a */; };
@@ -358,6 +360,20 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		AD59077F237BCD1E00F87C80 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 017D44C1FC634AE1A50C1A10 /* RNSecureKeyStore.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNSecureKeyStore;
+		};
+		AD590781237BCD1E00F87C80 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 017D44C1FC634AE1A50C1A10 /* RNSecureKeyStore.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 465057B52107394900FD399B;
+			remoteInfo = "RNSecureKeyStore-tvOS";
+		};
 		ADBDB9261DFEBF0700ED6528 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */;
@@ -377,6 +393,7 @@
 		00E356EE1AD99517003FC87E /* KbankOnboardingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KbankOnboardingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* KbankOnboardingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KbankOnboardingTests.m; sourceTree = "<group>"; };
+		017D44C1FC634AE1A50C1A10 /* RNSecureKeyStore.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSecureKeyStore.xcodeproj; path = "../node_modules/react-native-secure-key-store/ios/RNSecureKeyStore.xcodeproj"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* KbankOnboarding.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KbankOnboarding.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -407,7 +424,9 @@
 		7CE566BF4BB740FEBCC661E9 /* SukhumvitSet-Text.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SukhumvitSet-Text.ttf"; path = "../assets/fonts/SukhumvitSet-Text.ttf"; sourceTree = "<group>"; };
 		7DA48EFE273B468F917969B3 /* SukhumvitSet-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SukhumvitSet-Bold.ttf"; path = "../assets/fonts/SukhumvitSet-Bold.ttf"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		9EF088DEDD374B2BBAA041F1 /* libRNSecureKeyStore.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSecureKeyStore.a; sourceTree = "<group>"; };
 		A0161E11E96519D9B9A7BBAB /* Pods-KbankOnboarding-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KbankOnboarding-tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KbankOnboarding-tvOSTests/Pods-KbankOnboarding-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		AD590794237BEE0D00F87C80 /* KbankOnboarding.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = KbankOnboarding.entitlements; path = KbankOnboarding/KbankOnboarding.entitlements; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		AE1D58F7F9074172853939DA /* SukhumvitSet-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SukhumvitSet-SemiBold.ttf"; path = "../assets/fonts/SukhumvitSet-SemiBold.ttf"; sourceTree = "<group>"; };
 		AF62C8537BDA1D5AE757A391 /* Pods-KbankOnboarding-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KbankOnboarding-tvOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KbankOnboarding-tvOSTests/Pods-KbankOnboarding-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -418,6 +437,7 @@
 		DF7C0BF318F447C9AF067F83 /* Pods-KbankOnboarding.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KbankOnboarding.release.xcconfig"; path = "Pods/Target Support Files/Pods-KbankOnboarding/Pods-KbankOnboarding.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		EECD4123AB86458FAEFCDD61 /* libRNSecureKeyStore-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNSecureKeyStore-tvOS.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -452,6 +472,7 @@
 				26253A9A225F2199006A90E6 /* libART.a in Frameworks */,
 				075E46012C1944A2BC5A79F6 /* libRNGestureHandler.a in Frameworks */,
 				269AF1341079F93886A0CF24 /* libPods-KbankOnboarding.a in Frameworks */,
+				A88B92EB185249F39F9B2D1E /* libRNSecureKeyStore.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,6 +489,7 @@
 				2D02E4C61E0B4AEC006451C7 /* libRCTSettings-tvOS.a in Frameworks */,
 				2D02E4C71E0B4AEC006451C7 /* libRCTText-tvOS.a in Frameworks */,
 				2D02E4C81E0B4AEC006451C7 /* libRCTWebSocket-tvOS.a in Frameworks */,
+				6A1C27FC61C145BBAA956E7A /* libRNSecureKeyStore-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -565,6 +587,7 @@
 		13B07FAE1A68108700A75B9A /* KbankOnboarding */ = {
 			isa = PBXGroup;
 			children = (
+				AD590794237BEE0D00F87C80 /* KbankOnboarding.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -630,6 +653,8 @@
 			isa = PBXGroup;
 			children = (
 				51AD18BE98B642C8835E20B8 /* libRNGestureHandler.a */,
+				9EF088DEDD374B2BBAA041F1 /* libRNSecureKeyStore.a */,
+				EECD4123AB86458FAEFCDD61 /* libRNSecureKeyStore-tvOS.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -692,6 +717,7 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				5E49649C823541C6A470160F /* RNGestureHandler.xcodeproj */,
+				017D44C1FC634AE1A50C1A10 /* RNSecureKeyStore.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -744,6 +770,15 @@
 				34C7CD23DF3E4E21BAD4D292 /* SukhumvitSet-Thin.ttf */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		AD59077B237BCD1E00F87C80 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AD590780237BCD1E00F87C80 /* libRNSecureKeyStore.a */,
+				AD590782237BCD1E00F87C80 /* libRNSecureKeyStore-tvOS.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		ADBDB9201DFEBF0600ED6528 /* Products */ = {
@@ -859,9 +894,6 @@
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
-					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = CBVH7VW8CW;
-					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
 						ProvisioningStyle = Automatic;
@@ -945,6 +977,10 @@
 				{
 					ProductGroup = 26DBA24A2254B3460046829E /* Products */;
 					ProjectRef = 5E49649C823541C6A470160F /* RNGestureHandler.xcodeproj */;
+				},
+				{
+					ProductGroup = AD59077B237BCD1E00F87C80 /* Products */;
+					ProjectRef = 017D44C1FC634AE1A50C1A10 /* RNSecureKeyStore.xcodeproj */;
 				},
 				{
 					ProductGroup = 26B2DB7322715A2300F57ECD /* Products */;
@@ -1249,6 +1285,20 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		AD590780237BCD1E00F87C80 /* libRNSecureKeyStore.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNSecureKeyStore.a;
+			remoteRef = AD59077F237BCD1E00F87C80 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AD590782237BCD1E00F87C80 /* libRNSecureKeyStore-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNSecureKeyStore-tvOS.a";
+			remoteRef = AD590781237BCD1E00F87C80 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1452,6 +1502,7 @@
 			baseConfigurationReference = 771AAE5A92C36C7171F7A2D0 /* Pods-KbankOnboardingTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1459,12 +1510,15 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-secure-key-store/ios/**",
 				);
 				INFOPLIST_FILE = KbankOnboardingTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1483,15 +1537,19 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-secure-key-store/ios/**",
 				);
 				INFOPLIST_FILE = KbankOnboardingTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1509,12 +1567,14 @@
 			baseConfigurationReference = 741F971A904808AF5AC4754F /* Pods-KbankOnboarding.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = KbankOnboarding/KbankOnboarding.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = CBVH7VW8CW;
+				DEVELOPMENT_TEAM = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-secure-key-store/ios/**",
 				);
 				INFOPLIST_FILE = KbankOnboarding/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1534,11 +1594,13 @@
 			baseConfigurationReference = DF7C0BF318F447C9AF067F83 /* Pods-KbankOnboarding.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = KbankOnboarding/KbankOnboarding.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CBVH7VW8CW;
+				DEVELOPMENT_TEAM = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-secure-key-store/ios/**",
 				);
 				INFOPLIST_FILE = KbankOnboarding/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1568,11 +1630,14 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-secure-key-store/ios/**",
 				);
 				INFOPLIST_FILE = "KbankOnboarding-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1602,11 +1667,14 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-secure-key-store/ios/**",
 				);
 				INFOPLIST_FILE = "KbankOnboarding-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1636,11 +1704,14 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-secure-key-store/ios/**",
 				);
 				INFOPLIST_FILE = "KbankOnboarding-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1670,11 +1741,14 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-secure-key-store/ios/**",
 				);
 				INFOPLIST_FILE = "KbankOnboarding-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (

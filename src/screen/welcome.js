@@ -3,7 +3,6 @@ import {
   View,
   Image,
   Dimensions,
-  AsyncStorage,
   TouchableOpacity,
 } from 'react-native'
 import { bindActionCreators } from 'redux'
@@ -25,6 +24,7 @@ import { NavBar } from '../component/gradient'
 import { replaceSpace, fontToLower, handleSizing } from '../utility/helper'
 import { validateEmail, validateIdentityCard, validatePhoneNumber, RequiredFields } from '../utility/validation'
 import { maskedFormat } from '../utility/util'
+import SecureKeyStore from "../utility/keyStore";
 
 const { height: heightScreen } = Dimensions.get('window')
 
@@ -79,9 +79,9 @@ export default class extends React.Component {
   }
 
   componentDidMount = async () => {
-    const a = await AsyncStorage.getItem('access_token')
-    const b = await AsyncStorage.getItem('user_token')
-    console.log('token', a, 'user_token', b)
+    const a = await SecureKeyStore.get("access_token")
+    const b = await SecureKeyStore.get("user_token")
+    console.log('token', a, "user_token", b)
   }
 
   handleInput = (obj) => {

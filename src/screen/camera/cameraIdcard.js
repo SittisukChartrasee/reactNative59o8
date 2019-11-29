@@ -5,7 +5,6 @@ import {
   Platform,
   SafeAreaView,
   TouchableHighlight,
-  AsyncStorage,
   TouchableOpacity,
 } from 'react-native'
 import { connect } from 'react-redux'
@@ -19,6 +18,7 @@ import { navigateAction, navigateReset } from '../../redux/actions'
 import request from '../../utility/requestApi'
 import typeModal from '../../utility/typeModal'
 import { errorMessage } from '../../utility/messages'
+import SecureKeyStore from "../../utility/keyStore";
 
 const mapToProps = () => ({})
 const dispatchToProps = dispatch => ({
@@ -33,7 +33,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const token = await AsyncStorage.getItem("access_token")
+    const token = await SecureKeyStore.get("access_token")
     const url = 'upload-idcard'
     const data = new FormData()
     data.append('file', {

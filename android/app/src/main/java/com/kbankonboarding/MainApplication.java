@@ -12,6 +12,7 @@ import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.codefin3.myapplication.onboarding.OnboardPackage;
 import com.facebook.react.ReactApplication;
+import com.reactlibrary.securekeystore.RNSecureKeyStorePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -34,6 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+          new RNSecureKeyStorePackage(),
           new OnboardPackage(),
           new LinearGradientPackage(),
           new RNGestureHandlerPackage(),

@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   SafeAreaView,
   PermissionsAndroid,
-  AsyncStorage
 } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -25,6 +24,7 @@ import lockout from '../../containers/hoc/lockout'
 import { updateUser } from '../../redux/actions/commonAction'
 import typeModal from '../../utility/typeModal'
 import { errorMessage } from '../../utility/messages'
+import SecureKeyStore from "../../utility/keyStore";
 
 const mapToProps = ({ user }) => ({ user })
 const dispatchToProps = dispatch => ({
@@ -66,7 +66,7 @@ export default class Demo extends Component {
   }
 
   _onSaveEvent = async result => {
-    const token = await AsyncStorage.getItem("access_token")
+    const token = await SecureKeyStore.get("access_token")
     this.props.updateUser('signature', `data:image/png;base64,${result.encoded}`)
 
     const data = new FormData()

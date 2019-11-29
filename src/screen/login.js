@@ -1,5 +1,5 @@
 import React from 'react'
-import { AsyncStorage, Platform, NativeModules } from 'react-native'
+import { Platform, NativeModules } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withApollo } from 'react-apollo'
@@ -18,6 +18,7 @@ import { formatIdCard, formatPhoneNumber, } from '../utility/helper'
 import { userDataToProps } from '../schemaData/userData'
 import { errorMessage } from '../utility/messages'
 import releaseApp from '../../release/releaseApp.json'
+import SecureKeyStore from "../utility/keyStore";
 
 const defaultPasscode = {
 	dot: ['', '', '', '', '', ''],
@@ -128,8 +129,8 @@ export default class extends React.Component {
 
 	setNumber = async obj => {
 
-		let userToken = await AsyncStorage.getItem('user_token')
-		if (!userToken) userToken = this.props.navigation.getParam('user_token', '')
+		let userToken = await SecureKeyStore.get("user_token")
+		if (!userToken) userToken = this.props.navigation.getParam("user_token", '')
 
 		this.setState({ ...obj })
 
@@ -149,9 +150,8 @@ export default class extends React.Component {
 			const email = get(res, 'result.email', '')
 
 			if (success) {
-				AsyncStorage.setItem('access_token', accessToken)
-				AsyncStorage.setItem('user_token', userToken)
-
+				SecureKeyStore.set("access_token", accessToken)
+				SecureKeyStore.set("user_token", userToken)
 				NativeModules.KMyFundOnboarding.saveUserToken(userToken)
 
 				this.props.updateUser('profile', {
@@ -248,7 +248,7 @@ export default class extends React.Component {
 						dot,
 						title: 'กรุณากรอกรหัสผ่าน',
 						onPrevPage: () => releaseApp.modeDev
-							? AsyncStorage.clear()
+							? SecureKeyStore.clear() 
 							: NativeModules.KMyFundOnboarding.finishActivity(),
 						forgetbtn: () => this.props.navigateAction({ ...this.props, page: 'forgetPasscode' })
 					}}

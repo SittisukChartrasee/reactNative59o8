@@ -4,7 +4,6 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
-  AsyncStorage,
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'

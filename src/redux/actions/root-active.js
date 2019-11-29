@@ -4,6 +4,7 @@ import { errorMessage } from '../../utility/messages'
 import request from '../../utility/requestApi'
 import typeModal from '../../utility/typeModal'
 import { CHANGE_ROOT } from '../types'
+import { btoa } from '../../utility/btoa'
 
 const handleTimeout = (res, dispatch) => {
   if (!res.success && res.message === 'jwt expired') {
@@ -22,10 +23,11 @@ export const requestOtp = (obj, { token = null, currFlowUP }) => async dispatch 
     switch (currFlow) {
       case 'updatePasscode': return 'user/accept-term/request-otp'
       case 'forgetPasscode': return 'user/forgot-password/request-otp'
-      default: return 'auth/otp'
+      default:  obj.tempKey =  btoa(new Date().getTime().toString());
+      return 'auth/otp'
     }
   }
-
+  
   dispatch({ type: CHANGE_ROOT, key: 'loading', value: true })
 
   try {
@@ -39,13 +41,19 @@ export const requestOtp = (obj, { token = null, currFlowUP }) => async dispatch 
     handleTimeout(res, dispatch)
 
     const result = get(res, 'result', null)
-
-    if (result) {
+    if (res) {
       for (const key in result) {
         if (key === 'code')
           dispatch({ type: CHANGE_ROOT, key, value: { code: result.code, message: result.message } })
         else
           dispatch({ type: CHANGE_ROOT, key, value: result[key] })
+      }
+      if(!res.success){
+        const modal = {
+          ...typeModal[res.code],
+          dis: res.message,
+        }
+        dispatch({ type: CHANGE_ROOT, key: 'modal', value: modal })
       }
     } else {
       for (const key in res) {
