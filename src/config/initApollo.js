@@ -1,4 +1,4 @@
-import { AsyncStorage, NativeModules } from 'react-native'
+import { NativeModules } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { ApolloClient } from 'apollo-client'
 import { ApolloLink } from 'apollo-link'
@@ -8,6 +8,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createUploadLink } from 'apollo-upload-client'
 import { CHANGE_ROOT } from '../redux/types'
 import ENV from './env'
+import SecureKeyStore from "../utility/keyStore";
 
 // import { beforLogin } from './router'
 
@@ -40,7 +41,7 @@ const handleToken = token => token ? { authorization: `Bearer ${token}` } : {}
 
 
 const authLink = store => setContext(async (_, { headers }) => {
-  const token = await AsyncStorage.getItem('access_token')
+  const token = await SecureKeyStore.get("access_token")
 
   return ({
     headers: {

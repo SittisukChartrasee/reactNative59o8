@@ -2,7 +2,6 @@ import React from 'react'
 import {
   TouchableOpacity,
   ScrollView,
-  AsyncStorage,
   Image,
   View,
 } from 'react-native'
@@ -22,6 +21,7 @@ import { forgotPasscode, requestOtp } from '../redux/actions/root-active'
 import { replaceSpace } from '../utility/helper'
 import { maskedFormat } from '../utility/util'
 import { TBold } from '../component/texts';
+import SecureKeyStore from "../utility/keyStore";
 
 const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
@@ -71,7 +71,7 @@ export default class extends React.Component {
   }
 
   onNext = async () => {
-    const user_token = await AsyncStorage.getItem('user_token')
+    const user_token = await SecureKeyStore.get("user_token")
     const res = await this.onForgotPasscode({ user_token: user_token, id_card: replaceSpace(this.state.card[0].value) })
 
     const success = get(res, 'success', false)

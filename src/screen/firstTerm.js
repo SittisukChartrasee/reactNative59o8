@@ -8,7 +8,6 @@ import {
   SafeAreaView,
   Clipboard,
   Image,
-  AsyncStorage
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -21,6 +20,7 @@ import { LongButton } from '../component/button'
 import images from '../config/images'
 import { navigateAction } from '../redux/actions'
 import getVersion from '../config/version'
+import SecureKeyStore from "../utility/keyStore";
 
 const { width: widthView } = Dimensions.get('window')
 
@@ -114,10 +114,11 @@ export default class extends React.Component {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
             <TouchableOpacity
               onPress={async () => {
-                await AsyncStorage.clear()
+                SecureKeyStore.clear()
                 NativeModules.KMyFundOnboarding.finishActivity()
                 // NativeModules.KMyFundOnboarding.autoLogin('100', 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9')
-                // AsyncStorage.setItem('access_token', 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTkxMTI4ODUsImlkZW50aXR5IjoiWDRvZVUvTUN2NXhuOEtMZXhrS2hPNkM5NVJIU0hwN09Md1QvcDJueXZad0I1RmhRWXp2MkRKaEFHSFNhdTlMNmh3MlgyT2p2b0UyWmNmZ3pSdm1VWlZ4RzZQb2hndGZLVGVnclBTVFcifQ.ePioDlD-myl7JM5mH60ivY-mKBtbu11p_cFEgkxXSrnWkQgEFT-pSY8DbY96q1EWs_MwKZBS2Ku7vwTQ7GaEBDWh6LgaOVih9qKA9owUQ_8lXfMutsc-I1xaUM1rhApImCeux9pUq_BIGaihPpuv76pspGYBaineMirGr8HDEDx30-3SWtjBUlOUoWZJRs_1iXruSu54l8I3sSjoSOvvQdAIcDs_hXAVpftHGOqmZcueLoCg242Tj7Z5eTubW8vqGm2kI7u42ONTGIZzK-oJqLM8e9VEzhND052Vs-MZePSWW8DoXYmwhE0iUEi1H6NAUQPz6P7dQKqKI2LeZVKiYw')
+                // SecureKeyStore.set("access_token", 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTkxMTI4ODUsImlkZW50aXR5IjoiWDRvZVUvTUN2NXhuOEtMZXhrS2hPNkM5NVJIU0hwN09Md1QvcDJueXZad0I1RmhRWXp2MkRKaEFHSFNhdTlMNmh3MlgyT2p2b0UyWmNmZ3pSdm1VWlZ4RzZQb2hndGZLVGVnclBTVFcifQ.ePioDlD-myl7JM5mH60ivY-mKBtbu11p_cFEgkxXSrnWkQgEFT-pSY8DbY96q1EWs_MwKZBS2Ku7vwTQ7GaEBDWh6LgaOVih9qKA9owUQ_8lXfMutsc-I1xaUM1rhApImCeux9pUq_BIGaihPpuv76pspGYBaineMirGr8HDEDx30-3SWtjBUlOUoWZJRs_1iXruSu54l8I3sSjoSOvvQdAIcDs_hXAVpftHGOqmZcueLoCg242Tj7Z5eTubW8vqGm2kI7u42ONTGIZzK-oJqLM8e9VEzhND052Vs-MZePSWW8DoXYmwhE0iUEi1H6NAUQPz6P7dQKqKI2LeZVKiYw'
+                // )
               }}
               style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
               <Image source={images.cancelFirst} style={{ marginRight: 8 }} />

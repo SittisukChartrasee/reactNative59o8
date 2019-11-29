@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
-import { Text, View, AppState, BackHandler, AsyncStorage, NativeModules } from 'react-native'
+import { Text, View, AppState, BackHandler, NativeModules } from 'react-native'
 import { createReduxContainer } from 'react-navigation-redux-helpers'
 import { bindActionCreators } from 'redux'
 import { onStore, AppNavigator } from './redux/store'
@@ -14,6 +14,7 @@ import colors from './config/colors';
 import { TBold } from './component/texts';
 import Spinner from './component/spinner'
 import releaseApp from '../release/releaseApp.json'
+import SecureKeyStore from "../src/utility/keyStore";
 
 export const store = onStore
 const ReactWithState = connect(({ nav }) => ({ state: nav }))(createReduxContainer(AppNavigator, 'root'))
@@ -42,9 +43,9 @@ export default class extends React.Component {
     }
 
     !TEST &&
-      AsyncStorage.getItem('user_token')
+      SecureKeyStore.get("user_token")
         .then(async d => {
-          const a = await AsyncStorage.getItem('userToken')
+          const a = await SecureKeyStore.get('userToken')
           console.log(a, d)
           if (d) {
             this.setState({ loading: true })

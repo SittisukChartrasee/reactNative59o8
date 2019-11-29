@@ -9303,6 +9303,11 @@ react-native-screens@^1.0.0-alpha:
   dependencies:
     debounce "^1.2.0"
 
+react-native-secure-key-store@2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-secure-key-store/-/react-native-secure-key-store-2.0.4.tgz#117d616442a3471e49c723094708f5dd0d4d7404"
+  integrity sha512-qbcnNXoixIn96GlIyu0S1b/JVboOPmyTSH3EbfVX4RZYRem2HTMxhkkd3vRWCk3IuJ8POf+3KZBeQM6UvYOZZA==
+
 react-native-signature-capture@0.4.9:
   version "0.4.9"
   resolved "https://registry.yarnpkg.com/react-native-signature-capture/-/react-native-signature-capture-0.4.9.tgz#c581cedef6cea42beea40d0f7d210173196b9d4a"

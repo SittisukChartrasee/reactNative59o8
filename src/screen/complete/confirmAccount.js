@@ -4,7 +4,6 @@ import {
 	TouchableOpacity,
 	ScrollView,
 	Image,
-	AsyncStorage,
 } from 'react-native'
 import throttle from 'lodash/throttle'
 import { withApollo } from 'react-apollo'
@@ -21,6 +20,7 @@ import { navigateAction } from '../../redux/actions'
 import { root } from '../../redux/actions/commonAction'
 import { requestOtp, acceptTerm } from '../../redux/actions/root-active'
 import { getTermAndCondition } from '../../containers/query'
+import SecureKeyStore from "../../utility/keyStore";
 
 const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
@@ -52,7 +52,7 @@ export default class extends React.Component {
 	}
 
 	onNext = throttle(async () => {
-		const token = await AsyncStorage.getItem("access_token")
+		const token = await SecureKeyStore.get("access_token")
 		this.props.updateRoot('currFlowUP', 'updatePasscode')
 
 		// try and catch in root-active

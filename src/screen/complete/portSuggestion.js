@@ -6,7 +6,6 @@ import {
   Image,
   Linking,
   Modal,
-  AsyncStorage,
   ActivityIndicator,
   NativeModules
 } from 'react-native'
@@ -32,6 +31,7 @@ import setMutation from '../../containers/mutation'
 import getnativeModules from '../../containers/hoc/infoAppNativeModules'
 import typeModal from '../../utility/typeModal'
 import { errorMessage } from '../../utility/messages'
+import SecureKeyStore from "../../utility/keyStore";
 
 const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
@@ -96,13 +96,13 @@ export default class extends React.Component {
 
   onCallApi = async () => {
     NativeModules.KMyFundOnboarding.finishActivity()
-    // NativeModules.KMyFundOnboarding.autoLogin(this.props.root.password, await AsyncStorage.getItem('user_token'))
+    // NativeModules.KMyFundOnboarding.autoLogin(this.props.root.password, await SecureKeyStore.get("user_token"))
     NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
     this.props.saveFCMToken({
       variables: {
         input: {
           FCMToken: this.props.fcm,
-          userToken: await AsyncStorage.getItem('user_token')
+          userToken: await SecureKeyStore.get("user_token")
         }
       }
     })

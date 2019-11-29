@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   Platform,
-  AsyncStorage,
   NativeModules,
 } from 'react-native'
 import { bindActionCreators } from 'redux'
@@ -17,6 +16,7 @@ import { root } from '../redux/actions/commonAction'
 import getnativeModules from '../containers/hoc/infoAppNativeModules'
 import typeModal from '../utility/typeModal'
 import { passcodeMessage } from '../utility/messages'
+import SecureKeyStore from "../utility/keyStore";
 
 const defaultPasscode = {
   dot: ['', '', '', '', '', ''],
@@ -92,9 +92,8 @@ export default class extends React.Component {
               this.props.navigation.navigate('portSuggestion')
               return
             } else {
-
-              AsyncStorage.setItem('access_token', accessToken)
-              AsyncStorage.setItem('user_token', userToken)
+              SecureKeyStore.set("access_token", accessToken)
+              SecureKeyStore.set("user_token", userToken)
               NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
               NativeModules.KMyFundOnboarding.saveUserToken(userToken)
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Image, TouchableOpacity, AsyncStorage } from 'react-native'
+import { View, Image, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import get from 'lodash/get'
@@ -14,6 +14,7 @@ import { velidateOtp, requestOtp } from '../redux/actions/root-active'
 import { updateUser, root } from '../redux/actions/commonAction'
 import typeModal from '../utility/typeModal'
 import { errorMessage, otpMessage } from '../utility/messages'
+import SecureKeyStore from "../utility/keyStore";
 
 const defaultDot = {
 	dot: [false, false, false, false, false, false],
@@ -122,7 +123,8 @@ export default class extends React.Component {
 
 				if (isRegister && userToken) {
 					this.props.navigateAction({ ...this.props, page: 'login', params: { user_token: userToken } })
-					AsyncStorage.setItem('user_token', userToken)
+					SecureKeyStore.set("user_token", userToken)
+	  
 				} else {
 					this.props.navigateAction({ ...this.props, page: 'passcode' })
 				}
