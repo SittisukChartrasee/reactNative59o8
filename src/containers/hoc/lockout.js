@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { root } from '../../redux/actions/commonAction'
 import { onStore } from '../../redux/store'
-import SecureKeyStore from '../../utility/keyStore'
 
 export default WrapperComponent => {
   const Enhance = props => {
@@ -18,10 +17,7 @@ export default WrapperComponent => {
     const modal = {
       ...detailModal,
       onPress: () => props.updateRoot('modal', { ...onStore.getState().root.modal, visible: false }),
-      onConfirm: () => {
-        SecureKeyStore.clear()
-        NativeModules.KMyFundOnboarding.finishActivity()
-      },
+      onConfirm: () => NativeModules.KMyFundOnboarding.finishActivity(),
       onPressClose: () => props.updateRoot('modal', { ...onStore.getState().root.modal, visible: false })
     }
     return <WrapperComponent lockout={() => props.updateRoot('modal', modal)} {...props} />

@@ -72,6 +72,8 @@ export default class extends React.Component {
         const token = this.props.root.access_token
         const currFlowUP = this.props.root.currFlowUP
 
+        this.props.updateRoot('password', data.password)
+
         try {
           const res = await this.props.confirmPasscode(data, { token, currFlowUP })
 
@@ -88,7 +90,6 @@ export default class extends React.Component {
               this.props.navigation.navigate('login')
               return
             } else if (currFlowUP === 'updatePasscode') {
-              this.props.updateRoot('password', data.password)
               this.props.navigation.navigate('portSuggestion')
               return
             } else {
