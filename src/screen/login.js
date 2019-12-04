@@ -71,10 +71,10 @@ export default class extends React.Component {
 		}
 	}
 
-	onGetStatus = async ({ password }) => {
+	onGetStatus = async () => {
 		try {
 			const res = await this.props.client.query({ query: getStatus })
-			this.onHandleChooseScreen({ res, password })
+			this.onHandleChooseScreen({ res })
 		} catch (error) {
 			this.props.toggleModal({
 				...typeModal[errorMessage.requestError.code],
@@ -165,9 +165,10 @@ export default class extends React.Component {
 					email
 				})
 
-				this.onGetStatus({ password: obj.number })
+				this.onGetStatus()
 				this.onGetUser()
 
+				this.props.updateRoot('password', obj.number)
 				this.props.updateRoot('loading', false)
 
 			} else if (!success) {
@@ -213,11 +214,11 @@ export default class extends React.Component {
 		}
 	}
 
-	onHandleChooseScreen = ({ res, password }) => {
+	onHandleChooseScreen = ({ res }) => {
 		NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_NEW_CUSTOMER)
+
 		switch (res.data.getStatus) {
 			case 'Approved':
-				this.props.updateRoot('password', password)
 				this.props.navigateAction({ ...this.props, page: 'confirmAccount' })
 				break
 
@@ -248,7 +249,7 @@ export default class extends React.Component {
 						dot,
 						title: 'กรุณากรอกรหัสผ่าน',
 						onPrevPage: () => releaseApp.modeDev
-							? SecureKeyStore.clear() 
+							? SecureKeyStore.clear()
 							: NativeModules.KMyFundOnboarding.finishActivity(),
 						forgetbtn: () => this.props.navigateAction({ ...this.props, page: 'forgetPasscode' })
 					}}
