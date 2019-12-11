@@ -14,7 +14,8 @@ import {
   replaceSpace,
   fontToLower,
   replaceJsCard,
-  handleSizing
+  handleSizing,
+  handleFontSize
 } from '../helper'
 import MockDate from 'mockdate'
 
@@ -120,4 +121,12 @@ it('handleSizing test', () => {
   expect(handleSizing(568)).toEqual({ width: 128, height: 93 })
   expect(handleSizing(667)).toEqual({ width: 176, height: 128 })
   expect(handleSizing()).toEqual({})
+})
+
+it('handleFontSize test', () => {
+  expect(handleFontSize(568)).toEqual(12)
+  expect(handleFontSize(667)).toEqual(14)
+  expect(handleFontSize(999)).toEqual(18)
+  expect(handleFontSize('1279')).toEqual(18)
+  expect(handleFontSize()).toEqual(18)
 })

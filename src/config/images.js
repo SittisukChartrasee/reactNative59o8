@@ -53,6 +53,12 @@ import iconrisk6 from '../../assets/image/risk6.png'
 import iconrisk7 from '../../assets/image/risk7.png'
 import iconrisk8 from '../../assets/image/risk8.png'
 
+// Bank Logo V2
+import kbankLogo from '../../assets/image/v2/bankLogo/KALogo.png'
+import scbLogo from '../../assets/image/v2/bankLogo/SCBLogo.png'
+import ktbLogo from '../../assets/image/v2/bankLogo/KTBLogo.png'
+import defLogo from '../../assets/image/v2/bankLogo/defbank.png'
+
 export default {
   cancelFirst,
   tutorialBankaccount,
@@ -105,5 +111,11 @@ export default {
   ovalFill,
   unlocked,
   logoKasset,
-  group2
+  group2,
+
+  // Bank Logo V2
+  kbankLogo,
+  scbLogo,
+  ktbLogo,
+  defLogo
 }
