@@ -86,7 +86,7 @@ export default class extends React.Component {
 
   handleInput = (obj) => {
     const { user } = this.props
-    
+
     if (obj.field === 'idCard') {
       this.props.updateUser('profile', {
         ...user.profile,
@@ -171,8 +171,8 @@ export default class extends React.Component {
 
     if (success || code === '1001') {
       if (code === '1001') {
-        const time = get(res, 'details.time', 0)
-        const refNo = get(res, 'details.ref_no', '')
+        const time = get(res, 'result.time', 0)
+        const refNo = get(res, 'result.ref_no', '')
 
         this.props.updateRoot('time', time)
         this.props.updateRoot('ref_no', refNo)

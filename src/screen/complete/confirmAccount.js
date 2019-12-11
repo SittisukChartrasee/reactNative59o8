@@ -5,7 +5,6 @@ import {
 	ScrollView,
 	Image,
 } from 'react-native'
-import throttle from 'lodash/throttle'
 import { withApollo } from 'react-apollo'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -20,14 +19,17 @@ import { navigateAction } from '../../redux/actions'
 import { root } from '../../redux/actions/commonAction'
 import { requestOtp, acceptTerm } from '../../redux/actions/root-active'
 import { getTermAndCondition } from '../../containers/query'
-import SecureKeyStore from "../../utility/keyStore";
+import SecureKeyStore from "../../utility/keyStore"
+import typeModal from '../../utility/typeModal'
+import { errorMessage } from '../../utility/messages'
 
 const mapToProps = ({ root }) => ({ root })
 const dispatchToProps = dispatch => ({
 	requestOtp: bindActionCreators(requestOtp, dispatch),
 	acceptTerm: bindActionCreators(acceptTerm, dispatch),
 	navigateAction: bindActionCreators(navigateAction, dispatch),
-	updateRoot: bindActionCreators(root, dispatch)
+	updateRoot: bindActionCreators(root, dispatch),
+	toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @withApollo
@@ -51,7 +53,7 @@ export default class extends React.Component {
 		}
 	}
 
-	onNext = throttle(async () => {
+	onNext = async () => {
 		const token = await SecureKeyStore.get("access_token")
 		this.props.updateRoot('currFlowUP', 'updatePasscode')
 
@@ -59,25 +61,34 @@ export default class extends React.Component {
 		const res = await this.props.acceptTerm(token)
 
 		const success = get(res, 'success', false)
-		const result = get(res, 'result', null)
+		const accessToken = get(res, 'result.access_token', null)
+		const code = get(res, 'code', '1103')
+		const message = get(res, 'message', '')
 
 		if (success) {
-			this.onRequestOtp(result.access_token)
+			setTimeout(() => this.onRequestOtp(accessToken), 1000)
+		} else {
+			this.props.toggleModal({
+				...typeModal[code || errorMessage.messageIsNull.code],
+				dis: message || errorMessage.messageIsNull.defaultMessage,
+			})
 		}
 
-	}, 2000)
+	}
 
 	onRequestOtp = async token => {
 		// try and catch in root-active
 		const res = await this.props.requestOtp(null, { token, currFlowUP: this.props.root.currFlowUP })
 
 		const success = get(res, 'success', false)
-		const time = get(res, 'details.time', 0)
-		const refNo = get(res, 'details.ref_no', '')
+		const time = get(res, 'result.time', 0)
+		const refNo = get(res, 'result.ref_no', '')
+		const code = get(res, 'code', '1103')
+		const message = get(res, 'message', '')
 
-		if (success || res.code === '1001') {
+		if (success || code === '1001') {
 
-			if (res.code === '1001') {
+			if (code === '1001') {
 				this.props.updateRoot('time', time)
 				this.props.updateRoot('ref_no', refNo)
 				this.props.updateRoot('overRequest', true)
@@ -89,7 +100,10 @@ export default class extends React.Component {
 
 			this.props.navigation.navigate({ routeName: 'otp', key: 'otpUpdatePasscode' })
 		} else {
-
+			this.props.toggleModal({
+				...typeModal[code || errorMessage.messageIsNull.code],
+				dis: message || errorMessage.messageIsNull.defaultMessage,
+			})
 		}
 	}
 
@@ -116,60 +130,64 @@ export default class extends React.Component {
 						</View>
 
 						<TLight color={colors.white}
-							mb={40}>{`ท่านสามารถเริ่มลงทุนผ่านแอปพลิเคชั่น \nK-My Funds ได้แล้ว`}</TLight>
+							mb={40}>{`ท่านสามารถเริ่มลงทุนผ่านแอปพลิเคชั่น \nK-My Funds ได้แล้ว`}
+						</TLight>
 
 						<View
 							style={{
 								backgroundColor: colors.white,
 								width: '100%',
+								marginTop: 16,
 								minHeight: 352,
-								paddingVertical: 16,
-								paddingHorizontal: 16,
 								borderTopRightRadius: 16,
 								borderTopLeftRadius: 16,
 								overflow: 'hidden'
 							}}
 						>
-							<View style={{ height: 40, flexDirection: 'row' }}>
-								<TBold fontSize={18} textAlign="left">เงื่อนไขการเปิดบัญชี</TBold>
+							<View style={{ backgroundColor: colors.white, margin: 0, paddingVertical: 16, paddingHorizontal: 16, }}>
+								<View style={{ height: 40, flexDirection: 'row' }}>
+									<TBold fontSize={18} textAlign="left">เงื่อนไขการเปิดบัญชี</TBold>
+								</View>
+								<TLight color={colors.grey} textAlign="left">{this.state.text}</TLight>
 							</View>
-							<TLight color={colors.grey} textAlign="left">{this.state.text}</TLight>
 						</View>
-						<TouchableOpacity
-							onPress={() => this.setState({ agree: !agree })}
-							activeOpacity={1}
-							style={{
-								backgroundColor: colors.lightgrey,
-								padding: 16,
-								flexDirection: 'row',
-								borderBottomRightRadius: 16,
-								borderBottomLeftRadius: 16,
-							}}
-						>
-							<View style={{ marginRight: 16, marginTop: 5 }}>
-								{
-									agree
-										? <Image source={images.iconCheck}
-											style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: 'red' }} />
-										: <View
-											style={{
-												width: 16,
-												height: 16,
-												borderRadius: 5,
-												backgroundColor: colors.white,
-												borderWidth: 1,
-												borderColor: colors.grey
-											}}
-										/>
-								}
-							</View>
-							<View style={{ flex: 1 }}>
-								<TLight color={colors.midnight} fontSize={16}
-									textAlign="left">ฉันได้อ่านและทำความเข้าใจในข้อความทั้งหมดโดยที่ฉันได้ยอมรับและเห็นด้วย </TLight>
-							</View>
-						</TouchableOpacity>
+
 					</View>
 				</ScrollView>
+
+				<TouchableOpacity
+					onPress={() => this.setState({ agree: !agree })}
+					activeOpacity={1}
+					style={{
+						backgroundColor: colors.lightgrey,
+						padding: 16,
+						marginHorizontal: 24,
+						flexDirection: 'row',
+						borderBottomRightRadius: 16,
+						borderBottomLeftRadius: 16,
+					}}
+				>
+					<View style={{ marginRight: 16, marginTop: 5 }}>
+						{
+							agree
+								? <Image source={images.iconCheck}
+									style={{ width: 16, height: 16, borderRadius: 5, backgroundColor: 'red' }} />
+								: <View
+									style={{
+										width: 16,
+										height: 16,
+										borderRadius: 5,
+										backgroundColor: colors.white,
+										borderWidth: 1,
+										borderColor: colors.grey
+									}}
+								/>
+						}
+					</View>
+					<View style={{ flex: 1 }}>
+						<TLight color={colors.midnight} fontSize={16} textAlign="left">ฉันได้อ่านและทำความเข้าใจในข้อความทั้งหมดโดยที่ฉันได้ยอมรับและเห็นด้วย </TLight>
+					</View>
+				</TouchableOpacity>
 
 				<View style={{ paddingBottom: 44 }}>
 					<LongButton
