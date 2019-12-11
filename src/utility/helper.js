@@ -153,3 +153,12 @@ export const handleSizing = heightScreen => {
   }
   return sizing
 }
+
+export const handleFontSize = heightScreen => {
+  if (heightScreen <= 568) {
+    return 12
+  } else if (heightScreen <= 667) { // iphone 6, 6s, 7, 7s
+    return 14
+  }
+  return 18
+}

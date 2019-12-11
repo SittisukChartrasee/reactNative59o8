@@ -379,6 +379,16 @@ export const getSubmit = gql`
   }
 `
 
+export const getBankList = gql`
+  query getBankList {
+    getBankList {
+      nameTh
+      nameEn
+      image
+    }
+  }
+`
+
 export const checkVerifiedEmailInterval = graphql(checkVerifiedEmail, {
   name: 'checkVerifiedEmailInterval',
   options: {

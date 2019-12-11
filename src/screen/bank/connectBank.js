@@ -76,8 +76,6 @@ export default class extends React.Component {
   }
 
   render() {
-    const bankName = this.props.navigation.getParam('bankName', '')
-    const url = this.props.navigation.getParam('url', 'https://ws06.uatebpp.kasikornbank.com/PGSRegistration.do?reg_id=20190604114131234908234&langLocale=th_TH')
     return (
       <Screen color="transparent">
         <NavBar
@@ -105,7 +103,7 @@ export default class extends React.Component {
         <SafeAreaView style={{ flex: 1 }}>
           <View style={{ flex: 1 }}>
             <WKWebView
-              source={{ uri: url }}
+              source={{ uri: this.props.user.bank.urlbank }}
               onProgress={(progress) => console.log(progress)}
               injectedJavaScript={`(function(){
                 document.querySelector(".btnNext").style.display = "none";
@@ -130,7 +128,7 @@ export default class extends React.Component {
             /> */}
           </View>
           <View style={{ height: 56, backgroundColor: colors.lightgrey, justifyContent: 'center' }}>
-            <TMed fontSize={14} color={colors.grey}>ท่านได้ออกจาก Kmyfunds และเข้าสู่เว็บไซต์ {handleNameBank(bankName)} แล้ว</TMed>
+            <TMed fontSize={14} color={colors.grey}>ท่านได้ออกจาก Kmyfunds และเข้าสู่เว็บไซต์ {handleNameBank(this.props.user.bank.bankName)} แล้ว</TMed>
           </View>
           {
             this.state.status
