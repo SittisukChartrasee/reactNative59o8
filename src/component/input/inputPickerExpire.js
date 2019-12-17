@@ -95,6 +95,7 @@ export default class extends React.Component {
   onPicker = () => {
     const { handleInput, field, type } = this.props
     const configPicker = {
+      pickerTextEllipsisLen: 50,
       pickerTitleText: 'กรุณาเลือก',
       pickerCancelBtnText: 'ยกเลิก',
       pickerConfirmBtnText: 'ตกลง',

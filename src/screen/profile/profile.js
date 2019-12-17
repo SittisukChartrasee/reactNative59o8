@@ -395,6 +395,7 @@ export default class extends React.Component {
 
         <KeyboardAwareScrollView
           extraScrollHeight={50}
+          keyboardShouldPersistTaps="handled"
           enableOnAndroid
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
