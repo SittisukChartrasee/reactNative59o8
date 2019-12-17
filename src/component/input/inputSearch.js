@@ -261,6 +261,7 @@ export default class extends React.Component {
                     <TBold fontSize={14} color={colors.shadow}>{this.state.errorMessage}</TBold>
                   </View>
                 : <FlatList
+                    keyboardShouldPersistTaps="handled"
                     data={this.state.result}
                     renderItem={({ item }) => (
                         <TouchableOpacity onPress={() => this.onHandleOnPress(item)}>
