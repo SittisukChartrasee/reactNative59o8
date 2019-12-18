@@ -23,10 +23,11 @@ const ReactWithState = connect(({ nav }) => ({ state: nav }))(createReduxContain
 
 const TEST = false // ถ้าจะ TEST ให้ set true : false
 
-const mapToProps = ({ root, nav }) => ({ root, nav })
+const mapToProps = ({ root, nav, bank }) => ({ root, nav, bank })
 const dispatchToProps = dispatch => ({
   updateRoot: bindActionCreators(root, dispatch),
   handleActionBack: () => dispatch(NavigationActions.back()),
+  handleActionNavigate: props => dispatch(NavigationActions.navigate(props)),
   handleScreen: (value) => dispatch({ type: 'CHECKSCREEN', value }),
   toggleModal: value => dispatch({ type: 'modal', value })
 })
@@ -103,6 +104,23 @@ export default class extends React.Component {
       } else {
         return false
       }
+    } else if (routeName === 'autoCheck') {
+      const isShow = get(this.props, 'bank.isShowSkipPage', false)
+
+      if (isShow) {
+        this.props.handleActionBack()
+      } else {
+        this.props.handleActionNavigate({ routeName: 'condi' })
+      }
+      return true
+    } else if (routeName === 'info') {
+      if (this.props.root.screenModal.page === 'idpStatus') {
+        this.props.updateRoot('screenModal', { visible: true, page: 'idpStatus' })
+        return true
+      } else {
+        this.props.handleActionNavigate({ routeName: 'checkpoint' })
+        return true
+      }
     }
 
     return false
@@ -112,7 +130,13 @@ export default class extends React.Component {
     const { nav } = this.props
 
     const lastNav = last(nav.routes)
-    const routeName = get(lastNav, 'routeName', '')
+    let routeName = get(lastNav, 'routeName', '')
+
+    if (routeName === 'branchNDID') {
+      const routes = get(lastNav, 'routes', '')
+      routeName = get(last(routes), 'routeName', '')
+    }
+
     const checkFinishPage = find(finishActivityPage, ["routeName", routeName])
     const checkBanPage = find(bannedPageList, ["routeName", routeName])
 
