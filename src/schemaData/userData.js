@@ -172,8 +172,6 @@ export const userDataToProps = ({
   const contact = get(result, 'contact', null)
   if (contact) {
 
-    console.log(contact.homePhone)
-
     const data = {
       workPhone: contact.workPhone,
       homePhone: formatHomeNumber(contact.homePhone).homePhone || userProps.contact.homePhone,

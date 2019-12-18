@@ -210,7 +210,7 @@ export default class extends React.Component {
           })
         }
 
-        <Modal visible={open} animationType="slide">
+        <Modal visible={open} onRequestClose={() => this.setState({ open: false })} animationType="slide">
           <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
 
             <View style={{ paddingHorizontal: 24, paddingVertical: 24 }}>
@@ -258,21 +258,21 @@ export default class extends React.Component {
             {
               this.state.errorMessage
                 ? <View style={{ flex: 1, backgroundColor: colors.lightgrey, paddingTop: 24, paddingHorizontal: 24 }}>
-                    <TBold fontSize={14} color={colors.shadow}>{this.state.errorMessage}</TBold>
-                  </View>
+                  <TBold fontSize={14} color={colors.shadow}>{this.state.errorMessage}</TBold>
+                </View>
                 : <FlatList
-                    keyboardShouldPersistTaps="handled"
-                    data={this.state.result}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => this.onHandleOnPress(item)}>
-                          <View style={{ marginVertical: 16 }}>
-                            <TBold textAlign="left" ml={24} mr={24}>{item.nameDetail ? item.nameDetail : (item.displayName || item.nameTH)}</TBold>
-                          </View>
-                          <View style={{ height: 1, backgroundColor: colors.smoky, marginLeft: 24 }} />
-                        </TouchableOpacity>
-                    )}
-                    keyExtractor={(i, key) => `${key}`}
-                  />
+                  keyboardShouldPersistTaps="handled"
+                  data={this.state.result}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => this.onHandleOnPress(item)}>
+                      <View style={{ marginVertical: 16 }}>
+                        <TBold textAlign="left" ml={24} mr={24}>{item.nameDetail ? item.nameDetail : (item.displayName || item.nameTH)}</TBold>
+                      </View>
+                      <View style={{ height: 1, backgroundColor: colors.smoky, marginLeft: 24 }} />
+                    </TouchableOpacity>
+                  )}
+                  keyExtractor={(i, key) => `${key}`}
+                />
             }
           </SafeAreaView>
         </Modal>

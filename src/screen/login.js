@@ -207,7 +207,7 @@ export default class extends React.Component {
 			if (checkVerified) {
 				return this.props.navigateAction({ ...this.props, page: 'waiting' })
 			} else {
-				return this.props.navigateAction({ ...this.props, page: 'verifyEmail' })
+				return this.props.updateRoot('screenModal', { visible: true, page: 'verifyEmail' })
 			}
 		} else {
 			return this.props.navigateAction({ ...this.props, page: 'checkpoint' })

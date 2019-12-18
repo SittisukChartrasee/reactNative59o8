@@ -53,8 +53,14 @@ export default class extends React.Component {
     } = this.props
 
     return (
-      <Modal isVisible={visible} onSwipeComplete={onPressClose} swipeDirection="left" useNativeDriver={true}>
-        <TouchableOpacity 
+      <Modal
+        isVisible={visible}
+        onSwipeComplete={onPressClose}
+        onRequestClose={onPressClose}
+        swipeDirection="left"
+        useNativeDriver={true}
+      >
+        <TouchableOpacity
           onPress={onPressClose}
           activeOpacity={1}
           disabled={disabled}
@@ -64,7 +70,7 @@ export default class extends React.Component {
             activeOpacity={1}
             style={{ flex: 1, padding: 24, backgroundColor: 'white', borderRadius: 8 }}
           >
-            { image && <Image source={image} style={{ alignSelf: 'center', marginBottom: 24 }} /> }
+            {image && <Image source={image} style={{ alignSelf: 'center', marginBottom: 24 }} />}
             <TLight>{dis}</TLight>
             {/* { onChange && (
               <View 
@@ -92,15 +98,15 @@ export default class extends React.Component {
                     </View>
                   )
                   : (
-                  <View style={{ flexDirection: 'row' }}>
-                    <FlexButton border onPress={onConfirm}>ใช่</FlexButton>
-                    <FlexButton marginLeft={16} onPress={onPressClose}>ไม่ใช่</FlexButton>
-                  </View>
-                ) : (
+                    <View style={{ flexDirection: 'row' }}>
+                      <FlexButton border onPress={onConfirm}>ใช่</FlexButton>
+                      <FlexButton marginLeft={16} onPress={onPressClose}>ไม่ใช่</FlexButton>
+                    </View>
+                  ) : (
                   <LongButton label={labelBtn} onPress={onPress} />
                 )
             }
-            
+
           </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
