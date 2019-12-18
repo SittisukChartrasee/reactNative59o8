@@ -7,8 +7,7 @@ import {
 } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import find from 'lodash/find'
-import head from 'lodash/head'
+import { get, find, head } from 'lodash'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Screen from '../../component/screenComponent'
 import { NavBar } from '../../component/gradient'
@@ -204,7 +203,7 @@ export default class extends React.Component {
     return null
   }
 
-  onNext = () => {
+  onNext = async () => {
     const { user } = this.props
     this.setState({ PreconditionRequired: [], InvalidArgument: [] })
     const {
@@ -227,38 +226,40 @@ export default class extends React.Component {
       dividendWithHoldingTax
     }
 
-    console.log(data)
-
     if (data.investmentSourceCountry === 'US') {
       return this.props.toggleModal({
         ...typeModal['1101'],
         dis: `ขออภัยท่านไม่สามารถเปิดบัญชีกองทุน\nผ่านช่องทาง K-My Funds ได้\nกรุณาติดต่อ KAsset Contact Center\n02 673 3888 กด 1 และ กด 1`,
       })
     } else {
-      this.props.saveSourceOfFund({ variables: { input: data } })
-        .then(res => {
-          if (res.data.saveSourceOfFund.success) {
-            this.props.navigateAction({ ...this.props, page: 'addressHome' })
-          } else if (!res.data.saveSourceOfFund.success) {
-            switch (res.data.saveSourceOfFund.code) {
-              case '2101':
-                return this.setState({ PreconditionRequired: res.data.saveSourceOfFund.details })
-              case '2201':
-                return this.setState({ InvalidArgument: res.data.saveSourceOfFund.details })
-              default:
-                return this.props.toggleModal({
-                  ...typeModal[res.data.saveSourceOfFund.code],
-                  dis: res.data.saveSourceOfFund.message
-                })
-            }
+      try {
+        const res = await this.props.saveSourceOfFund({ variables: { input: data } })
+        const success = get(res, 'data.saveSourceOfFund.success', false)
+        const code = get(res, 'data.saveSourceOfFund.code', '1103')
+        const message = get(res, 'data.saveSourceOfFund.message', null)
+        const details = get(res, 'data.saveSourceOfFund.details', []) || []
+
+        if (success) {
+          this.props.navigateAction({ ...this.props, page: 'addressHome' })
+        } else {
+          switch (code) {
+            case '2101':
+              return this.setState({ PreconditionRequired: details })
+            case '2201':
+              return this.setState({ InvalidArgument: details })
+            default:
+              return this.props.toggleModal({
+                ...typeModal[code],
+                dis: message || errorMessage.requestError.defaultMessage
+              })
           }
+        }
+      } catch (error) {
+        this.props.toggleModal({
+          ...typeModal[errorMessage.requestError.code],
+          dis: errorMessage.requestError.defaultMessage,
         })
-        .catch(err => {
-          this.props.toggleModal({
-            ...typeModal[errorMessage.requestError.code],
-            dis: errorMessage.requestError.defaultMessage,
-          })
-        })
+      }
     }
   }
 

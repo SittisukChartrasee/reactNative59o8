@@ -78,7 +78,6 @@ export default class extends React.Component {
   onNext = () => this.onCallApi()
 
   onConfirm = async () => {
-    this.onCallApi()
     this.props.toggleModal({ ...this.props.root.modal, visible: false })
 
     try {
@@ -92,21 +91,26 @@ export default class extends React.Component {
         dis: errorMessage.requestError.defaultMessage,
       })
     }
+
+    this.onCallApi()
   }
 
   onCallApi = async () => {
-    NativeModules.KMyFundOnboarding.finishActivity()
-    // NativeModules.KMyFundOnboarding.autoLogin(this.props.root.password, await SecureKeyStore.get("user_token"))
-    NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
-    this.props.saveFCMToken({
-      variables: {
-        input: {
-          FCMToken: this.props.fcm,
-          userToken: await SecureKeyStore.get("user_token")
+    try {
+      await this.props.saveFCMToken({
+        variables: {
+          input: {
+            FCMToken: this.props.fcm,
+            userToken: await SecureKeyStore.get("user_token")
+          }
         }
-      }
-    })
-      .catch(err => console.log(err))
+      })
+      // NativeModules.KMyFundOnboarding.autoLogin(this.props.root.password, await SecureKeyStore.get("user_token"))
+      NativeModules.KMyFundOnboarding.saveRegisterFlag(NativeModules.KMyFundOnboarding.STATUS_APPROVE)
+      NativeModules.KMyFundOnboarding.finishActivity()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   render() {
@@ -123,14 +127,6 @@ export default class extends React.Component {
         <NavBar
           color="transparent"
           title="ยืนยันผลการประเมินความเสี่ยง"
-          navLeft={
-            <TouchableOpacity
-              onPress={() => this.props.navigation.goBack()}
-              style={{ paddingRight: 30 }}
-            >
-              <Image source={images.iconback} />
-            </TouchableOpacity>
-          }
           navRight={
             <TouchableOpacity
               onPress={() => this.props.lockout()}

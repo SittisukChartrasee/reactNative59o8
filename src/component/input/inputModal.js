@@ -111,7 +111,7 @@ export default class extends React.Component {
           <View style={{ height: 1, backgroundColor: colors.smoky, marginTop: 5 }} />
         </TouchableOpacity>
 
-        <Modal visible={open} animationType="slide">
+        <Modal visible={open} onRequestClose={() => this.setState({ open: false })} animationType="slide">
           <View style={{ flex: 1 }}>
             <NavBar
               title={label}

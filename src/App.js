@@ -4,6 +4,7 @@ import { NavigationActions } from 'react-navigation'
 import { Text, View, AppState, BackHandler, NativeModules } from 'react-native'
 import { createReduxContainer } from 'react-navigation-redux-helpers'
 import { bindActionCreators } from 'redux'
+import { get, last, find } from 'lodash'
 import { onStore, AppNavigator } from './redux/store'
 import provider from './config/provider'
 import Modal from './component/modal'
@@ -14,7 +15,8 @@ import colors from './config/colors';
 import { TBold } from './component/texts';
 import Spinner from './component/spinner'
 import releaseApp from '../release/releaseApp.json'
-import SecureKeyStore from "../src/utility/keyStore";
+import SecureKeyStore from "../src/utility/keyStore"
+import { bannedPageList, finishActivityPage } from './utility/handleBackPress'
 
 export const store = onStore
 const ReactWithState = connect(({ nav }) => ({ state: nav }))(createReduxContainer(AppNavigator, 'root'))
@@ -25,7 +27,8 @@ const mapToProps = ({ root, nav }) => ({ root, nav })
 const dispatchToProps = dispatch => ({
   updateRoot: bindActionCreators(root, dispatch),
   handleActionBack: () => dispatch(NavigationActions.back()),
-  handleScreen: (value) => dispatch({ type: 'CHECKSCREEN', value })
+  handleScreen: (value) => dispatch({ type: 'CHECKSCREEN', value }),
+  toggleModal: value => dispatch({ type: 'modal', value })
 })
 
 @provider
@@ -79,13 +82,53 @@ export default class extends React.Component {
     BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
   }
 
+  _handleSpecialPage = ({ routeName }) => {
+    if (routeName === 'connectBank') {
+      this.props.toggleModal({
+        dis: 'ท่านต้องการออกจากหน้าเชื่อมบัญชี\nใช่หรือไม่',
+        visible: true,
+        type: 'row',
+        onPress: () => this.props.toggleModal({ ...this.props.root.modal, visible: false }),
+        onConfirm: async () => {
+          await this.props.toggleModal({ ...this.props.root.modal, visible: false })
+          await this.props.handleActionBack()
+        },
+        onPressClose: () => this.props.toggleModal({ ...this.props.root.modal, visible: false }),
+      })
+      return true
+    } else if (routeName === 'complete') {
+      if (this.props.root.screenModal.page === 'reviewScore') {
+        this.props.updateRoot('screenModal', { visible: true, page: 'reviewScore' })
+        return true
+      } else {
+        return false
+      }
+    }
+
+    return false
+  }
+
   onBackPress = () => {
     const { nav } = this.props
-    if (nav.index === 0) {
-      return false
+
+    const lastNav = last(nav.routes)
+    const routeName = get(lastNav, 'routeName', '')
+    const checkFinishPage = find(finishActivityPage, ["routeName", routeName])
+    const checkBanPage = find(bannedPageList, ["routeName", routeName])
+
+    if (this._handleSpecialPage({ routeName })) {
+      return true
     }
-    // this.props.handleActionBack()
-    return true
+
+    if (checkFinishPage) {
+      NativeModules.KMyFundOnboarding.finishActivity()
+      return true
+    } else if (checkBanPage) {
+      return true
+    } else {
+      this.props.handleActionBack()
+      return true
+    }
   }
 
   _handleGetBundleVersion = release => NativeModules.KMyFundOnboarding.getBundleVersion(`${release.nameFile}, ENV: ${release.env}, Build: ${release.build}`)
