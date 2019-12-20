@@ -15,7 +15,7 @@ export default WrapperComponent => {
 
     componentWillUnmount = () => BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
 
-    _handleSpecialPage = ({ routeName, previousRouteName }) => {
+    _handleSpecialPage = ({ routeName, previousRouteName, beforeLastRoute }) => {
       if (routeName === 'connectBank') {
         this.props.toggleModal({
           dis: 'ท่านต้องการออกจากหน้าเชื่อมบัญชี\nใช่หรือไม่',
@@ -47,7 +47,7 @@ export default WrapperComponent => {
         return true
       } else if (routeName === 'idpList') {
         if (previousRouteName === 'checkpoint') {
-          his.props.handleActionNavigate({ routeName: 'checkpoint' })
+          this.props.handleActionNavigate({ routeName: 'checkpoint' })
           return true
         } else if (beforeLastRoute !== 'skipNdid') {
           this.props.handleActionBack()
@@ -73,16 +73,15 @@ export default WrapperComponent => {
       const { nav } = this.props
 
       const lastNav = last(nav.routes)
-      const beforeLastNav = nav[nav.length - 2]
+      const beforeLastNav = nav.routes[nav.routes.length - 2]
       let beforeLastRoute = ''
       let routeName = get(lastNav, 'routeName', '')
-      let previousRouteName = get(beforeLastNav, 'routeName', '')
+      const previousRouteName = get(beforeLastNav, 'routeName', '')
 
       if (routeName === 'branchNDID') {
         const routes = get(lastNav, 'routes', '')
-        beforeLastRoute = routes[routes.length - 2]
+        beforeLastRoute = routes[routes.length - 2].routeName
         routeName = get(last(routes), 'routeName', '')
-        previousRouteName = get(beforeLastNav, 'routeName', '')
       }
 
       const checkFinishPage = find(finishActivityPage, ["routeName", routeName])
