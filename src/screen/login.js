@@ -121,7 +121,8 @@ export default class extends React.Component {
 			fcm_token: this.props.fcm,
 			version: this.props.version,
 			system_version: DeviceInfo.getSystemVersion(),
-			device_id: this.props.deviceInfo
+			device_id: this.props.deviceId,
+			device_model: this.props.deviceInfo
 		})
 
 		return res
@@ -135,8 +136,6 @@ export default class extends React.Component {
 		this.setState({ ...obj })
 
 		if (obj.number.length === 6) {
-
-			this.props.updateRoot('loading', true)
 
 			const res = await this.onRequestLogin({ userToken, obj })
 

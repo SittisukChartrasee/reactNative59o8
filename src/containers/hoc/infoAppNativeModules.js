@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import {
   NativeModules,
   View,
@@ -15,7 +15,7 @@ const dispatchToProps = dispatch => ({
 
 export default (ComponentWrapper) => {
   @connect(null, dispatchToProps)
-  class Enhance extends React.Component {
+  class Enhance extends PureComponent {
     state = {
       fcm: '',
       version: '',
@@ -26,11 +26,13 @@ export default (ComponentWrapper) => {
         NativeModules.KMyFundOnboarding.getFCMToken(fcm => {
           NativeModules.KMyFundOnboarding.getVersionAppKMyFunds(version => {
             NativeModules.KMyFundOnboarding.getDeviceInfo(deviceInfo => {
-              this.props.updateRoot('version', version)
-              this.setState({
-                fcm,
-                version,
-                deviceInfo,
+              NativeModules.KMyFundOnboarding.getDeviceId(deviceId => {
+                this.setState({
+                  fcm,
+                  version,
+                  deviceId,
+                  deviceInfo,
+                })
               })
             })
           })
