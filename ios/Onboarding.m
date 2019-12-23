@@ -66,6 +66,11 @@
     callback(@[@"getDeviceInfo"]);
   }
 
+  RCT_EXPORT_METHOD(getDeviceId: (RCTResponseSenderBlock)callback) {
+    NSLog(@"%s", "getDeviceId");
+    callback(@[@"getDeviceId"]);
+  }
+  
   RCT_EXPORT_METHOD(autoLogin: (NSString *)code token:(NSString *)token) {
     NSLog(@"autoLogin : %@ %@", code, token);
   }
