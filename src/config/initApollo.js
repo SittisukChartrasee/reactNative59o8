@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NativeModules } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { ApolloClient } from 'apollo-client'
@@ -40,25 +41,27 @@ const errorLink = store => onError(({ graphQLErrors, networkError }) => {
 const handleToken = token => token ? { authorization: `Bearer ${token}` } : {}
 
 
-const authLink = store => setContext(async (_, { headers }) => {
+const authLink = (_, version) => setContext(async (_, { headers }) => {
   const token = await SecureKeyStore.get("access_token")
-
   return ({
     headers: {
       ...headers,
+      'app-version': version,
       ...((token) => handleToken(token))(token),
     },
   })
 })
 
-const getAuthLink = (link, store) => new ApolloClient({
-  link: ApolloLink.from([errorLink(store), authLink(store).concat(createUploadLink({ uri: link }))]),
+const getAuthLink = (link, { store, version }) => new ApolloClient({
+  link: ApolloLink.from([errorLink(store), authLink(store, version).concat(createUploadLink({ uri: link }))]),
   cache: new InMemoryCache(),
 })
 
 export default (store) => {
+  const [version, setVersion] = useState('0.0.0')
+  NativeModules.KMyFundOnboarding.getVersionAppKMyFunds(v => setVersion(v))
   switch (true) {
     // default: return getAuthLink(`${env.API_PATH_SIT}/query`, store) // SIT
-    default: return getAuthLink(`${ENV[store.getState().root.env]}/query`, store)
+    default: return getAuthLink(`${ENV[store.getState().root.env]}/query`, { store, version })
   }
 }
