@@ -29,6 +29,7 @@
     "apollo-upload-client": "10.0.0",
     "babel-core": "^6.26.3",
     "babel-runtime": "^6.26.0",
+    "dragonlibs": "^1.0.3",
     "graphql": "14.2.1",
     "graphql-tag": "2.10.1",
     "hoist-non-react-statics": "3.3.0",

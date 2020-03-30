@@ -4785,6 +4785,11 @@ dotenv@^6.0.0, dotenv@^6.2.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-6.2.0.tgz#941c0410535d942c8becf28d3f357dbd9d476064"
   integrity sha512-HygQCKUBSFl8wKQZBSemMywRWcEDNidvNbjGVyZu3nbZ8qq9ubiPoGLMdRDpfSrpkkm9BXYFkpKxxFX38o/76w==
 
+dragonlibs@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/dragonlibs/-/dragonlibs-1.0.3.tgz#a29002d04ec15803acc7957edf0875320eabeef5"
+  integrity sha512-q+dUSx9+3ye6n2Ja+GPU9el6ZMm4vJ25gotG46qfGZXEjSGE5xEjgyMw9G2uPONd+6mWvhyWOArzSc4TfF65Ig==
+
 duplexer@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
