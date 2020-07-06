@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "build": "sh release.sh",
-    "build-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle",
+    "build-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output ../xamarin-react-native-59-8/samples/SampleApp.Droid/Assets/index.android.bundle",
     "build-ios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",
     "test": "jest --verbose --coverage --detectOpenHandles",
     "android": "react-native run-android",
