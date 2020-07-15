@@ -39,6 +39,7 @@ const genDate = ({ y = 2539, m = 2, a = 0 }) => {
 export default class extends React.Component {
   static defaultProps = {
     value: '-/-/2532',
+    label: 'default',
     date: 0
   }
 
