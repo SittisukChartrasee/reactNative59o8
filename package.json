@@ -36,7 +36,7 @@
     "jest-styled-components": "^6.3.3",
     "lodash": "4.17.11",
     "mockdate": "^2.0.5",
-    "moment": "2.24.0",
+    "moment": "2.29.2",
     "moment-timezone": "0.5.25",
     "prop-types": "^15.7.2",
     "react": "16.8.3",
