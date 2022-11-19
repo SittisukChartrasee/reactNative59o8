@@ -20,7 +20,7 @@
     "@react-native-community/slider": "^1.1.4",
     "@react-native-community/viewpager": "^1.1.7",
     "@react-navigation/core": "^3.5.1",
-    "@storybook/react-native": "4.1.13",
+    "@storybook/react-native": "5.3.27",
     "apollo-cache-inmemory": "1.5.1",
     "apollo-client": "2.5.1",
     "apollo-link": "1.2.11",
